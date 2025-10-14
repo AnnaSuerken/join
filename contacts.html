@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Join - Contacts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonts + CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/assets.css">      <!-- global styles -->
+  <link rel="stylesheet" href="./assets/css/contacts.css">    <!-- page styles -->
+</head>
+<body>
+  <div class="page">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo-row">
+        <div class="logo-box">j</div>
+        <div class="logo-text">OIN</div>
+      </div>
+
+      <nav class="menu">
+        <a href="./index.html" class="menu-link">Summary</a>
+        <a href="./add-task.html" class="menu-link">Add Task</a>
+        <a href="./board.html" class="menu-link">Board</a>
+        <a href="./contacts.html" class="menu-link active">Contacts</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="./privacy-policy.html" class="mini-link">Privacy Policy</a>
+        <a href="./legal-notice.html" class="mini-link">Legal notice</a>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div class="tool-name">Kanban Project Management Tool</div>
+        <div class="top-right">
+          <button class="small-icon" type="button">?</button>
+          <div class="avatar small">SM</div>
+        </div>
+      </header>
+
+      <section class="content">
+        <!-- Liste links -->
+        <div class="list">
+          <div class="list-head">
+            <button class="btn" type="button">Add new contact ▾</button>
+          </div>
+
+          <div class="group">
+            <div class="group-title">A</div>
+
+            <button class="row active" type="button">
+              <div class="avatar">AM</div>
+              <div>
+                <div class="row-name">Anton Mayer</div>
+                <a href="#" class="row-email">antonm@gmail.com</a>
+              </div>
+            </button>
+
+            <button class="row" type="button">
+              <div class="avatar">AS</div>
+              <div>
+                <div class="row-name">Anja Schulz</div>
+                <a href="#" class="row-email">schulz@hotmail.com</a>
+              </div>
+            </button>
+          </div>
+
+          <div class="group">
+            <div class="group-title">B</div>
+            <button class="row" type="button">
+              <div class="avatar">BZ</div>
+              <div>
+                <div class="row-name">Benedikt Ziegler</div>
+                <a href="#" class="row-email">benedikt@gmail.com</a>
+              </div>
+            </button>
+          </div>
+
+          <div class="group">
+            <div class="group-title">D</div>
+            <button class="row" type="button">
+              <div class="avatar">DE</div>
+              <div>
+                <div class="row-name">David Eisenberg</div>
+                <a href="#" class="row-email">davidberg@gmail.com</a>
+              </div>
+            </button>
+          </div>
+
+          <div class="group">
+            <div class="group-title">E</div>
+            <button class="row" type="button">
+              <div class="avatar">EF</div>
+              <div>
+                <div class="row-name">Eva Fischer</div>
+                <a href="#" class="row-email">eva@gmail.com</a>
+              </div>
+            </button>
+
+            <button class="row" type="button">
+              <div class="avatar">EM</div>
+              <div>
+                <div class="row-name">Emmanuel Mauer</div>
+                <a href="#" class="row-email">emmanuelma@gmail.com</a>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Detail rechts -->
+        <div class="detail">
+          <div class="detail-top">
+            <h1 class="detail-title">
+              Contacts <span class="pipe">|</span> <span class="light">Better with a team</span>
+            </h1>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-header">
+              <div class="avatar big">AM</div>
+              <div class="who">
+                <div class="big-name">Anton Mayer</div>
+                <div class="actions">
+                  <button class="link-btn" type="button">Edit</button>
+                  <button class="link-btn" type="button">Delete</button>
+                </div>
+              </div>
+            </div>
+
+            <h2 class="mini-title">Contact Information</h2>
+            <div class="info-row">
+              <div class="info-key">Email</div>
+              <div><a href="#" class="row-email">antonm@gmail.com</a></div>
+            </div>
+            <div class="info-row">
+              <div class="info-key">Phone</div>
+              <div><a href="#" class="row-email">+49 1111 111 11 1</a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- JS -->
+  <script src="./js/contacts.js"></script>
+</body>
+</html>
