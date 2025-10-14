@@ -2,6 +2,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 120px;
 }
 
 .logo-login {
@@ -42,4 +43,11 @@ main {
 .checkbox-div {
     display: flex;
     gap: 10px;
+}
+
+.signup-footer-links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
