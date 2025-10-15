@@ -19,10 +19,26 @@ main {
   flex-direction: column;
   background-color: white;
   border-radius: 25px;
-  box-shadow: 0 4px 5px 2px #29abe2, 0 4px 10px 2px #29abe2;
+  box-shadow: 0 4px 5px 1px #29abe2, 0 4px 10px 2px #29abe2;
   padding-top: 32px;
   padding-bottom: 32px;
+  padding-left: 16px;
+  padding-right: 16px;
   color: #d1d1d1;
+}
+
+.sign-up-box-h1 {
+  color: #293647;
+  font-weight: 700;
+  font-size: 61px;
+}
+
+.sign-up-box-header {
+  display: flex;
+  align-items: star;
+  justify-content: flex-start;
+  gap: 75px;
+
 }
 
 .sign-up-input-container {
@@ -61,5 +77,20 @@ main {
 }
 
 .footer-links:hover {
-  color: #29ABE2;
+  color: #29abe2;
+}
+
+.pivacy-policy-link {
+  color: #29abe2;
+}
+
+.divider {
+  background-color: #29abe2;
+  width: 148px;
+  height: 3px;
+  margin-top: 25px;
+}
+
+.return-arrow-btn{
+
 }

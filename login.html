@@ -23,7 +23,8 @@
     <div id="status" class="msg-box"></div>
     <main>
       <section class="sign-up-box">
-        <h1>Login</h1>
+        <h1 class="sign-up-box-h1">Login</h1>
+        <div class="divider"></div>
         <form id="login-form" action="">
           <div class="sign-up-input-container">
             <input
@@ -32,6 +33,7 @@
               type="email"
               required
               placeholder="Email"
+              class="signup-input"
             />
             <input
               id="password"
@@ -39,12 +41,15 @@
               type="password"
               required
               placeholder="Password"
+              class="signup-input"
             />
-          </div>
-          <button class="primary" type="submit">Log in</button>
-          <button id="guest-login-btn" class="ghost" style="margin-top: 16px">
+          <div>
+          <button class="primary blue-btn-short" type="submit" >Log in</button>
+          <button id="guest-login-btn" class="ghost white-btn-short" style="margin-top: 16px">
             Guest Log in
           </button>
+          </div>
+          </div>
         </form>
       </section>
     </main>

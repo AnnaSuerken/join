@@ -49,8 +49,26 @@ a {
   font-size: 21px;
 }
 
+.white-btn-short{
+  background-color: white;
+  color: #2A3647;
+  padding-top: 15px;
+  padding-left: 24px;
+  padding-bottom: 15px;
+  padding-right: 24px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-weight: bold;
+  font-size: 21px;
+}
+
+
 .blue-btn-short:hover {
   background-color: #29ABE2;;
+}
+
+.white-btn-short:hover {
+  color: #29ABE2;
 }
 
 .menu-links {
