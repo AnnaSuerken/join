@@ -7,8 +7,8 @@
 
   <!-- Fonts + CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/assets.css">      <!-- global styles -->
-  <link rel="stylesheet" href="./css/contacts.css">    <!-- page styles -->
+  <link rel="stylesheet" href="./css/assets.css">
+  <link rel="stylesheet" href="./css/contacts.css">
 </head>
 <body>
   <div class="page">
@@ -47,7 +47,7 @@
         <!-- Liste links -->
         <div class="list">
           <div class="list-head">
-            <button class="btn" type="button">Add new contact ▾</button>
+            <button class="btn" id="openAddModal" type="button">Add new contact ▾</button>
           </div>
 
           <div class="group">
@@ -126,8 +126,8 @@
               <div class="who">
                 <div class="big-name">Anton Mayer</div>
                 <div class="actions">
-                  <button class="link-btn" type="button">Edit</button>
-                  <button class="link-btn" type="button">Delete</button>
+                  <button class="link-btn" id="editBtn" type="button">Edit</button>
+                  <button class="link-btn" id="deleteBtn" type="button">Delete</button>
                 </div>
               </div>
             </div>
@@ -146,6 +146,46 @@
       </section>
     </main>
 
+  </div>
+
+  <!-- Add/Edit Contact Modal -->
+  <div class="modal-overlay" id="contactModal" hidden>
+    <div class="modal">
+      <button class="modal-close" id="modalCloseBtn" type="button">✕</button>
+
+      <div class="modal-left">
+        <div class="modal-brand">
+          <div class="logo-box big">j</div>
+          <div class="logo-text">OIN</div>
+        </div>
+        <h2 class="modal-title" id="modalTitle">Add contact</h2>
+        <p class="modal-sub">Tasks are better with a team!</p>
+        <div class="modal-underline"></div>
+      </div>
+
+      <div class="modal-right">
+        <form id="contactForm" autocomplete="off">
+          <div class="form-avatar">
+            <div class="avatar big" id="formAvatar">?</div>
+          </div>
+
+          <div class="form-field">
+            <input type="text" id="nameInput" placeholder="Name" required>
+          </div>
+          <div class="form-field">
+            <input type="email" id="emailInput" placeholder="Email" required>
+          </div>
+          <div class="form-field">
+            <input type="tel" id="phoneInput" placeholder="Phone" required>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn" id="submitBtn">Create contact ▾</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- JS -->
