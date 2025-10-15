@@ -48,3 +48,12 @@ a {
   font-weight: bold;
   font-size: 21px;
 }
+
+.blue-btn-short:hover {
+  background-color: #29ABE2;;
+}
+
+.menu-links {
+  color: white;
+  text-decoration: none;
+}

@@ -17,6 +17,7 @@ main {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: white;
   border-radius: 25px;
   box-shadow: 0 4px 5px 2px #29abe2, 0 4px 10px 2px #29abe2;
   padding-top: 32px;
