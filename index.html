@@ -5,28 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join</title>
     <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/summery.css" />
 
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
       const user = await requireAuth({ redirectTo: "/login.html" });
-      export {logout};
+      export { logout };
     </script>
-
-    <script type="module" src="./js/firebase.js"></script>
-
-    <script type="module">
-        import { dbApi } from "./js/firebase.js";
-
-        data = DBApi.getData('/')
-
-        console.log(data);
-        
-
-    </script>
-
   </head>
   <body>
-    <button id="logout-btn"></button>
+    <button id="logout-btn">Logout</button>
+
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="" />
+        <section class="nav-bar">
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/summery.svg" alt="" /> Summery
+          </button>
+          <button>
+            <img src="./assets/icons/addtask.svg" alt="" /> Add Task
+          </button>
+          <button><img src="./assets/icons/board.svg" alt="" />Board</button>
+          <button>
+            <img src="./assets/icons/contacts.svg" alt="" />Contacts
+          </button>
+        </section>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Police</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
+      </section>
+      <section class="content-right">
+        <header>
+          <h2>Kanban Projekt Managemant Tool</h2>
+          <div class="header-right">
+            <a href="#"><img src="./assets/icons/help-default.svg" alt="" /></a>
+            <div class="dropdown">
+              <button class="dropbtn">JK</button>
+              <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+              </div>
+            </div>
+          </div>
+        </header>
+      </section>
+    </div>
   </body>
 </html>
