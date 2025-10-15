@@ -1,9 +1,10 @@
 .content {
   display: flex;
+  width: 100%;
 }
 
 .content-left {
-  width: 230px;
+  width: 10%;
   height: 100vh;
   background-color: #293647;
   display: flex;
@@ -12,6 +13,15 @@
 .content-left img {
   margin-top: 25%;
   height: 120px;
+}
+
+.content-right {
+  width: 90%;
+  height: 100vh;
+  background-color: #fbfbfc;
+  display: flex;
+  flex-direction: column;
+  padding-left: 120px;
 }
 
 .nav-bar {
