@@ -21,6 +21,7 @@ main {
   box-shadow: 0 4px 5px 2px #29abe2, 0 4px 10px 2px #29abe2;
   padding-top: 32px;
   padding-bottom: 32px;
+  color: #d1d1d1;
 }
 
 .sign-up-input-container {
@@ -39,14 +40,25 @@ main {
   border-color: #d1d1d1;
 }
 
-.checkbox-div {
+.checkbox-container {
   display: flex;
+  align-items: center;
+  justify-items: center;
   gap: 10px;
 }
 
-.signup-footer-links {
+.signup-footer-links-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
+}
+
+.footer-links {
+  color: #d1d1d1;
+  font-weight: 400;
+}
+
+.footer-links:hover {
+  color: #29ABE2;
 }

@@ -7,6 +7,7 @@
 
 body {
   height: 100vh;
+  background-color: #f6f7f8;
 }
 
 a {
@@ -33,4 +34,17 @@ a {
   font-size: 12px;
   font-weight: bold;
   text-align: center;
+}
+
+.blue-btn-short{
+  background-color: #2A3647;
+  color: white;
+  padding-top: 15px;
+  padding-left: 24px;
+  padding-bottom: 15px;
+  padding-right: 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  font-size: 21px;
 }
