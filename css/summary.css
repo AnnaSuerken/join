@@ -4,7 +4,7 @@
 }
 
 .content-left {
-  width: 10%;
+  width: 230px;
   height: 100vh;
   background-color: #293647;
   display: flex;
@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   padding-left: 120px;
+
 }
 
 .nav-bar {
