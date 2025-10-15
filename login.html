@@ -1,12 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Log in</title>
-    <link rel="stylesheet" href="./assets/css/assets.css">
-</head>
-<body>
-    
-</body>
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/signup.css" />
+
+    <script type="module" src="./js/firebase.js"></script>
+    <script type="module" src="./js/login.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo-box-signup">
+        <img
+          src="./assets/imgs/join_logo_blue.svg"
+          alt="Join Logo"
+          class="logo-login"
+        />
+      </div>
+    </header>
+    <div id="status" class="msg-box"></div>
+    <main>
+      <section class="sign-up-box">
+        <h1>Login</h1>
+        <form id="login-form" action="">
+          <div class="sign-up-input-container">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="Email"
+            />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder="Password"
+            />
+          </div>
+          <button class="primary" type="submit">Log in</button>
+          <button id="guest-login-btn" class="ghost" style="margin-top: 16px">
+            Guest Log in
+          </button>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <div class="signup-footer-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./legal-notice.html">Legal notice</a>
+      </div>
+    </footer>
+  </body>
 </html>

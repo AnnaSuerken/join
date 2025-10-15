@@ -1,35 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
-    <link rel="stylesheet" href="./assets/css/assets.css">
-    <link rel="stylesheet" href="./assets/css/signup.css">
-</head>
-<body>
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/signup.css" />
+
+    <script type="mobule" src="./js/firebase.js"></script>
+    <script type="module" src="./js/signup.js"></script>
+  </head>
+  <body>
     <header>
-        <div class="logo-box-signup"><img src="./imgs/join_logo_blue.svg" alt="Join Logo" class="logo-login"></div>
+      <div class="logo-box-signup">
+        <img
+          src="./assets/imgs/join_logo_blue.svg"
+          alt="Join Logo"
+          class="logo-login"
+        />
+      </div>
     </header>
+    <div id="status" class="msg-box">
+    </div>
     <main>
-        <section class="sign-up-box">
-                <h1>Sign up</h1>
-                <div class="sign-up-input-container">
-                <input type="text" placeholder="Name" class="signup-input">
-                <input type="text" placeholder="Email" class="signup-input">
-                <input type="text" placeholder="Password" class="signup-input">
-                <input type="text" placeholder="Confirm Password" class="signup-input">
-                <div class="checkbox-div"><input type="checkbox">I accept the <a href="./privacy-policy.html">Privacy Policy</a></div>
-                </div>
-                <button>Sign up</button>
-        </section>
+      <section class="sign-up-box">
+        <h1>Sign up</h1>
+        <form id="register-form" action="">
+          <div class="sign-up-input-container">
+            <input
+              id="displayName"
+              type="text"
+              placeholder="Name"
+              class="signup-input"
+            />
+            <input
+              id="email"
+              type="text"
+              placeholder="Email"
+              class="signup-input"
+            />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              class="signup-input"
+            />
+            <input
+              type="text"
+              placeholder="Confirm Password"
+              class="signup-input"
+            />
+            <div class="checkbox-div">
+              <input type="checkbox" />I accept the
+              <a href="./privacy-policy.html">Privacy Policy</a>
+            </div>
+          </div>
+          <button type="submit">Sign up</button>
+        </form>
+      </section>
     </main>
     <footer>
-        <div class="signup-footer-links">
-            <a href="./privacy-policy.html">Privacy Policy</a>
-            <a href="./legal-notice.html">Legal notice</a>
-        </div>
+      <div class="signup-footer-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./legal-notice.html">Legal notice</a>
+      </div>
     </footer>
-    
-</body>
+  </body>
 </html>
