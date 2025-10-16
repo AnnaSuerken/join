@@ -21,8 +21,6 @@
   background-color: #fbfbfc;
   display: flex;
   flex-direction: column;
-  padding-left: 120px;
-
 }
 
 .nav-bar {
@@ -82,13 +80,14 @@
 .dropbtn {
   background-color: white;
   border-radius: 50%;
-  border: solid 3px #293647;
-  width: 80px;
-  height: 80px;
+  border: solid 3px #2A3647;
+  width: 56px;
+  height: 56px;
   color: #29abe2;
-  font-size: 32px;
+  font-size: 27px;
   font-weight: bold;
   text-align: center;
+  padding: 0;
 }
 
 .dropdown {
@@ -122,6 +121,6 @@
 
 #logout-btn {
   position: absolute;
-  top: 10px;
+  top: 100px;
   right: 20px;
 }

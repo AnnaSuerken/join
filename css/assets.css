@@ -73,3 +73,24 @@ button {
   border-radius: 8px;
   font-size: 21px;
 }
+
+.header-right {
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 96px;
+}
+
+.header-content-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-right: 48px;
+}
+
+.tool-name {
+  font-size: 20px;
+  font-weight: 400;
+  margin-left: 90px;
+}
