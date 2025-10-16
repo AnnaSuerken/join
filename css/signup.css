@@ -19,12 +19,12 @@ main {
   flex-direction: column;
   background-color: white;
   border-radius: 25px;
-  box-shadow: 0 4px 5px 1px #29abe2, 0 4px 10px 2px #29abe2;
+  box-shadow: -1px 0px 6px 0px rgb(0, 0, 0, 0.2);
   padding-top: 32px;
   padding-bottom: 32px;
   padding-left: 16px;
   padding-right: 16px;
-  color: #d1d1d1;
+  color: #f6f7f8;
 }
 
 .sign-up-box-h1 {
@@ -35,10 +35,8 @@ main {
 
 .sign-up-box-header {
   display: flex;
-  align-items: star;
-  justify-content: flex-start;
-  gap: 75px;
-
+  align-items: center;
+  gap: 55px;
 }
 
 .sign-up-input-container {
@@ -62,6 +60,7 @@ main {
   align-items: center;
   justify-items: center;
   gap: 10px;
+  color: #757575;
 }
 
 .signup-footer-links-container {
@@ -89,4 +88,9 @@ main {
   width: 148px;
   height: 3px;
   margin-top: 25px;
+}
+
+.return-arrow-btn{
+  width: 32px;
+  height: 32px;
 }
