@@ -6,6 +6,13 @@
     <title>Board</title>
     <link rel="stylesheet" href="./css/assets.css">
     <link rel="stylesheet" href="./css/summary.css">
+    <link rel="stylesheet" href="./css/board.css">
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
 
 </head>
 <body>
@@ -39,14 +46,22 @@
             <div class="dropdown">
               <button class="dropbtn">JK</button>
               <div class="dropdown-content">
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
               </div>
             </div>
           </div>
         </header>
-        <button id="logout-btn">Logout</button>
+        <main>
+          <section class="board-header">
+            <h1>Board</h1>
+            <div></div>
+            <div><input type="search" placeholder="Find Task"><img src="" alt=""></div>
+            <button>Add Task +</button>
+            </div>
+          </section>
+        </main>
       </section>
     </div>
 </body>

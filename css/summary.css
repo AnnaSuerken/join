@@ -18,7 +18,7 @@
 .content-right {
   width: 90%;
   height: 100vh;
-  background-color: #fbfbfc;
+  background-color: #f6f7f8;
   display: flex;
   flex-direction: column;
 }
@@ -120,7 +120,5 @@
 }
 
 #logout-btn {
-  position: absolute;
-  top: 100px;
-  right: 20px;
+  cursor: pointer;
 }

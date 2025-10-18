@@ -1,0 +1,15 @@
+main {
+    margin-left: 90px;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+}
+
+.board-header H1 {
+    font-size: 61px;
+    font-weight: 700;
+}

@@ -80,6 +80,7 @@ button {
   justify-content: space-between;
   align-items: center;
   height: 96px;
+  background-color: #ffffff;
 }
 
 .header-content-right {

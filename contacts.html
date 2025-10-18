@@ -9,6 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/assets.css">
   <link rel="stylesheet" href="./css/contacts.css">
+  <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
 </head>
 <body>
   <div class="page">
