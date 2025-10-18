@@ -14,6 +14,12 @@ a {
   text-decoration: none;
 }
 
+input {
+  border-radius: 10px;
+  border: solid 0.5px;
+  border-color: #d1d1d1;
+}
+
 .d_none {
   display: none;
 }
@@ -48,15 +54,16 @@ a {
   color: #2A3647;
   border: 1px solid;
   font-weight: 700;
-
 }
 
 .blue-btn-bold:hover {
-  background-color: #29ABE2;;
+  background-color: #29ABE2;
+  cursor: pointer;
 }
 
 .white-btn-bold:hover {
   color: #29ABE2;
+  cursor: pointer;
 }
 
 .menu-links {

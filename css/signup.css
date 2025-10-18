@@ -50,9 +50,6 @@ main {
 .signup-input {
   padding-top: 15px;
   padding-right: 125px;
-  border-radius: 10px;
-  border: solid 0.5px;
-  border-color: #d1d1d1;
 }
 
 .checkbox-container {
