@@ -36,7 +36,8 @@ main {
 .sign-up-box-header {
   display: flex;
   align-items: center;
-  gap: 55px;
+  width: 95%;
+  gap: 48px;
 }
 
 .sign-up-input-container {
@@ -85,9 +86,4 @@ main {
   width: 148px;
   height: 3px;
   margin-top: 25px;
-}
-
-.return-arrow-btn{
-  width: 32px;
-  height: 32px;
 }
