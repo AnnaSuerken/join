@@ -28,11 +28,17 @@ main {
 
 .task-table {
     display: flex;
-    align-items: flex-start;
-}
-
-table {
-    display: flex;
     justify-content: space-between;
     width: 90%;
+    gap: 64px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #42526e;
+}
+
+.task-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 25%;
 }
