@@ -1,284 +1,167 @@
 /* =======================
-   CONTACTS – clean version
+   CONTACTS – Allman + ≤15 lines/func
    ======================= */
 
-let contacts = [
-  { name: "Anton Mayer",    initials: "AM", email: "antonm@gmail.com",    phone: "+49 1111 111 11 1", color: "#FF7A00" },
-  { name: "Anja Schulz",    initials: "AS", email: "schulz@hotmail.com",  phone: "+49 2222 222 22 2", color: "#29ABE2" },
-  { name: "Benedikt Ziegler", initials: "BZ", email: "benedikt@gmail.com", phone: "+49 3333 333 33 3", color: "#6E52FF" },
-  { name: "David Eisenberg",  initials: "DE", email: "davidberg@gmail.com", phone: "+49 4444 444 44 4", color: "#1FD7C1" },
-  { name: "Eva Fischer",      initials: "EF", email: "eva@gmail.com",       phone: "+49 5555 555 55 5", color: "#FC71FF" },
-  { name: "Emmanuel Mauer",   initials: "EM", email: "emmanuelma@gmail.com",phone: "+49 6666 666 66 6", color: "#FFBB2B" }
+let contacts =
+[
+  { name:"Anton Mayer", email:"antonm@gmail.com", phone:"+49 1111 111 11 1", color:"#FF7A00" },
+  { name:"Anja Schulz", email:"schulz@hotmail.com", phone:"+49 2222 222 22 2", color:"#29ABE2" },
+  { name:"Benedikt Ziegler", email:"benedikt@gmail.com", phone:"+49 3333 333 33 3", color:"#6E52FF" },
+  { name:"David Eisenberg", email:"davidberg@gmail.com", phone:"+49 4444 444 44 4", color:"#1FD7C1" },
+  { name:"Eva Fischer", email:"eva@gmail.com", phone:"+49 5555 555 55 5", color:"#FC71FF" },
+  { name:"Emmanuel Mauer", email:"emmanuelma@gmail.com", phone:"+49 6666 666 66 6", color:"#FFBB2B" }
 ];
 
-let selectedIndex = 0;
-let modalMode = "create";
 const colorPool = ["#FF7A00","#29ABE2","#6E52FF","#1FD7C1","#FC71FF","#FFBB2B"];
+let selectedId = null, modalMode = "create", nextId = 1;
 
-/* ---------- helpers ---------- */
-const qs  = (s, r=document)=>r.querySelector(s);
-const qsa = (s, r=document)=>[...r.querySelectorAll(s)];
-const byId = id => document.getElementById(id);
+const qs = (s,r=document)=>r.querySelector(s), qsa = (s,r=document)=>[...r.querySelectorAll(s)], byId = id=>document.getElementById(id);
+const initialsFromName = n => { const p = String(n||"").trim().split(/\s+/); return ((p[0]?.[0]||"")+(p[1]?.[0]||"")).toUpperCase(); };
+const telHref = s => `tel:${(s||"").replace(/\s+/g,"")}`, getLetter = n => (n?.[0]||"#").toUpperCase(), idxById = id => contacts.findIndex(c=>c.id===id);
 
-const initialsFromName = n => {
-  const p = n.trim().split(/\s+/);
-  return ((p[0]?.[0]||"") + (p[1]?.[0]||"")).toUpperCase();
-};
-
-function telHref(s){ return `tel:${(s||"").replace(/\s+/g,"")}`; }
-
-/* ---------- list wiring ---------- */
-function refreshRowIndices(){
-  qsa(".row").forEach((b,i)=> b.dataset.index = i);
+/* ---------- focus trap ---------- */
+function trapFocus(scope)
+{
+  const f = scope.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
+  const first = f[0], last = f[f.length - 1];
+  function onKey(e){ if(e.key!=='Tab')return;
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); } }
+  scope.addEventListener('keydown', onKey);
+  return () => scope.removeEventListener('keydown', onKey);
 }
 
-function markActive(i){
-  selectedIndex = i;
-  qsa(".row").forEach(r=>r.classList.remove("active"));
-  const rows = qsa(".row");
-  if (rows[i]) rows[i].classList.add("active");
+/* ---------- groups ---------- */
+function ensureGroup(letter)
+{
+  letter = (letter||"#").toUpperCase();
+  const list = qs(".list"), groups = qsa(".group", list);
+  for (const g of groups) { const t = qs(".group-title", g)?.textContent.trim().toUpperCase(); if (t === letter) return g; }
+  const g = document.createElement("div"); g.className = "group"; g.innerHTML = `<div class="group-title">${letter}</div>`;
+  let placed = false; for (const node of groups) { const t = qs(".group-title", node)?.textContent.trim().toUpperCase(); if (t && t > letter) { list.insertBefore(g, node); placed = true; break; } }
+  if (!placed) list.appendChild(g); return g;
 }
 
-function updateDetail(i){
-  selectedIndex = i;
-  const c = contacts[i];
-  const d = qs(".detail-card");
-  if (!d) return;
-
-  d.innerHTML = `
-    <div class="detail-header">
-      <div class="avatar big" style="background:${c.color}">${c.initials}</div>
-      <div class="who">
-        <div class="big-name">${c.name}</div>
-        <div class="actions">
-          <button class="link-btn" id="editBtn" type="button">Edit</button>
-          <button class="link-btn" id="deleteBtn" type="button">Delete</button>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="mini-title">Contact Information</h2>
-    <div class="info-row">
-      <div class="info-key">Email</div>
-      <div><a class="row-email" href="mailto:${c.email}">${c.email}</a></div>
-    </div>
-    <div class="info-row">
-      <div class="info-key">Phone</div>
-      <div><a class="row-email" href="${telHref(c.phone)}">${c.phone}</a></div>
-    </div>`;
-
-  byId("editBtn").addEventListener("click", ()=> openModal("edit", i));
-  byId("deleteBtn").addEventListener("click", onDelete);
+function insertRowSorted(groupEl, rowEl)
+{
+  const rows = qsa(".row", groupEl), newName = qs(".row-name", rowEl).textContent.trim();
+  for (const r of rows) { const nm = qs(".row-name", r).textContent.trim(); if (nm.localeCompare(newName, "de", { sensitivity:"base" }) > 0) { groupEl.insertBefore(rowEl, r); return; } }
+  groupEl.appendChild(rowEl);
 }
 
-function attachRowHandlers(){
-  qsa(".row").forEach((b,i)=>{
-    b.dataset.index = i;
-    b.addEventListener("click", ()=>{
-      markActive(i);
-      updateDetail(i);
-    });
+/* ---------- rows / selection ---------- */
+function makeRow(c)
+{
+  const b = document.createElement("button"); b.className = "row"; b.type = "button"; b.dataset.id = String(c.id);
+  b.innerHTML = `<div class="avatar" style="background:${c.color}">${c.initials}</div><div><div class="row-name">${c.name}</div><a class="row-email" href="mailto:${c.email}">${c.email}</a></div>`;
+  b.addEventListener("click", ()=>{ setActiveRow(c.id); updateDetail(c.id); }); return b;
+}
+
+function setActiveRow(cid)
+{
+  selectedId = cid; qsa(".row").forEach(r => r.classList.toggle("active", r.dataset.id === String(cid)));
+}
+
+/* ---------- detail ---------- */
+function updateDetail(cid)
+{
+  const i = idxById(cid); if (i < 0) return; const c = contacts[i], d = qs(".detail-card"); if (!d) return;
+  d.innerHTML = `<div class="detail-header"><div class="avatar big" style="background:${c.color}">${c.initials}</div><div class="who"><div class="big-name">${c.name}</div><div class="actions"><button class="link-btn" id="editBtn" type="button">Edit</button><button class="link-btn" id="deleteBtn" type="button">Delete</button></div></div></div><h2 class="mini-title">Contact Information</h2><div class="info-row"><div class="info-key">Email</div><div><a class="row-email" href="mailto:${c.email}">${c.email}</a></div></div><div class="info-row"><div class="info-key">Phone</div><div><a class="row-email" href="${telHref(c.phone)}">${c.phone}</a></div></div>`;
+  byId("editBtn").addEventListener("click", ()=> openModal("edit", cid)); byId("deleteBtn").addEventListener("click", onDelete);
+}
+
+/* ---------- boot list ---------- */
+function syncListFromContacts()
+{
+  contacts = contacts.map(c => ({ ...c, id: c.id ?? nextId++, initials: c.initials || initialsFromName(c.name) }));
+  qsa(".row").forEach(r => { const nm = qs(".row-name", r)?.textContent.trim(), em = qs(".row-email", r)?.textContent.trim();
+    const c = contacts.find(x => x.name === nm && x.email === em); if (!c) return;
+    r.dataset.id = String(c.id); const av = qs(".avatar", r); if (av) { av.textContent = c.initials; av.style.background = c.color; }
+    const emA = qs(".row-email", r); if (emA) emA.href = `mailto:${c.email}`; r.addEventListener("click", ()=>{ setActiveRow(c.id); updateDetail(c.id); });
   });
 }
 
-/* ---------- init: sync static HTML rows mit contacts[] ---------- */
-function syncListFromContacts(){
-  const rows = qsa(".row");
-  rows.forEach((b,i)=>{
-    const c = contacts[i];
-    if (!c) return;
-    // Visuelle Daten in die Row injizieren (Farbe/Phone)
-    const av = b.querySelector(".avatar");
-    if (av){
-      av.textContent = c.initials;
-      av.style.background = c.color;
-    }
-    const nm = b.querySelector(".row-name");
-    const em = b.querySelector(".row-email");
-    if (nm) nm.textContent = c.name;
-    if (em){ em.textContent = c.email; em.href = `mailto:${c.email}`; }
-    b.dataset.phone = c.phone;
-    b.dataset.index = i;
-  });
-}
-
-/* ---------- modal ---------- */
-function openModal(mode="create", index = selectedIndex){
+/* ---------- modal (mit federndem Slide via Keyframes) ---------- */
+function openModal(mode="create", cid=selectedId)
+{
   modalMode = mode;
-
-  if (mode === "edit"){
-    const c = contacts[index];
-    byId("nameInput").value  = c.name;
-    byId("emailInput").value = c.email;
-    byId("phoneInput").value = c.phone;
-    const av = byId("formAvatar");
-    av.textContent = c.initials;
-    av.style.background = c.color;
-  } else {
-    byId("contactForm").reset();
-    const av = byId("formAvatar");
-    av.textContent = "?";
-    av.style.background = "#E5E7EB";
-  }
-
+  const form = byId("contactForm"), name = byId("nameInput"), email = byId("emailInput"), phone = byId("phoneInput");
+  if (mode === "edit") { const c = contacts[idxById(cid)]; name.value = c.name; email.value = c.email; phone.value = c.phone; byId("formAvatar").textContent = c.initials; }
+  else { form.reset(); byId("formAvatar").textContent = "?"; }
   byId("modalTitle").textContent = mode === "edit" ? "Edit contact" : "Add contact";
   byId("submitBtn").textContent  = mode === "edit" ? "Save changes ▾" : "Create contact ▾";
-
-  const overlay = byId("contactModal");
-  overlay.hidden = false;
-
-  // Esc + Außenklick
-  const onKey = e => { if (e.key === "Escape") closeModal(); };
-  const onClickOutside = e => { if (e.target === overlay) closeModal(); };
-  overlay.dataset._esc = "1";
-  document.addEventListener("keydown", onKey, { once:true });
-  overlay.addEventListener("click", onClickOutside, { once:true });
+  const overlay = byId("contactModal"), card = overlay.querySelector(".modal");
+  overlay.hidden = false; overlay.classList.add("is-open"); card.classList.remove("is-leaving"); void card.offsetWidth; card.classList.add("is-entering"); setTimeout(()=> name.focus(), 0);
+  const cleanupTrap = trapFocus(card), doClose = () => { cleanupTrap(); closeModal(); };
+  document.addEventListener("keydown", e => { if (e.key === "Escape") doClose(); }, { once:true });
+  overlay.addEventListener("click", e => { if (e.target === overlay) doClose(); }, { once:true });
+  card.addEventListener("animationend", e => { if (e.animationName === "modalIn") card.classList.remove("is-entering"); }, { once:true });
 }
 
-function closeModal(){
-  const overlay = byId("contactModal");
-  overlay.hidden = true;
+function closeModal()
+{
+  const overlay = byId("contactModal"), card = overlay.querySelector(".modal"), form = byId("contactForm");
+  card.classList.remove("is-entering"); card.classList.add("is-leaving");
+  const onEnd = e => { if (e.animationName !== "modalOut") return;
+    card.removeEventListener("animationend", onEnd); overlay.classList.remove("is-open"); overlay.hidden = true; card.classList.remove("is-leaving");
+    form.reset(); byId("formAvatar").textContent = "?"; };
+  card.addEventListener("animationend", onEnd);
 }
 
-function onSubmitForm(e){
+function onSubmitForm(e)
+{
   e.preventDefault();
-  const name  = byId("nameInput").value.trim();
-  const email = byId("emailInput").value.trim();
-  const phone = byId("phoneInput").value.trim();
-  if (!name || !email || !phone) return;
+  const btn = byId("submitBtn");
+  if (btn.dataset.busy) return;
+  btn.dataset.busy = "1";
 
-  if (modalMode === "create") {
-    createContact(name, email, phone);
-  } else {
-    saveEdit(name, email, phone);
-  }
-  closeModal();
+  const name = byId("nameInput").value.trim(),
+        email = byId("emailInput").value.trim(),
+        phone = byId("phoneInput").value.trim();
+
+  if (!name || !email || !phone) { btn.dataset.busy = ""; return; }
+  modalMode === "create" ? createContact(name, email, phone) : saveEdit(name, email, phone);
+  btn.dataset.busy = ""; closeModal();
 }
 
-/* ---------- add / edit / delete ---------- */
-function ensureGroup(letter){
-  letter = (letter || "#").toUpperCase();
-  const list = qs(".list");
-  const groups = qsa(".group", list);
-  // gibt es Gruppe schon?
-  for (const g of groups){
-    const t = qs(".group-title", g);
-    if (t && t.textContent.trim().toUpperCase() === letter) return g;
-  }
-  // neu anlegen (ans Ende; reicht hier)
-  const g = document.createElement("div");
-  g.className = "group";
-  g.innerHTML = `<div class="group-title">${letter}</div>`;
-  list.appendChild(g);
-  return g;
+/* ---------- CRUD ---------- */
+function createContact(name, email, phone)
+{
+  const c = { id: nextId++, name, email, phone, color: colorPool[contacts.length % colorPool.length], initials: initialsFromName(name) };
+  contacts.push(c); const group = ensureGroup(getLetter(c.name)); insertRowSorted(group, makeRow(c)); setActiveRow(c.id); updateDetail(c.id);
 }
 
-function makeRow(c){
-  const b = document.createElement("button");
-  b.className = "row";
-  b.type = "button";
-  b.dataset.phone = c.phone;
-  b.innerHTML = `
-    <div class="avatar" style="background:${c.color}">${c.initials}</div>
-    <div>
-      <div class="row-name">${c.name}</div>
-      <a href="mailto:${c.email}" class="row-email">${c.email}</a>
-    </div>`;
-  b.addEventListener("click", ()=>{
-    const i = Number(b.dataset.index);
-    markActive(i);
-    updateDetail(i);
-  });
-  return b;
+function saveEdit(name, email, phone)
+{
+  const i = idxById(selectedId); if (i < 0) return; const c = contacts[i]; Object.assign(c, { name, email, phone, initials: initialsFromName(name) });
+  const row = qs(`.row[data-id="${c.id}"]`); if (!row) return; const oldGroup = row.closest(".group"), oldLetter = qs(".group-title", oldGroup).textContent.trim().toUpperCase(), newLetter = getLetter(c.name);
+  qs(".row-name", row).textContent = c.name; const em = qs(".row-email", row); em.textContent = c.email; em.href = `mailto:${c.email}`; qs(".avatar", row).textContent = c.initials;
+  if (oldLetter !== newLetter) { row.remove(); insertRowSorted(ensureGroup(newLetter), row); if (!qsa(".row", oldGroup).length) oldGroup.remove(); } else { row.remove(); insertRowSorted(oldGroup, row); }
+  updateDetail(c.id);
 }
 
-function createContact(name,email,phone){
-  const color = colorPool[contacts.length % colorPool.length];
-  const initials = initialsFromName(name);
-  const c = { name, email, phone, color, initials };
-  // in Daten
-  contacts.push(c);
-
-  // richtige Gruppe nach Buchstabe
-  const letter = (name[0] || "#").toUpperCase();
-  const group = ensureGroup(letter);
-  const row = makeRow(c);
-  group.appendChild(row);
-
-  refreshRowIndices();
-  const idx = contacts.length - 1;
-  markActive(idx);
-  updateDetail(idx);
-}
-
-function saveEdit(name,email,phone){
-  const i = selectedIndex;
-  const c = contacts[i];
-  c.name = name;
-  c.email = email;
-  c.phone = phone;
-  c.initials = initialsFromName(name);
-
-  const btn = qs(`.row[data-index="${i}"]`);
-  if (btn){
-    btn.querySelector(".row-name").textContent = c.name;
-    const em = btn.querySelector(".row-email");
-    em.textContent = c.email; em.href = `mailto:${c.email}`;
-    const av = btn.querySelector(".avatar");
-    av.textContent = c.initials;
-  }
-  updateDetail(i);
-}
-
-function onDelete(){
+function onDelete()
+{
   if (!confirm("Delete this contact?")) return;
-
-  // Dom entfernen
-  const btn = qs(`.row[data-index="${selectedIndex}"]`);
-  if (btn) btn.remove();
-
-  // Daten entfernen
-  contacts.splice(selectedIndex, 1);
-
-  refreshRowIndices();
-  const next = Math.max(0, selectedIndex - 1);
-
-  if (contacts[next]){
-    markActive(next);
-    updateDetail(next);
-  } else {
-    const d = qs(".detail-card");
-    if (d) d.innerHTML = "<p>No contact selected.</p>";
-  }
+  const i = idxById(selectedId); if (i < 0) return; contacts.splice(i, 1); const row = qs(`.row[data-id="${selectedId}"]`), group = row?.closest(".group");
+  if (row) row.remove(); if (group && !qsa(".row", group).length) group.remove(); const any = qs(".row");
+  if (any) { const cid = Number(any.dataset.id); setActiveRow(cid); updateDetail(cid); } else { selectedId = null; const d = qs(".detail-card"); if (d) d.innerHTML = "<p>No contact selected.</p>"; }
 }
 
-/* ---------- boot ---------- */
-function init(){
-  // Klicks
-  attachRowHandlers();
+/* ---------- wiring / init ---------- */
+function attachGlobalHandlers()
+{
+  byId("openAddModal")?.addEventListener("click", ()=> openModal("create"));
+  byId("cancelBtn")?.addEventListener("click", closeModal);
+  byId("modalCloseBtn")?.addEventListener("click", closeModal);
+  byId("contactForm")?.addEventListener("submit", onSubmitForm);
+  byId("nameInput")?.addEventListener("input", e=> byId("formAvatar").textContent = initialsFromName(e.target.value) || "?");
+}
 
-  // Buttons Top
-  const add = byId("openAddModal");
-  if (add) add.addEventListener("click", ()=> openModal("create"));
-
-  byId("cancelBtn").addEventListener("click", closeModal);
-  byId("modalCloseBtn").addEventListener("click", closeModal);
-  byId("contactForm").addEventListener("submit", onSubmitForm);
-
-  // Tippen im Name-Feld → Avatar-Initialen live
-  document.addEventListener("input", (e)=>{
-    if (e.target && e.target.id === "nameInput"){
-      const av = byId("formAvatar");
-      av.textContent = initialsFromName(e.target.value) || "?";
-    }
-  });
-
-  // Liste gemäß contacts[] einfärben/verdrahten
-  syncListFromContacts();
-
-  // Startzustand
-  markActive(0);
-  updateDetail(0);
+function init()
+{
+  syncListFromContacts(); const first = qs(".row"); if (first) { const cid = Number(first.dataset.id) || 1; setActiveRow(cid); updateDetail(cid); }
+  attachGlobalHandlers();
 }
 
 window.addEventListener("load", init);
