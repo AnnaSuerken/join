@@ -5,6 +5,8 @@
     gap: 35px;
     margin-top: 125px;
     margin-left: 90px;
+    width: 1016px;   
+    height: 309px;  
 }
 
 .privacy-policy-section h1 {
@@ -12,7 +14,7 @@
   font-size: 61px;
 }
 
-.privacy-policy-article{
+.privacy-policy-article {
     display: flex;
     flex-direction: column;
     justify-content: center;
