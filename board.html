@@ -1,79 +1,130 @@
+<!-- /board.html -->
 <!DOCTYPE html>
 <html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Board</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Board</title>
-  <link rel="stylesheet" href="./css/assets.css">
-  <link rel="stylesheet" href="./css/summary.css">
-  <link rel="stylesheet" href="./css/board.css">
-  <script type="module">
-    import { requireAuth } from "./js/authguard.js";
-    import { logout } from "./js/logout.js";
-    const user = await requireAuth({ redirectTo: "/login.html" });
-    export { logout };
-  </script>
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/summary.css" />
+    <link rel="stylesheet" href="./css/board.css" />
 
-</head>
+    <script src="./js/main.js"></script>
 
-<body>
-  <div class="content">
-    <section class="content-left">
-      <img src="./assets/imgs/join_logo_white.svg" alt="" />
-      <section class="nav-bar">
-        <button>
-          <img src="./assets/icons/summary.svg" alt="" /><a href="./index.html" class="menu-links">Summary
-        </button>
-        <button>
-          <img src="./assets/icons/addtask.svg" alt="" /><a href="./add-task.html" class="menu-links">Add Task</a>
-        </button>
-        <button class="nav-bar-button-active">
-          <img src="./assets/icons/board.svg" alt="" /><a href="./board.html" class="menu-links">Board</a>
-        </button>
-        <button>
-          <img src="./assets/icons/contacts.svg" alt="" /><a href="./contacts.html" class="menu-links">Contacts</a>
-        </button>
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
+  </head>
+
+  <body>
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <section class="nav-bar">
+          <button>
+            <img src="./assets/icons/summary.svg" alt="" /><a
+              href="./index.html"
+              class="menu-links"
+              >Summary</a
+            >
+          </button>
+          <button>
+            <img src="./assets/icons/addtask.svg" alt="" /><a
+              href="./add-task.html"
+              class="menu-links"
+              >Add Task</a
+            >
+          </button>
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/board.svg" alt="" /><a
+              href="./board.html"
+              class="menu-links"
+              >Board</a
+            >
+          </button>
+          <button>
+            <img src="./assets/icons/contacts.svg" alt="" /><a
+              href="./contacts.html"
+              class="menu-links"
+              >Contacts</a
+            >
+          </button>
+        </section>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
       </section>
-      <div class="nav-bar-links">
-        <a href="./privacy-policy.html">Privacy Policy</a>
-        <a href="./legal-notice.html">Legal notice</a>
-      </div>
-    </section>
-    <section class="content-right">
-      <header class="header-right">
-        <span class="tool-name">Kanban Projekt Managemant Tool</span>
-        <div class="header-content-right">
-          <a href="./help.html"><img src="./assets/icons/help.svg" alt="" /></a>
-          <div class="dropdown">
-            <button class="dropbtn">JK</button>
-            <div class="dropdown-content">
-              <a href="./legal-notice.html">Legal Notice</a>
-              <a href="./privacy-policy.html">Privacy Policy</a>
-              <a id="logout-btn">Logout</a>
+
+      <section class="content-right">
+        <header class="header-right">
+          <span class="tool-name">Kanban Projekt Management Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html"
+              ><img src="./assets/icons/help.svg" alt="Hilfe"
+            /></a>
+            <div class="dropdown">
+              <button class="dropbtn">JK</button>
+              <div class="dropdown-content">
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
-      <main>
-        <section class="board-header">
-          <h1>Board</h1>
-          <div class="action-container">
-            <input type="search" placeholder="Find Task"><img src="./assets/icons/search.svg" alt="">
-            <button class="blue-btn-bold">Add Task +</button>
-          </div>
-        </section>
-        <section>
-          <div class="task-table">
-            <div class="task-table-header"><span>To Do</span><button class="white-btn-bold">+</button></div>
-            <div class="task-table-header"><span>In progress</span><button class="white-btn-bold">+</button></div>
-            <div class="task-table-header"><span>Await Feedback</span><button class="white-btn-bold">+</button></div>
-            <div class="task-table-header"><span>Done</span><button class="white-btn-bold">+</button></div>
-          </div>
-        </section>
-      </main>
-    </section>
-  </div>
-</body>
+        </header>
 
+        <main>
+          <section class="board-header">
+            <h1>Board</h1>
+            <div class="action-container">
+              <input id="task-search" type="search" placeholder="Find Task" />
+              <img src="./assets/icons/search.svg" alt="Search" />
+              <button id="add-demo" class="blue-btn-bold">
+                Add Demo Task +
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <div class="task-table">
+              <div class="task-table-header">
+                <span>To Do</span><button class="white-btn-bold">+</button>
+              </div>
+              <div class="task-table-header">
+                <span>In progress</span
+                ><button class="white-btn-bold">+</button>
+              </div>
+              <div class="task-table-header">
+                <span>Await Feedback</span
+                ><button class="white-btn-bold">+</button>
+              </div>
+              <div class="task-table-header">
+                <span>Done</span><button class="white-btn-bold">+</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="task-table-tasks">
+            <div id="task-table-todo" class="task-table-colum dropzone"></div>
+            <div
+              id="task-table-progress"
+              class="task-table-colum dropzone"
+            ></div>
+            <div
+              id="task-table-feedback"
+              class="task-table-colum dropzone"
+            ></div>
+            <div id="task-table-done" class="task-table-colum dropzone"></div>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <script type="module" src="./js/board.js" defer></script>
+  </body>
 </html>

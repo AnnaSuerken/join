@@ -1,44 +1,112 @@
 main {
-    margin-left: 90px;
-    width: 90%;
+  margin-left: 90px;
+  width: 90%;
 }
 
 .board-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 232px;;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 232px;
 }
 
 .board-header H1 {
-    font-size: 61px;
-    font-weight: 700;
+  font-size: 61px;
+  font-weight: 700;
 }
 
 .action-container {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .action-container input {
-    padding-right: 32px;
-    padding-left: 32px;
+  padding-right: 32px;
+  padding-left: 32px;
 }
 
 .task-table {
-    display: flex;
-    justify-content: space-between;
-    width: 90%;
-    gap: 64px;
-    font-size: 20px;
-    font-weight: 700;
-    color: #42526e;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 64px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #42526e;
 }
 
 .task-table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 25%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 25%;
+}
+
+.task-table-tasks {
+  display: flex;
+  width: 100%;
+}
+
+.task-table-colum {
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f5f7;
+  border-radius: 6px;
+  width: 25%;
+}
+
+.task {
+  background-color: #ffffff;
+  border-radius: 12px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+.task-name {
+  background-color: #0038ff;
+  color: white;
+  border-radius: 4px;
+  width: 50%;
+  text-align: center;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+.task-discription-headline {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.task-discription-secontline {
+  font-weight: 400;
+  margin-bottom: 12px;
+  color: #a8a8a8;
+}
+.task-subtasks {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.task-subtask-line {
+  width: 60%;
+  height: 6px;
+  border-radius: 12px;
+  background-color: #f4f4f4;
+}
+
+.task-subtask-line-fill {
+  background-color: #4589ff;
+  width: 30%;
+}
+
+.dropzone {
+  width: 90%;
+}
+.dropzone.over {
+  outline: 2px dashed #8aa7ff;
+  background: #fff;
+  width: 90%;
+}
+.item.dragging {
+  opacity: 0.85;
 }
