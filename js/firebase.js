@@ -64,3 +64,6 @@ export const dbApi = {
     await remove(ref(db, path));
   },
 };
+
+
+window.dbApi = dbApi;

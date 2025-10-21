@@ -1,205 +1,201 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-<head>
-  <meta charset="utf-8">
-  <title>Join - Contacts</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/assets.css">
-  <link rel="stylesheet" href="./css/contacts.css">
-  <script type="module">
-    import { requireAuth } from "./js/authguard.js";
-    import { logout } from "./js/logout.js";
-    const user = await requireAuth({ redirectTo: "/login.html" });
-    export { logout };
-  </script>
-</head>
-<body>
-  <div class="page">
+  <head>
+    <meta charset="utf-8" />
+    <title>Join - Contacts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/contacts.css" />
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="brand">
-        <img src="./assets/imgs/join_logo_white.svg" class="brand-logo" alt="JOIN">
-      </div>
+    <!-- Login-Gate -->
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
 
-      <nav class="menu">
-        <a href="./index.html" class="menu-link">
-          <img src="./assets/icons/person.svg" class="menu-ic" alt=""><span>Summary</span>
-        </a>
-        <a href="./add-task.html" class="menu-link">
-          <img src="./assets/icons/addtask.svg" class="menu-ic" alt=""><span>Add Task</span>
-        </a>
-        <a href="./board.html" class="menu-link">
-          <img src="./assets/icons/board.svg" class="menu-ic" alt=""><span>Board</span>
-        </a>
-        <a href="./contacts.html" class="menu-link active" aria-current="page">
-          <img src="./assets/icons/contacts.svg" class="menu-ic" alt=""><span>Contacts</span>
-        </a>
-      </nav>
+    <!-- Firebase + dbApi global verfügbar machen -->
+    <script src="./js/firebase.js"></script>
+    <script src="./js/contacts.js"></script>
+  </head>
+  <body>
 
-      <div class="sidebar-bottom">
-        <a href="./privacy-policy.html" class="mini-link"><img src="./assets/icons/lock.svg" class="mini-ic" alt=""> Privacy Policy</a>
-        <a href="./legal-notice.html" class="mini-link"><img src="./assets/icons/help.svg" class="mini-ic" alt=""> Legal notice</a>
-      </div>
-    </aside>
+    <!-- <div id="heckbock" class="checkbox">
+      <h2>Are you Sure</h2>
+      <button>Yes</button>
+      <button>No</button>
+    </div> -->
 
-    <!-- Main -->
-    <main class="main">
-      <header class="topbar">
-        <div class="tool-name">Kanban Project Management Tool</div>
-        <div class="top-right">
-          <button class="small-icon" type="button">?</button>
-          <div class="avatar small">SM</div>
+    <div class="page">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="brand">
+          <img
+            src="./assets/imgs/join_logo_white.svg"
+            class="brand-logo"
+            alt="JOIN"
+          />
         </div>
-      </header>
-
-      <section class="content">
-        <!-- Liste links -->
-        <div class="list">
-          <div class="list-head">
-            <button class="btn" id="openAddModal" type="button">Add new contact ▾</button>
-          </div>
-
-          <div class="group" data-group="A">
-            <div class="group-title">A</div>
-
-            <button class="row active" type="button">
-              <div class="avatar">AM</div>
-              <div>
-                <div class="row-name">Anton Mayer</div>
-                <a href="mailto:antonm@gmail.com" class="row-email">antonm@gmail.com</a>
-              </div>
-            </button>
-
-            <button class="row" type="button">
-              <div class="avatar">AS</div>
-              <div>
-                <div class="row-name">Anja Schulz</div>
-                <a href="mailto:schulz@hotmail.com" class="row-email">schulz@hotmail.com</a>
-              </div>
-            </button>
-          </div>
-
-          <div class="group" data-group="B">
-            <div class="group-title">B</div>
-            <button class="row" type="button">
-              <div class="avatar">BZ</div>
-              <div>
-                <div class="row-name">Benedikt Ziegler</div>
-                <a href="mailto:benedikt@gmail.com" class="row-email">benedikt@gmail.com</a>
-              </div>
-            </button>
-          </div>
-
-          <div class="group" data-group="D">
-            <div class="group-title">D</div>
-            <button class="row" type="button">
-              <div class="avatar">DE</div>
-              <div>
-                <div class="row-name">David Eisenberg</div>
-                <a href="mailto:davidberg@gmail.com" class="row-email">davidberg@gmail.com</a>
-              </div>
-            </button>
-          </div>
-
-          <div class="group" data-group="E">
-            <div class="group-title">E</div>
-            <button class="row" type="button">
-              <div class="avatar">EF</div>
-              <div>
-                <div class="row-name">Eva Fischer</div>
-                <a href="mailto:eva@gmail.com" class="row-email">eva@gmail.com</a>
-              </div>
-            </button>
-
-            <button class="row" type="button">
-              <div class="avatar">EM</div>
-              <div>
-                <div class="row-name">Emmanuel Mauer</div>
-                <a href="mailto:emmanuelma@gmail.com" class="row-email">emmanuelma@gmail.com</a>
-              </div>
-            </button>
-          </div>
+        <nav class="menu">
+          <a href="./index.html" class="menu-link">
+            <img src="./assets/icons/person.svg" class="menu-ic" alt="" /><span
+              >Summary</span
+            >
+          </a>
+          <a href="./add-task.html" class="menu-link">
+            <img src="./assets/icons/addtask.svg" class="menu-ic" alt="" /><span
+              >Add Task</span
+            >
+          </a>
+          <a href="./board.html" class="menu-link">
+            <img src="./assets/icons/board.svg" class="menu-ic" alt="" /><span
+              >Board</span
+            >
+          </a>
+          <a
+            href="./contacts.html"
+            class="menu-link active"
+            aria-current="page"
+          >
+            <img
+              src="./assets/icons/contacts.svg"
+              class="menu-ic"
+              alt=""
+            /><span>Contacts</span>
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <a href="./privacy-policy.html" class="mini-link"
+            ><img src="./assets/icons/lock.svg" class="mini-ic" alt="" />
+            Privacy Policy</a
+          >
+          <a href="./legal-notice.html" class="mini-link"
+            ><img src="./assets/icons/help.svg" class="mini-ic" alt="" /> Legal
+            notice</a
+          >
         </div>
+      </aside>
 
-        <!-- Detail rechts -->
-        <div class="detail">
-          <div class="detail-top">
-            <h1 class="detail-title">
-              Contacts <span class="pipe">|</span> <span class="light">Better with a team</span>
-            </h1>
+      <!-- Main -->
+      <main class="main">
+        <header class="topbar">
+          <div class="tool-name">Kanban Project Management Tool</div>
+          <div class="top-right">
+            <button class="small-icon" type="button">?</button>
+            <div class="avatar small">SM</div>
           </div>
+        </header>
 
-          <div class="detail-card">
-            <div class="detail-header">
-              <div class="avatar big">AM</div>
-              <div class="who">
-                <div class="big-name">Anton Mayer</div>
-                <div class="actions">
-                  <button class="link-btn" id="editBtn" type="button">Edit</button>
-                  <button class="link-btn" id="deleteBtn" type="button">Delete</button>
-                </div>
-              </div>
-            </div>
-
-            <h2 class="mini-title">Contact Information</h2>
-            <div class="info-row">
-              <div class="info-key">Email</div>
-              <div><a href="mailto:antonm@gmail.com" class="row-email">antonm@gmail.com</a></div>
-            </div>
-            <div class="info-row">
-              <div class="info-key">Phone</div>
-              <div><a href="tel:+491111111111" class="row-email">+49 1111 111 11 1</a></div>
+        <section class="content">
+          <!-- Liste links -->
+          <div class="list">
+            <div class="list-head">
+              <button class="btn" id="openAddModal" type="button">
+                Add new contact ▾
+              </button>
             </div>
           </div>
+
+          <!-- Detail rechts -->
+          <div class="detail">
+            <div class="detail-top">
+              <h1 class="detail-title">
+                Contacts <span class="pipe">|</span>
+                <span class="light">Better with a team</span>
+              </h1>
+            </div>
+            <div class="detail-card">
+              <p>No contact selected.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Add/Edit Contact Modal -->
+    <div class="modal-overlay" id="contactModal" hidden>
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <button
+          class="modal-close"
+          id="modalCloseBtn"
+          type="button"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
+        <div class="modal-left">
+          <div class="modal-brand">
+            <img
+              src="./assets/imgs/join_logo_white.svg"
+              alt=""
+              class="brand-logo"
+              style="width: 48px; height: auto"
+            />
+            <div class="logo-text">OIN</div>
+          </div>
+          <h2 class="modal-title" id="modalTitle">Add contact</h2>
+          <p class="modal-sub">Tasks are better with a team!</p>
+          <div class="modal-underline"></div>
         </div>
-      </section>
-    </main>
 
-  </div>
+        <div class="modal-right">
+          <form id="contactForm" autocomplete="off">
+            <div class="form-avatar">
+              <div class="avatar big" id="formAvatar" aria-hidden="true">?</div>
+            </div>
 
-  <!-- Add/Edit Contact Modal -->
-  <div class="modal-overlay" id="contactModal" hidden>
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Close">✕</button>
+            <div class="form-field">
+              <input
+                type="text"
+                id="nameInput"
+                placeholder="Name"
+                required
+                autocomplete="name"
+              />
+            </div>
+            <div class="form-field">
+              <input
+                type="email"
+                id="emailInput"
+                placeholder="Email"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <div class="form-field">
+              <input
+                type="tel"
+                id="phoneInput"
+                placeholder="Phone"
+                required
+                autocomplete="tel"
+              />
+            </div>
 
-      <div class="modal-left">
-        <div class="modal-brand">
-          <img src="./assets/imgs/join_logo_white.svg" alt="" class="brand-logo" style="width:48px;height:auto">
-          <div class="logo-text">OIN</div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancelBtn">
+                Cancel
+              </button>
+              <button type="submit" class="btn" id="submitBtn">
+                Create contact ▾
+              </button>
+            </div>
+          </form>
         </div>
-        <h2 class="modal-title" id="modalTitle">Add contact</h2>
-        <p class="modal-sub">Tasks are better with a team!</p>
-        <div class="modal-underline"></div>
-      </div>
-
-      <div class="modal-right">
-        <form id="contactForm" autocomplete="off">
-          <div class="form-avatar">
-            <div class="avatar big" id="formAvatar" aria-hidden="true">?</div>
-          </div>
-
-          <div class="form-field">
-            <input type="text" id="nameInput" placeholder="Name" required autocomplete="name">
-          </div>
-          <div class="form-field">
-            <input type="email" id="emailInput" placeholder="Email" required autocomplete="email">
-          </div>
-          <div class="form-field">
-            <input type="tel" id="phoneInput" placeholder="Phone" required autocomplete="tel">
-          </div>
-
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
-            <button type="submit" class="btn" id="submitBtn">Create contact ▾</button>
-          </div>
-        </form>
       </div>
     </div>
-  </div>
 
-  <!-- JS -->
-  <script src="./js/contacts.js"></script>
-</body>
+    <!-- Seitenlogik -->
+  </body>
 </html>
