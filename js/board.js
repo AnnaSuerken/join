@@ -274,3 +274,11 @@ async function delTask(id) {
 }
 
 window.delTask = delTask;
+
+
+//toggle Task Overlay//
+
+function openOverlay (){
+  const contenRef = document.getElementById('task-overlay')
+  
+}
