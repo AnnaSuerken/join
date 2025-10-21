@@ -3,13 +3,13 @@ import { auth, db } from "./firebase.js";
 import {
   signInWithEmailAndPassword,
   signInAnonymously,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import {
   ref,
   set,
   serverTimestamp,
-  update
+  update,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 const form = document.getElementById("login-form");
@@ -36,7 +36,10 @@ form?.addEventListener("submit", async (e) => {
   } catch (err) {
     console.error(err);
     await setTimeout(() => {
-      setStatus("Login fehlgeschlagen überprüfe deine Email oder Passwort", true);
+      setStatus(
+        "Login fehlgeschlagen überprüfe deine Email oder Passwort",
+        true
+      );
     }, 3000);
     form.reset();
   }
@@ -49,7 +52,7 @@ guestBtn?.addEventListener("click", async () => {
     await update(ref(db, `guests/${cred.user.uid}`), {
       createdAt: serverTimestamp(),
       lastLoginAt: serverTimestamp(),
-      isAnonymous: true
+      isAnonymous: true,
     });
     setStatus("Als Gast angemeldet.");
     window.location.href = "/index.html";

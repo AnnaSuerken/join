@@ -1,45 +1,9 @@
-/* =======================
-   CONTACTS – Allman + ≤15 lines/func
-   ======================= */
-
-let contacts = [
-  {
-    name: "Anton Mayer",
-    email: "antonm@gmail.com",
-    phone: "+49 1111 111 11 1",
-    color: "#FF7A00",
-  },
-  {
-    name: "Anja Schulz",
-    email: "schulz@hotmail.com",
-    phone: "+49 2222 222 22 2",
-    color: "#29ABE2",
-  },
-  {
-    name: "Benedikt Ziegler",
-    email: "benedikt@gmail.com",
-    phone: "+49 3333 333 33 3",
-    color: "#6E52FF",
-  },
-  {
-    name: "David Eisenberg",
-    email: "davidberg@gmail.com",
-    phone: "+49 4444 444 44 4",
-    color: "#1FD7C1",
-  },
-  {
-    name: "Eva Fischer",
-    email: "eva@gmail.com",
-    phone: "+49 5555 555 55 5",
-    color: "#FC71FF",
-  },
-  {
-    name: "Emmanuel Mauer",
-    email: "emmanuelma@gmail.com",
-    phone: "+49 6666 666 66 6",
-    color: "#FFBB2B",
-  },
-];
+/* ---------- State ---------- */
+const state = {
+  data: {}, // {contactId: contactObj, ...}
+  selectedId: null, // aktuell gewählte Kontakt-ID
+  unsubscribe: null, // Live-Listener cleanup
+};
 
 const colorPool = [
   "#FF7A00",
@@ -49,22 +13,39 @@ const colorPool = [
   "#FC71FF",
   "#FFBB2B",
 ];
-let selectedId = null,
-  modalMode = "create",
-  nextId = 1;
+let modalMode = "create";
 
-const qs = (s, r = document) => r.querySelector(s),
-  qsa = (s, r = document) => [...r.querySelectorAll(s)],
-  byId = (id) => document.getElementById(id);
+/* ---------- DOM helpers ---------- */
+const qs = (s, r = document) => r.querySelector(s);
+const qsa = (s, r = document) => [...r.querySelectorAll(s)];
+const byId = (id) => document.getElementById(id);
+
+/* ---------- utils ---------- */
 const initialsFromName = (n) => {
   const p = String(n || "")
     .trim()
     .split(/\s+/);
   return ((p[0]?.[0] || "") + (p[1]?.[0] || "")).toUpperCase();
 };
-const telHref = (s) => `tel:${(s || "").replace(/\s+/g, "")}`,
-  getLetter = (n) => (n?.[0] || "#").toUpperCase(),
-  idxById = (id) => contacts.findIndex((c) => c.id === id);
+const telHref = (s) => `tel:${(s || "").replace(/\s+/g, "")}`;
+const getLetter = (n) => (n?.[0] || "#").toUpperCase();
+const hashStr = (s = "") =>
+  Array.from(s).reduce((acc, ch) => (acc * 33 + ch.charCodeAt(0)) >>> 0, 5381);
+
+/** sorge für vollständige Felder + stabile Farbe */
+function normalizeContact(id, raw) {
+  const name = raw?.name ?? "";
+  const email = raw?.email ?? "";
+  const phone = raw?.phone ?? "";
+  const initials = raw?.initials || initialsFromName(name);
+  const color = raw?.color || colorPool[hashStr(id) % colorPool.length];
+  return { id, name, email, phone, initials, color };
+}
+
+function getContact(id) {
+  const raw = state.data?.[id];
+  return raw ? normalizeContact(id, raw) : null;
+}
 
 /* ---------- focus trap ---------- */
 function trapFocus(scope) {
@@ -113,8 +94,8 @@ function ensureGroup(letter) {
 }
 
 function insertRowSorted(groupEl, rowEl) {
-  const rows = qsa(".row", groupEl),
-    newName = qs(".row-name", rowEl).textContent.trim();
+  const rows = qsa(".row", groupEl);
+  const newName = qs(".row-name", rowEl).textContent.trim();
   for (const r of rows) {
     const nm = qs(".row-name", r).textContent.trim();
     if (nm.localeCompare(newName, "de", { sensitivity: "base" }) > 0) {
@@ -131,7 +112,12 @@ function makeRow(c) {
   b.className = "row";
   b.type = "button";
   b.dataset.id = String(c.id);
-  b.innerHTML = `<div class="avatar" style="background:${c.color}">${c.initials}</div><div><div class="row-name">${c.name}</div><a class="row-email" href="mailto:${c.email}">${c.email}</a></div>`;
+  b.innerHTML = `
+    <div class="avatar" style="background:${c.color}">${c.initials}</div>
+    <div>
+      <div class="row-name">${c.name}</div>
+      <a class="row-email" href="mailto:${c.email}">${c.email}</a>
+    </div>`;
   b.addEventListener("click", () => {
     setActiveRow(c.id);
     updateDetail(c.id);
@@ -140,7 +126,7 @@ function makeRow(c) {
 }
 
 function setActiveRow(cid) {
-  selectedId = cid;
+  state.selectedId = cid;
   qsa(".row").forEach((r) =>
     r.classList.toggle("active", r.dataset.id === String(cid))
   );
@@ -148,62 +134,76 @@ function setActiveRow(cid) {
 
 /* ---------- detail ---------- */
 function updateDetail(cid) {
-  const i = idxById(cid);
-  if (i < 0) return;
-  const c = contacts[i],
-    d = qs(".detail-card");
+  const c = getContact(cid);
+  if (!c) return;
+  const d = qs(".detail-card");
   if (!d) return;
-  d.innerHTML = `<div class="detail-header"><div class="avatar big" style="background:${
-    c.color
-  }">${c.initials}</div><div class="who"><div class="big-name">${
-    c.name
-  }</div><div class="actions"><button class="link-btn" id="editBtn" type="button">Edit</button><button class="link-btn" id="deleteBtn" type="button">Delete</button></div></div></div><h2 class="mini-title">Contact Information</h2><div class="info-row"><div class="info-key">Email</div><div><a class="row-email" href="mailto:${
+
+  d.innerHTML = `
+    <div class="detail-header">
+      <div class="avatar big" style="background:${c.color}">${c.initials}</div>
+      <div class="who">
+        <div class="big-name">${c.name}</div>
+        <div class="actions">
+          <button class="link-btn" id="editBtn" type="button">Edit</button>
+          <button class="link-btn" id="deleteBtn" type="button">Delete</button>
+        </div>
+      </div>
+    </div>
+    <h2 class="mini-title">Contact Information</h2>
+    <div class="info-row"><div class="info-key">Email</div>
+      <div><a class="row-email" href="mailto:${c.email}">${
     c.email
-  }">${
-    c.email
-  }</a></div></div><div class="info-row"><div class="info-key">Phone</div><div><a class="row-email" href="${telHref(
+  }</a></div></div>
+    <div class="info-row"><div class="info-key">Phone</div>
+      <div><a class="row-email" href="${telHref(c.phone)}">${
     c.phone
-  )}">${c.phone}</a></div></div>`;
+  }</a></div></div>`;
+
   byId("editBtn").addEventListener("click", () => openModal("edit", cid));
   byId("deleteBtn").addEventListener("click", onDelete);
 }
 
-/* ---------- boot list ---------- */
-function syncListFromContacts() {
-  contacts = contacts.map((c) => ({
-    ...c,
-    id: c.id ?? nextId++,
-    initials: c.initials || initialsFromName(c.name),
-  }));
-  qsa(".row").forEach((r) => {
-    const nm = qs(".row-name", r)?.textContent.trim(),
-      em = qs(".row-email", r)?.textContent.trim();
-    const c = contacts.find((x) => x.name === nm && x.email === em);
-    if (!c) return;
-    r.dataset.id = String(c.id);
-    const av = qs(".avatar", r);
-    if (av) {
-      av.textContent = c.initials;
-      av.style.background = c.color;
-    }
-    const emA = qs(".row-email", r);
-    if (emA) emA.href = `mailto:${c.email}`;
-    r.addEventListener("click", () => {
-      setActiveRow(c.id);
-      updateDetail(c.id);
-    });
-  });
+/* ---------- render ---------- */
+function addButtonTemplate() {
+  return `
+    <div class="list-head">
+      <button class="btn" id="openAddModal" type="button">Add new contact ▾</button>
+    </div>`;
 }
 
-/* ---------- modal (mit federndem Slide via Keyframes) ---------- */
-function openModal(mode = "create", cid = selectedId) {
+function renderContacts() {
+  const list = qs(".list");
+  if (!list) return;
+
+  list.innerHTML = "";
+  list.insertAdjacentHTML("beforeend", addButtonTemplate());
+
+  const arr = Object.entries(state.data || {}).map(([id, raw]) =>
+    normalizeContact(id, raw)
+  );
+
+  const sorted = arr.sort((a, b) =>
+    a.name.localeCompare(b.name, "de", { sensitivity: "base" })
+  );
+
+  for (const c of sorted) {
+    const g = ensureGroup(getLetter(c.name));
+    insertRowSorted(g, makeRow(c));
+  }
+}
+
+/* ---------- modal ---------- */
+function openModal(mode = "create", cid = state.selectedId) {
   modalMode = mode;
   const form = byId("contactForm"),
     name = byId("nameInput"),
     email = byId("emailInput"),
     phone = byId("phoneInput");
+
   if (mode === "edit") {
-    const c = contacts[idxById(cid)];
+    const c = getContact(cid);
+    if (!c) return;
     name.value = c.name;
     email.value = c.email;
     phone.value = c.phone;
@@ -212,10 +212,12 @@ function openModal(mode = "create", cid = selectedId) {
     form.reset();
     byId("formAvatar").textContent = "?";
   }
+
   byId("modalTitle").textContent =
     mode === "edit" ? "Edit contact" : "Add contact";
   byId("submitBtn").textContent =
     mode === "edit" ? "Save changes ▾" : "Create contact ▾";
+
   const overlay = byId("contactModal"),
     card = overlay.querySelector(".modal");
   overlay.hidden = false;
@@ -224,11 +226,13 @@ function openModal(mode = "create", cid = selectedId) {
   void card.offsetWidth;
   card.classList.add("is-entering");
   setTimeout(() => name.focus(), 0);
+
   const cleanupTrap = trapFocus(card),
     doClose = () => {
       cleanupTrap();
       closeModal();
     };
+
   document.addEventListener(
     "keydown",
     (e) => {
@@ -284,78 +288,61 @@ function onSubmitForm(e) {
     btn.dataset.busy = "";
     return;
   }
+
   modalMode === "create"
     ? createContact(name, email, phone)
     : saveEdit(name, email, phone);
+
   btn.dataset.busy = "";
   closeModal();
 }
 
-/* ---------- CRUD ---------- */
-function createContact(name, email, phone) {
-  const c = {
-    id: nextId++,
-    name,
-    email,
-    phone,
-    color: colorPool[contacts.length % colorPool.length],
-    initials: initialsFromName(name),
-  };
-  contacts.push(c);
-  const group = ensureGroup(getLetter(c.name));
-  insertRowSorted(group, makeRow(c));
-  setActiveRow(c.id);
-  updateDetail(c.id);
-}
+/* ---------- CRUD (direkt DB, /contacts) ---------- */
+async function createContact(name, email, phone) {
+  const payload = { name, email, phone, initials: initialsFromName(name) };
 
-function saveEdit(name, email, phone) {
-  const i = idxById(selectedId);
-  if (i < 0) return;
-  const c = contacts[i];
-  Object.assign(c, { name, email, phone, initials: initialsFromName(name) });
-  const row = qs(`.row[data-id="${c.id}"]`);
-  if (!row) return;
-  const oldGroup = row.closest(".group"),
-    oldLetter = qs(".group-title", oldGroup).textContent.trim().toUpperCase(),
-    newLetter = getLetter(c.name);
-  qs(".row-name", row).textContent = c.name;
-  const em = qs(".row-email", row);
-  em.textContent = c.email;
-  em.href = `mailto:${c.email}`;
-  qs(".avatar", row).textContent = c.initials;
-  if (oldLetter !== newLetter) {
-    row.remove();
-    insertRowSorted(ensureGroup(newLetter), row);
-    if (!qsa(".row", oldGroup).length) oldGroup.remove();
-  } else {
-    row.remove();
-    insertRowSorted(oldGroup, row);
-  }
-  updateDetail(c.id);
-}
-
-function onDelete() {
-  if (!confirm("Delete this contact?")) return;
-  const i = idxById(selectedId);
-  if (i < 0) return;
-  contacts.splice(i, 1);
-  const row = qs(`.row[data-id="${selectedId}"]`),
-    group = row?.closest(".group");
-  if (row) row.remove();
-  if (group && !qsa(".row", group).length) group.remove();
-  const any = qs(".row");
-  if (any) {
-    const cid = Number(any.dataset.id);
-    setActiveRow(cid);
-    updateDetail(cid);
-  } else {
-    selectedId = null;
-    const d = qs(".detail-card");
-    if (d) d.innerHTML = "<p>No contact selected.</p>";
+  try {
+    const key = await dbApi.pushData(`contacts`, payload);
+    await dbApi.updateData(`contacts/${key}`, { id: key });
+    state.selectedId = key; // nach Live-Render auswählen
+  } catch (e) {
+    console.error(e);
+    alert("Could not save contact");
   }
 }
 
-/* ---------- wiring / init ---------- */
+async function saveEdit(name, email, phone) {
+  const id = state.selectedId;
+  if (!id) return;
+
+  try {
+    await dbApi.updateData(`contacts/${id}`, {
+      name,
+      email,
+      phone,
+      initials: initialsFromName(name),
+    });
+    // UI aktualisiert sich über Live-Listener
+  } catch (e) {
+    console.error(e);
+    alert("Update failed");
+  }
+}
+
+async function onDelete() {
+  const id = state.selectedId;
+  if (!id) return;
+
+  try {
+    await dbApi.deleteData(`contacts/${id}`);
+    state.selectedId = null; // Auswahl wird nach Re-Render neu gesetzt
+  } catch (e) {
+    console.error(e);
+    alert("Delete failed");
+  }
+}
+
+/* ---------- wiring ---------- */
 function attachGlobalHandlers() {
   byId("openAddModal")?.addEventListener("click", () => openModal("create"));
   byId("cancelBtn")?.addEventListener("click", closeModal);
@@ -368,15 +355,49 @@ function attachGlobalHandlers() {
   );
 }
 
-function init() {
-  syncListFromContacts();
+/** Auswahl bestmöglich beibehalten, sonst ersten Kontakt wählen */
+function afterRenderSelectFallback() {
+  if (state.selectedId && qs(`.row[data-id="${state.selectedId}"]`)) {
+    setActiveRow(state.selectedId);
+    updateDetail(state.selectedId);
+    return;
+  }
   const first = qs(".row");
   if (first) {
-    const cid = Number(first.dataset.id) || 1;
+    const cid = first.dataset.id;
     setActiveRow(cid);
     updateDetail(cid);
+  } else {
+    const d = qs(".detail-card");
+    if (d) d.innerHTML = "<p>No contact selected.</p>";
   }
-  attachGlobalHandlers();
+}
+
+/* ---------- Live subscription ---------- */
+let scheduled = false;
+function scheduleRender() {
+  if (scheduled) return;
+  scheduled = true;
+  requestAnimationFrame(() => {
+    scheduled = false;
+    renderContacts();
+    attachGlobalHandlers(); // list-head wurde neu eingefügt
+    afterRenderSelectFallback();
+  });
+}
+
+function startLiveView() {
+  state.unsubscribe?.();
+  state.unsubscribe = dbApi.onData("contacts", (data) => {
+    state.data = data || {};
+    scheduleRender();
+  });
+}
+
+/* ---------- boot ---------- */
+function init() {
+  startLiveView();
 }
 
 window.addEventListener("load", init);
+window.addEventListener("beforeunload", () => state.unsubscribe?.());
