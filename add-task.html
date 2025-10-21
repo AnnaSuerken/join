@@ -6,6 +6,7 @@
     <title>Add Task</title>
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/add-task.css">
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
@@ -51,7 +52,35 @@
             </div>
           </div>
         </header>
+    <main>
+      <section class="add-task-section">
+              <h1>Add Task</h1>
+              <div class="add-task-content">
+                <div class="add-task-content-right">
+                  <span>Title*</span>
+                  <input type="text">
+                  <span>Description</span>
+                  <input type="text">
+                  <span>Due date*</span>
+                  <input type="date">
+                </div>
+                <div class="divider"></div>
+                <div class="add-task-content-left">
+                  <span>Priority</span>
+                  <div><button>Urgent</button> <button>Medium</button> <button>Low</button> </div>
+                </div>
+              </div>
+              <div class="add-task-footer">
+                <span>*This field is required</span>
+                <div>
+                <button>Cancel X</button>
+                <button>Create Task</button>
+                </div>
+              </div>
+          </section>
+      </main>
       </section>
+
     </div>
 </body>
 </html>

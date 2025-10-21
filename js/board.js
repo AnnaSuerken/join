@@ -278,7 +278,15 @@ window.delTask = delTask;
 
 //toggle Task Overlay//
 
-function openOverlay (){
-  const contenRef = document.getElementById('task-overlay')
-  
+function openAddTaskOverlay() {
+  const taskOverlay = document.getElementById('add-task-overlay');
+
+  taskOverlay.classList.remove("d_none");
+  document.body.classList.add("no-scroll");
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const addTaskButton = document.getElementById('open-add-task-overlay');
+  addTaskButton.addEventListener('click', openAddTaskOverlay);
+});
+

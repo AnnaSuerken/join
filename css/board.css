@@ -111,16 +111,18 @@ main {
   opacity: 0.85;
 }
 
-.overlay-section {
+.task-overlay-section {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.10);
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .task-overlay {
