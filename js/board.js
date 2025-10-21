@@ -1,8 +1,10 @@
-import { db, dbApi } from "./firebase.js";
-import { requireAuth } from "./authguard.js";
-await requireAuth({ redirectTo: "/login.html" });
+//authentification und sync with firebase 
 
-const TASKS_ROOT = "/board";
+import { db, dbApi } from "./firebase.js"; 
+import { requireAuth } from "./authguard.js"; //checks if user is logged in
+await requireAuth({ redirectTo: "/login.html" }); //redirects to login otherwise
+
+const TASKS_ROOT = "/board"; //saves everything under this path in firebase
 
 const COLS = ["todo", "inprogress", "await", "done"];
 
@@ -17,7 +19,9 @@ const addDemoBtn = document.getElementById("add-demo");
 
 let data = { todo: {}, inprogress: {}, await: {}, done: {} };
 
-dbApi.onData(TASKS_ROOT, (val) => {
+
+ //live synchronisation with firebase > renders new data as soon as it's added
+dbApi.onData(TASKS_ROOT, (val) => {            
   data = {
     todo: val?.todo || {},
     inprogress: val?.inprogress || {},
@@ -27,6 +31,8 @@ dbApi.onData(TASKS_ROOT, (val) => {
   render();
 });
 
+
+//creates new tasks under /board/todo/ and saves new data to datarecord
 addDemoBtn?.addEventListener("click", async () => {
   const now = Date.now();
   const key = await dbApi.pushData(`${TASKS_ROOT}/todo`, {
@@ -41,6 +47,8 @@ addDemoBtn?.addEventListener("click", async () => {
   });
   await dbApi.updateData(`${TASKS_ROOT}/todo/${key}`, { id: key });
 });
+
+//filters tasks in regards to search
 
 function render() {
   COLS.forEach((c) => (colsEl[c].innerHTML = ""));
@@ -63,6 +71,7 @@ function render() {
   }
 }
 
+// TaskCard template including drag and drop function
 function taskCard(task) {
   const completed = Number.isFinite(task.subtasksCompleted)
     ? task.subtasksCompleted
@@ -107,6 +116,7 @@ function taskCard(task) {
   return el;
 }
 
+// function to visualize the drag & Drop effect and update data to firebase
 document.querySelectorAll(".dropzone").forEach((zone) => {
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -175,6 +185,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
   });
 });
 
+//builds order of tasks
 function buildOrderMapForZone(zone, toCol, draggedId) {
   const children = [...zone.querySelectorAll(".task")];
   const orderMap = {};
@@ -188,6 +199,7 @@ function buildOrderMapForZone(zone, toCol, draggedId) {
   return orderMap;
 }
 
+//saves order of all tasks within one column and creates updates object
 async function persistColumnOrder(zone, col) {
   const children = [...zone.querySelectorAll(".task")];
   const updates = {};
@@ -215,6 +227,7 @@ function getZoneStatus(zoneEl) {
   }
 }
 
+//calculates where taskcard is dropped and places it accordingly
 function getDragAfterElement(container, y) {
   const candidates = [...container.querySelectorAll(".task:not(.dragging)")];
   return candidates.reduce(
@@ -229,6 +242,7 @@ function getDragAfterElement(container, y) {
   ).element;
 }
 
+//finds tasks within the different columns
 function findColumnOfTask(id) {
   for (const c of COLS) {
     if (data[c] && data[c][id]) return c;
@@ -259,6 +273,7 @@ function safeParse(s) {
   }
 }
 
+//deletes task from firebase and board
 async function delTask(id) {
   const col = findColumnOfTask(id);
   if (!col) {
