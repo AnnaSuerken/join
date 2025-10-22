@@ -81,6 +81,11 @@ button {
   font-size: 21px;
 }
 
+.content {
+  display: flex;
+  width: 100%;
+}
+
 .header-right {
   border-bottom: 1px solid #e5e7eb;
   display: flex;

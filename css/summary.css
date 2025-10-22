@@ -80,7 +80,7 @@
 .dropbtn {
   background-color: white;
   border-radius: 50%;
-  border: solid 3px #2A3647;
+  border: solid 3px #2a3647;
   width: 56px;
   height: 56px;
   color: #29abe2;
@@ -121,4 +121,83 @@
 
 #logout-btn {
   cursor: pointer;
+}
+
+.main-summary {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.summary-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 60px;
+}
+.summary-title h1 {
+  font-size: 48px;
+  font-weight: 700;
+  color: #293647;
+}
+.summary-title p {
+  font-size: 24px;
+  font-weight: 400;
+  color: #757575;
+}
+.summary-slash {
+  height: 48px;
+  width: 2px;
+  background-color: #29abe2;
+  margin-left: 18px;
+  margin-right: 18px;
+}
+.summary-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.summary-tasks {
+  display: flex;
+  flex-wrap: wrap;
+}
+.summary-task-medium {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 200px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  margin: 16px;
+}
+.summary-task-medium img {
+  height: 60px;
+  width: 60px;
+  margin-right: 12px;
+}
+.summary-task-info {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.summary-task-info h2 {
+  font-size: 50px;
+}
+.summary-task-info p {
+  font-size: 18px;
+  color: #757575;
+}
+.summary-name {
+  display: flex;
+  flex-direction: column;
+}
+.summary-name h3 {
+  font-size: 32px;
+}
+.summary-name h2 {
+  font-size: 48px;
+  color: #29abe2;
 }
