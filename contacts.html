@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Join - Contacts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
@@ -11,7 +12,6 @@
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/contacts.css" />
 
-    <!-- Login-Gate -->
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
@@ -19,12 +19,10 @@
       export { logout };
     </script>
 
-    <!-- Firebase + dbApi global verfügbar machen -->
     <script src="./js/firebase.js"></script>
     <script src="./js/contacts.js"></script>
   </head>
   <body>
-
     <!-- <div id="heckbock" class="checkbox">
       <h2>Are you Sure</h2>
       <button>Yes</button>
@@ -33,53 +31,43 @@
 
     <div class="page">
       <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="brand">
-          <img
-            src="./assets/imgs/join_logo_white.svg"
-            class="brand-logo"
-            alt="JOIN"
-          />
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <section class="nav-bar">
+          <button>
+            <img src="./assets/icons/summary.svg" alt="" /><a
+              href="./index.html"
+              class="menu-links"
+              >Summary</a
+            >
+          </button>
+          <button>
+            <img src="./assets/icons/addtask.svg" alt="" /><a
+              href="./add-task.html"
+              class="menu-links"
+              >Add Task</a
+            >
+          </button>
+          <button>
+            <img src="./assets/icons/board.svg" alt="" /><a
+              href="./board.html"
+              class="menu-links"
+              >Board</a
+            >
+          </button>
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/contacts.svg" alt="" /><a
+              href="./contacts.html"
+              class="menu-links"
+              >Contacts</a
+            >
+          </button>
+        </section>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
         </div>
-        <nav class="menu">
-          <a href="./index.html" class="menu-link">
-            <img src="./assets/icons/person.svg" class="menu-ic" alt="" /><span
-              >Summary</span
-            >
-          </a>
-          <a href="./add-task.html" class="menu-link">
-            <img src="./assets/icons/addtask.svg" class="menu-ic" alt="" /><span
-              >Add Task</span
-            >
-          </a>
-          <a href="./board.html" class="menu-link">
-            <img src="./assets/icons/board.svg" class="menu-ic" alt="" /><span
-              >Board</span
-            >
-          </a>
-          <a
-            href="./contacts.html"
-            class="menu-link active"
-            aria-current="page"
-          >
-            <img
-              src="./assets/icons/contacts.svg"
-              class="menu-ic"
-              alt=""
-            /><span>Contacts</span>
-          </a>
-        </nav>
-        <div class="sidebar-bottom">
-          <a href="./privacy-policy.html" class="mini-link"
-            ><img src="./assets/icons/lock.svg" class="mini-ic" alt="" />
-            Privacy Policy</a
-          >
-          <a href="./legal-notice.html" class="mini-link"
-            ><img src="./assets/icons/help.svg" class="mini-ic" alt="" /> Legal
-            notice</a
-          >
-        </div>
-      </aside>
+      </section>
 
       <!-- Main -->
       <main class="main">
