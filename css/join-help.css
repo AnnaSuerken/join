@@ -1,0 +1,165 @@
+:root{
+  --bg:#f4f5f7;
+  --ink:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --white:#fff;
+
+  --sidebar:#2A3647;
+  --sidebar-2:#223042;
+  --active:#0B1324;
+  --hover:rgba(255,255,255,.08);
+  --accent:#29ABE2;
+}
+
+/* Basis */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  font-family:"Inter", Arial, sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+
+/* Layout */
+.page{ display:flex; min-height:100vh; }
+
+.sidebar{
+  width:220px;
+  background:linear-gradient(180deg,var(--sidebar),var(--sidebar-2));
+  color:#e5e7eb;
+  display:flex; flex-direction:column;
+}
+.brand{
+  height:112px; display:flex; align-items:center; padding:0 20px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.brand-logo{ height:56px; width:auto; display:block; }
+
+.menu{ padding:18px 12px; display:flex; flex-direction:column; gap:10px; }
+.menu-link{
+  display:flex; align-items:center; gap:14px;
+  color:#E5E7EB; text-decoration:none; padding:12px 14px;
+  border-radius:12px; font:600 15px/1 "Inter", Arial, sans-serif;
+}
+.menu-link:hover{ background:var(--hover); }
+.menu-ic{ width:22px; height:22px; filter:brightness(0) invert(1); }
+.sidebar-bottom{ margin-top:auto; padding:16px 16px 22px; display:flex; flex-direction:column; gap:12px; }
+.mini-link{ color:#BFC6D0; text-decoration:none; font:400 14px/1 "Inter"; }
+.mini-link:hover{ color:#fff; }
+
+.main{ flex:1; display:flex; flex-direction:column; overflow:auto; background:var(--bg); }
+
+/* Topbar */
+.topbar{
+  height:72px; background:var(--white); border-bottom:1px solid var(--border);
+  padding:0 20px; display:flex; align-items:center; justify-content:space-between;
+}
+.tool-name{ font-weight:600; }
+.top-right{ display:flex; align-items:center; gap:14px; }
+.small-icon{
+  width:34px; height:34px; aspect-ratio:1/1;
+  border-radius:999px; border:1px solid var(--border); background:#fff;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-weight:700; line-height:1; cursor:pointer;
+}
+.avatar.small{
+  width:36px; height:36px; border-radius:999px; background:#475569; color:#fff;
+  display:grid; place-items:center; font-weight:700; font-size:12px;
+}
+
+/* Content */
+.content{ padding:24px; display:block; }
+.doc{
+  max-width:880px; margin:0 auto; background:transparent;
+}
+.doc h1{
+  font-size:48px; font-weight:800; margin:12px 0 8px;
+}
+.doc h2{
+  font-size:22px; font-weight:700; margin:24px 0 8px;
+}
+.doc p{
+  font-size:16px; line-height:1.6; margin:8px 0; color:#111827;
+}
+.doc .hl{
+  color:#29ABE2; text-decoration:none; font-weight:600;
+}
+.doc .hl:hover{ text-decoration:underline; }
+.steps{ margin:14px 0 0 18px; }
+.steps li{ margin:10px 0; }
+
+/* ===================================================== */
+/* JOIN HELP OVERLAY STYLES – einheitlich für alle Seiten */
+/* ===================================================== */
+
+:root{
+  --jh-overlay: rgba(0,0,0,.45);
+}
+
+/* Runder Fragezeichen-Button */
+.jh-help-btn{
+  width:40px; height:40px; aspect-ratio:1/1; border-radius:50%;
+  border:2px solid var(--sidebar); background:#fff; color:var(--sidebar);
+  font:700 18px/1 Inter, Arial, sans-serif;
+  display:inline-flex; align-items:center; justify-content:center;
+  cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.12); padding:0;
+}
+
+/* Falls kein Header vorhanden ist → schwebender Button oben rechts */
+.jh-fab{ position:fixed; top:16px; right:16px; z-index:9999; }
+
+/* Overlay und Modal */
+.jh-overlay{
+  position:fixed; inset:0; background:var(--jh-overlay);
+  display:none; z-index:9998;
+}
+.jh-modal{
+  position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:min(920px,92vw); max-height:85vh; overflow:auto;
+  background:#fff; border:1px solid var(--border); border-radius:16px;
+  box-shadow:0 24px 60px rgba(2,6,23,.28);
+  display:none; z-index:9999;
+  font-family:Inter, Arial, sans-serif; color:var(--ink);
+}
+.jh-visible{ display:block !important; }
+
+/* Header vom Help-Fenster */
+.jh-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px; border-bottom:1px solid var(--border);
+}
+.jh-title{ font-weight:700; font-size:16px; }
+.jh-close{
+  width:32px; height:32px; border-radius:50%;
+  border:1px solid var(--border); background:#fff;
+  cursor:pointer; font-size:16px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* Inhalt */
+.jh-body{ padding:20px; }
+.jh-body h1{
+  font-size:48px; font-weight:800; margin:12px 0 8px;
+}
+.jh-body h2{
+  font-size:22px; font-weight:700; margin:24px 0 8px;
+}
+.jh-body p{
+  font-size:16px; line-height:1.6; margin:8px 0;
+}
+.jh-body ol{ margin:14px 0 0 18px; }
+.jh-body li{ margin:10px 0; }
+
+.jh-link{
+  color:#29ABE2; text-decoration:none; font-weight:600;
+}
+.jh-link:hover{ text-decoration:underline; }
+
+/* Sicherheitshalber: vorhandene .small-icon bleibt rund */
+.small-icon{
+  aspect-ratio:1/1; border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  line-height:1; padding:0;
+}

@@ -304,7 +304,7 @@ async function createContact(name, email, phone) {
   try {
     const key = await dbApi.pushData(`contacts`, payload);
     await dbApi.updateData(`contacts/${key}`, { id: key });
-    state.selectedId = key; // nach Live-Render auswählen
+    state.selectedId = key;
   } catch (e) {
     console.error(e);
     alert("Could not save contact");
@@ -322,7 +322,6 @@ async function saveEdit(name, email, phone) {
       phone,
       initials: initialsFromName(name),
     });
-    // UI aktualisiert sich über Live-Listener
   } catch (e) {
     console.error(e);
     alert("Update failed");
@@ -335,7 +334,7 @@ async function onDelete() {
 
   try {
     await dbApi.deleteData(`contacts/${id}`);
-    state.selectedId = null; // Auswahl wird nach Re-Render neu gesetzt
+    state.selectedId = null;
   } catch (e) {
     console.error(e);
     alert("Delete failed");
@@ -381,7 +380,7 @@ function scheduleRender() {
   requestAnimationFrame(() => {
     scheduled = false;
     renderContacts();
-    attachGlobalHandlers(); // list-head wurde neu eingefügt
+    attachGlobalHandlers();
     afterRenderSelectFallback();
   });
 }
@@ -401,3 +400,108 @@ function init() {
 
 window.addEventListener("load", init);
 window.addEventListener("beforeunload", () => state.unsubscribe?.());
+
+(() => {
+  const overlay = document.getElementById('contactModal');
+  const dialog  = overlay?.querySelector('.modal');
+  const openBtn = document.getElementById('openAddModal');
+  const closeBtn= document.getElementById('modalCloseBtn');
+  const cancel  = document.getElementById('cancelBtn');
+
+  const open = () => {
+    overlay.hidden = false;
+    overlay.classList.add('is-open');
+    dialog.classList.remove('is-leaving');
+    dialog.classList.add('is-entering');
+    setTimeout(() => document.getElementById('nameInput')?.focus(), 10);
+  };
+
+  const close = () => {
+    dialog.classList.remove('is-entering');
+    dialog.classList.add('is-leaving');
+    setTimeout(() => {
+      overlay.classList.remove('is-open');
+      overlay.hidden = true;
+      dialog.classList.remove('is-leaving');
+    }, 300);
+  };
+
+  openBtn?.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  cancel?.addEventListener('click', (e) => { e.preventDefault(); close(); });
+  overlay?.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) close(); });
+})();
+
+/* ---------- JOIN HELP SYSTEM (Add-on, keine Konflikte) ---------- */
+(function(){
+  const HTML = `
+    <div class="jh-overlay" data-jh="overlay"></div>
+    <div class="jh-dialog" role="dialog" aria-modal="true" aria-labelledby="jh-help-title" data-jh="dialog">
+      <div class="jh-dialog-header">
+        <div class="jh-title-wrap">
+          <span class="jh-badge">Kanban Project Management Tool</span>
+          <span class="jh-subtle">Help</span>
+        </div>
+        <button class="jh-close" type="button" aria-label="Close Help" data-jh="close">&times;</button>
+      </div>
+      <div class="jh-dialog-body">
+        <article class="jh-help">
+          <a href="#" class="jh-back-link" data-jh="close">&larr; Back</a>
+          <h1 id="jh-help-title">Help</h1>
+          <p>Welcome to the help page for <strong>Join</strong>, your guide to using our kanban project management tool.</p>
+          <h2>What is Join?</h2>
+          <p><strong>Join</strong> is a kanban-based project management tool built by students at the Developer Akademie.</p>
+          <h2>How to use it</h2>
+          <ol>
+            <li>Explore the board and task lists.</li>
+            <li>Create contacts to collaborate with.</li>
+            <li>Add cards (tasks) and assign contacts.</li>
+            <li>Drag cards to change progress state.</li>
+            <li>Delete cards when finished.</li>
+          </ol>
+          <p><strong>Enjoy using Join!</strong></p>
+        </article>
+      </div>
+    </div>
+  `;
+
+  const JoinHelp = {
+    _mounted:false, _els:{},
+    init(){
+      if(this._mounted) return; this._mounted = true;
+      let trigger = document.querySelector('.topbar .top-right .small-icon');
+      if (!trigger) {
+        trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.className = 'jh-help-fab';
+        trigger.textContent = '?';
+        document.body.appendChild(trigger);
+      } else trigger.classList.add('jh-help-btn');
+      const wrap = document.createElement('div');
+      wrap.innerHTML = HTML;
+      const overlay = wrap.querySelector('[data-jh="overlay"]');
+      const dialog  = wrap.querySelector('[data-jh="dialog"]');
+      document.body.appendChild(overlay);
+      document.body.appendChild(dialog);
+      const open = () => {
+        overlay.classList.add('jh-visible');
+        dialog.classList.add('jh-visible');
+        dialog.querySelector('[data-jh="close"]').focus();
+        document.documentElement.style.overflow='hidden';
+      };
+      const close = () => {
+        overlay.classList.remove('jh-visible');
+        dialog.classList.remove('jh-visible');
+        document.documentElement.style.overflow='';
+      };
+      trigger.addEventListener('click', open);
+      overlay.addEventListener('click', e => { if(e.target===overlay) close(); });
+      dialog.querySelectorAll('[data-jh="close"]').forEach(b => b.addEventListener('click', e => {e.preventDefault();close();}));
+      window.addEventListener('keydown', e => { if(e.key==='Escape') close(); });
+      this._els = { trigger, overlay, dialog };
+    }
+  };
+  window.JoinHelp = JoinHelp;
+  document.addEventListener('DOMContentLoaded', () => JoinHelp.init());
+})();
