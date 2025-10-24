@@ -2,7 +2,6 @@ body {
   margin: 0;
   font-family: "Inter", Arial, sans-serif;
   color: var(--ink);
-  overflow: hidden;
 }
 
 .page {
@@ -140,6 +139,10 @@ body {
   background: #fff;
   overflow: scroll;
   overflow-x: hidden;
+  height: calc(100vh - 110px);
+}
+.list::-webkit-scrollbar {
+  display: none;
 }
 
 .list-head {
