@@ -1,8 +1,7 @@
-/* ---------- State ---------- */
 const state = {
-  data: {}, // {contactId: contactObj, ...}
-  selectedId: null, // aktuell gewählte Kontakt-ID
-  unsubscribe: null, // Live-Listener cleanup
+  data: {}, 
+  selectedId: null, 
+  unsubscribe: null, 
 };
 
 const colorPool = [
@@ -15,12 +14,10 @@ const colorPool = [
 ];
 let modalMode = "create";
 
-/* ---------- DOM helpers ---------- */
 const qs = (s, r = document) => r.querySelector(s);
 const qsa = (s, r = document) => [...r.querySelectorAll(s)];
 const byId = (id) => document.getElementById(id);
 
-/* ---------- utils ---------- */
 const initialsFromName = (n) => {
   const p = String(n || "")
     .trim()
@@ -47,7 +44,6 @@ function getContact(id) {
   return raw ? normalizeContact(id, raw) : null;
 }
 
-/* ---------- focus trap ---------- */
 function trapFocus(scope) {
   const f = scope.querySelectorAll(
     'button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])'
@@ -68,7 +64,6 @@ function trapFocus(scope) {
   return () => scope.removeEventListener("keydown", onKey);
 }
 
-/* ---------- groups ---------- */
 function ensureGroup(letter) {
   letter = (letter || "#").toUpperCase();
   const list = qs(".list"),
@@ -106,7 +101,6 @@ function insertRowSorted(groupEl, rowEl) {
   groupEl.appendChild(rowEl);
 }
 
-/* ---------- rows / selection ---------- */
 function makeRow(c) {
   const b = document.createElement("button");
   b.className = "row";
@@ -394,7 +388,6 @@ function startLiveView() {
   });
 }
 
-/* ---------- boot ---------- */
 function init() {
   startLiveView();
 }

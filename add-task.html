@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/add-task.css">
+
+    <script src="./js/firebase.js"></script>
+    <script src="./js/addtask.js"></script>
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
@@ -59,7 +62,7 @@
               <div class="add-task-content">
                 <div class="add-task-content-right">
                   <span>Title*</span>
-                  <input type="text">
+                  <input id="task-title" type="text">
                   <span>Description</span>
                   <input type="text">
                   <span>Due date*</span>
@@ -75,7 +78,7 @@
                 <span>*This field is required</span>
                 <div>
                 <button>Cancel X</button>
-                <button>Create Task</button>
+                <button onclick="createTask()">Create Task</button>
                 </div>
               </div>
           </section>

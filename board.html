@@ -1,4 +1,3 @@
-<!-- /board.html -->
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="./css/board.css" />
 
     <script src="./js/main.js"></script>
-
 
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
@@ -92,7 +90,9 @@
               <button id="add-demo" class="blue-btn-bold">
                 Add Demo Task +
               </button>
-              <button class="blue-btn-bold" id="open-add-task-overlay">Add Task</button>
+              <button class="blue-btn-bold" id="open-add-task-overlay">
+                Add Task
+              </button>
             </div>
           </section>
 
@@ -128,32 +128,39 @@
             <div id="task-table-done" class="task-table-colum dropzone"></div>
           </section>
 
-            <section class="task-overlay-section d_none" id="add-task-overlay">
+          <section class="task-overlay-section d_none" id="add-task-overlay">
             <div class="task-overlay">
               <div class="task-overlay-header">
-              <h1>Add Task</h1>
-              <img src="./assets/icons/Close.svg" alt="close" id="close-btn">
+                <h1>Add Task</h1>
+                <img
+                  src="./assets/icons/Close.svg"
+                  alt="close"
+                  id="close-btn"
+                />
               </div>
               <div class="task-overlay-content">
                 <div class="task-overlay-content-right">
                   <span>Title*</span>
-                  <input type="text">
+                  <input type="text" />
                   <span>Description</span>
-                  <input type="text">
+                  <input type="text" />
                   <span>Due date*</span>
-                  <input type="date">
+                  <input type="date" />
                 </div>
                 <div class="divider"></div>
                 <div class="task-overlay-content-left">
                   <span>Priority</span>
-                  <div><button>Urgent</button> <button>Medium</button> <button>Low</button> </div>
+                  <div>
+                    <button>Urgent</button> <button>Medium</button>
+                    <button>Low</button>
+                  </div>
                 </div>
               </div>
               <div class="task-overlay-footer">
                 <span>*This field is required</span>
                 <div>
-                <button>Cancel X</button>
-                <button>Create Task Häkchen</button>
+                  <button>Cancel X</button>
+                  <button>Create Task Häkchen</button>
                 </div>
               </div>
             </div>
@@ -162,6 +169,6 @@
       </section>
     </div>
 
-       <script type="module" src="./js/board.js"></script>
+    <script type="module" src="./js/board.js"></script>
   </body>
 </html>
