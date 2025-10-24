@@ -275,18 +275,16 @@ async function delTask(id) {
 
 window.delTask = delTask;
 
-
 //toggle Task Overlay//
 
 function openAddTaskOverlay() {
-  const taskOverlay = document.getElementById('add-task-overlay');
+  const taskOverlay = document.getElementById("add-task-overlay");
 
   taskOverlay.classList.remove("d_none");
   document.body.classList.add("no-scroll");
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const addTaskButton = document.getElementById('open-add-task-overlay');
-  addTaskButton.addEventListener('click', openAddTaskOverlay);
+document.addEventListener("DOMContentLoaded", () => {
+  const addTaskButton = document.getElementById("open-add-task-overlay");
+  addTaskButton.addEventListener("click", openAddTaskOverlay);
 });
-

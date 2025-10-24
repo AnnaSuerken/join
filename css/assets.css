@@ -141,10 +141,6 @@ button {
   cursor: pointer;
 }
 
-.nav-bar button:hover {
-  font-size: 20px;
-  transition: all 0.2s ease-in-out;
-}
 
 .nav-bar-button-active {
   background-color: #091931 !important;

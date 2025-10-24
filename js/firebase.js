@@ -16,7 +16,8 @@ import {
 const firebaseConfig = {
   apiKey: "AIzaSyCLJlzAaU0yw1uT3SgPseFDz0TzGmi8TIY",
   authDomain: "join-1338.firebaseapp.com",
-  databaseURL: "https://join-1338-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL:
+    "https://join-1338-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "join-1338",
   storageBucket: "join-1338.firebasestorage.app",
   messagingSenderId: "227907404609",
@@ -65,5 +66,5 @@ export const dbApi = {
   },
 };
 
-
 window.dbApi = dbApi;
+window.auth = auth;

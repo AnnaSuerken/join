@@ -44,11 +44,6 @@
   cursor: pointer;
 }
 
-.nav-bar button:hover {
-  font-size: 20px;
-  transition: all 0.2s ease-in-out;
-}
-
 .nav-bar-button-active {
   background-color: #091931 !important;
   padding-top: 12px;
@@ -159,6 +154,7 @@
 .summary-tasks {
   display: flex;
   flex-wrap: wrap;
+  width: 464px;
 }
 .summary-task-medium {
   background-color: #ffffff;
@@ -182,16 +178,17 @@
   flex-direction: column;
   align-items: center;
 }
-.summary-task-info h2 {
+.summary-tasks h2 {
   font-size: 50px;
 }
-.summary-task-info p {
+.summary-tasks p {
   font-size: 18px;
   color: #757575;
 }
 .summary-name {
   display: flex;
   flex-direction: column;
+  margin-left: 64px;
 }
 .summary-name h3 {
   font-size: 32px;
@@ -199,4 +196,61 @@
 .summary-name h2 {
   font-size: 48px;
   color: #29abe2;
+}
+
+.summary-task-big {
+  width: 432px;
+  height: 150px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  margin: 16px;
+}
+
+.summary-task-big-left {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+.summary-task-big-left slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-task-big-split {
+  height: 90%;
+  width: 3px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #a8a8a8;
+  border-radius: 12px;
+}
+
+.summary-task-big-rigth {
+  width: 50%;
+  display: flex;
+  justify-content: left;
+}
+
+.summary-task-big-right h3 {
+  margin-bottom: 12px;
+}
+
+.summary-task-small {
+  width: 122px;
+  height: 150px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 16px;
+  margin: 16px;
+  text-align: center;
 }
