@@ -1,5 +1,3 @@
-import { dbApi } from "./firebase";
-
 function createTask() {
     const taskTitle = document.getElementById("task-title");
     dbApi.pushData('/board/todo', {
