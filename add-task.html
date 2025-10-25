@@ -61,23 +61,27 @@
               <h1>Add Task</h1>
               <form class="add-task-content">
                 <div class="add-task-content-right">
-                  <label for="task-title">Title</label>
+                  <label for="task-title">Title<span>*</span></label>
                   <input type="text" placeholder="Enter a Title" id="task-title" required>
                   <label for="task-description">Description</label>
                   <textarea placeholder="Enter a Description" id="task-description"></textarea>
-                  <label for="task-due-date">Due date*</label>
+                  <label for="task-due-date">Due date<span>*</span></label>
                   <input type="date" id="task-due-date" required>
                 </div>
                 <div class="divider"></div>
                 <div class="add-task-content-left">
                   <label>Priority</label>
-                  <div><button>Urgent</button><button>Medium</button> <button>Low</button> </div>
+                  <div>
+                    <button>Urgent <img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img"></button>
+                    <button>Medium <img src="./assets/icons/medium-orange.svg" alt="medium"></button> 
+                    <button>Low <img src="./assets/icons/low-green.svg" alt="low"></button> 
+                  </div>
                   
                   <label for="contacts">Assigned to</label>
                   <select name="contatcs" id="assigned-contacts">
-                    <option>select contacts to assign</option>
+                    <option>Select contacts to assign</option>
                   </select>
-                  <label for="catergory">Category*</label>
+                  <label for="catergory">Category<span>*</span></label>
                   <select name="catergory" id="task-category" required>
                     <option>Select task category</option>
                     <option value="technical-task">Technical Task</option>
@@ -88,10 +92,10 @@
                 </div>
               </form>
               <div class="add-task-footer">
-                <span>*This field is required</span>
+                <p><span>*</span>This field is required</p>
                 <div>
-                <button>Cancel X</button>
-                <button onclick="createTask()">Create Task</button>
+                <button class="white-btn-bold" onclick="clearTask()">Clear</button>
+                <button onclick="createTask()" class="blue-btn-bold">Create Task</button>
                 </div>
               </div>
           </section>

@@ -22,3 +22,17 @@ async function createTask() {
   await dbApi.updateData(`board/todo/${key}`, { id: key });
   console.log(taskTitle.value);
 }
+
+/**
+ * This functions clears the add-task forms
+ * 
+ */
+
+async function clearTask() {
+  document.getElementById("task-title").value = "";
+  document.getElementById("task-description").value = "";
+  document.getElementById("task-due-date").value = "";
+  //const taskContacts = document.getElementById("task-contacts");
+  document.getElementById("task-category").value = "Select task category";
+  document.getElementById("subtask").value = "";
+}

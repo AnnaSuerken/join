@@ -21,22 +21,71 @@ main {
 .add-task-content {
   display: flex;
   gap: 48px;
-  margin-left: 74px;
   margin-right: 74px;
   margin-top: 32px;
 }
 
-.add-task-content-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.add-task-content span {
+  color: #ff8190;
 }
 
-.add-task-content-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.add-task-content-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  color: #2A3647;
 }
+
+.add-task-content-right input {
+  width: 440px;
+  padding: 12px;
+}
+
+.add-task-content-right textarea {
+  width: 440px;
+  border-radius: 10px;
+  padding-bottom: 72px;
+  padding-left: 12px;
+  padding-top: 12px;
+  border: solid 0.5px;
+  border-color: #d1d1d1;
+}
+
+
+.add-task-content-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  color: #2A3647;
+}
+
+.add-task-content-left button {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.add-task-content-left button:hover {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.add-task-content-left input {
+  width: 440px;
+  padding: 12px;
+}
+
+.add-task-content-left select {
+  width: 440px;
+  padding: 12px;
+  border: solid 0.5px;
+  border-color: #d1d1d1;
+  border-radius: 10px;
+}
+
 
 .divider {
   background-color: #d1d1d1;
@@ -50,5 +99,9 @@ main {
   align-items: center;
   justify-content: space-between;
   margin-top: 136px;
+  width: 90%;
+}
 
+.add-task-footer span {
+  color: #ff8190;
 }
