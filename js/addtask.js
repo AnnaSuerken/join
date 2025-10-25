@@ -1,3 +1,8 @@
+/**
+ * This function is used to add new Task to Firebase
+ * 
+ */
+
 async function createTask() {
   const taskTitle = document.getElementById("task-title");
   const key = await dbApi.pushData("/board/todo", {

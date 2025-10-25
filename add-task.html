@@ -59,21 +59,34 @@
     <main>
       <section class="add-task-section">
               <h1>Add Task</h1>
-              <div class="add-task-content">
+              <form class="add-task-content">
                 <div class="add-task-content-right">
-                  <span>Title*</span>
-                  <input id="task-title" type="text">
-                  <span>Description</span>
-                  <input type="text">
-                  <span>Due date*</span>
-                  <input type="date">
+                  <label for="task-title">Title</label>
+                  <input type="text" placeholder="Enter a Title" id="task-title" required>
+                  <label for="task-description">Description</label>
+                  <textarea placeholder="Enter a Description" id="task-description"></textarea>
+                  <label for="task-due-date">Due date*</label>
+                  <input type="date" id="task-due-date" required>
                 </div>
                 <div class="divider"></div>
                 <div class="add-task-content-left">
-                  <span>Priority</span>
-                  <div><button>Urgent</button> <button>Medium</button> <button>Low</button> </div>
+                  <label>Priority</label>
+                  <div><button>Urgent</button><button>Medium</button> <button>Low</button> </div>
+                  
+                  <label for="contacts">Assigned to</label>
+                  <select name="contatcs" id="assigned-contacts">
+                    <option>select contacts to assign</option>
+                  </select>
+                  <label for="catergory">Category*</label>
+                  <select name="catergory" id="task-category" required>
+                    <option>Select task category</option>
+                    <option value="technical-task">Technical Task</option>
+                    <option value="user-story">User Story</option>
+                  </select>
+                  <label for="subtask">Subtasks</label>
+                  <input type="text" placeholder="Add new subtask" id="subtask">
                 </div>
-              </div>
+              </form>
               <div class="add-task-footer">
                 <span>*This field is required</span>
                 <div>
