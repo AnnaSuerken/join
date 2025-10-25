@@ -71,10 +71,10 @@
                 <div class="divider"></div>
                 <div class="add-task-content-left">
                   <label>Priority</label>
-                  <div>
-                    <button>Urgent <img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img"></button>
-                    <button>Medium <img src="./assets/icons/medium-orange.svg" alt="medium"></button> 
-                    <button>Low <img src="./assets/icons/low-green.svg" alt="low"></button> 
+                  <div class="priority-container">
+                    <div class="priority-btn" id="prio-urgent" onclick="setPriority('urgent')">Urgent <img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img"></div>
+                    <div class="priority-btn" id="prio-medium" onclick="setPriority('medium')">Medium <img src="./assets/icons/medium-orange.svg" alt="medium"></div> 
+                    <div class="priority-btn" id="prio-low" onclick="setPriority('low')">Low <img src="./assets/icons/low-green.svg" alt="low"></div> 
                   </div>
                   
                   <label for="contacts">Assigned to</label>

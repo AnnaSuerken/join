@@ -61,13 +61,47 @@ main {
   color: #2A3647;
 }
 
-.add-task-content-left button {
+.priority-container {
+  display: flex;
+  gap: 16px;
+}
+
+.priority-btn {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-top: 15px;
+  padding-right: 24px;
+  padding-bottom: 15px;
+  padding-left: 24px;
+  border-radius: 8px;
+  font-size: 21px;
 }
 
-.add-task-content-left button:hover {
+.priority-btn-urgent {
+  background-color: red;
+  border-radius: 10px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-top: 15px;
+  padding-right: 24px;
+  padding-bottom: 15px;
+  padding-left: 24px;
+  border-radius: 8px;
+  font-size: 21px;
+ 
+}
+
+.priority-btn-medium{
+  background-color: #ffa800;
+}
+
+.priority-btn-low{
+  background-color: green;
+}
+
+.priority-btn:hover {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
