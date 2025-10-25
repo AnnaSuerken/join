@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
 
-    <script src="./js/firebase.js"></script>
+    <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/summary.js"></script>
 
     <script type="module">
@@ -92,22 +92,22 @@
                 </div>
               </section>
               <section class="summary-task-small">
-                <h2>5</h2>
+                <h2 id="allTasks"></h2>
                 <p>Tasks in <br> Board</p>
               </section>
               <section class="summary-task-small">
-                <h2>2</h2>
+                <h2 id="inProgress"></h2>
                 <p>Tasks in <br>Progress</p>
               </section>
               <section class="summary-task-small">
-                <h2>2</h2>
+                <h2 id="awaitingFeedback"></h2>
                 <p>Awaiting <br> Feedback</p>
               </section>
             </section>
-              <div class="summary-name">
-              <h3>Good morning,</h3>
-              <h2 id="summary-name">John Kevin</h2>
-            </div>
+    <div class="summary-name">
+      <h3 id="summary-greeting">Good morning,</h3>
+      <h2 id="summary-name">…</h2>
+    </div>
           </div>
         </main>
       </section>
