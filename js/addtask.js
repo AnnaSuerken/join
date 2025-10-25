@@ -21,6 +21,7 @@ async function createTask() {
   });
   await dbApi.updateData(`board/todo/${key}`, { id: key });
   console.log(taskTitle.value);
+  clearTask()
 }
 
 /**
