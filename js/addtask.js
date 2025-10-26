@@ -14,7 +14,7 @@ async function createTask() {
   const key = await dbApi.pushData("/board/todo", {
     headline: taskTitle.value,
     id: "",
-    description: taskDescription.value,
+    secondline: taskDescription.value,
     deadline: taskDueDate.value,
     category: taskCategory.value,
     subtask: subtask.value,
