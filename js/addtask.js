@@ -44,6 +44,7 @@ function clearTask() {
  */
 function setPriority(status) {
   const priorities = ["urgent", "medium", "low"];
+  let currentPriority = null;
 
   if (currentPriority === status) {
     priorities.forEach((prio) => {
