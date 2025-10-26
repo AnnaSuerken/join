@@ -18,6 +18,7 @@ async function createTask() {
     deadline: taskDueDate.value,
     category: taskCategory.value,
     subtask: subtask.value,
+    priority: currentPriority,
   });
   await dbApi.updateData(`board/todo/${key}`, { id: key });
   console.log(taskTitle.value);
@@ -74,5 +75,7 @@ function setPriority(status) {
   document.getElementById(`prio-${status}-active`).classList.remove("d_none");
 
   currentPriority = status;
-
+  console.log(currentPriority)
 }
+
+console.log(currentPriority)
