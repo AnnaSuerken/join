@@ -121,6 +121,12 @@ main {
   font-weight: 400;
   margin-bottom: 12px;
   color: #a8a8a8;
+  line-height: 1.4;
+  min-height: calc(2 * 1em * 1.4);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
 }
 .task-subtasks {
   display: flex;
