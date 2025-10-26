@@ -73,8 +73,11 @@
                   <label>Priority</label>
                   <div class="priority-container">
                     <div class="priority-btn" id="prio-urgent" onclick="setPriority('urgent')">Urgent <img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img"></div>
+                    <div class="priority-btn-urgent d_none" id="prio-urgent-active" onclick="setPriority('urgent')">Urgent <img src="./assets/icons/urgent-white.svg" alt="urgent" class="urgent-img"></div>
                     <div class="priority-btn" id="prio-medium" onclick="setPriority('medium')">Medium <img src="./assets/icons/medium-orange.svg" alt="medium"></div> 
-                    <div class="priority-btn" id="prio-low" onclick="setPriority('low')">Low <img src="./assets/icons/low-green.svg" alt="low"></div> 
+                    <div class="priority-btn-medium d_none" id="prio-medium-active" onclick="setPriority('medium')">Medium <img src="./assets/icons/medium-white.svg" alt="medium"></div> 
+                    <div class="priority-btn" id="prio-low" onclick="setPriority('low')">Low <img src="./assets/icons/low-green.svg" alt="low"></div>
+                    <div class="priority-btn-low d_none" id="prio-low-active" onclick="setPriority('low')">Low <img src="./assets/icons/low-white.svg" alt="low"></div> 
                   </div>
                   
                   <label for="contacts">Assigned to</label>

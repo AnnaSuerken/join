@@ -34,7 +34,7 @@ main {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  color: #2A3647;
+  color: #2a3647;
 }
 
 .add-task-content-right input {
@@ -52,13 +52,12 @@ main {
   border-color: #d1d1d1;
 }
 
-
 .add-task-content-left {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  color: #2A3647;
+  color: #2a3647;
 }
 
 .priority-container {
@@ -90,15 +89,32 @@ main {
   padding-left: 24px;
   border-radius: 8px;
   font-size: 21px;
- 
 }
 
-.priority-btn-medium{
+.priority-btn-medium {
   background-color: #ffa800;
+  border-radius: 10px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-top: 15px;
+  padding-right: 24px;
+  padding-bottom: 15px;
+  padding-left: 24px;
+  border-radius: 8px;
+  font-size: 21px;
 }
 
-.priority-btn-low{
+.priority-btn-low {
   background-color: green;
+  border-radius: 10px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding-top: 15px;
+  padding-right: 24px;
+  padding-bottom: 15px;
+  padding-left: 24px;
+  border-radius: 8px;
+  font-size: 21px;
 }
 
 .priority-btn:hover {
@@ -119,7 +135,6 @@ main {
   border-color: #d1d1d1;
   border-radius: 10px;
 }
-
 
 .divider {
   background-color: #d1d1d1;

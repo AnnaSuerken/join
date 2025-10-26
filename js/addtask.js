@@ -1,6 +1,6 @@
 /**
  * This function is used to add new Task to Firebase
- * 
+ *
  */
 
 async function createTask() {
@@ -21,12 +21,12 @@ async function createTask() {
   });
   await dbApi.updateData(`board/todo/${key}`, { id: key });
   console.log(taskTitle.value);
-  clearTask()
+  clearTask();
 }
 
 /**
  * This functions clears the add-task forms
- * 
+ *
  */
 
 function clearTask() {
@@ -40,14 +40,29 @@ function clearTask() {
 
 /**
  * This function changes the appearance of priority buttons within add.task.section upon click
- * 
+ *
  */
-function setPriority(status){
-  let priorityStatus = document.getElementById(`prio-${status}`)
-  priorityStatus.innerHTML = "";
-  priorityStatus.innerHTML += priorityTemplate(status);
-}
+function setPriority(status) {
+  const priorities = ["urgent", "medium", "low"];
 
-function priorityTemplate(status){
-  return `<div class="priority-btn-${status}" id="prio-${status}">${status}<img src="./assets/icons/${status}-white.svg" alt="${status}" class="${status}-img-active"></div>` 
+  if (currentPriority === status) {
+    priorities.forEach((prio) => {
+      document.getElementById(`prio-${prio}`).classList.remove("d_none");
+      document.getElementById(`prio-${prio}-active`).classList.add("d_none");
+    });
+
+    currentPriority = null;
+    return;
+  }
+
+  priorities.forEach((prio) => {
+    document.getElementById(`prio-${prio}`).classList.remove("d_none");
+    document.getElementById(`prio-${prio}-active`).classList.add("d_none");
+  });
+
+  document.getElementById(`prio-${status}`).classList.add("d_none");
+  document.getElementById(`prio-${status}-active`).classList.remove("d_none");
+
+  currentPriority = status;
+  console.log(currentPriority)
 }
