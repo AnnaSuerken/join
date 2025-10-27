@@ -143,6 +143,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
       updates[`${toCol}/${id}/priority`] = taskObj.priority || "";
       updates[`${toCol}/${id}/categorycolor`] = taskObj.categorycolor || "";
       updates[`${toCol}/${id}/deadline`] = taskObj.deadline || "";
+      updates[`${toCol}/${id}/title`] = taskObj.title || "";
       updates[`${toCol}/${id}/subtasksCompleted`] = Number.isFinite(
         taskObj.subtasksCompleted
       )
