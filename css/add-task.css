@@ -151,6 +151,7 @@ main {
   align-items: flex-start;
   justify-content: space-between;
   margin-top: 136px;
+  width: 90%;
 }
 
 .add-task-footer span {
