@@ -105,6 +105,12 @@ function taskCard(task) {
     <div class="task-discription">
       <p class="task-discription-headline">${escapeHtml(task.title || "")}</p>
 >>>>>>> origin/main
+    <p class="task-name" style="background-color: ${
+        task.categorycolor
+      }">${escapeHtml(task.category || "No Category")}</p>
+    </div>
+    <div class="task-discription">
+      <p class="task-discription-headline">${escapeHtml(task.title || "")}</p>
       <p class="task-discription-secontline">${escapeHtml(
         task.secondline || ""
       )}</p>
@@ -115,12 +121,15 @@ function taskCard(task) {
     </div>
     <div class="task-users">
     <button onclick="delTask('${task.id}')">DEL</button>
-<<<<<<< HEAD
+    <<<<<<< HEAD
 =======
     <div class="task-priority">
     <img src="./assets/icons/${task.priority || "low"}.svg" alt="Priority" />
     </div>
 >>>>>>> origin/main
+    <div class="task-priority">
+    <img src="./assets/icons/${task.priority || "low"}.svg" alt="Priority" />
+    </div>
     </div>
   `;
 
@@ -174,7 +183,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
       updates[`${fromCol}/${id}`] = null;
 
       updates[`${toCol}/${id}/id`] = id;
-<<<<<<< HEAD
+      <<<<<<< HEAD
       updates[`${toCol}/${id}/category`] = taskObj.title || "User Story";
       updates[`${toCol}/${id}/headline`] = taskObj.headline || "";
       updates[`${toCol}/${id}/secondline`] = taskObj.secondline || "";
@@ -185,6 +194,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
       updates[`${toCol}/${id}/priority`] = taskObj.priority || "";
       updates[`${toCol}/${id}/categorycolor`] = taskObj.categorycolor || "";
       updates[`${toCol}/${id}/deadline`] = taskObj.deadline || "";
+
 <<<<<<< HEAD
 >>>>>>> origin/main
 =======
@@ -325,7 +335,7 @@ function openAddTaskOverlay() {
   taskOverlay.classList.remove("d_none");
   document.body.classList.add("no-scroll");
 }
-<<<<<<< HEAD
+  <<<<<<< HEAD
 
 document.addEventListener("DOMContentLoaded", () => {
   const addTaskButton = document.getElementById("open-add-task-overlay");
@@ -333,3 +343,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 =======
 >>>>>>> origin/main
+}

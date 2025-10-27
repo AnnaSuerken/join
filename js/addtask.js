@@ -1,14 +1,7 @@
-<<<<<<< HEAD
-/**
- * This function is used to add new Task to Firebase
- *
- */
-=======
 let taskCategoryColor = [
   { name: "Technical Task", color: "#20D7C1" },
   { name: "User Story", color: "#0038FF" },
 ];
->>>>>>> origin/main
 
 async function createTask() {
   const taskTitle = document.getElementById("task-title");
@@ -19,20 +12,13 @@ async function createTask() {
   const subtask = document.getElementById("subtask");
 
   const key = await dbApi.pushData("/board/todo", {
-<<<<<<< HEAD
-    headline: taskTitle.value,
-=======
     title: taskTitle.value,
->>>>>>> origin/main
     id: "",
     secondline: taskDescription.value,
     deadline: taskDueDate.value,
     category: taskCategory.value,
-<<<<<<< HEAD
-=======
     categorycolor:
       taskCategoryColor.find((c) => c.name === taskCategory.value)?.color || "",
->>>>>>> origin/main
     subtask: subtask.value,
     priority: currentPriority,
   });
@@ -71,10 +57,6 @@ let currentPriority = [];
 function setPriority(status) {
   const priorities = ["urgent", "medium", "low"];
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
   if (currentPriority === status) {
     priorities.forEach((prio) => {
       document.getElementById(`prio-${prio}`).classList.remove("d_none");
@@ -94,12 +76,5 @@ function setPriority(status) {
   document.getElementById(`prio-${status}-active`).classList.remove("d_none");
 
   currentPriority = status;
-<<<<<<< HEAD
-  console.log(currentPriority)
-}
-
-console.log(currentPriority)
-=======
   console.log(currentPriority);
 }
->>>>>>> origin/main
