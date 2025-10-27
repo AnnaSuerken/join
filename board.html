@@ -135,29 +135,113 @@
                   id="close-btn"
                 />
               </div>
-              <div class="task-overlay-content">
+              <form class="task-overlay-content">
                 <div class="task-overlay-content-right">
-                  <span>Title*</span>
-                  <input type="text" />
-                  <span>Description</span>
-                  <input type="text" />
-                  <span>Due date*</span>
-                  <input type="date" />
+                  <label for="task-title">Title*</label>
+                  <input
+                    type="text"
+                    placeholder="Enter a Title"
+                    id="task-title"
+                    required
+                  />
+                  <label for="task-description">Description</label>
+                  <textarea
+                    placeholder="Enter a Description"
+                    id="task-description"
+                  ></textarea>
+                  <label for="task-due-date">Due date*</label>
+                  <input type="date" id="task-due-date" required />
                 </div>
                 <div class="divider"></div>
                 <div class="task-overlay-content-left">
-                  <span>Priority</span>
-                  <div>
-                    <button>Urgent</button> <button>Medium</button>
-                    <button>Low</button>
+                  <label>Priority</label>
+                  <div class="priority-container">
+                    <div
+                      class="priority-btn"
+                      id="prio-urgent"
+                      onclick="setPriority('urgent')"
+                    >
+                      Urgent<img
+                        src="./assets/icons/urgent-red.svg"
+                        alt="urgent"
+                        class="urgent-img"
+                      />
+                    </div>
+                    <div
+                      class="priority-btn-urgent d_none"
+                      id="prio-urgent-active"
+                      onclick="setPriority('urgent')"
+                    >
+                      Urgent<img
+                        src="./assets/icons/urgent-white.svg"
+                        alt="urgent"
+                        class="urgent-img"
+                      />
+                    </div>
+                    <div
+                      class="priority-btn"
+                      id="prio-medium"
+                      onclick="setPriority('medium')"
+                    >
+                      Medium
+                      <img
+                        src="./assets/icons/medium-orange.svg"
+                        alt="medium"
+                      />
+                    </div>
+                    <div
+                      class="priority-btn-medium d_none"
+                      id="prio-medium-active"
+                      onclick="setPriority('medium')"
+                    >
+                      Medium<img
+                        src="./assets/icons/medium-white.svg"
+                        alt="medium"
+                      />
+                    </div>
+                    <div
+                      class="priority-btn"
+                      id="prio-low"
+                      onclick="setPriority('low')"
+                    >
+                      Low <img src="./assets/icons/low-green.svg" alt="low" />
+                    </div>
+                    <div
+                      class="priority-btn-low d_none"
+                      id="prio-low-active"
+                      onclick="setPriority('low')"
+                    >
+                      Low <img src="./assets/icons/low-white.svg" alt="low" />
+                    </div>
                   </div>
+
+                  <label for="contacts">Assigned to</label>
+                  <select name="contacts" id="assigned-contacts">
+                    <option>Select contacts to assign</option>
+                  </select>
+                  <label for="catergory">Category<span>*</span></label>
+                  <select name="catergory" id="task-category" required>
+                    <option>Select task category</option>
+                    <option value="Technical Task">Technical Task</option>
+                    <option value="User Story">User Story</option>
+                  </select>
+                  <label for="subtask">Subtasks</label>
+                  <input
+                    type="text"
+                    placeholder="Add new subtask"
+                    id="subtask"
+                  />
                 </div>
-              </div>
+              </form>
               <div class="task-overlay-footer">
-                <span>*This field is required</span>
+                <p><span>*</span>This field is required</p>
                 <div>
-                  <button>Cancel X</button>
-                  <button>Create Task Häkchen</button>
+                  <button class="white-btn-bold" onclick="clearTask()">
+                    Clear
+                  </button>
+                  <button onclick="createTask()" class="blue-btn-bold">
+                    Create Task
+                  </button>
                 </div>
               </div>
             </div>
