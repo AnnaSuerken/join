@@ -3,14 +3,11 @@ import { requireAuth } from "./authguard.js";
 await requireAuth({ redirectTo: "/login.html" });
 
 const TASKS_ROOT = "/board";
-<<<<<<< HEAD
-=======
 const addTaskButton = document.getElementById("open-add-task-overlay");
 
 addTaskButton.addEventListener("click", () => {
   openAddTaskOverlay();
 });
->>>>>>> origin/main
 
 const COLS = ["todo", "inprogress", "await", "done"];
 
@@ -21,10 +18,6 @@ const colsEl = {
   done: document.getElementById("task-table-done"),
 };
 const searchInput = document.getElementById("task-search");
-<<<<<<< HEAD
-const addDemoBtn = document.getElementById("add-demo");
-=======
->>>>>>> origin/main
 
 let data = { todo: {}, inprogress: {}, await: {}, done: {} };
 
@@ -38,24 +31,6 @@ dbApi.onData(TASKS_ROOT, (val) => {
   render();
 });
 
-<<<<<<< HEAD
-addDemoBtn?.addEventListener("click", async () => {
-  const now = Date.now();
-  const key = await dbApi.pushData(`${TASKS_ROOT}/todo`, {
-    id: "",
-    category: "User Story",
-    headline: "Kochwelt Page & Recipe Recommender",
-    secondline: "Build start page with recipe recommendation...",
-    subtasksCompleted: 1,
-    subtasksTotal: 2,
-    order: now,
-    createdAt: now,
-  });
-  await dbApi.updateData(`${TASKS_ROOT}/todo/${key}`, { id: key });
-});
-
-=======
->>>>>>> origin/main
 function render() {
   COLS.forEach((c) => (colsEl[c].innerHTML = ""));
 
@@ -90,22 +65,7 @@ function taskCard(task) {
 
   el.innerHTML = `
     <div>
-<<<<<<< HEAD
-      <p class="task-name">${escapeHtml(task.title || "User Story")}</p>
-    </div>
-    <div class="task-discription">
-      <p class="task-discription-headline">${escapeHtml(
-        task.headline || ""
-      )}</p>
-=======
       <p class="task-name" style="background-color: ${
-        task.categorycolor
-      }">${escapeHtml(task.category || "No Category")}</p>
-    </div>
-    <div class="task-discription">
-      <p class="task-discription-headline">${escapeHtml(task.title || "")}</p>
->>>>>>> origin/main
-    <p class="task-name" style="background-color: ${
         task.categorycolor
       }">${escapeHtml(task.category || "No Category")}</p>
     </div>
@@ -121,12 +81,6 @@ function taskCard(task) {
     </div>
     <div class="task-users">
     <button onclick="delTask('${task.id}')">DEL</button>
-    <<<<<<< HEAD
-=======
-    <div class="task-priority">
-    <img src="./assets/icons/${task.priority || "low"}.svg" alt="Priority" />
-    </div>
->>>>>>> origin/main
     <div class="task-priority">
     <img src="./assets/icons/${task.priority || "low"}.svg" alt="Priority" />
     </div>
@@ -183,23 +137,13 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
       updates[`${fromCol}/${id}`] = null;
 
       updates[`${toCol}/${id}/id`] = id;
-      <<<<<<< HEAD
-      updates[`${toCol}/${id}/category`] = taskObj.title || "User Story";
-      updates[`${toCol}/${id}/headline`] = taskObj.headline || "";
-      updates[`${toCol}/${id}/secondline`] = taskObj.secondline || "";
-=======
       updates[`${toCol}/${id}/category`] = taskObj.category || "No Category";
       updates[`${toCol}/${id}/headline`] = taskObj.title || "";
       updates[`${toCol}/${id}/secondline`] = taskObj.secondline || "";
       updates[`${toCol}/${id}/priority`] = taskObj.priority || "";
       updates[`${toCol}/${id}/categorycolor`] = taskObj.categorycolor || "";
       updates[`${toCol}/${id}/deadline`] = taskObj.deadline || "";
-
-<<<<<<< HEAD
->>>>>>> origin/main
-=======
       updates[`${toCol}/${id}/title`] = taskObj.title || "";
->>>>>>> a43031b7d67331dd45138999fed00b904219d74c
       updates[`${toCol}/${id}/subtasksCompleted`] = Number.isFinite(
         taskObj.subtasksCompleted
       )
@@ -334,13 +278,4 @@ function openAddTaskOverlay() {
 
   taskOverlay.classList.remove("d_none");
   document.body.classList.add("no-scroll");
-}
-  <<<<<<< HEAD
-
-document.addEventListener("DOMContentLoaded", () => {
-  const addTaskButton = document.getElementById("open-add-task-overlay");
-  addTaskButton.addEventListener("click", openAddTaskOverlay);
-});
-=======
->>>>>>> origin/main
 }

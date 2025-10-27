@@ -30,76 +30,46 @@ main {
   display: flex;
   justify-content: space-between;
   width: 100%;
-<<<<<<< HEAD
-  gap: 64px;
-  font-size: 20px;
-  font-weight: 700;
-  color: #42526e;
-=======
   font-size: 20px;
   font-weight: 700;
   color: #42526e;
   margin-bottom: 24px;
->>>>>>> origin/main
 }
 
 .task-table-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-<<<<<<< HEAD
-  width: 25%;
-=======
   width: 24%;
->>>>>>> origin/main
 }
 
 .task-table-tasks {
   display: flex;
-<<<<<<< HEAD
-=======
   justify-content: space-between;
->>>>>>> origin/main
   width: 100%;
 }
 
 #task-table-todo {
   overflow: scroll;
-<<<<<<< HEAD
-  height: calc(100vh - 345px);
-=======
   height: calc(100vh - 393px);
->>>>>>> origin/main
   overflow-x: hidden;
 }
 
 #task-table-progress {
   overflow: scroll;
-<<<<<<< HEAD
-  height: calc(100vh - 345px);
-=======
   height: calc(100vh - 393px);
->>>>>>> origin/main
   overflow-x: hidden;
 }
 
 #task-table-feedback {
   overflow: scroll;
-<<<<<<< HEAD
-  height: calc(100vh - 345px);
-=======
   height: calc(100vh - 393px);
->>>>>>> origin/main
   overflow-x: hidden;
 }
 
 #task-table-done {
   overflow: scroll;
-<<<<<<< HEAD
-  height: calc(100vh - 345px);
-=======
   height: calc(100vh - 393px);
->>>>>>> origin/main
   overflow-x: hidden;
 }
 
@@ -124,28 +94,17 @@ main {
   flex-direction: column;
   background-color: #f4f5f7;
   border-radius: 6px;
-<<<<<<< HEAD
-  width: 25%;
-=======
   width: 24%;
->>>>>>> origin/main
 }
 
 .task {
   background-color: #ffffff;
   border-radius: 12px;
-<<<<<<< HEAD
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  padding: 12px;
-=======
   width: 100%;
   display: flex;
   flex-direction: column;
   padding: 12px;
   cursor: pointer;
->>>>>>> origin/main
 }
 .task-name {
   background-color: #0038ff;
@@ -188,10 +147,6 @@ main {
   width: 30%;
 }
 
-<<<<<<< HEAD
-.dropzone {
-  width: 90%;
-=======
 .task-users {
   display: flex;
   justify-content: space-between;
@@ -205,22 +160,14 @@ main {
 
 .dropzone {
   width: 24%;
->>>>>>> origin/main
 }
 .dropzone.over {
   outline: 2px dashed #8aa7ff;
   background: #ffffff;
-<<<<<<< HEAD
-  width: 90%;
-}
-.item.dragging {
-  opacity: 0.85;
-=======
   width: 24%;
 }
 .task.dragging {
   opacity: 0.1;
->>>>>>> origin/main
 }
 
 .task-overlay-section {

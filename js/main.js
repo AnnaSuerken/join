@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-function delTask(id) {
-  dbApi.deleteData("/board" + findColumnOfTask(id) + "/" + id);
-}
-=======
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 async function loadNameHeader() {
@@ -61,4 +56,3 @@ addEventListener("load", async () => {
 });
 
 window.delTask = delTask;
->>>>>>> origin/main
