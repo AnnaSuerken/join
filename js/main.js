@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 21be5b33357e407f5bc8094de20b145a59fbcfb8
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 async function loadNameHeader() {
@@ -60,11 +56,3 @@ addEventListener("load", async () => {
 });
 
 window.delTask = delTask;
-<<<<<<< HEAD
-=======
-=======
-function delTask(id) {
-  dbApi.deleteData("/board" + findColumnOfTask(id) + "/" + id);
-}
->>>>>>> origin/main
->>>>>>> 21be5b33357e407f5bc8094de20b145a59fbcfb8
