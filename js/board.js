@@ -185,7 +185,11 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
       updates[`${toCol}/${id}/priority`] = taskObj.priority || "";
       updates[`${toCol}/${id}/categorycolor`] = taskObj.categorycolor || "";
       updates[`${toCol}/${id}/deadline`] = taskObj.deadline || "";
+<<<<<<< HEAD
 >>>>>>> origin/main
+=======
+      updates[`${toCol}/${id}/title`] = taskObj.title || "";
+>>>>>>> a43031b7d67331dd45138999fed00b904219d74c
       updates[`${toCol}/${id}/subtasksCompleted`] = Number.isFinite(
         taskObj.subtasksCompleted
       )
