@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 main {
   margin-left: 90px;
   width: 90%;
@@ -11,6 +12,14 @@ main {
   margin-left: 74px;
   margin-right: 74px;
   margin-top: 64px;
+=======
+.add-task-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+>>>>>>> origin/main
 }
 
 .add-task-section h1 {
@@ -76,6 +85,10 @@ main {
   padding-left: 24px;
   border-radius: 8px;
   font-size: 21px;
+<<<<<<< HEAD
+=======
+  cursor: pointer;
+>>>>>>> origin/main
 }
 
 .priority-btn-urgent {
