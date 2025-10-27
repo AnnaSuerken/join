@@ -1,0 +1,89 @@
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 120px;
+}
+
+.logo-login {
+  width: 100px;
+  height: 122px;
+  margin-top: 80px;
+  margin-left: 72px;
+}
+
+.sign-up-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 25px;
+  box-shadow: -1px 0px 6px 0px rgb(0, 0, 0, 0.2);
+  padding-top: 32px;
+  padding-bottom: 32px;
+  padding-left: 16px;
+  padding-right: 16px;
+  color: #f6f7f8;
+}
+
+.sign-up-box-h1 {
+  color: #293647;
+  font-weight: 700;
+  font-size: 61px;
+}
+
+.sign-up-box-header {
+  display: flex;
+  align-items: center;
+  width: 95%;
+  gap: 48px;
+}
+
+.sign-up-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  padding: 48px;
+}
+.signup-input {
+  padding-top: 15px;
+  padding-right: 125px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  gap: 10px;
+  color: #757575;
+}
+
+.signup-footer-links-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer-links {
+  color: #d1d1d1;
+  font-weight: 400;
+}
+
+.footer-links:hover {
+  color: #29abe2;
+}
+
+.pivacy-policy-link {
+  color: #29abe2;
+}
+
+.divider {
+  background-color: #29abe2;
+  width: 148px;
+  height: 3px;
+  margin-top: 25px;
+}

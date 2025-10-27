@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Summery</title>
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/summary.css" />
+
+    <script type="module" src="./js/firebase.js"></script>
+    <script type="module" src="./js/summary.js"></script>
+    <script type="module" src="./js/main.js"></script>
+    
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
+  </head>
+  <body>
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="" />
+        <section class="nav-bar">
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/summary.svg" alt=""/><a href="./index.html" class="menu-links">Summary
+          </button>
+          <button>
+            <img src="./assets/icons/addtask.svg" alt="" /><a href="./add-task.html" class="menu-links">Add Task</a>
+          </button>
+          <button>
+            <img src="./assets/icons/board.svg" alt="" /><a href="./board.html" class="menu-links">Board</a>
+          </button>
+          <button>
+            <img src="./assets/icons/contacts.svg" alt="" /><a href="./contacts.html" class="menu-links">Contacts</a>
+          </button>
+        </section>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
+      </section>
+      <section class="content-right">
+        <header class="header-right">
+          <span class="tool-name">Kanban Projekt Management Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html"><img src="./assets/icons/help.svg" alt=""/></a>
+            <div class="dropdown">
+              <button class="dropbtn">JK</button>
+              <div class="dropdown-content">
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
+              </div>
+            </div>
+          </div>
+        </header>
+        <main class="main-summary">
+          <div class="summary-title">
+            <h1>Join 360</h1>
+            <div class="summary-slash"></div>
+            <p>Key Metrics at a Glance</p>
+          </div>
+          <div class="summary-wrapper">
+            <section class="summary-tasks">
+              <section class="summary-task-medium">
+                <img src="./assets/icons/pen.svg" alt="">
+                <div class="summary-task-info">
+                <h2 id="summary-task-todo-number">1</h2>
+                <p>To Do</p>
+                </div>
+              </section>
+              <section class="summary-task-medium">
+                <img src="./assets/icons/hook.svg" alt="">
+                <div class="summary-task-info">
+                <h2 id="summary-task-todo-number">1</h2>
+                <p>To Do</p>
+                </div>
+              </section>
+              <section class="summary-task-big">
+                <div class="summary-task-big-left">
+                  <img src="./assets/icons/urgent.svg" alt="">
+                  <slot>
+                    <h2>1</h2>
+                    <p>Urgent</p>
+                  </slot>
+                </div>
+                <div class="summary-task-big-split"></div>
+                <div class="summary-task-big-right">
+                  <h3>October 24, 2025</h3>
+                  <p>Upcomming Deadline</p>
+                </div>
+              </section>
+              <section class="summary-task-small">
+                <h2 id="allTasks"></h2>
+                <p>Tasks in <br> Board</p>
+              </section>
+              <section class="summary-task-small">
+                <h2 id="inProgress"></h2>
+                <p>Tasks in <br>Progress</p>
+              </section>
+              <section class="summary-task-small">
+                <h2 id="awaitingFeedback"></h2>
+                <p>Awaiting <br> Feedback</p>
+              </section>
+            </section>
+    <div class="summary-name">
+      <h3 id="summary-greeting">Good morning,</h3>
+      <h2 id="summary-name">…</h2>
+    </div>
+          </div>
+        </main>
+      </section>
+    </div>
+  </body>
+</html>

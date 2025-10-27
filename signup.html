@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Sign Up</title>
+    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/signup.css" />
+
+    <script type="mobule" src="./js/firebase.js"></script>
+    <script type="module" src="./js/signup.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo-box-signup">
+        <img
+          src="./assets/imgs/join_logo_blue.svg"
+          alt="Join Logo"
+          class="logo-login"
+        />
+      </div>
+    </header>
+    <div id="status" class="msg-box">
+    </div>
+    <main>
+      <section class="sign-up-box">
+        <div class="sign-up-box-header">
+        <a href="./login.html"><img src="./assets/icons/return-arrow.svg" alt="return" class="return-arrow-btn"></a>
+        <h1 class="sign-up-box-h1">Sign up</h1>
+        </div>
+        <div class="divider"></div>
+        
+        <form id="register-form" action="">
+          <div class="sign-up-input-container">
+            <input
+              id="displayName"
+              type="text"
+              placeholder="Name"
+              class="signup-input"
+            />
+            <input
+              id="email"
+              type="text"
+              placeholder="Email"
+              class="signup-input"
+            />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              class="signup-input"
+            />
+            <input
+              id="password2"
+              name="password"
+              type="password"
+              placeholder="Confirm Password"
+              class="signup-input"
+            />
+            <div class="checkbox-container">
+              <input id="checkbox" type="checkbox" />I accept the
+              <a href="./privacy-policy.html" class="pivacy-policy-link">Privacy Policy</a>
+            </div>
+          <button id="signupbutton"  class="blue-btn-bold">Sign up</button>
+          </div>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <div class="signup-footer-links-container">
+        <a href="./privacy-policy.html" class="footer-links">Privacy Policy</a>
+        <a href="./legal-notice.html" class="footer-links">Legal notice</a>
+      </div>
+    </footer>
+  </body>
+</html>
