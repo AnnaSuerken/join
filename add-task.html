@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/add-task.css">
+    <script type="module" src="./js/main.js"></script>
 
     <script type="module" src="./js/firebase.js"></script>
     <script src="./js/addtask.js"></script>
@@ -45,9 +46,11 @@
         <header class="header-right">
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
-            <a href="./help.html"><img src="./assets/icons/help.svg" alt=""/></a>
+            <a href="./help.html"
+              ><img src="./assets/icons/help.svg" alt="Hilfe"
+            /></a>
             <div class="dropdown">
-              <button class="dropbtn">JK</button>
+              <button id="dropbtn" class="dropbtn"></button>
               <div class="dropdown-content">
                 <a href="./legal-notice.html">Legal Notice</a>
                 <a href="./privacy-policy.html">Privacy Policy</a>
