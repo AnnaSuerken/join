@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Log in</title>
+    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/signup.css" />
+
+    <script type="module" src="./js/firebase.js"></script>
+    <script type="module" src="./js/login.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo-box-signup">
+        <img
+          src="./assets/imgs/join_logo_blue.svg"
+          alt="Join Logo"
+          class="logo-login"
+        />
+      </div>
+    </header>
+    <div id="status" class="msg-box"></div>
+    <main>
+      <section class="sign-up-box">
+        <h1 class="sign-up-box-h1">Login</h1>
+        <div class="divider"></div>
+        <form id="login-form" action="">
+          <div class="sign-up-input-container">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="Email"
+              class="signup-input"
+            />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder="Password"
+              class="signup-input"
+            />
+          <div>
+          <button class="primary blue-btn-bold" type="submit" >Log in</button>
+          <button id="guest-login-btn" class="ghost white-btn-bold" style="margin-top: 16px">
+            Guest Log in
+          </button>
+          </div>
+          </div>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <div class="signup-footer-links-container">
+        <a href="./privacy-policy.html" class="footer-links">Privacy Policy</a>
+        <a href="./legal-notice.html" class="footer-links">Legal notice</a>
+        <a href="./signup.html" class="footer-links">Sign up</a>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Join - Legal notice</title>
+  <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="./css/assets.css" />
+  <link rel="stylesheet" href="./css/summary.css"/>
+
+  
+  <style>
+    .doc-page .doc-wrap{
+      max-width: 900px; margin: 24px auto;
+      background:#fff; border:1px solid var(--line); border-radius:12px;
+      padding:32px 40px 40px;
+    }
+    .doc-page .doc-title{
+      margin:0 0 20px; font-size:48px; font-weight:800; letter-spacing:-.02em;
+    }
+    .doc-page .doc-subtitle{
+      margin:24px 0 8px; font-size:20px; font-weight:700;
+    }
+    .doc-page .doc-text, .doc-page .doc-list{
+      color:#374151; font-size:14px; line-height:1.6;
+    }
+    .doc-page .doc-list{ margin:8px 0 16px 18px; }
+    .doc-page .doc-meta{ margin-top:24px; color:#6b7280; font-size:12px; }
+    
+    .nav-bar-links a.active{
+      display:block; background:#0f2236; color:#fff; border-radius:10px; padding:8px 12px;
+    }
+    
+    .doc-link{
+      color:#1d4ed8;
+      text-decoration:none;
+      font-weight:600;
+    }
+    .doc-link:hover{ text-decoration:underline; }
+  </style>
+
+  <script type="module">
+    import { requireAuth } from "./js/authguard.js";
+    import { logout } from "./js/logout.js";
+    const user = await requireAuth({ redirectTo: "/login.html" });
+    export { logout };
+  </script>
+</head>
+<body class="doc-page">
+  <div class="content">
+    <section class="content-left">
+      <img src="./assets/imgs/join_logo_white.svg" alt="" />
+
+      <section class="nav-bar">
+        <button>
+          <img src="./assets/icons/summary.svg" alt="" />
+          <a href="./index.html" class="menu-links">Summary</a>
+        </button>
+        <button>
+          <img src="./assets/icons/addtask.svg" alt="" />
+          <a href="./add-task.html" class="menu-links">Add Task</a>
+        </button>
+        <button>
+          <img src="./assets/icons/board.svg" alt="" />
+          <a href="./board.html" class="menu-links">Board</a>
+        </button>
+        <button>
+          <img src="./assets/icons/contacts.svg" alt="" />
+          <a href="./contacts.html" class="menu-links">Contacts</a>
+        </button>
+      </section>
+
+      <div class="nav-bar-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./legal-notice.html" class="active" aria-current="page">Legal notice</a>
+      </div>
+    </section>
+
+    <section class="content-right">
+      <header class="header-right">
+        <span class="tool-name">Kanban Projekt Management Tool</span>
+        <div class="header-content-right">
+          <a href="./help.html"><img src="./assets/icons/help.svg" alt=""/></a>
+          <div class="dropdown">
+            <button class="dropbtn">JK</button>
+            <div class="dropdown-content">
+              <a href="./legal-notice.html">Legal Notice</a>
+              <a href="./privacy-policy.html">Privacy Policy</a>
+              <a id="logout-btn">Logout</a>
+      <section class="content-right">
+        <header class="header-right">
+          <span class="tool-name">Kanban Projekt Managemant Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html"><img src="./assets/icons/help.svg" alt=""/></a>
+            <div class="dropdown">
+              <button class="dropbtn">JK</button>
+              <div class="dropdown-content">
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- DOKU-INHALT -->
+      <main class="doc-wrap">
+        <h1 class="doc-title">Legal Notice</h1>
+
+        <h2 class="doc-subtitle">Imprint</h2>
+        <ul class="doc-list">
+          <li>[Student Names List]</li>
+          <li>[Address of the <span class="doc-link">JOIN</span> operator - e.g. one of the students]</li>
+          <li>[Postcode and city]</li>
+        </ul>
+
+        <h2 class="doc-subtitle">Exploring the Board</h2>
+        <p class="doc-text">Email: <a href="mailto:info@example.com" class="doc-link">info@example.com</a></p>
+
+        <h2 class="doc-subtitle">Acceptance of terms</h2>
+        <p class="doc-text">
+          By accessing and using <a href="./index.html" class="doc-link">Join</a> (Product), you acknowledge and agree to the following
+          terms and conditions, and any policies, guidelines, or amendments thereto that may be presented to you
+          from time to time. We, the listed students, may update or change the terms and conditions from time to time without notice.
+        </p>
+
+        <h2 class="doc-subtitle">Scope and ownership of the product</h2>
+        <p class="doc-text">
+          <a href="./index.html" class="doc-link">Join</a> has been developed as part of a student group project in a web development bootcamp at the
+          <a href="https://developerakademie.com" target="_blank" rel="noopener" class="doc-link">Developer Akademie GmbH</a>.
+          It has an educational purpose and is not intended for extensive personal & business usage.
+          As such, we cannot guarantee consistent availability, reliability, accuracy, or any other aspect of quality regarding this Product.
+        </p>
+
+        <h2 class="doc-subtitle">Proprietary rights</h2>
+        <p class="doc-text">
+          Aside from the design owned by <a href="https://developerakademie.com" target="_blank" rel="noopener" class="doc-link">Developer Akademie GmbH</a>,
+          we, the listed students, retain all proprietary rights in <a href="./index.html" class="doc-link">Join</a>,
+          including any associated copyrighted material, trademarks, and other proprietary information.
+        </p>
+
+        <h2 class="doc-subtitle">Use of the product</h2>
+        <p class="doc-text">
+          <a href="./index.html" class="doc-link">Join</a> is intended to be used for lawful purposes only, in accordance with all applicable laws and regulations.
+          Any use of <a href="./index.html" class="doc-link">Join</a> for illegal activities, or to harass, harm, threaten, or intimidate another person, is strictly prohibited.
+          You are solely responsible for your interactions with other users of <a href="./index.html" class="doc-link">Join</a>.
+        </p>
+
+        <h2 class="doc-subtitle">Disclaimer of warranties and limitation of liability</h2>
+        <p class="doc-text">
+          <a href="./index.html" class="doc-link">Join</a> is provided “as is” without warranty of any kind, whether express or implied, including but not limited to
+          the implied warranties of merchantability, fitness for a particular purpose, and non-infringement.
+          In no event will we, the listed students, or the <a href="https://developerakademie.com" target="_blank" rel="noopener" class="doc-link">Developer Akademie GmbH</a>,
+          be liable for any direct, indirect, incidental, special, consequential or exemplary damages, including but not limited to, damages for loss of profits, goodwill,
+          use, data, or other intangible losses, even if we have been advised of the possibility of such damages.
+        </p>
+
+        <h2 class="doc-subtitle">Indemnity</h2>
+        <p class="doc-text">
+          You agree to indemnify, defend and hold harmless us, the listed students, the
+          <a href="https://developerakademie.com" target="_blank" rel="noopener" class="doc-link">Developer Akademie GmbH</a>, and our affiliates, partners,
+          officers, directors, agents, and employees, from and against any claim, demand, loss, damage, cost, or liability
+          (including reasonable legal fees) arising out of or relating to your use of <a href="./index.html" class="doc-link">Join</a>
+          and/or your breach of this Legal Notice.
+        </p>
+
+        <div class="doc-meta">Date: July 26, 2023</div>
+      </main>
+    </section>
+  </div>
+</body>
+</html>

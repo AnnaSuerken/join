@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Board</title>
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/summary.css" />
+    <link rel="stylesheet" href="./css/board.css" />
+
+    <script src="./js/main.js"></script>
+
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
+  </head>
+
+  <body>
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <section class="nav-bar">
+          <button>
+            <img src="./assets/icons/summary.svg" alt="" /><a
+              href="./index.html"
+              class="menu-links"
+              >Summary</a
+            >
+          </button>
+          <button>
+            <img src="./assets/icons/addtask.svg" alt="" /><a
+              href="./add-task.html"
+              class="menu-links"
+              >Add Task</a
+            >
+          </button>
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/board.svg" alt="" /><a
+              href="./board.html"
+              class="menu-links"
+              >Board</a
+            >
+          </button>
+          <button>
+            <img src="./assets/icons/contacts.svg" alt="" /><a
+              href="./contacts.html"
+              class="menu-links"
+              >Contacts</a
+            >
+          </button>
+        </section>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
+      </section>
+
+      <section class="content-right">
+        <header class="header-right">
+          <span class="tool-name">Kanban Projekt Management Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html"
+              ><img src="./assets/icons/help.svg" alt="Hilfe"
+            /></a>
+            <div class="dropdown">
+              <button class="dropbtn">JK</button>
+              <div class="dropdown-content">
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main>
+          <section class="board-header">
+            <h1>Board</h1>
+            <div class="action-container">
+              <input id="task-search" type="search" placeholder="Find Task" />
+              <img src="./assets/icons/search.svg" alt="Search" />
+              <button class="blue-btn-bold" id="open-add-task-overlay">
+                Add Task
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <div class="task-table">
+              <div class="task-table-header">
+                <span>To Do</span><button class="white-btn-bold">+</button>
+              </div>
+              <div class="task-table-header">
+                <span>In progress</span
+                ><button class="white-btn-bold">+</button>
+              </div>
+              <div class="task-table-header">
+                <span>Await Feedback</span
+                ><button class="white-btn-bold">+</button>
+              </div>
+              <div class="task-table-header">
+                <span>Done</span><button class="white-btn-bold">+</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="task-table-tasks">
+            <div id="task-table-todo" class="task-table-colum dropzone"></div>
+            <div
+              id="task-table-progress"
+              class="task-table-colum dropzone"
+            ></div>
+            <div
+              id="task-table-feedback"
+              class="task-table-colum dropzone"
+            ></div>
+            <div id="task-table-done" class="task-table-colum dropzone"></div>
+          </section>
+
+          <section class="task-overlay-section d_none" id="add-task-overlay">
+            <div class="task-overlay">
+              <div class="task-overlay-header">
+                <h1>Add Task</h1>
+                <img
+                  src="./assets/icons/Close.svg"
+                  alt="close"
+                  id="close-btn"
+                />
+              </div>
+              <div class="task-overlay-content">
+                <div class="task-overlay-content-right">
+                  <span>Title*</span>
+                  <input type="text" />
+                  <span>Description</span>
+                  <input type="text" />
+                  <span>Due date*</span>
+                  <input type="date" />
+                </div>
+                <div class="divider"></div>
+                <div class="task-overlay-content-left">
+                  <span>Priority</span>
+                  <div>
+                    <button>Urgent</button> <button>Medium</button>
+                    <button>Low</button>
+                  </div>
+                </div>
+              </div>
+              <div class="task-overlay-footer">
+                <span>*This field is required</span>
+                <div>
+                  <button>Cancel X</button>
+                  <button>Create Task Häkchen</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <script type="module" src="./js/board.js"></script>
+  </body>
+</html>
