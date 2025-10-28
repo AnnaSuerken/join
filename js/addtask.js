@@ -76,5 +76,27 @@ function setPriority(status) {
   document.getElementById(`prio-${status}-active`).classList.remove("d_none");
 
   currentPriority = status;
-  console.log(currentPriority);
+}
+
+/**
+ * This function pulls contacts data from firebase and creates template to choose perople to assign to tasks
+ *
+ */
+let contactsData = [];
+
+async function getContactsData() {
+
+  const data= await dbApi.getData(`contacts/`);
+  const contactsArray = Object.values(data)
+
+  for (let i = 0; i < contactsArray.length; i++) {
+    const contacts = contactsArray[i];
+
+    contactsData.push({
+      initials: contacts.initials,
+      name: contacts.name,
+    })
+    
+  }
+   console.log(contactsData)
 }
