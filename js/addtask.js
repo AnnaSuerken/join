@@ -7,7 +7,7 @@ async function createTask() {
   const taskTitle = document.getElementById("task-title");
   const taskDescription = document.getElementById("task-description");
   const taskDueDate = document.getElementById("task-due-date");
-  //const taskContacts = document.getElementById("task-contacts");
+  const taskContacts = document.getElementById("assigned-contacts");
   const taskCategory = document.getElementById("task-category");
   const subtask = document.getElementById("subtask");
 
@@ -16,6 +16,7 @@ async function createTask() {
     id: "",
     secondline: taskDescription.value,
     deadline: taskDueDate.value,
+    assignedContact: taskContacts.value,
     category: taskCategory.value,
     categorycolor:
       taskCategoryColor.find((c) => c.name === taskCategory.value)?.color || "",
@@ -35,9 +36,9 @@ async function createTask() {
 function clearTask() {
   const priorities = ["urgent", "medium", "low"];
   document.getElementById("task-title").value = "";
-  document.getElementById("task-description").value = "";
+  document.getElementById("task-deion").value = "";
   document.getElementById("task-due-date").value = "";
-  //const taskContacts = document.getElementById("task-contacts");
+  document.getElementById("assigned-contacts").value = "";
   document.getElementById("task-category").value = "Select task category";
   document.getElementById("subtask").value = "";
   priorities.forEach((prio) => {
@@ -99,4 +100,18 @@ async function getContactsData() {
     
   }
    console.log(contactsData)
+   assignToTemplate();
+}
+
+function assignToTemplate() {
+  let contentRef = document.getElementById('assigned-contacts');
+  contentRef.innerHTML = "";
+
+  for (let i = 0; i < contactsData.length; i++) {
+    contentRef.innerHTML += getAssignToTemplate(i);
+  }
+}
+
+function getAssignToTemplate(i){
+  return `<option>${contactsData[i].name}</option>`
 }
