@@ -130,6 +130,7 @@ main {
   overflow: hidden;
   -webkit-line-clamp: 2;
 }
+
 .task-subtasks {
   display: flex;
   justify-content: space-between;
