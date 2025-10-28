@@ -79,7 +79,7 @@ function setPriority(status) {
 }
 
 /**
- * This function pulls contacts data from firebase and creates template to choose perople to assign to tasks
+ * This function pulls contacts data from firebase and creates array for assign to template
  *
  */
 let contactsData = [];
