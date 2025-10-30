@@ -45,7 +45,7 @@ body {
 }
 
 
-/* Hauptbereich unter dem Header */
+
 .help-main {
   flex: 1;                      
   background-color: #ffffff;
@@ -97,7 +97,7 @@ body {
   margin: 0;
 }
 
-/* Abschnittsüberschriften ("What is Join?", "How to use it") */
+
 .help-section-headline {
   font-size: 24px;
   font-weight: 600;

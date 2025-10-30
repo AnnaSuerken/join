@@ -5,22 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Help</title>
 
-    <link
-      rel="shortcut icon"
-      href="./assets/icons/favicon-32x32.png"
-      type="image/x-icon"
-    />
+    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon" />
 
     <!-- globale styles -->
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
 
-    <!-- page -->
+    <!-- page specific -->
     <link rel="stylesheet" href="./css/help.css" />
 
     <script src="./js/main.js" defer></script>
 
-    <!--  logout -->
+    <!-- auth / logout -->
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
@@ -30,9 +26,7 @@
       document.addEventListener("DOMContentLoaded", () => {
         const logoutBtn = document.getElementById("logout-btn");
         if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
-            logout();
-          });
+          logoutBtn.addEventListener("click", () => logout());
         }
       });
     </script>
@@ -103,10 +97,11 @@
 
             <!-- Intro-Text -->
             <p class="help-intro">
-              Welcome to the help page for <span class="help-link">Join</span>,
+              Welcome to the help page for 
+              <a href="./index.html" class="help-link">Join</a>,
               your guide to using our kanban project management tool. Here,
-              we'll provide an overview of what <span class="help-link">Join</span>
-              is, how it can benefit you, and how to use it.
+              we'll provide an overview of what 
+              <a href="./index.html" class="help-link">Join</a> is, how it can benefit you, and how to use it.
             </p>
 
             <!-- SECTION  -->
@@ -114,7 +109,7 @@
               <h2 class="help-section-headline">What is Join?</h2>
 
               <p class="help-paragraph">
-                <span class="help-link">Join</span> is a kanban-based project
+                <a href="./index.html" class="help-link">Join</a> is a kanban-based project
                 management tool designed and built by a group of dedicated
                 students as part of their web development bootcamp at the
                 Developer Akademie.
@@ -124,19 +119,19 @@
                 Kanban, a Japanese term meaning "billboard", is a highly
                 effective method to visualize work, limit work-in-progress, and
                 maximize efficiency (or flow).
-                <span class="help-link">Join</span> leverages the principles of
+                <a href="./index.html" class="help-link">Join</a> leverages the principles of
                 kanban to help users manage their tasks and projects in an
                 intuitive, visual interface.
               </p>
 
               <p class="help-paragraph">
                 It is important to note that
-                <span class="help-link">Join</span> is designed as an
+                <a href="./index.html" class="help-link">Join</a> is designed as an
                 educational exercise and is not intended for extensive business
                 usage. While we strive to ensure the best possible user
                 experience, we cannot guarantee consistent availability,
                 reliability, accuracy, or other aspects of quality regarding
-                <span class="help-link">Join</span>.
+                <a href="./index.html" class="help-link">Join</a>.
               </p>
             </section>
 
@@ -146,7 +141,7 @@
 
               <p class="help-paragraph">
                 Here is a step-by-step guide on how to use
-                <span class="help-link">Join</span>:
+                <a href="./index.html" class="help-link">Join</a>:
               </p>
 
               <ol class="help-list">
@@ -155,7 +150,8 @@
                   <div class="help-list-content">
                     <div class="help-list-title">Exploring the Board</div>
                     <div class="help-list-text">
-                      When you log in to <span class="help-link">Join</span>,
+                      When you log in to 
+                      <a href="./index.html" class="help-link">Join</a>,
                       you'll find a default board. This board represents your
                       project and contains four default lists: "To Do",
                       "In Progress", "Await feedback" and "Done".
@@ -168,7 +164,7 @@
                   <div class="help-list-content">
                     <div class="help-list-title">Creating Contacts</div>
                     <div class="help-list-text">
-                      In <span class="help-link">Join</span>, you can add
+                      In <a href="./index.html" class="help-link">Join</a>, you can add
                       contacts to collaborate on your projects. Go to the
                       "Contacts" section, click on "New contact", and fill in
                       the required information. Once added, these contacts can
@@ -220,14 +216,14 @@
 
               <p class="help-paragraph">
                 Remember that using
-                <span class="help-link">Join</span> effectively requires
+                <a href="./index.html" class="help-link">Join</a> effectively requires
                 consistent updates from you and your team to ensure the board
                 reflects the current state of your project.
               </p>
 
               <p class="help-paragraph">
                 Have more questions about
-                <span class="help-link">Join</span>? Feel free to contact us at
+                <a href="./index.html" class="help-link">Join</a>? Feel free to contact us at
                 [Your Contact Email]. We're here to help you!
               </p>
             </section>
@@ -241,5 +237,7 @@
     </div>
 
     <script src="./js/help.js" defer></script>
+    <script src="./js/nav-active.js" defer></script>
+
   </body>
 </html>

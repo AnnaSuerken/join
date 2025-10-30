@@ -11,11 +11,11 @@
       type="image/x-icon"
     />
 
-    <!-- globale styles -->
+
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
 
-    <!-- page specific -->
+    
     <link rel="stylesheet" href="./css/contacts.css" />
 
     <!-- help styles  -->
@@ -40,8 +40,8 @@
       });
     </script>
 
-    <script src="./js/firebase.js"></script>
-    <script src="./js/contacts.js"></script>
+    <script src="./js/firebase.js" defer></script>
+    
   </head>
 
   <body>
@@ -65,7 +65,7 @@
             <a href="./board.html" class="menu-links">Board</a>
           </button>
 
-          <button class="nav-bar-button-active">
+          <button>
             <img src="./assets/icons/contacts.svg" alt="" />
             <a href="./contacts.html" class="menu-links">Contacts</a>
           </button>
@@ -101,7 +101,7 @@
         </header>
 
         <main class="contacts-main">
-          <!-- LEFT PANEL -->
+          
           <aside class="contacts-panel">
             <div class="contacts-panel-inner">
               <button
@@ -167,7 +167,7 @@
 
         <!-- RECHTE SEITE -->
         <div class="add-contact-right">
-          <!-- CLOSE (X) -->
+          
           <button
             class="modal-close-btn"
             id="close-add-contact-overlay"
@@ -258,5 +258,6 @@
 
     <!-- PAGE LOGIC -->
     <script type="module" src="./js/contacts.js"></script>
+    <script src="./js/nav-active.js" defer></script>
   </body>
 </html>
