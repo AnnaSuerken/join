@@ -1,5 +1,11 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
+addEventListener("keypress", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
+});
+
 async function loadNameHeader() {
   const userNameRef = document.getElementById("dropbtn");
 

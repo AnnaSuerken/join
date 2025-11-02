@@ -1,40 +1,51 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Add Task</title>
-    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/assets.css" />
-    <link rel="stylesheet" href="./css/add-task.css">
-    <script type="module" src="./js/main.js"></script>
+    <link rel="stylesheet" href="./css/add-task.css" />
 
+    <script type="module" src="./js/main.js"></script>
     <script type="module" src="./js/firebase.js"></script>
+    <!-- Unsere (neue) Subtask-Logik -->
     <script src="./js/addtask.js"></script>
+
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
       const user = await requireAuth({ redirectTo: "/login.html" });
       export { logout };
     </script>
-</head>
-<body onload="getContactsData()">
+  </head>
+
+  <body onload="getContactsData()">
     <div class="content">
       <section class="content-left">
-        <img src="./assets/imgs/join_logo_white.svg" alt="" />
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join" />
         <section class="nav-bar">
           <button>
-            <img src="./assets/icons/summary.svg" alt="" /><a href="./index.html" class="menu-links">Summary
+            <img src="./assets/icons/summary.svg" alt="summary" />
+            <a href="./index.html" class="menu-links">Summary</a>
           </button>
           <button class="nav-bar-button-active">
-            <img src="./assets/icons/addtask.svg" alt="" /><a href="./add-task.html" class="menu-links">Add Task</a>
+            <img src="./assets/icons/addtask.svg" alt="add task" />
+            <a href="./add-task.html" class="menu-links">Add Task</a>
           </button>
           <button>
-            <img src="./assets/icons/board.svg" alt="" /><a href="./board.html" class="menu-links">Board</a>
-        </button>
+            <img src="./assets/icons/board.svg" alt="board" />
+            <a href="./board.html" class="menu-links">Board</a>
+          </button>
           <button>
-            <img src="./assets/icons/contacts.svg" alt="" /><a href="./contacts.html" class="menu-links">Contacts</a>
+            <img src="./assets/icons/contacts.svg" alt="contacts" />
+            <a href="./contacts.html" class="menu-links">Contacts</a>
           </button>
         </section>
         <div class="nav-bar-links">
@@ -42,6 +53,7 @@
           <a href="./legal-notice.html">Legal notice</a>
         </div>
       </section>
+
       <section class="content-right">
         <header class="header-right">
           <span class="tool-name">Kanban Projekt Management Tool</span>
@@ -59,54 +71,149 @@
             </div>
           </div>
         </header>
-    <main>
-      <section class="add-task-section">
-              <h1>Add Task</h1>
-              <form class="add-task-content">
-                <div class="add-task-content-right">
-                  <label for="task-title">Title<span>*</span></label>
-                  <input type="text" placeholder="Enter a Title" id="task-title" required>
-                  <label for="task-description">Description</label>
-                  <textarea placeholder="Enter a Description" id="task-description"></textarea>
-                  <label for="task-due-date">Due date<span>*</span></label>
-                  <input type="date" id="task-due-date" required>
-                </div>
-                <div class="divider"></div>
-                <div class="add-task-content-left">
-                  <label>Priority</label>
-                  <div class="priority-container">
-                    <div class="priority-btn" id="prio-urgent" onclick="setPriority('urgent')">Urgent <img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img"></div>
-                    <div class="priority-btn-urgent d_none" id="prio-urgent-active" onclick="setPriority('urgent')">Urgent <img src="./assets/icons/urgent-white.svg" alt="urgent" class="urgent-img"></div>
-                    <div class="priority-btn" id="prio-medium" onclick="setPriority('medium')">Medium <img src="./assets/icons/medium-orange.svg" alt="medium"></div> 
-                    <div class="priority-btn-medium d_none" id="prio-medium-active" onclick="setPriority('medium')">Medium <img src="./assets/icons/medium-white.svg" alt="medium"></div> 
-                    <div class="priority-btn" id="prio-low" onclick="setPriority('low')">Low <img src="./assets/icons/low-green.svg" alt="low"></div>
-                    <div class="priority-btn-low d_none" id="prio-low-active" onclick="setPriority('low')">Low <img src="./assets/icons/low-white.svg" alt="low"></div> 
+
+        <main>
+          <section class="add-task-section">
+            <h1>Add Task</h1>
+
+            <form class="add-task-content">
+              <div class="add-task-content-right">
+                <label for="task-title">Title<span>*</span></label>
+                <input
+                  type="text"
+                  placeholder="Enter a Title"
+                  id="task-title"
+                  required
+                />
+
+                <label for="task-description">Description</label>
+                <textarea
+                  placeholder="Enter a Description"
+                  id="task-description"
+                ></textarea>
+
+                <label for="task-due-date">Due date<span>*</span></label>
+                <input type="date" min="" id="task-due-date" required />
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="add-task-content-left">
+                <label>Priority</label>
+                <div class="priority-container">
+                  <div
+                    class="priority-btn"
+                    id="prio-urgent"
+                    onclick="setPriority('urgent')"
+                  >
+                    Urgent
+                    <img
+                      src="./assets/icons/urgent-red.svg"
+                      alt="urgent"
+                      class="urgent-img"
+                    />
                   </div>
-                  
-                  <label for="contacts">Assigned to</label>
-                  <select name="contacts" id="assigned-contacts">
-                  </select>
-                  <label for="catergory">Category<span>*</span></label>
-                  <select name="catergory" id="task-category" required>
-                    <option>Select task category</option>
-                    <option value="Technical Task">Technical Task</option>
-                    <option value="User Story">User Story</option>
-                  </select>
-                  <label for="subtask">Subtasks</label>
-                  <input type="text" placeholder="Add new subtask" id="subtask">
+                  <div
+                    class="priority-btn-urgent d_none"
+                    id="prio-urgent-active"
+                    onclick="setPriority('urgent')"
+                  >
+                    Urgent
+                    <img
+                      src="./assets/icons/urgent-white.svg"
+                      alt="urgent"
+                      class="urgent-img"
+                    />
+                  </div>
+
+                  <div
+                    class="priority-btn"
+                    id="prio-medium"
+                    onclick="setPriority('medium')"
+                  >
+                    Medium
+                    <img src="./assets/icons/medium-orange.svg" alt="medium" />
+                  </div>
+                  <div
+                    class="priority-btn-medium d_none"
+                    id="prio-medium-active"
+                    onclick="setPriority('medium')"
+                  >
+                    Medium
+                    <img src="./assets/icons/medium-white.svg" alt="medium" />
+                  </div>
+
+                  <div
+                    class="priority-btn"
+                    id="prio-low"
+                    onclick="setPriority('low')"
+                  >
+                    Low <img src="./assets/icons/low-green.svg" alt="low" />
+                  </div>
+                  <div
+                    class="priority-btn-low d_none"
+                    id="prio-low-active"
+                    onclick="setPriority('low')"
+                  >
+                    Low <img src="./assets/icons/low-white.svg" alt="low" />
+                  </div>
                 </div>
-              </form>
-              <div class="add-task-footer">
-                <p><span>*</span>This field is required</p>
-                <div>
-                <button class="white-btn-bold" onclick="clearTask()">Clear</button>
-                <button onclick="createTask()" class="blue-btn-bold">Create Task</button>
+
+                <label for="contacts">Assigned to</label>
+                <select name="contacts" id="assigned-contacts"></select>
+
+                <label for="catergory">Category<span>*</span></label>
+                <select name="catergory" id="task-category" required>
+                  <option>Select task category</option>
+                  <option value="Technical Task">Technical Task</option>
+                  <option value="User Story">User Story</option>
+                </select>
+
+                <label for="subtask">Subtasks</label>
+                <input type="text" placeholder="Add new subtask" id="subtask" />
+                <div class="subtask-list" id="subtask-list"></div>
+
+                <!-- Inline-Editor für Subtasks (unten, standardmäßig versteckt) -->
+                <div id="subtask-editor" class="subtask-editor d_none">
+                  <input
+                    type="text"
+                    id="subtask-edit-input"
+                    placeholder="Edit subtask"
+                  />
+                  <div class="subtask-editor-actions">
+                    <button
+                      type="button"
+                      id="subtask-save"
+                      class="blue-btn-bold"
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      id="subtask-cancel"
+                      class="white-btn-bold"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
-          </section>
-      </main>
-      </section>
+            </form>
 
+            <div class="add-task-footer">
+              <p><span>*</span>This field is required</p>
+              <div>
+                <button class="white-btn-bold" onclick="clearTask()">
+                  Clear
+                </button>
+                <button onclick="createTask()" class="blue-btn-bold">
+                  Create Task
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </section>
     </div>
-</body>
+  </body>
 </html>

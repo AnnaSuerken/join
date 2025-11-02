@@ -2,6 +2,7 @@ function genId() {
   return Date.now().toString(16) + Math.random().toString(16).slice(2);
 }
 
+// Consolidated color palettes
 const avatarColors = [
   "#FF7A00",
   "#462F8A",

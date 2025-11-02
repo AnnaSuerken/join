@@ -3,7 +3,6 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .add-task-section {
@@ -12,19 +11,24 @@ main {
   justify-content: space-between;
   flex-direction: column;
   margin-top: 64px;
-
 }
 
 .add-task-section h1 {
   font-size: 61px;
   font-weight: 700;
-
 }
 
 .add-task-content {
   display: flex;
   gap: 48px;
   margin-top: 32px;
+}
+
+.add-task-content textarea {
+  max-width: 440px;
+  min-width: 440px;
+  min-height: 120px;
+  max-height: 120px;
 }
 
 .add-task-content span {
@@ -65,6 +69,40 @@ main {
 .priority-container {
   display: flex;
   gap: 16px;
+}
+
+.subtask-list {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.subtask-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 8px;
+}
+.subtask-item span {
+  color: #2a3647;
+}
+.subtask-item button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-left: 12px;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#subtask.is-editing {
+  outline: 2px dashed #4b83ff;
+  background: #f5f8ff;
 }
 
 .priority-btn {
