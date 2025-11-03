@@ -1,4 +1,4 @@
-/***** Add Task – Subtasks unten im gleichen Input bearbeiten (Enter = speichern, Esc = abbrechen) *****/
+/***** Add Task – Subtasks, Custom-Assignee-Dropdown mit Avatar-Initialen in der Liste *****/
 
 /* ---------- Konfiguration ---------- */
 let taskCategoryColor = [
@@ -6,11 +6,9 @@ let taskCategoryColor = [
   { name: "User Story", color: "#0038FF" },
 ];
 
-/* ---------- Subtasks ---------- */
-let subtasks = [];
-let editingIndex = null; // null = Add-Modus, Zahl = Edit-Modus auf Index
+/* ---------- Utilities ---------- */
 
-/** HTML-escaping (falls jemand < > & usw. eingibt) */
+/** HTML-escaping */
 function escapeHtml(str) {
   return String(str)
     .replaceAll("&", "&amp;")
@@ -20,7 +18,26 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-/* ---------- Subtask-Logik ---------- */
+/** Initialen aus Name (max 2) */
+function makeInitials(name = "") {
+  const parts = name.trim().split(/\s+/);
+  const first = (parts[0]?.[0] || "").toUpperCase();
+  const last = (parts[1]?.[0] || "").toUpperCase();
+  return (first + last).slice(0, 2);
+}
+
+/** stabile Farbe (Fallback), wenn Kontakt keine Farbe hat */
+function colorFromName(name = "") {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  const h = Math.abs(hash) % 360;
+  return `hsl(${h} 70% 45%)`;
+}
+
+/* ---------- Subtasks ---------- */
+
+let subtasks = [];
+let editingIndex = null; // null = Add, Zahl = Edit-Index
 
 function setSubtaskModeEdit(i) {
   const input = document.getElementById("subtask");
@@ -55,7 +72,7 @@ function saveEditFromInput() {
   if (editingIndex === null) return;
   const input = document.getElementById("subtask");
   const value = input.value.trim();
-  if (!value) return; // optional: leere Eingabe nicht speichern
+  if (!value) return;
   subtasks[editingIndex] = value;
   setSubtaskModeAdd();
   renderSubtasks();
@@ -87,10 +104,7 @@ function renderSubtasks() {
     )
     .join("");
 
-  if (
-    editingIndex !== null &&
-    (editingIndex < 0 || editingIndex >= subtasks.length)
-  ) {
+  if (editingIndex !== null && (editingIndex < 0 || editingIndex >= subtasks.length)) {
     setSubtaskModeAdd();
   }
 }
@@ -98,11 +112,8 @@ function renderSubtasks() {
 function removeSubtask(index) {
   subtasks.splice(index, 1);
   renderSubtasks();
-  if (editingIndex === index) {
-    setSubtaskModeAdd();
-  } else if (editingIndex !== null && index < editingIndex) {
-    editingIndex -= 1;
-  }
+  if (editingIndex === index) setSubtaskModeAdd();
+  else if (editingIndex !== null && index < editingIndex) editingIndex -= 1;
 }
 
 function wireSubtaskEvents() {
@@ -127,92 +138,181 @@ function wireSubtaskEvents() {
     const row = e.target.closest(".subtask-item");
     if (!row) return;
     const index = Number(row.dataset.index);
-    if (btn.classList.contains("btn-edit")) {
-      setSubtaskModeEdit(index); // unten im selben Input bearbeiten
-    } else if (btn.classList.contains("btn-delete")) {
-      removeSubtask(index);
+    if (btn.classList.contains("btn-edit")) setSubtaskModeEdit(index);
+    else if (btn.classList.contains("btn-delete")) removeSubtask(index);
+  });
+}
+
+/* ---------- Toast ---------- */
+
+function showToast(message, isError = false) {
+  const toast = document.getElementById("toast");
+  if (!toast) { alert(message); return; }
+  toast.textContent = message;
+  toast.style.background = isError ? "#C62828" : "#2a3647";
+  toast.classList.remove("d_none");
+  void toast.offsetWidth; // Reflow für Transition
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.classList.add("d_none"), 250);
+  }, 2000);
+}
+
+/* ---------- Contacts / Custom Dropdown ---------- */
+
+let contactsData = [];
+let selectedAssignees = []; // [{ name, initials, color }]
+
+async function getContactsData() {
+  const data = await dbApi.getData(`contacts/`);
+  const contactsArray = Object.values(data || {});
+
+  contactsData = contactsArray.map((c) => ({
+    name: c.name,
+    initials: c.initials || makeInitials(c.name),
+    color: c.color || colorFromName(c.name),
+    // id: c.id,
+  }));
+
+  buildAssigneeDropdown();
+  renderAssignees();
+}
+
+/** Custom „Select“: Button + Options-Liste mit Avatar-Layout */
+function buildAssigneeDropdown() {
+  const trigger = document.getElementById("assignee-select");
+  const list = document.getElementById("assignee-options");
+  if (!trigger || !list) return;
+
+  // Optionen rendern (mit Avatar + Name)
+  list.innerHTML = contactsData
+    .map(
+      (c, i) => `
+      <li class="assignee-option" role="option" aria-selected="false" data-index="${i}">
+        <span class="assignee-avatar" style="background:${escapeHtml(c.color)}">${escapeHtml(c.initials)}</span>
+        <span class="assignee-option-name">${escapeHtml(c.name)}</span>
+        <span class="assignee-check" aria-hidden="true">✓</span>
+      </li>
+    `
+    )
+    .join("");
+
+  // Öffnen/Schließen
+  function open() {
+    list.classList.remove("d_none");
+    trigger.setAttribute("aria-expanded", "true");
+  }
+  function close() {
+    list.classList.add("d_none");
+    trigger.setAttribute("aria-expanded", "false");
+  }
+  function toggleOpen() {
+    const isOpen = trigger.getAttribute("aria-expanded") === "true";
+    isOpen ? close() : open();
+  }
+
+  trigger.addEventListener("click", toggleOpen);
+  trigger.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+      e.preventDefault();
+      toggleOpen();
+    } else if (e.key === "Escape") {
+      close();
+      trigger.blur();
     }
   });
-}
 
-addEventListener("load", function () {
-  const dayRef = document.getElementById("task-due-date");
-  if (dayRef) {
-    const day = new Date();
-    dayRef.min = day.toISOString().split("T")[0];
-  }
-
-  wireSubtaskEvents();
-  renderSubtasks();
-});
-
-/* ---------- Task-Erstellung ---------- */
-
-async function createTask() {
-  const taskTitle = document.getElementById("task-title");
-  const taskDescription = document.getElementById("task-description");
-  const taskDueDate = document.getElementById("task-due-date");
-  const taskContacts = document.getElementById("assigned-contacts");
-  const taskCategory = document.getElementById("task-category");
-
-  if (!taskTitle?.value.trim() || !taskDueDate?.value) {
-    alert("Bitte Titel und Fälligkeitsdatum ausfüllen.");
-    return;
-  }
-
-  const payload = {
-    title: taskTitle.value,
-    id: "",
-    secondline: taskDescription?.value || "",
-    deadline: taskDueDate.value,
-    assignedContact: taskContacts?.value || "",
-    category: taskCategory?.value || "",
-    categorycolor:
-      taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color ||
-      "",
-    subtask: subtasks,
-    priority: currentPriority,
-  };
-
-  const key = await dbApi.pushData("/board/todo", payload);
-  await dbApi.updateData(`board/todo/${key}`, { id: key });
-
-  clearTask();
-}
-
-/**
- * Formular-Reset
- */
-function clearTask() {
-  const priorities = ["urgent", "medium", "low"];
-  const titleEl = document.getElementById("task-title");
-  const descEl = document.getElementById("task-description"); // Bugfix
-  const dateEl = document.getElementById("task-due-date");
-  const contactsEl = document.getElementById("assigned-contacts");
-  const categoryEl = document.getElementById("task-category");
-  const subtaskInput = document.getElementById("subtask");
-  const subtaskList = document.getElementById("subtask-list");
-
-  if (titleEl) titleEl.value = "";
-  if (descEl) descEl.value = "";
-  if (dateEl) dateEl.value = "";
-  if (contactsEl) contactsEl.value = "";
-  if (categoryEl) categoryEl.value = "Select task category";
-  if (subtaskInput) {
-    subtaskInput.value = "";
-    subtaskInput.placeholder = "Add new subtask";
-    subtaskInput.classList.remove("is-editing");
-  }
-
-  priorities.forEach((prio) => {
-    document.getElementById(`prio-${prio}`)?.classList.remove("d_none");
-    document.getElementById(`prio-${prio}-active`)?.classList.add("d_none");
+  // Klick außerhalb schließt
+  document.addEventListener("click", (e) => {
+    if (!trigger.contains(e.target) && !list.contains(e.target)) close();
   });
 
-  currentPriority = null;
-  subtasks = [];
-  editingIndex = null;
-  if (subtaskList) subtaskList.innerHTML = "";
+  // Option Klick -> Toggle Auswahl
+  list.addEventListener("click", (e) => {
+    const item = e.target.closest(".assignee-option");
+    if (!item) return;
+    const idx = Number(item.dataset.index);
+    toggleAssigneeByContactIndex(idx);
+    // ausgewählten Zustand visuell updaten
+    syncOptionSelectedStates();
+  });
+
+  // initial Zustand
+  trigger.setAttribute("aria-expanded", "false");
+  // für Screenreader Platzhaltertext
+  if (!trigger.querySelector(".assignee-select-label")) {
+    trigger.innerHTML = `<span class="assignee-select-label">Select contacts to assign</span><span class="chevron">▾</span>`;
+  }
+
+  // visuelle Selektionsmarkierung initial
+  syncOptionSelectedStates();
+
+  function syncOptionSelectedStates() {
+    const selectedNames = new Set(selectedAssignees.map((a) => a.name.toLowerCase()));
+    list.querySelectorAll(".assignee-option").forEach((node) => {
+      const i = Number(node.dataset.index);
+      const name = (contactsData[i]?.name || "").toLowerCase();
+      const isSel = selectedNames.has(name);
+      node.setAttribute("aria-selected", String(isSel));
+      node.classList.toggle("is-selected", isSel);
+    });
+  }
+
+  // Expose intern, falls nach getContactsData() erneut gebraucht
+  buildAssigneeDropdown._sync = syncOptionSelectedStates;
+}
+
+/** Toggle per Index aus contactsData (aus Liste geklickt) */
+function toggleAssigneeByContactIndex(contactIndex) {
+  const c = contactsData[contactIndex];
+  if (!c) return;
+
+  const pos = selectedAssignees.findIndex(
+    (a) => a.name.toLowerCase() === c.name.toLowerCase()
+  );
+
+  if (pos >= 0) {
+    selectedAssignees.splice(pos, 1);
+  } else {
+    selectedAssignees.push({
+      name: c.name,
+      initials: c.initials,
+      color: c.color,
+    });
+  }
+
+  renderAssignees();
+  // Selektionszustand der Liste aktualisieren (falls Funktion vorhanden)
+  buildAssigneeDropdown._sync?.();
+}
+
+/** Avatare nebeneinander unter dem Feld (nur Initialen), Klick entfernt */
+function renderAssignees() {
+  const wrap = document.getElementById("assignee-list");
+  if (!wrap) return;
+
+  wrap.innerHTML = selectedAssignees
+    .map(
+      (a, i) => `
+      <span
+        class="assignee-avatar"
+        title="${escapeHtml(a.name)}"
+        style="background:${escapeHtml(a.color)}"
+        onclick="toggleAssigneeByIndex(${i})"
+      >
+        ${escapeHtml(a.initials)}
+      </span>
+    `
+    )
+    .join("");
+}
+
+/** Entfernen per Klick auf Avatar-Chip */
+function toggleAssigneeByIndex(i) {
+  selectedAssignees.splice(i, 1);
+  renderAssignees();
+  buildAssigneeDropdown._sync?.();
 }
 
 /* ---------- Priority ---------- */
@@ -238,40 +338,101 @@ function setPriority(status) {
 
   document.getElementById(`prio-${status}`)?.classList.add("d_none");
   document.getElementById(`prio-${status}-active`)?.classList.remove("d_none");
-
   currentPriority = status;
 }
 
-/* ---------- Contacts (Firebase) ---------- */
-let contactsData = [];
+/* ---------- Task-Erstellung ---------- */
 
-async function getContactsData() {
-  const data = await dbApi.getData(`contacts/`);
-  const contactsArray = Object.values(data || {});
+async function createTask() {
+  const taskTitle = document.getElementById("task-title");
+  const taskDescription = document.getElementById("task-description");
+  const taskDueDate = document.getElementById("task-due-date");
+  const taskCategory = document.getElementById("task-category");
 
-  contactsData = contactsArray.map((c) => ({
-    initials: c.initials,
-    name: c.name,
-  }));
+  if (!taskTitle?.value.trim() || !taskDueDate?.value) {
+    alert("Bitte Titel und Fälligkeitsdatum ausfüllen.");
+    return;
+  }
 
-  assignToTemplate();
-}
+  const assigneeNames = selectedAssignees.map((a) => a.name);
 
-function assignToTemplate() {
-  const contentRef = document.getElementById("assigned-contacts");
-  if (!contentRef) return;
-  contentRef.innerHTML = "";
-  for (let i = 0; i < contactsData.length; i++) {
-    contentRef.innerHTML += getAssignToTemplate(i);
+  const payload = {
+    title: taskTitle.value,
+    id: "",
+    secondline: taskDescription?.value || "",
+    deadline: taskDueDate.value,
+    assignedContacts: assigneeNames,           // Array (neu)
+    assignedContact: assigneeNames.join(", "), // String (kompatibel)
+    category: taskCategory?.value || "",
+    categorycolor:
+      taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color || "",
+    subtask: subtasks,
+    priority: currentPriority,
+  };
+
+  try {
+    const key = await dbApi.pushData("/board/todo", payload);
+    await dbApi.updateData(`board/todo/${key}`, { id: key });
+
+    showToast("Task wurde erfolgreich erstellt.");
+    clearTask();
+  } catch (err) {
+    console.error(err);
+    showToast("Fehler beim Speichern des Tasks.", true);
   }
 }
 
-function getAssignToTemplate(i) {
-  return `<option>${contactsData[i].name}</option>`;
+/* ---------- Formular-Reset ---------- */
+
+function clearTask() {
+  const priorities = ["urgent", "medium", "low"];
+  const titleEl = document.getElementById("task-title");
+  const descEl = document.getElementById("task-description");
+  const dateEl = document.getElementById("task-due-date");
+  const categoryEl = document.getElementById("task-category");
+  const subtaskInput = document.getElementById("subtask");
+  const subtaskList = document.getElementById("subtask-list");
+
+  if (titleEl) titleEl.value = "";
+  if (descEl) descEl.value = "";
+  if (dateEl) dateEl.value = "";
+  if (categoryEl) categoryEl.value = "Select task category";
+  if (subtaskInput) {
+    subtaskInput.value = "";
+    subtaskInput.placeholder = "Add new subtask";
+    subtaskInput.classList.remove("is-editing");
+  }
+
+  priorities.forEach((prio) => {
+    document.getElementById(`prio-${prio}`)?.classList.remove("d_none");
+    document.getElementById(`prio-${prio}-active`)?.classList.add("d_none");
+  });
+
+  currentPriority = null;
+  subtasks = [];
+  editingIndex = null;
+  if (subtaskList) subtaskList.innerHTML = "";
+
+  selectedAssignees = [];
+  renderAssignees();
+  buildAssigneeDropdown._sync?.();
 }
 
-/* ---------- Exports in globalem Scope (für inline-Handler in HTML) ---------- */
+/* ---------- Init ---------- */
+
+addEventListener("load", function () {
+  const dayRef = document.getElementById("task-due-date");
+  if (dayRef) {
+    const day = new Date();
+    dayRef.min = day.toISOString().split("T")[0];
+  }
+  wireSubtaskEvents();
+  renderSubtasks();
+});
+
+/* ---------- Exports für Inline-Handler ---------- */
 window.createTask = createTask;
 window.clearTask = clearTask;
 window.setPriority = setPriority;
 window.getContactsData = getContactsData;
+window.toggleAssigneeByIndex = toggleAssigneeByIndex;

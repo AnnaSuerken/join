@@ -217,16 +217,12 @@ async function delTask(id) {
 }
 window.delTask = delTask;
 
-/* ---------- Add-Task Overlay ---------- */
 function openAddTaskOverlay() {
   const taskOverlay = document.getElementById("add-task-overlay");
   taskOverlay.classList.remove("d_none");
   document.body.classList.add("no-scroll");
 }
 
-/* =====================================================
-   DETAIL OVERLAY + SUBTASK SYNC
-===================================================== */
 const detailSection = document.getElementById("task-detail-overlay");
 const detailCloseBtn = document.getElementById("detail-close-btn");
 let currentDetail = { id: null, col: null, task: null };
@@ -340,7 +336,7 @@ function renderAssignedAvatars(items = []) {
     .map((it, i) => {
       const init = escapeHtml(initialsFromName(it.name));
       const col = it.color || pickColorForName(it.name);
-      return `<span class="avatar-chip" style="z-index:${10 - i}; background:${col}" title="${escapeHtml(it.name)}">${init}</span>`;
+      return `<span class="avatar-chip" style="background:${col}" title="${escapeHtml(it.name)}">${init}</span>`;
     })
     .join("");
   const moreChip = more > 0 ? `<span class="avatar-chip more-chip">+${more}</span>` : "";

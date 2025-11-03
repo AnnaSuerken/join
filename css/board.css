@@ -101,6 +101,7 @@ main {
   background-color: #ffffff;
   border-radius: 12px;
   width: 100%;
+  min-height: 225px;
   display: flex;
   flex-direction: column;
   padding: 12px;

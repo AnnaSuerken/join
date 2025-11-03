@@ -15,7 +15,6 @@
 
     <script type="module" src="./js/main.js"></script>
     <script type="module" src="./js/firebase.js"></script>
-    <!-- Unsere (neue) Subtask-Logik -->
     <script src="./js/addtask.js"></script>
 
     <script type="module">
@@ -159,8 +158,26 @@
                   </div>
                 </div>
 
-                <label for="contacts">Assigned to</label>
-                <select name="contacts" id="assigned-contacts"></select>
+                <label>Assigned to</label>
+                <div
+                  id="assignee-select"
+                  class="assignee-select"
+                  tabindex="0"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span class="assignee-select-label"
+                    >Select contacts to assign</span
+                  >
+                  <span class="chevron">▾</span>
+                </div>
+                <ul
+                  id="assignee-options"
+                  class="assignee-options d_none"
+                  role="listbox"
+                  aria-multiselectable="true"
+                ></ul>
+                <div id="assignee-list" class="assignee-list"></div>
 
                 <label for="catergory">Category<span>*</span></label>
                 <select name="catergory" id="task-category" required>
@@ -172,41 +189,24 @@
                 <label for="subtask">Subtasks</label>
                 <input type="text" placeholder="Add new subtask" id="subtask" />
                 <div class="subtask-list" id="subtask-list"></div>
-
-                <!-- Inline-Editor für Subtasks (unten, standardmäßig versteckt) -->
-                <div id="subtask-editor" class="subtask-editor d_none">
-                  <input
-                    type="text"
-                    id="subtask-edit-input"
-                    placeholder="Edit subtask"
-                  />
-                  <div class="subtask-editor-actions">
-                    <button
-                      type="button"
-                      id="subtask-save"
-                      class="blue-btn-bold"
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      id="subtask-cancel"
-                      class="white-btn-bold"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
               </div>
             </form>
 
             <div class="add-task-footer">
               <p><span>*</span>This field is required</p>
               <div>
-                <button class="white-btn-bold" onclick="clearTask()">
+                <button
+                  class="white-btn-bold"
+                  type="button"
+                  onclick="clearTask()"
+                >
                   Clear
                 </button>
-                <button onclick="createTask()" class="blue-btn-bold">
+                <button
+                  type="button"
+                  onclick="createTask()"
+                  class="blue-btn-bold"
+                >
                   Create Task
                 </button>
               </div>
@@ -214,6 +214,11 @@
           </section>
         </main>
       </section>
+    </div>
+
+    <!-- Toast / Erfolgsmeldung -->
+    <div id="toast" class="toast d_none" role="status" aria-live="polite">
+      Task wurde erfolgreich erstellt.
     </div>
   </body>
 </html>
