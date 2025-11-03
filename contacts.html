@@ -18,12 +18,12 @@
     
     <link rel="stylesheet" href="./css/contacts.css" />
 
-    <!-- help styles  -->
-    <link rel="stylesheet" href="./css/join-help.css" />
+    <!-- Hauptlogik -->
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/firebase.js"></script>
+    <script type="module" src="./js/contacts.js"></script>
 
-    <script src="./js/main.js" defer></script>
-
-    <!-- logout -->
+    <!-- Auth & Logout -->
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
@@ -32,11 +32,7 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         const logoutBtn = document.getElementById("logout-btn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
-            logout();
-          });
-        }
+        if (logoutBtn) logoutBtn.addEventListener("click", logout);
       });
     </script>
 
@@ -65,7 +61,7 @@
             <a href="./board.html" class="menu-links">Board</a>
           </button>
 
-          <button>
+          <button class="nav-bar-button-active">
             <img src="./assets/icons/contacts.svg" alt="" />
             <a href="./contacts.html" class="menu-links">Contacts</a>
           </button>
@@ -104,23 +100,14 @@
           
           <aside class="contacts-panel">
             <div class="contacts-panel-inner">
-              <button
-                id="open-add-contact-overlay"
-                class="add-contact-btn"
-              >
+              <button id="open-add-contact-overlay" class="add-contact-btn">
                 <span class="add-contact-text">Add new contact</span>
                 <span class="add-contact-icon">
-                  <img
-                    src="./assets/icons/person.svg"
-                    alt="add person"
-                  />
+                  <img src="./assets/icons/person.svg" alt="add person" />
                 </span>
               </button>
 
-              <div
-                id="contacts-scroll"
-                class="contacts-scroll"
-              ></div>
+              <div id="contacts-scroll" class="contacts-scroll"></div>
             </div>
           </aside>
 
@@ -132,20 +119,34 @@
               <div class="contacts-subline">Better with a team</div>
             </div>
 
-            <div
-              id="contact-detail"
-              class="contact-detail-inner"
-            ></div>
+            <div id="contact-detail" class="contact-detail-inner"></div>
           </section>
         </main>
       </section>
     </div>
 
+    <!-- MOBILE NAVIGATION -->
+    <nav class="mobile-nav">
+      <a href="./index.html" class="mobile-link">
+        <img src="./assets/icons/summary.svg" alt="Summary" />
+        <span>Summary</span>
+      </a>
+      <a href="./add-task.html" class="mobile-link">
+        <img src="./assets/icons/addtask.svg" alt="Add Task" />
+        <span>Add Task</span>
+      </a>
+      <a href="./board.html" class="mobile-link">
+        <img src="./assets/icons/board.svg" alt="Board" />
+        <span>Board</span>
+      </a>
+      <a href="./contacts.html" class="mobile-link active">
+        <img src="./assets/icons/contacts.svg" alt="Contacts" />
+        <span>Contacts</span>
+      </a>
+    </nav>
+
     <!-- ADD CONTACT MODAL -->
-    <section
-      class="modal-overlay d_none"
-      id="add-contact-overlay"
-    >
+    <section class="modal-overlay d_none" id="add-contact-overlay">
       <div class="add-contact-modal">
         <!-- LINKE SEITE -->
         <div class="add-contact-left">
@@ -179,10 +180,7 @@
           <div class="modal-form-row">
             <!-- Avatar -->
             <div class="modal-avatar-circle" id="modal-avatar-preview">
-              <img
-                src="./assets/icons/person.svg"
-                alt="avatar placeholder"
-              />
+              <img src="./assets/icons/person.svg" alt="avatar placeholder" />
             </div>
 
             <form
@@ -238,17 +236,11 @@
 
           <!-- FOOTER BUTTONS -->
           <div class="modal-footer">
-            <button
-              class="btn-cancel"
-              id="cancel-add-contact-overlay"
-            >
+            <button class="btn-cancel" id="cancel-add-contact-overlay">
               Cancel ✕
             </button>
 
-            <button
-              class="btn-create"
-              id="create-contact-btn"
-            >
+            <button class="btn-create" id="create-contact-btn">
               Create contact ✓
             </button>
           </div>
@@ -258,6 +250,6 @@
 
     <!-- PAGE LOGIC -->
     <script type="module" src="./js/contacts.js"></script>
-    <script src="./js/nav-active.js" defer></script>
+    <script src="./js/nav.js" defer></script>
   </body>
 </html>

@@ -1,0 +1,61 @@
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #2a3647;
+  height: 100%;
+  padding-top: 20px;
+}
+
+.nav-bar button {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-bar button img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1); /* Icons bleiben hell */
+}
+
+.nav-bar button a {
+  color: #cdcdcd;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.nav-bar button:hover {
+  background-color: #091931;
+}
+
+.nav-bar-button-active {
+  background-color: #091931;
+}
+
+.nav-bar-button-active a {
+  color: #ffffff;
+}
+
+.nav-bar-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  padding: 20px 24px;
+}
+
+.nav-bar-links a {
+  color: #a8a8a8;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.nav-bar-links a:hover {
+  text-decoration: underline;
+}
