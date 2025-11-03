@@ -87,7 +87,10 @@ function renderSubtasks() {
     )
     .join("");
 
-  if (editingIndex !== null && (editingIndex < 0 || editingIndex >= subtasks.length)) {
+  if (
+    editingIndex !== null &&
+    (editingIndex < 0 || editingIndex >= subtasks.length)
+  ) {
     setSubtaskModeAdd();
   }
 }
@@ -165,7 +168,8 @@ async function createTask() {
     assignedContact: taskContacts?.value || "",
     category: taskCategory?.value || "",
     categorycolor:
-      taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color || "",
+      taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color ||
+      "",
     subtask: subtasks,
     priority: currentPriority,
   };

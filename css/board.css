@@ -327,7 +327,6 @@ main {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
-
 .divider {
   background-color: #d1d1d1;
   width: 1px;
@@ -347,5 +346,301 @@ main {
 
 .task-overlay-footer span {
   color: #ff8190;
+}
+
+.task-overlay-open {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 12px;
+  width: 390px;
+  padding: 24px;
+}
+.task-overlay-open-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.task-overlay-open-title {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.task-overlay-open-description {
+  font-weight: 400;
+  margin-top: 8px;
+}
+
+.task-overlay-open-footer {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.task-overlay-open-footer p {
+  color: #42526e;
+  font-weight: 500;
+}
+.task-overlay-open-footer span {
+  padding-left: 8px;
+}
+.task-overlay-open-due-date {
+  display: flex;
+}
+.task-overlay-open-priority {
+  display: flex;
+}
+.task-overlay-open-assigned-to {
+  display: flex;
+  flex-direction: column;
+}
+.task-overlay-open-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+.task-overlay-open-subtask-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.task-overlay-open-subtask-item {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+.task-overlay-open-subtask-item p {
+  padding-left: 8px;
+}
+.task-overlay-open-actions button {
+  padding: 0 0 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* =========================
+   Task Detail Overlay (Board)
+   ========================= */
+
+.board-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+
+  /* hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 200ms ease, visibility 200ms ease;
+}
+
+/* sichtbar wenn geöffnet */
+.board-overlay.board-overlay-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.board-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.board-overlay__card {
+  position: relative;
+  width: min(92vw, 560px);
+  max-height: 90vh;
+  overflow: auto;
+
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  padding: 24px;
+
+  transform: translateY(10px) scale(0.985);
+  transition: transform 220ms ease, opacity 220ms ease;
+  opacity: 0;
+}
+
+/* animate in when open */
+.board-overlay.board-overlay-open .board-overlay__card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Close Button */
+.board-overlay__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: #111827;
+}
+.board-overlay__close:hover { background: #f3f4f6; }
+
+/* Kategorie-Pill */
+.bo-category {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: #0038ff; /* fallback */
+  margin-bottom: 12px;
+}
+.bo-category[data-category="Technical Task"] { background: #20d7c1; }
+.bo-category[data-category="User Story"]     { background: #0038ff; }
+
+/* Titel & Beschreibung */
+.bo-title {
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.2;
+  margin: 4px 0 8px;
+  color: #0b0f19;
+}
+.bo-desc {
+  margin: 0 0 16px;
+  color: #364152;
+  font-size: 14.5px;
+}
+
+/* Meta */
+.bo-meta { margin: 4px 0 10px; }
+.bo-meta__row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  margin: 6px 0;
+  align-items: center;
+}
+.bo-meta dt { color: #64748b; font-weight: 600; }
+.bo-meta dd { margin: 0; color: #0b0f19; }
+
+/* Priority */
+.bo-prio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.bo-prio-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #ff8a00; /* default medium */
+}
+.bo-prio--urgent .bo-prio-dot { background: #ff3b30; }
+.bo-prio--medium .bo-prio-dot { background: #ff8a00; }
+.bo-prio--low    .bo-prio-dot { background: #3ec300; }
+
+/* Assigned */
+.bo-assigned h3,
+.bo-subtasks h3 {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  letter-spacing: .2px;
+  color: #0b0f19;
+}
+.bo-people {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bo-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bo-avatar {
+  --bg: #0038ff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: 700 12px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color: white;
+  background: var(--bg);
+}
+.bo-name { color: #0b0f19; }
+
+/* Subtasks */
+.bo-subtask-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.bo-subtask label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #0b0f19;
+}
+.bo-subtask input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #0038ff;
+}
+
+/* Footer-Aktionen */
+.bo-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #eef2f7;
+}
+.bo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.bo-btn img { width: 16px; height: 16px; }
+.bo-btn--ghost {
+  background: transparent;
+  color: #374151;
+}
+.bo-btn--ghost:hover {
+  background: #f3f4f6;
+}
+
+/* Kleine Screens */
+@media (max-width: 480px) {
+  .board-overlay__card { width: min(94vw, 560px); padding: 20px; }
+  .bo-meta__row { grid-template-columns: 90px 1fr; }
 }
 
