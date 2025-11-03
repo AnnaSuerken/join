@@ -4,11 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Board</title>
-    <link
-      rel="shortcut icon"
-      href="./assets/icons/favicon-32x32.png"
-      type="image/x-icon"
-    />
+    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon" />
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/board.css" />
@@ -30,32 +26,20 @@
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
         <section class="nav-bar">
           <button>
-            <img src="./assets/icons/summary.svg" alt="" /><a
-              href="./index.html"
-              class="menu-links"
-              >Summary</a
-            >
+            <img src="./assets/icons/summary.svg" alt="" />
+            <a href="./index.html" class="menu-links">Summary</a>
           </button>
           <button>
-            <img src="./assets/icons/addtask.svg" alt="" /><a
-              href="./add-task.html"
-              class="menu-links"
-              >Add Task</a
-            >
+            <img src="./assets/icons/addtask.svg" alt="" />
+            <a href="./add-task.html" class="menu-links">Add Task</a>
           </button>
           <button class="nav-bar-button-active">
-            <img src="./assets/icons/board.svg" alt="" /><a
-              href="./board.html"
-              class="menu-links"
-              >Board</a
-            >
+            <img src="./assets/icons/board.svg" alt="" />
+            <a href="./board.html" class="menu-links">Board</a>
           </button>
           <button>
-            <img src="./assets/icons/contacts.svg" alt="" /><a
-              href="./contacts.html"
-              class="menu-links"
-              >Contacts</a
-            >
+            <img src="./assets/icons/contacts.svg" alt="" />
+            <a href="./contacts.html" class="menu-links">Contacts</a>
           </button>
         </section>
         <div class="nav-bar-links">
@@ -68,9 +52,7 @@
         <header class="header-right">
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
-            <a href="./help.html"
-              ><img src="./assets/icons/help.svg" alt="Hilfe"
-            /></a>
+            <a href="./help.html"><img src="./assets/icons/help.svg" alt="Hilfe"/></a>
             <div class="dropdown">
               <button id="dropbtn" class="dropbtn"></button>
               <div class="dropdown-content">
@@ -88,9 +70,7 @@
             <div class="action-container">
               <input id="task-search" type="search" placeholder="Find Task" />
               <img src="./assets/icons/search.svg" alt="Search" />
-              <button class="blue-btn-bold" id="open-add-task-overlay">
-                Add Task
-              </button>
+              <button class="blue-btn-bold" id="open-add-task-overlay">Add Task</button>
             </div>
           </section>
 
@@ -100,12 +80,10 @@
                 <span>To Do</span><button class="white-btn-bold">+</button>
               </div>
               <div class="task-table-header">
-                <span>In progress</span
-                ><button class="white-btn-bold">+</button>
+                <span>In progress</span><button class="white-btn-bold">+</button>
               </div>
               <div class="task-table-header">
-                <span>Await Feedback</span
-                ><button class="white-btn-bold">+</button>
+                <span>Await Feedback</span><button class="white-btn-bold">+</button>
               </div>
               <div class="task-table-header">
                 <span>Done</span><button class="white-btn-bold">+</button>
@@ -115,41 +93,24 @@
 
           <section class="task-table-tasks">
             <div id="task-table-todo" class="task-table-colum dropzone"></div>
-            <div
-              id="task-table-progress"
-              class="task-table-colum dropzone"
-            ></div>
-            <div
-              id="task-table-feedback"
-              class="task-table-colum dropzone"
-            ></div>
+            <div id="task-table-progress" class="task-table-colum dropzone"></div>
+            <div id="task-table-feedback" class="task-table-colum dropzone"></div>
             <div id="task-table-done" class="task-table-colum dropzone"></div>
           </section>
 
+          <!-- Bestehendes Add-Task-Overlay -->
           <section class="task-overlay-section d_none" id="add-task-overlay">
             <div class="task-overlay">
               <div class="task-overlay-header">
                 <h1>Add Task</h1>
-                <img
-                  src="./assets/icons/Close.svg"
-                  alt="close"
-                  id="close-btn"
-                />
+                <img src="./assets/icons/Close.svg" alt="close" id="close-btn" />
               </div>
               <form class="task-overlay-content">
                 <div class="task-overlay-content-right">
                   <label for="task-title">Title<span>*</span></label>
-                  <input
-                    type="text"
-                    placeholder="Enter a Title"
-                    id="task-title"
-                    required
-                  />
+                  <input type="text" placeholder="Enter a Title" id="task-title" required />
                   <label for="task-description">Description</label>
-                  <textarea
-                    placeholder="Enter a Description"
-                    id="task-description"
-                  ></textarea>
+                  <textarea placeholder="Enter a Description" id="task-description"></textarea>
                   <label for="task-due-date">Due date<span>*</span></label>
                   <input type="date" id="task-due-date" required />
                 </div>
@@ -157,61 +118,22 @@
                 <div class="task-overlay-content-left">
                   <label>Priority</label>
                   <div class="priority-container">
-                    <div
-                      class="priority-btn"
-                      id="prio-urgent"
-                      onclick="setPriority('urgent')"
-                    >
-                      Urgent<img
-                        src="./assets/icons/urgent-red.svg"
-                        alt="urgent"
-                        class="urgent-img"
-                      />
+                    <div class="priority-btn" id="prio-urgent" onclick="setPriority('urgent')">
+                      Urgent<img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img" />
                     </div>
-                    <div
-                      class="priority-btn-urgent d_none"
-                      id="prio-urgent-active"
-                      onclick="setPriority('urgent')"
-                    >
-                      Urgent<img
-                        src="./assets/icons/urgent-white.svg"
-                        alt="urgent"
-                        class="urgent-img"
-                      />
+                    <div class="priority-btn-urgent d_none" id="prio-urgent-active" onclick="setPriority('urgent')">
+                      Urgent<img src="./assets/icons/urgent-white.svg" alt="urgent" class="urgent-img" />
                     </div>
-                    <div
-                      class="priority-btn"
-                      id="prio-medium"
-                      onclick="setPriority('medium')"
-                    >
-                      Medium
-                      <img
-                        src="./assets/icons/medium-orange.svg"
-                        alt="medium"
-                      />
+                    <div class="priority-btn" id="prio-medium" onclick="setPriority('medium')">
+                      Medium<img src="./assets/icons/medium-orange.svg" alt="medium" />
                     </div>
-                    <div
-                      class="priority-btn-medium d_none"
-                      id="prio-medium-active"
-                      onclick="setPriority('medium')"
-                    >
-                      Medium<img
-                        src="./assets/icons/medium-white.svg"
-                        alt="medium"
-                      />
+                    <div class="priority-btn-medium d_none" id="prio-medium-active" onclick="setPriority('medium')">
+                      Medium<img src="./assets/icons/medium-white.svg" alt="medium" />
                     </div>
-                    <div
-                      class="priority-btn"
-                      id="prio-low"
-                      onclick="setPriority('low')"
-                    >
+                    <div class="priority-btn" id="prio-low" onclick="setPriority('low')">
                       Low <img src="./assets/icons/low-green.svg" alt="low" />
                     </div>
-                    <div
-                      class="priority-btn-low d_none"
-                      id="prio-low-active"
-                      onclick="setPriority('low')"
-                    >
+                    <div class="priority-btn-low d_none" id="prio-low-active" onclick="setPriority('low')">
                       Low <img src="./assets/icons/low-white.svg" alt="low" />
                     </div>
                   </div>
@@ -227,81 +149,67 @@
                     <option value="User Story">User Story</option>
                   </select>
                   <label for="subtask">Subtasks</label>
-                  <input
-                    type="text"
-                    placeholder="Add new subtask"
-                    id="subtask"
-                  />
+                  <input type="text" placeholder="Add new subtask" id="subtask" />
                 </div>
               </form>
               <div class="task-overlay-footer">
                 <p><span>*</span>This field is required</p>
                 <div>
-                  <button class="white-btn-bold" onclick="clearTask()">
-                    Clear
-                  </button>
-                  <button onclick="createTask()" class="blue-btn-bold">
-                    Create Task
-                  </button>
+                  <button class="white-btn-bold" onclick="clearTask()">Clear</button>
+                  <button onclick="createTask()" class="blue-btn-bold">Create Task</button>
                 </div>
               </div>
             </div>
           </section>
-<!-- Task Detail Overlay (hidden by default) -->
-<div id="boardOverlay" class="board-overlay" aria-hidden="true">
-  <div class="board-overlay__backdrop" data-close-overlay></div>
 
-  <article class="board-overlay__card" role="dialog" aria-modal="true" aria-labelledby="bo-title">
-    <button class="board-overlay__close" type="button" aria-label="Close" data-close-overlay>×</button>
+          <!-- DEIN Detail-Overlay (standardmäßig versteckt) -->
+          <section class="task-overlay-open d_none" id="task-detail-overlay">
+            <div class="task-overlay-open-head">
+              <p class="task-name" id="detail-category" style="background-color:#0038ff">Category</p>
+              <button id="detail-close-btn" aria-label="Close">X</button>
+            </div>
 
-    <!-- Kategorie-Pill -->
-    <div class="bo-category" data-category="">Category</div>
+            <div class="task-overlay-open-title">
+              <h1 id="detail-title">Task Title</h1>
+            </div>
 
-    <!-- Titel & Beschreibung -->
-    <h2 id="bo-title" class="bo-title">Task Title</h2>
-    <p class="bo-desc">Task description</p>
+            <div class="task-overlay-open-description">
+              <p id="detail-desc">Task description</p>
+            </div>
 
-    <!-- Meta -->
-    <dl class="bo-meta">
-      <div class="bo-meta__row">
-        <dt>Due date:</dt>
-        <dd><span class="bo-date">--/--/----</span></dd>
-      </div>
-      <div class="bo-meta__row">
-        <dt>Priority:</dt>
-        <dd>
-          <span class="bo-prio">
-            <span class="bo-prio-dot"></span>
-            <span class="bo-prio-text">Medium</span>
-          </span>
-        </dd>
-      </div>
-    </dl>
+            <div class="task-overlay-open-footer">
+              <div class="task-overlay-open-due-date">
+                <p>Due Date:</p>
+                <span id="detail-date">--.--.----</span>
+              </div>
 
-    <!-- Assigned -->
-    <section class="bo-assigned">
-      <h3>Assigned To:</h3>
-      <ul class="bo-people"><!-- filled by JS --></ul>
-    </section>
+              <div class="task-overlay-open-priority" id="detail-priority">
+                <p>Priority:</p>
+                <span>
+                  <span id="detail-priority-text">Medium</span>
+                  <img id="detail-priority-icon" src="./assets/icons/medium-orange.svg" alt="priority" />
+                </span>
+              </div>
 
-    <!-- Subtasks -->
-    <section class="bo-subtasks">
-      <h3>Subtasks</h3>
-      <ul class="bo-subtask-list"><!-- filled by JS --></ul>
-    </section>
+              <div class="task-overlay-open-assigned-to">
+                <p>Assigned To:</p>
+                <div id="detail-assignees"><!-- rows --></div>
+              </div>
+            </div>
 
-    <!-- Footer-Aktionen -->
-    <footer class="bo-footer">
-      <button class="bo-btn bo-btn--ghost" type="button" id="bo-delete">
-        <img src="./assets/icons/delete.svg" alt="" /> Delete
-      </button>
-      <button class="bo-btn bo-btn--ghost" type="button" id="bo-edit">
-        <img src="./assets/icons/edit.svg" alt="" /> Edit
-      </button>
-    </footer>
-  </article>
-</div>
-
+            <div class="task-overlay-open-footer">
+              <div class="task-overlay-open-subtasks">
+                <p>Subtasks:</p>
+                <div class="task-overlay-open-subtask-list" id="task-overlay-open-subtask-list">
+                  <!-- gefüllt durch JS -->
+                </div>
+              </div>
+              <div class="task-overlay-open-actions"> 
+                <button id="detail-delete" class="" title="Delete"><img src="./assets/icons/delete.svg" alt=""></button>
+                <button id="detail-edit" class="" title="Edit"><img src="./assets/icons/edit.svg" alt=""></button>
+              </div>
+            </div>
+          </section>
         </main>
       </section>
     </div>

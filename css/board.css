@@ -105,6 +105,7 @@ main {
   flex-direction: column;
   padding: 12px;
   cursor: pointer;
+  margin-bottom: 16px;
 }
 .task-name {
   background-color: #0038ff;
@@ -135,17 +136,7 @@ main {
   display: flex;
   justify-content: space-between;
   width: 100%;
-}
-.task-subtask-line {
-  width: 60%;
-  height: 6px;
-  border-radius: 12px;
-  background-color: #f4f4f4;
-}
-
-.task-subtask-line-fill {
-  background-color: #4589ff;
-  width: 30%;
+  padding-bottom: 12px;
 }
 
 .task-users {
@@ -428,219 +419,128 @@ main {
   border: none;
 }
 
-/* =========================
-   Task Detail Overlay (Board)
-   ========================= */
-
-.board-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-
-  /* hidden by default */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 200ms ease, visibility 200ms ease;
+body.board-overlay-open .content {
+  transition: filter 160ms ease;
+  pointer-events: none; /* verhindert Interaktion mit Board im Hintergrund */
 }
-
-/* sichtbar wenn geöffnet */
-.board-overlay.board-overlay-open {
-  opacity: 1;
-  visibility: visible;
+body.board-overlay-open #task-detail-overlay {
   pointer-events: auto;
 }
 
-.board-overlay__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(2px);
-}
-
-.board-overlay__card {
-  position: relative;
-  width: min(92vw, 560px);
+/* ====== Detail-Overlay Polishing ====== */
+.task-overlay-open {
+  position: fixed; /* statt absolute -> fixiert am Viewport */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 12px;
+  width: 390px;
+  max-width: 92vw;
   max-height: 90vh;
   overflow: auto;
-
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   padding: 24px;
-
-  transform: translateY(10px) scale(0.985);
-  transition: transform 220ms ease, opacity 220ms ease;
-  opacity: 0;
-}
-
-/* animate in when open */
-.board-overlay.board-overlay-open .board-overlay__card {
-  transform: translateY(0) scale(1);
+  z-index: 1000; /* über allem */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  transition: transform 200ms ease, opacity 200ms ease;
   opacity: 1;
 }
 
-/* Close Button */
-.board-overlay__close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 50%;
+.task-overlay-open-head button {
   background: transparent;
-  font-size: 22px;
-  line-height: 1;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
-  color: #111827;
 }
-.board-overlay__close:hover { background: #f3f4f6; }
-
-/* Kategorie-Pill */
-.bo-category {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #fff;
-  background: #0038ff; /* fallback */
-  margin-bottom: 12px;
-}
-.bo-category[data-category="Technical Task"] { background: #20d7c1; }
-.bo-category[data-category="User Story"]     { background: #0038ff; }
-
-/* Titel & Beschreibung */
-.bo-title {
-  font-size: clamp(22px, 3vw, 32px);
-  line-height: 1.2;
-  margin: 4px 0 8px;
-  color: #0b0f19;
-}
-.bo-desc {
-  margin: 0 0 16px;
-  color: #364152;
-  font-size: 14.5px;
+.task-overlay-open-head button:hover {
+  opacity: 0.7;
 }
 
-/* Meta */
-.bo-meta { margin: 4px 0 10px; }
-.bo-meta__row {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 8px;
-  margin: 6px 0;
-  align-items: center;
-}
-.bo-meta dt { color: #64748b; font-weight: 600; }
-.bo-meta dd { margin: 0; color: #0b0f19; }
-
-/* Priority */
-.bo-prio {
-  display: inline-flex;
+/* Assigned rows */
+.detail-user-row {
+  display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
+  margin-top: 6px;
 }
-.bo-prio-dot {
-  width: 10px;
-  height: 10px;
+.detail-user-row .user {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  display: inline-block;
-  background: #ff8a00; /* default medium */
-}
-.bo-prio--urgent .bo-prio-dot { background: #ff3b30; }
-.bo-prio--medium .bo-prio-dot { background: #ff8a00; }
-.bo-prio--low    .bo-prio-dot { background: #3ec300; }
-
-/* Assigned */
-.bo-assigned h3,
-.bo-subtasks h3 {
-  margin: 16px 0 8px;
-  font-size: 14px;
-  letter-spacing: .2px;
-  color: #0b0f19;
-}
-.bo-people {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 4px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  background: #0038ff;
+  color: #fff;
+  font-size: 14px;
 }
-.bo-person {
+
+/* Optional: dezenter Backdrop (wenn du zusätzlich zum Blur noch Abdunkeln willst) */
+body.board-overlay-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 900;
+}
+
+.task-subtask-line {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
-.bo-avatar {
-  --bg: #0038ff;
+progress {
+  -webkit-appearance: none;
+  height: 5px;
+}
+
+::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  width: 120px;
+}
+::-webkit-progress-value {
+  background-color: #0038ff;
+  border-radius: 12px;
+}
+
+.task-subtasks p {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+.task-subtasks img {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-overlay-open main,
+.board-overlay-open .board-container {
+  pointer-events: none;
+}
+
+/* Avatar Stack */
+.assigned-avatars {
+  display: flex;
+  align-items: center;
+}
+.avatar-chip {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font: 700 12px/1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  color: white;
-  background: var(--bg);
+  color: #fff;
+  border: 2px solid #fff;
+  margin-left: -8px;
 }
-.bo-name { color: #0b0f19; }
-
-/* Subtasks */
-.bo-subtask-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 8px;
+.avatar-chip:first-child {
+  margin-left: 0;
 }
-.bo-subtask label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #0b0f19;
+.avatar-chip.more-chip {
+  background: #e5e7eb;
+  color: #111;
 }
-.bo-subtask input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #0038ff;
-}
-
-/* Footer-Aktionen */
-.bo-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #eef2f7;
-}
-.bo-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-.bo-btn img { width: 16px; height: 16px; }
-.bo-btn--ghost {
-  background: transparent;
-  color: #374151;
-}
-.bo-btn--ghost:hover {
-  background: #f3f4f6;
-}
-
-/* Kleine Screens */
-@media (max-width: 480px) {
-  .board-overlay__card { width: min(94vw, 560px); padding: 20px; }
-  .bo-meta__row { grid-template-columns: 90px 1fr; }
-}
-
