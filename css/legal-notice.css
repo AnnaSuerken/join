@@ -1,24 +1,3 @@
-
-.content-right{
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background: var(--bg);
-  overflow: hidden;
-}
-
-
-.header-right{
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  background: #fff;
-  border-bottom: 1px solid var(--line);
-}
-
-
 .legal-scroll{
   flex: 1;
   overflow: auto;
