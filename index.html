@@ -10,7 +10,7 @@
     <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/summary.js"></script>
     <script type="module" src="./js/main.js"></script>
-    
+
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
       import { logout } from "./js/logout.js";
@@ -21,21 +21,29 @@
   <body>
     <div class="content">
       <section class="content-left">
-        <img src="./assets/imgs/join_logo_white.svg" alt="" />
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
         <section class="nav-bar">
           <button class="nav-bar-button-active">
-            <img src="./assets/icons/summary.svg" alt=""/><a href="./index.html" class="menu-links">Summary
+            <img src="./assets/icons/summary.svg" alt="" />
+            <a href="./index.html" class="menu-links">Summary</a>
           </button>
+
           <button>
-            <img src="./assets/icons/addtask.svg" alt="" /><a href="./add-task.html" class="menu-links">Add Task</a>
+            <img src="./assets/icons/addtask.svg" alt="" />
+            <a href="./add-task.html" class="menu-links">Add Task</a>
           </button>
+
           <button>
-            <img src="./assets/icons/board.svg" alt="" /><a href="./board.html" class="menu-links">Board</a>
+            <img src="./assets/icons/board.svg" alt="" />
+            <a href="./board.html" class="menu-links">Board</a>
           </button>
+
           <button>
-            <img src="./assets/icons/contacts.svg" alt="" /><a href="./contacts.html" class="menu-links">Contacts</a>
+            <img src="./assets/icons/contacts.svg" alt="" />
+            <a href="./contacts.html" class="menu-links">Contacts</a>
           </button>
         </section>
+
         <div class="nav-bar-links">
           <a href="./privacy-policy.html">Privacy Policy</a>
           <a href="./legal-notice.html">Legal notice</a>
@@ -67,22 +75,22 @@
           <div class="summary-wrapper">
             <section class="summary-tasks">
               <section class="summary-task-medium">
-                <img src="./assets/icons/pen.svg" alt="">
+                <img src="./assets/icons/pen.svg" alt="" />
                 <div class="summary-task-info">
-                <h2 id="summary-task-todo-number">1</h2>
-                <p>To Do</p>
+                  <h2 id="summary-task-todo-number">1</h2>
+                  <p>To Do</p>
                 </div>
               </section>
               <section class="summary-task-medium">
-                <img src="./assets/icons/hook.svg" alt="">
+                <img src="./assets/icons/hook.svg" alt="" />
                 <div class="summary-task-info">
-                <h2 id="summary-task-todo-number">1</h2>
-                <p>To Do</p>
+                  <h2 id="summary-task-todo-number">1</h2>
+                  <p>To Do</p>
                 </div>
               </section>
               <section class="summary-task-big">
                 <div class="summary-task-big-left">
-                  <img src="./assets/icons/urgent.svg" alt="">
+                  <img src="./assets/icons/urgent.svg" alt="" />
                   <slot>
                     <h2>1</h2>
                     <p>Urgent</p>
@@ -96,21 +104,27 @@
               </section>
               <section class="summary-task-small">
                 <h2 id="allTasks"></h2>
-                <p>Tasks in <br> Board</p>
+                <p>
+                  Tasks in <br />
+                  Board
+                </p>
               </section>
               <section class="summary-task-small">
                 <h2 id="inProgress"></h2>
-                <p>Tasks in <br>Progress</p>
+                <p>Tasks in <br />Progress</p>
               </section>
               <section class="summary-task-small">
                 <h2 id="awaitingFeedback"></h2>
-                <p>Awaiting <br> Feedback</p>
+                <p>
+                  Awaiting <br />
+                  Feedback
+                </p>
               </section>
             </section>
-    <div class="summary-name">
-      <h3 id="summary-greeting">Good morning,</h3>
-      <h2 id="summary-name">…</h2>
-    </div>
+            <div class="summary-name">
+              <h3 id="summary-greeting">Good morning,</h3>
+              <h2 id="summary-name">…</h2>
+            </div>
           </div>
         </main>
       </section>

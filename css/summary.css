@@ -29,25 +29,54 @@
   width: 100%;
   gap: 20px;
 }
+/* === SIDEBAR HOVER & ACTIVE STATE === */
 .nav-bar button {
-  background-color: transparent;
-  border: none;
-  color: white;
-  font-size: 18px;
-  align-items: center;
-  display: flex;
-  justify-content: left;
   width: 100%;
-  margin: 0;
-  padding-left: 25px;
-  padding-right: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  background: transparent;
+  color: #cdcdcd;
+  font-size: 16px;
   cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
+.nav-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.nav-bar button:hover img {
+  filter: brightness(0) invert(1);
+}
+
+.nav-bar a.menu-links {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-bar button.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.nav-bar button.active img {
+  filter: brightness(0) invert(1);
+}
+
+/* === FIXED ACTIVE BUTTON STYLE === */
 .nav-bar-button-active {
-  background-color: #091931 !important;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nav-bar-button-active img {
+  filter: brightness(0) invert(1);
 }
 
 .nav-bar img {
