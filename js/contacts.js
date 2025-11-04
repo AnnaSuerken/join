@@ -2,7 +2,7 @@ function genId() {
   return Date.now().toString(16) + Math.random().toString(16).slice(2);
 }
 
-// Consolidated color palettes
+// Farben
 const avatarColors = [
   "#FF7A00",
   "#462F8A",
@@ -30,7 +30,7 @@ const getLetter = (n) => (n?.[0] || "#").toUpperCase();
 const hashStr = (s = "") => Array.from(s).reduce((acc, ch) => (acc * 33 + ch.charCodeAt(0)) >>> 0, 5381);
 
 /*************************
- * State & Storage layer  *
+ * State & Storage layer *
  *************************/
 const state = {
   data: {}, // id -> { id, name, email, phone, initials?, color? }
@@ -38,7 +38,7 @@ const state = {
   unsubscribe: null,
 };
 
-// Local fallback store when dbApi is not available
+// Lokaler Fallback-Speicher
 const localStore = (() => {
   const KEY = "contactsStoreV1";
   function load() {
@@ -86,8 +86,7 @@ const localStore = (() => {
     },
     onData(path, cb) {
       listeners.add(cb);
-      // bootstrap
-      cb(mem);
+      cb(mem); // initial load
       return () => listeners.delete(cb);
     },
     seedIfEmpty(seedArr) {
@@ -101,7 +100,7 @@ const localStore = (() => {
   };
 })();
 
-// Select store implementation (dbApi if available)
+// wähle dbApi oder lokalen Speicher
 const store = typeof window !== "undefined" && window.dbApi
   ? {
       pushData: (p, v) => window.dbApi.pushData(p, v),
@@ -113,7 +112,7 @@ const store = typeof window !== "undefined" && window.dbApi
   : localStore;
 
 /*************************
- * Normalization helpers  *
+ * Normalization helpers *
  *************************/
 function normalizeContact(id, raw) {
   const name = raw?.name ?? "";
@@ -134,12 +133,11 @@ function sortContactsInPlace(arr) {
 }
 
 /*************************
- * UI Variant A (Legacy)  *
- *  - #contacts-scroll list, #contact-detail detail
+ * UI (Legacy)
  *************************/
 function renderContactListLegacy() {
   const listEl = byId("contacts-scroll");
-  if (!listEl) return false; // not on this UI
+  if (!listEl) return false;
 
   const contacts = contactsArrayFromState();
   sortContactsInPlace(contacts);
@@ -217,8 +215,7 @@ function renderEmptyDetailLegacy() {
 }
 
 /*************************
- * UI Variant B (Modern)  *
- *  - .list container + .detail-card + #contactModal
+ * UI (Modern)
  *************************/
 function ensureGroup(letter) {
   letter = (letter || "#").toUpperCase();
@@ -328,7 +325,7 @@ function renderContactsModern() {
 }
 
 /*************************
- * Modal & Overlay (both) *
+ * Modal & Overlay
  *************************/
 let modalMode = "create";
 
@@ -363,9 +360,7 @@ function attachLegacyOverlayHandlers() {
     const email = byId("contact-email-input")?.value.trim();
     const phone = byId("contact-phone-input")?.value.trim();
     if (!name || !email) return;
-    createContact(name, email, phone).then(() => {
-      closeOverlayLegacy();
-    });
+    createContact(name, email, phone).then(closeOverlayLegacy);
   });
 }
 
@@ -378,10 +373,10 @@ function openModal(mode = "create", cid = state.selectedId) {
   const email = byId("emailInput");
   const phone = byId("phoneInput");
   if (!overlay || !card || !form || !name || !email || !phone) {
-    // If modern modal not present, fall back to legacy overlay
+    
     if (mode === "create") openOverlayLegacy();
     else if (cid) {
-      // populate legacy inputs if present
+      
       byId("contact-name-input") && (byId("contact-name-input").value = state.data[cid]?.name || "");
       byId("contact-email-input") && (byId("contact-email-input").value = state.data[cid]?.email || "");
       byId("contact-phone-input") && (byId("contact-phone-input").value = state.data[cid]?.phone || "");
@@ -405,7 +400,7 @@ function openModal(mode = "create", cid = state.selectedId) {
   overlay.hidden = false;
   overlay.classList.add("is-open");
   card.classList.remove("is-leaving");
-  void card.offsetWidth; // reflow
+  void card.offsetWidth;
   card.classList.add("is-entering");
   setTimeout(() => name.focus(), 0);
 
@@ -459,14 +454,13 @@ function onSubmitForm(e) {
 }
 
 /****************
- * CRUD actions  *
+ * CRUD actions *
  ****************/
 async function createContact(name, email, phone) {
   const payload = { name, email, phone, initials: initialsFromName(name) };
   try {
     const key = await store.pushData(`contacts`, payload);
-    await store.updateData(`contacts/${key}`, { id: key });
-    state.selectedId = key;
+    state.selectedId = key; // kein zweites updateData() mehr!
   } catch (e) {
     console.error(e);
     alert("Could not save contact");
@@ -506,7 +500,9 @@ function attachModernHandlers() {
   byId("modalCloseBtn")?.addEventListener("click", closeModal);
   byId("contactForm")?.addEventListener("submit", onSubmitForm);
   byId("nameInput")?.addEventListener("input", (e) => {
-    const v = e.target.value; const el = byId("formAvatar"); if (el) el.textContent = initialsFromName(v) || "?";
+    const v = e.target.value;
+    const el = byId("formAvatar");
+    if (el) el.textContent = initialsFromName(v) || "?";
   });
 }
 
