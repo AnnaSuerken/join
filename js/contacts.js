@@ -2,7 +2,7 @@ function genId() {
   return Date.now().toString(16) + Math.random().toString(16).slice(2);
 }
 
-// Farben
+
 const avatarColors = [
   "#FF7A00",
   "#462F8A",
@@ -29,16 +29,14 @@ const telHref = (s) => `tel:${(s || "").replace(/\s+/g, "")}`;
 const getLetter = (n) => (n?.[0] || "#").toUpperCase();
 const hashStr = (s = "") => Array.from(s).reduce((acc, ch) => (acc * 33 + ch.charCodeAt(0)) >>> 0, 5381);
 
-/*************************
- * State & Storage layer *
- *************************/
+
 const state = {
-  data: {}, // id -> { id, name, email, phone, initials?, color? }
+  data: {}, 
   selectedId: null,
   unsubscribe: null,
 };
 
-// Lokaler Fallback-Speicher
+
 const localStore = (() => {
   const KEY = "contactsStoreV1";
   function load() {
@@ -64,7 +62,7 @@ const localStore = (() => {
   }
   return {
     async pushData(path, payload) {
-      // path = "contacts"
+      
       const id = payload.id || genId();
       mem[id] = { ...payload, id };
       save(mem);
@@ -86,7 +84,7 @@ const localStore = (() => {
     },
     onData(path, cb) {
       listeners.add(cb);
-      cb(mem); // initial load
+      cb(mem);
       return () => listeners.delete(cb);
     },
     seedIfEmpty(seedArr) {
@@ -100,7 +98,7 @@ const localStore = (() => {
   };
 })();
 
-// wähle dbApi oder lokalen Speicher
+
 const store = typeof window !== "undefined" && window.dbApi
   ? {
       pushData: (p, v) => window.dbApi.pushData(p, v),
@@ -111,15 +109,15 @@ const store = typeof window !== "undefined" && window.dbApi
     }
   : localStore;
 
-/*************************
- * Normalization helpers *
- *************************/
+
+ 
+ 
 function normalizeContact(id, raw) {
   const name = raw?.name ?? "";
   const email = raw?.email ?? "";
   const phone = raw?.phone ?? "";
   const initials = raw?.initials || initialsFromName(name);
-  // stable color: use given color, else hash to colorPool
+  
   const baseColor = raw?.color || colorPool[hashStr(id) % colorPool.length];
   return { id, name, email, phone, initials, color: baseColor };
 }
@@ -132,9 +130,9 @@ function sortContactsInPlace(arr) {
   arr.sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
 }
 
-/*************************
- * UI (Legacy)
- *************************/
+
+ 
+ 
 function renderContactListLegacy() {
   const listEl = byId("contacts-scroll");
   if (!listEl) return false;
@@ -460,7 +458,7 @@ async function createContact(name, email, phone) {
   const payload = { name, email, phone, initials: initialsFromName(name) };
   try {
     const key = await store.pushData(`contacts`, payload);
-    state.selectedId = key; // kein zweites updateData() mehr!
+    state.selectedId = key;
   } catch (e) {
     console.error(e);
     alert("Could not save contact");
@@ -534,12 +532,12 @@ function scheduleRender() {
   scheduled = true;
   requestAnimationFrame(() => {
     scheduled = false;
-    // Render whichever UI exists
+
     const usedModern = renderContactsModern();
     if (!usedModern) renderContactListLegacy();
-    // Handlers depend on rendered DOM
-    attachModernHandlers();
-    attachLegacyOverlayHandlers();
+
+   
+
     afterRenderSelectFallback();
   });
 }
@@ -554,6 +552,8 @@ function startLiveView() {
 
 function init() {
   startLiveView();
+  attachModernHandlers();
+  attachLegacyOverlayHandlers();
 }
 
 window.addEventListener("load", init);
