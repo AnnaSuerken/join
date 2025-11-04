@@ -5,6 +5,38 @@ main {
   padding-bottom: 120px;
 }
 
+.logo-box-signup{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 77px;
+}
+
+.sign-up-div {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
+
+.sign-up-div span {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.sign-up-div a {
+  background-color: #2a3647;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border: none;
+  padding-top: 15px;
+  padding-right: 24px;
+  padding-bottom: 15px;
+  padding-left: 24px;
+  border-radius: 8px;
+  font-size: 21px;
+}
+
 .logo-login {
   width: 100px;
   height: 122px;
@@ -50,7 +82,9 @@ main {
 }
 .signup-input {
   padding-top: 15px;
+  padding-bottom: 15px;
   padding-right: 125px;
+  padding-left: 12px;
 }
 
 .checkbox-container {

@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Log in</title>
-    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/signup.css" />
 
@@ -19,6 +23,10 @@
           alt="Join Logo"
           class="logo-login"
         />
+        <div class="sign-up-div">
+          <span>Not a Join user?</span>
+          <a href="./signup.html" class="primary blue-btn-bold">Sign up</a>
+        </div>
       </div>
     </header>
     <div id="status" class="msg-box"></div>
@@ -28,6 +36,7 @@
         <div class="divider"></div>
         <form id="login-form" action="">
           <div class="sign-up-input-container">
+            <div class="input-wrapper">
             <input
               id="email"
               name="email"
@@ -35,7 +44,9 @@
               required
               placeholder="Email"
               class="signup-input"
-            />
+            /><img class="input-icon" src="./assets/icons/mail.svg" alt="Email">
+          </div>
+          <div class="input-wrapper">
             <input
               id="password"
               name="password"
@@ -44,12 +55,21 @@
               placeholder="Password"
               class="signup-input"
             />
-          <div>
-          <button class="primary blue-btn-bold" type="submit" >Log in</button>
-          <button id="guest-login-btn" class="ghost white-btn-bold" style="margin-top: 16px">
-            Guest Log in
-          </button>
-          </div>
+           <img class="input-icon" src="./assets/icons/lock.svg" alt="Email">
+
+            </div>
+            <div>
+              <button class="primary blue-btn-bold" type="submit">
+                Log in
+              </button>
+              <button
+                id="guest-login-btn"
+                class="ghost white-btn-bold"
+                style="margin-top: 16px"
+              >
+                Guest Log in
+              </button>
+            </div>
           </div>
         </form>
       </section>
@@ -58,7 +78,6 @@
       <div class="signup-footer-links-container">
         <a href="./privacy-policy.html" class="footer-links">Privacy Policy</a>
         <a href="./legal-notice.html" class="footer-links">Legal notice</a>
-        <a href="./signup.html" class="footer-links">Sign up</a>
       </div>
     </footer>
   </body>
