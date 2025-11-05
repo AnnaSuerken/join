@@ -2,7 +2,7 @@
 html,
 body {
   background-color: #ffffff;
-  height: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
 }
@@ -16,8 +16,7 @@ body {
 
 .content {
   display: flex;
-  height: 100vh;              
-  overflow: hidden;           
+  height: 100vh;                     
 }
 
 
@@ -25,7 +24,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;          
+  overflow-x: hidden;          
 }
 
 
@@ -55,7 +54,7 @@ body {
 
   /* Text mittig ausrichten */
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
 }
 
