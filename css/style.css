@@ -111,7 +111,7 @@
   font-size: 27px;
   font-weight: bold;
   text-align: center;
-  padding: 0;
+  padding: 0;  
   cursor: pointer;
 }
 
@@ -175,6 +175,10 @@
   background-color: #ddd;
   color: #2A3647;
 
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
 }
 
 .header-right {
@@ -255,12 +259,24 @@
   font-weight: 700;
 }
 
+.white-btn {
+  background-color: white;
+  color: #2a3647;
+  border: 1px solid;
+  font-weight: 400;
+}
+
 .blue-btn-bold:hover {
   background-color: #29abe2;
   cursor: pointer;
 }
 
 .white-btn-bold:hover {
+  color: #29abe2;
+  cursor: pointer;
+}
+
+.white-btn:hover {
   color: #29abe2;
   cursor: pointer;
 }
@@ -281,4 +297,3 @@ html, body {
   padding: 0;
   overflow: hidden;
 }
-

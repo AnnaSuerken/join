@@ -185,8 +185,8 @@
                 ></ul>
                 <div id="assignee-list" class="assignee-list"></div>
 
-                <label for="catergory">Category<span>*</span></label>
-                <select name="catergory" id="task-category" required>
+                <label for="category">Category<span>*</span></label>
+                <select name="category" id="task-category" required>
                   <option>Select task category</option>
                   <option value="Technical Task">Technical Task</option>
                   <option value="User Story">User Story</option>
@@ -201,20 +201,13 @@
             <div class="add-task-footer">
               <p><span>*</span>This field is required</p>
               <div>
-                <button
-                  class="white-btn-bold"
-                  type="button"
-                  onclick="clearTask()"
-                >
-                  Clear
-                </button>
-                <button
-                  type="button"
-                  onclick="createTask()"
-                  class="blue-btn-bold"
-                >
-                  Create Task
-                </button>
+                <button class="white-btn" onclick="clearTask()">
+                    Clear X
+                  </button>
+                  <button onclick="createTask()" class="blue-btn-bold">
+                    Create Task 
+                    <img src="./assets/icons/check.svg" alt="create" />
+                  </button>
               </div>
             </div>
           </section>

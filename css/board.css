@@ -201,8 +201,14 @@
   font-weight: 700;
 }
 
-#close-btn {
-  width: 32px;
+.close-btn {
+  cursor: pointer;
+  width: 24px;
+}
+
+.close-btn:hover {
+  background-color: #eeeeee;
+  border-radius: 100%;
 }
 
 .task-overlay-content {
@@ -220,7 +226,7 @@
   gap: 16px;
 }
 
-.task-overlay-content span {
+.task-overlay-footer span {
   color: #ff8190;
 }
 
@@ -230,13 +236,16 @@
 }
 
 .task-overlay-content-right textarea {
-  width: 440px;
   border-radius: 10px;
   padding-bottom: 72px;
   padding-left: 12px;
   padding-top: 12px;
   border: solid 0.5px;
   border-color: #d1d1d1;
+  max-width: 440px;
+  min-width: 440px;
+  min-height: 120px;
+  max-height: 120px;
 }
 
 .task-overlay-content-left {

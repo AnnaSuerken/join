@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/board.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/add-task.css" />
 
     <script type="module" src="./js/main.js"></script>
     <script src="./js/addtask.js"></script>
@@ -128,6 +129,7 @@
                   src="./assets/icons/Close.svg"
                   alt="close"
                   id="close-btn"
+                  class="close-btn"
                 />
               </div>
               <form class="task-overlay-content">
@@ -209,32 +211,48 @@
                     </div>
                   </div>
 
-                  <label for="contacts">Assigned to</label>
-                  <select name="contacts" id="assigned-contacts">
-                    <option>Select contacts to assign</option>
-                  </select>
-                  <label for="catergory">Category<span>*</span></label>
-                  <select name="catergory" id="task-category" required>
-                    <option>Select task category</option>
-                    <option value="Technical Task">Technical Task</option>
-                    <option value="User Story">User Story</option>
-                  </select>
-                  <label for="subtask">Subtasks</label>
-                  <input
-                    type="text"
-                    placeholder="Add new subtask"
-                    id="subtask"
-                  />
+                  <label>Assigned to</label>
+                <div
+                  id="assignee-select"
+                  class="assignee-select"
+                  tabindex="0"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span class="assignee-select-label"
+                    >Select contacts to assign</span
+                  >
+                  <span class="chevron">▾</span>
                 </div>
+                <ul
+                  id="assignee-options"
+                  class="assignee-options d_none"
+                  role="listbox"
+                  aria-multiselectable="true"
+                ></ul>
+                <div id="assignee-list" class="assignee-list"></div>
+
+                <label for="category">Category<span>*</span></label>
+                <select name="category" id="task-category" required>
+                  <option>Select task category</option>
+                  <option value="Technical Task">Technical Task</option>
+                  <option value="User Story">User Story</option>
+                </select>
+
+                <label for="subtask">Subtasks</label>
+                <input type="text" placeholder="Add new subtask" id="subtask" />
+                <div class="subtask-list" id="subtask-list"></div>
+              </div>
               </form>
               <div class="task-overlay-footer">
                 <p><span>*</span>This field is required</p>
                 <div>
-                  <button class="white-btn-bold" onclick="clearTask()">
-                    Clear
+                  <button class="white-btn" onclick="clearTask()">
+                    Clear X
                   </button>
                   <button onclick="createTask()" class="blue-btn-bold">
-                    Create Task
+                    Create Task 
+                    <img src="./assets/icons/check.svg" alt="create" />
                   </button>
                 </div>
               </div>
@@ -306,7 +324,9 @@
         </main>
       </section>
     </div>
-
+    <div id="toast" class="toast d_none" role="status" aria-live="polite">
+      Task wurde erfolgreich erstellt.
+    </div>
     <script type="module" src="./js/board.js"></script>
   </body>
 </html>

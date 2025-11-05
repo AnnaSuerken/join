@@ -12,7 +12,15 @@ const addTaskButton = document.getElementById("open-add-task-overlay");
 addTaskButton?.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
+  clearTask();
 });
+
+const closeButton = document.getElementById("close-btn");
+closeButton?.addEventListener("click", () => {
+  document.getElementById("add-task-overlay")?.classList.add("d_none");
+  document.body.classList.remove("no-scroll");
+});
+
 
 const colsEl = {
   todo: document.getElementById("task-table-todo"),

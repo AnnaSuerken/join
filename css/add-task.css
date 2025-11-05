@@ -23,6 +23,9 @@
   min-width: 440px;
   min-height: 120px;
   max-height: 120px;
+  border: solid 0.5px #d1d1d1;
+  border-radius: 10px;
+  padding: 12px;
 }
 
 .add-task-content-right {
@@ -36,12 +39,7 @@
   width: 440px;
   padding: 12px;
 }
-.add-task-content-right textarea {
-  width: 440px;
-  border-radius: 10px;
-  padding: 12px;
-  border: solid 0.5px #d1d1d1;
-}
+
 .add-task-content-left {
   display: flex;
   flex-direction: column;
