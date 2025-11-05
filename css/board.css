@@ -31,6 +31,16 @@
   margin-bottom: 24px;
 }
 
+.task-table button {
+  height: 32px;
+  width: 32px;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .task-table-header {
   display: flex;
   justify-content: space-between;
@@ -363,6 +373,28 @@
   margin-top: 8px;
 }
 
+.detail-assignees {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  overflow: scroll;
+  height: 140px;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+.detail-assignees::-webkit-scrollbar {
+  width: 3px;
+}
+.detail-assignees::-webkit-scrollbar-track {
+  background: transparent;
+}
+.detail-assignees::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf;
+  border-radius: 3px;
+}
+
 .task-overlay-open-footer {
   margin-top: 24px;
   display: flex;
@@ -417,15 +449,14 @@
 
 body.board-overlay-open .content {
   transition: filter 160ms ease;
-  pointer-events: none; /* verhindert Interaktion mit Board im Hintergrund */
+  pointer-events: none;
 }
 body.board-overlay-open #task-detail-overlay {
   pointer-events: auto;
 }
 
-/* ====== Detail-Overlay Polishing ====== */
 .task-overlay-open {
-  position: fixed; /* statt absolute -> fixiert am Viewport */
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

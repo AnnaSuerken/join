@@ -2,17 +2,6 @@ function genId() {
   return Date.now().toString(16) + Math.random().toString(16).slice(2);
 }
 
-
-const avatarColors = [
-  "#FF7A00",
-  "#462F8A",
-  "#2A3647",
-  "#FF5EB3",
-  "#FFA800",
-  "#29ABE2",
-  "#9D00FF",
-  "#3EC300",
-];
 const colorPool = ["#FF7A00", "#29ABE2", "#6E52FF", "#1FD7C1", "#FC71FF", "#FFBB2B"];
 
 const qs = (s, r = document) => r.querySelector(s);
@@ -357,8 +346,9 @@ function attachLegacyOverlayHandlers() {
     const name = byId("contact-name-input")?.value.trim();
     const email = byId("contact-email-input")?.value.trim();
     const phone = byId("contact-phone-input")?.value.trim();
+    const color = colorPool[hashStr(name) % colorPool.length];
     if (!name || !email) return;
-    createContact(name, email, phone).then(closeOverlayLegacy);
+    createContact(name, email, phone, color).then(closeOverlayLegacy);
   });
 }
 
@@ -454,8 +444,8 @@ function onSubmitForm(e) {
 /****************
  * CRUD actions *
  ****************/
-async function createContact(name, email, phone) {
-  const payload = { name, email, phone, initials: initialsFromName(name) };
+async function createContact(name, email, phone, color) {
+  const payload = { name, email, phone, initials: initialsFromName(name), color };
   try {
     const key = await store.pushData(`contacts`, payload);
     state.selectedId = key;
@@ -469,7 +459,7 @@ async function saveEdit(name, email, phone) {
   const id = state.selectedId;
   if (!id) return;
   try {
-    await store.updateData(`contacts/${id}`, { name, email, phone, initials: initialsFromName(name) });
+    await store.updateData(`contacts/${id}`, { name, email, phone, initials: initialsFromName(name), color: state.data[id]?.color });
   } catch (e) {
     console.error(e);
     alert("Update failed");
