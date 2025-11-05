@@ -11,11 +11,10 @@
       type="image/x-icon"
     />
 
-
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/style.css" />
-    
+
     <link rel="stylesheet" href="./css/contacts.css" />
 
     <!-- Hauptlogik -->
@@ -37,33 +36,31 @@
     </script>
 
     <script src="./js/firebase.js" defer></script>
-    
   </head>
 
   <body>
     <div class="content">
-      <!-- LEFT SIDEBAR -->
       <section class="content-left">
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
         <section class="nav-bar">
           <button>
             <img src="./assets/icons/summary.svg" alt="" />
-            <a href="./index.html" class="menu-links">Summary</a>
+            <a id="summary" class="menu-links">Summary</a>
           </button>
 
           <button>
             <img src="./assets/icons/addtask.svg" alt="" />
-            <a href="./add-task.html" class="menu-links">Add Task</a>
+            <a id="add-task" class="menu-links">Add Task</a>
           </button>
 
           <button>
             <img src="./assets/icons/board.svg" alt="" />
-            <a href="./board.html" class="menu-links">Board</a>
+            <a id="board" class="menu-links">Board</a>
           </button>
 
           <button class="nav-bar-button-active">
             <img src="./assets/icons/contacts.svg" alt="" />
-            <a href="./contacts.html" class="menu-links">Contacts</a>
+            <a class="menu-links">Contacts</a>
           </button>
         </section>
 
@@ -97,7 +94,6 @@
         </header>
 
         <main class="contacts-main">
-          
           <aside class="contacts-panel">
             <div class="contacts-panel-inner">
               <button id="open-add-contact-overlay" class="add-contact-btn">
@@ -168,7 +164,6 @@
 
         <!-- RECHTE SEITE -->
         <div class="add-contact-right">
-          
           <button
             class="modal-close-btn"
             id="close-add-contact-overlay"

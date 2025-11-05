@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./css/assets.css" />
   <link rel="stylesheet" href="./css/summary.css"/>
   <link rel="stylesheet" href="./css/style.css" />
+  <script type="module" src="./js/main.js"></script>
 
   
   <style>
@@ -52,26 +53,28 @@
 <body class="doc-page">
   <div class="content">
     <section class="content-left">
-      <img src="./assets/imgs/join_logo_white.svg" alt="" />
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <section class="nav-bar">
+          <button>
+            <img src="./assets/icons/summary.svg" alt="" />
+            <a id="summary" class="menu-links">Summary</a>
+          </button>
 
-      <section class="nav-bar">
-        <button>
-          <img src="./assets/icons/summary.svg" alt="" />
-          <a href="./index.html" class="menu-links">Summary</a>
-        </button>
-        <button>
-          <img src="./assets/icons/addtask.svg" alt="" />
-          <a href="./add-task.html" class="menu-links">Add Task</a>
-        </button>
-        <button>
-          <img src="./assets/icons/board.svg" alt="" />
-          <a href="./board.html" class="menu-links">Board</a>
-        </button>
-        <button>
-          <img src="./assets/icons/contacts.svg" alt="" />
-          <a href="./contacts.html" class="menu-links">Contacts</a>
-        </button>
-      </section>
+          <button>
+            <img src="./assets/icons/addtask.svg" alt="" />
+            <a id="add-task" class="menu-links">Add Task</a>
+          </button>
+
+          <button>
+            <img src="./assets/icons/board.svg" alt="" />
+            <a id="board" class="menu-links">Board</a>
+          </button>
+
+          <button>
+            <img src="./assets/icons/contacts.svg" alt="" />
+            <a id="contacts" class="menu-links">Contacts</a>
+          </button>
+        </section>
 
       <div class="nav-bar-links">
         <a href="./privacy-policy.html">Privacy Policy</a>

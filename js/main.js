@@ -61,4 +61,19 @@ addEventListener("load", async () => {
   loadNameHeader();
 });
 
+addEventListener("click", async (event) => {
+  if (event.target.closest("#summary")) {
+    window.location.href = "./index.html";
+  }
+  if (event.target.closest("#add-task")) {
+    window.location.href = "./add-task.html";
+  }
+  if (event.target.closest("#board")) {
+    window.location.href = "./board.html";
+  }
+  if (event.target.closest("#contacts")) {
+    window.location.href = "./contacts.html";
+  }
+});
+
 window.delTask = delTask;

@@ -53,6 +53,25 @@
   width: 60px;
   margin-right: 12px;
 }
+.summary-task-medium:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform: scale(1.029);
+  background-color: #293647;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.summary-task-medium:hover p {
+  color: white;
+  transition: all 0.3s ease;
+}
+.summary-task-medium:hover img.penIcon {
+  content: url("../assets/icons/pen_white.svg");
+}
+
+.summary-task-medium:hover img.checkIcon {
+  content: url("../assets/icons/check_white.svg");
+}
 .summary-task-info {
   display: flex;
   justify-content: center;
@@ -89,6 +108,14 @@
   align-items: center;
   padding: 16px;
   margin: 16px;
+}
+.summary-task-big:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform: scale(1.029);
+  background-color: #293647;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .summary-task-big-left {
@@ -134,4 +161,17 @@
   padding: 16px;
   margin: 16px;
   text-align: center;
+}
+
+.summary-task-small:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform: scale(1.029);
+  background-color: #293647;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.summary-task-small:hover p {
+  color: white;
+  transition: all 0.3s ease;
 }

@@ -91,4 +91,14 @@ async function init() {
   await loadTasksAwaitingFeedback();
 }
 
+addEventListener("click", async (event) => {
+  if (
+    event.target.closest(
+      ".summary-task-big, .summary-task-medium, .summary-task-small"
+    )
+  ) {
+    window.location.href = "board.html";
+  }
+});
+
 window.addEventListener("load", init);
