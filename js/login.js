@@ -67,3 +67,8 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "/index.html";
   }
 });
+
+setTimeout(() => {
+  const loader = document.querySelector(".loader");
+  loader.style.display = "none";
+}, 1000);

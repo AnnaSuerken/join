@@ -17,6 +17,9 @@
     <script type="module" src="./js/login.js"></script>
   </head>
   <body>
+    <div class="loader">
+      <img src="./assets/imgs/join_logo_blue.svg" alt="" />
+    </div>
     <header>
       <div class="logo-box-signup">
         <img
@@ -38,26 +41,33 @@
         <form id="login-form" action="">
           <div class="sign-up-input-container">
             <div class="input-wrapper">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              placeholder="Email"
-              class="signup-input"
-            /><img class="input-icon" src="./assets/icons/mail.svg" alt="Email">
-          </div>
-          <div class="input-wrapper">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              placeholder="Password"
-              class="signup-input"
-            />
-           <img class="input-icon" src="./assets/icons/lock.svg" alt="Email">
-
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="Email"
+                class="signup-input"
+              /><img
+                class="input-icon"
+                src="./assets/icons/mail.svg"
+                alt="Email"
+              />
+            </div>
+            <div class="input-wrapper">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                placeholder="Password"
+                class="signup-input"
+              />
+              <img
+                class="input-icon"
+                src="./assets/icons/lock.svg"
+                alt="Email"
+              />
             </div>
             <div>
               <button class="primary blue-btn-bold" type="submit">

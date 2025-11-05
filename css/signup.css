@@ -5,11 +5,12 @@ main {
   padding-bottom: 120px;
 }
 
-.logo-box-signup{
+.logo-box-signup {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-right: 77px;
+  height: 202px;
 }
 
 .sign-up-div {
@@ -42,6 +43,49 @@ main {
   height: 122px;
   margin-top: 80px;
   margin-left: 72px;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.95);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+.loader img {
+  height: 300px;
+  width: auto;
+  -webkit-animation-name: zoomOutLeft;
+  animation-name: zoomOutLeft;
+  -webkit-animation-duration: 1s;
+  animation-duration: 5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  transition: all 0.5s ease;
+}
+@keyframes zoomOutLeft {
+  40% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475)
+      translate3d(calc(-100vw - 1500px), calc(-100vh - 1500px), 150px);
+    transform: scale3d(0.475, 0.475, 0.475)
+      translate3d(calc(-100vw - 1500px), calc(-100vh - 1500px), 150px);
+    background-color: none;
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(0.1) translate3d(-10000px, 0, 0);
+    transform: scale(0.1) translate3d(-10000px, 0, 0);
+    -webkit-transform-origin: right center;
+    transform-origin: right center;
+  }
 }
 
 .sign-up-box {
