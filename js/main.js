@@ -77,3 +77,25 @@ addEventListener("click", async (event) => {
 });
 
 window.delTask = delTask;
+
+// === Dropdown Toggle (oben rechts "G"-Button) ===
+document.addEventListener("DOMContentLoaded", () => {
+  const dropBtn = document.getElementById("dropbtn");
+  const dropdown = document.querySelector(".dropdown-content");
+
+  if (!dropBtn || !dropdown) return;
+
+  dropBtn.style.cursor = "pointer";
+
+  dropBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle("show");
+  });
+
+  // Klick außerhalb schließt das Dropdown
+  document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target) && e.target !== dropBtn) {
+      dropdown.classList.remove("show");
+    }
+  });
+});
