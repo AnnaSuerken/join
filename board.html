@@ -83,7 +83,7 @@
             <div class="action-container">
               <input id="task-search" type="search" placeholder="Find Task" />
               <img src="./assets/icons/search.svg" alt="Search" />
-              <button class="blue-btn-bold open-add-task-overlay" id="open-add-task-overlay">
+              <button class="blue-btn-bold open-add-task-overlay" id="open-add-task-overlay" data-column="todo">
                 Add Task
               </button>
             </div>
@@ -92,18 +92,18 @@
           <section>
             <div class="task-table">
               <div class="task-table-header">
-                <span>To Do</span><button class="white-btn-bold open-add-task-overlay">+</button>
+                <span>To Do</span><button class="white-btn-bold open-add-task-overlay" data-column="todo">+</button>
               </div>
               <div class="task-table-header">
                 <span>In progress</span
-                ><button class="white-btn-bold">+</button>
+                ><button class="white-btn-bold open-add-task-overlay" data-column="inprogress">+</button>
               </div>
               <div class="task-table-header">
                 <span>Await Feedback</span
-                ><button class="white-btn-bold">+</button>
+                ><button class="white-btn-bold open-add-task-overlay" data-column="await">+</button>
               </div>
               <div class="task-table-header">
-                <span>Done</span><button class="white-btn-bold">+</button>
+                <span>Done</span><button class="white-btn-bold open-add-task-overlay" data-column="done">+</button>
               </div>
             </div>
           </section>

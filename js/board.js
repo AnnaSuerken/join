@@ -9,19 +9,26 @@ const COLS = ["todo", "inprogress", "await", "done"];
 
 /* ---------- UI ---------- */
 //const addTaskButton = document.getElementById("open-add-task-overlay");
+
 document.querySelectorAll(".open-add-task-overlay").forEach((btn)=>{
   btn.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
   clearTask();
   getContactsData();
+
+   window.currentTaskColumn = btn.dataset.column; 
+  console.log(window.currentTaskColumn)
 })
 });
+
 
 const closeButton = document.getElementById("close-btn");
 closeButton?.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.add("d_none");
   document.body.classList.remove("no-scroll");
+  window.currentTaskColumn = null;
+  console.log(window.currentTaskColumn)
 });
 
 

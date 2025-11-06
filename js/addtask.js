@@ -29,7 +29,8 @@ function makeInitials(name = "") {
 /** stabile Farbe (Fallback), wenn Kontakt keine Farbe hat */
 function colorFromName(name = "") {
   let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
   const h = Math.abs(hash) % 360;
   return `hsl(${h} 70% 45%)`;
 }
@@ -104,7 +105,10 @@ function renderSubtasks() {
     )
     .join("");
 
-  if (editingIndex !== null && (editingIndex < 0 || editingIndex >= subtasks.length)) {
+  if (
+    editingIndex !== null &&
+    (editingIndex < 0 || editingIndex >= subtasks.length)
+  ) {
     setSubtaskModeAdd();
   }
 }
@@ -147,7 +151,10 @@ function wireSubtaskEvents() {
 
 function showToast(message, isError = false) {
   const toast = document.getElementById("toast");
-  if (!toast) { alert(message); return; }
+  if (!toast) {
+    alert(message);
+    return;
+  }
   toast.textContent = message;
   toast.style.background = isError ? "#C62828" : "#2a3647";
   toast.classList.remove("d_none");
@@ -190,7 +197,9 @@ function buildAssigneeDropdown() {
     .map(
       (c, i) => `
       <li class="assignee-option" role="option" aria-selected="false" data-index="${i}">
-        <span class="assignee-avatar" style="background:${escapeHtml(c.color)}">${escapeHtml(c.initials)}</span>
+        <span class="assignee-avatar" style="background:${escapeHtml(
+          c.color
+        )}">${escapeHtml(c.initials)}</span>
         <span class="assignee-option-name">${escapeHtml(c.name)}</span>
         <span class="assignee-check" aria-hidden="true">✓</span>
       </li>
@@ -249,7 +258,9 @@ function buildAssigneeDropdown() {
   syncOptionSelectedStates();
 
   function syncOptionSelectedStates() {
-    const selectedNames = new Set(selectedAssignees.map((a) => a.name.toLowerCase()));
+    const selectedNames = new Set(
+      selectedAssignees.map((a) => a.name.toLowerCase())
+    );
     list.querySelectorAll(".assignee-option").forEach((node) => {
       const i = Number(node.dataset.index);
       const name = (contactsData[i]?.name || "").toLowerCase();
@@ -361,21 +372,46 @@ async function createTask() {
     id: "",
     secondline: taskDescription?.value || "",
     deadline: taskDueDate.value,
-    assignedContacts: assigneeNames,           // Array (neu)
+    assignedContacts: assigneeNames, // Array (neu)
     assignedContact: assigneeNames.join(", "), // String (kompatibel)
     category: taskCategory?.value || "",
     categorycolor:
-      taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color || "",
+      taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color ||
+      "",
     subtask: subtasks,
     priority: currentPriority,
   };
 
-  try {
-    const key = await dbApi.pushData("/board/todo", payload);
-    await dbApi.updateData(`board/todo/${key}`, { id: key });
+  progressTablePush(payload, currentTaskColumn);
+}
 
-    showToast("Task wurde erfolgreich erstellt.");
-    clearTask();
+async function progressTablePush(payload, currentTaskColumn) {
+  try {
+    if (currentTaskColumn === "todo") {
+      const key = await dbApi.pushData("/board/todo", payload);
+      await dbApi.updateData(`/board/todo/${key}`, { id: key });
+
+      showToast("Task wurde erfolgreich erstellt.");
+      clearTask();
+    } else if (currentTaskColumn === "inprogress") {
+      const key = await dbApi.pushData("/board/inprogress", payload);
+      await dbApi.updateData(`/board/inprogress/${key}`, { id: key });
+
+      showToast("Task wurde erfolgreich erstellt.");
+      clearTask();
+    } else if (currentTaskColumn === "await") {
+      const key = await dbApi.pushData("/board/await", payload);
+      await dbApi.updateData(`/board/await/${key}`, { id: key });
+
+      showToast("Task wurde erfolgreich erstellt.");
+      clearTask();
+    } else if (currentTaskColumn === "done") {
+      const key = await dbApi.pushData("/board/done", payload);
+      await dbApi.updateData(`/board/done/${key}`, { id: key });
+
+      showToast("Task wurde erfolgreich erstellt.");
+      clearTask();
+    }
   } catch (err) {
     console.error(err);
     showToast("Fehler beim Speichern des Tasks.", true);
