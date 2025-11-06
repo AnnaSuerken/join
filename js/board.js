@@ -16,9 +16,7 @@ document.querySelectorAll(".open-add-task-overlay").forEach((btn)=>{
   document.body.classList.add("no-scroll");
   clearTask();
   getContactsData();
-
-   window.currentTaskColumn = btn.dataset.column; 
-  console.log(window.currentTaskColumn)
+  window.currentTaskColumn = btn.dataset.column; 
 })
 });
 
@@ -28,7 +26,6 @@ closeButton?.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.add("d_none");
   document.body.classList.remove("no-scroll");
   window.currentTaskColumn = null;
-  console.log(window.currentTaskColumn)
 });
 
 
