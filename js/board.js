@@ -8,12 +8,14 @@ const CONTACTS_ROOT = "/contacts";
 const COLS = ["todo", "inprogress", "await", "done"];
 
 /* ---------- UI ---------- */
-const addTaskButton = document.getElementById("open-add-task-overlay");
-addTaskButton?.addEventListener("click", () => {
+//const addTaskButton = document.getElementById("open-add-task-overlay");
+document.querySelectorAll(".open-add-task-overlay").forEach((btn)=>{
+  btn.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
   clearTask();
   getContactsData();
+})
 });
 
 const closeButton = document.getElementById("close-btn");
