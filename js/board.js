@@ -13,6 +13,7 @@ addTaskButton?.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
   clearTask();
+  getContactsData();
 });
 
 const closeButton = document.getElementById("close-btn");

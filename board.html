@@ -17,6 +17,7 @@
 
     <script type="module" src="./js/main.js"></script>
     <script src="./js/addtask.js"></script>
+    <script type="module" src="./js/firebase.js"></script>
 
     <script type="module">
       import { requireAuth } from "./js/authguard.js";
@@ -248,7 +249,7 @@
                 <p><span>*</span>This field is required</p>
                 <div>
                   <button class="white-btn" onclick="clearTask()">
-                    Clear X
+                    Cancel X
                   </button>
                   <button onclick="createTask()" class="blue-btn-bold">
                     Create Task 
