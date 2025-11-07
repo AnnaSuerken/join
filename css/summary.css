@@ -5,21 +5,25 @@
   justify-content: center;
   align-items: center;
 }
+
 .summary-title {
   display: flex;
   align-items: center;
   margin-bottom: 60px;
 }
+
 .summary-title h1 {
   font-size: 48px;
   font-weight: 700;
   color: #293647;
 }
+
 .summary-title p {
   font-size: 24px;
   font-weight: 400;
   color: #757575;
 }
+
 .summary-slash {
   height: 48px;
   width: 2px;
@@ -27,16 +31,19 @@
   margin-left: 18px;
   margin-right: 18px;
 }
+
 .summary-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .summary-tasks {
   display: flex;
   flex-wrap: wrap;
   width: 464px;
 }
+
 .summary-task-medium {
   background-color: #ffffff;
   border-radius: 16px;
@@ -48,11 +55,13 @@
   padding: 16px;
   margin: 16px;
 }
+
 .summary-task-medium img {
   height: 60px;
   width: 60px;
   margin-right: 12px;
 }
+
 .summary-task-medium:hover {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   transform: scale(1.029);
@@ -61,10 +70,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 .summary-task-medium:hover p {
   color: white;
   transition: all 0.3s ease;
 }
+
 .summary-task-medium:hover img.penIcon {
   content: url("../assets/icons/pen_white.svg");
 }
@@ -72,27 +83,33 @@
 .summary-task-medium:hover img.checkIcon {
   content: url("../assets/icons/check_white.svg");
 }
+
 .summary-task-info {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
+
 .summary-tasks h2 {
   font-size: 50px;
 }
+
 .summary-tasks p {
   font-size: 18px;
   color: #757575;
 }
+
 .summary-name {
   display: flex;
   flex-direction: column;
   margin-left: 64px;
 }
+
 .summary-name h3 {
   font-size: 32px;
 }
+
 .summary-name h2 {
   font-size: 48px;
   color: #29abe2;
@@ -109,6 +126,7 @@
   padding: 16px;
   margin: 16px;
 }
+
 .summary-task-big:hover {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   transform: scale(1.029);
@@ -125,6 +143,7 @@
   align-items: center;
   text-align: center;
 }
+
 .summary-task-big-left slot {
   display: flex;
   flex-direction: column;
@@ -171,7 +190,130 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 .summary-task-small:hover p {
   color: white;
   transition: all 0.3s ease;
+}
+
+/* ============================== */
+/* ========== RESPONSIVE ========= */
+/* ============================== */
+
+/* Tablets quer / kleine Laptops */
+@media (max-width: 1024px) {
+  .main-summary {
+    padding: 40px 20px;
+    justify-content: flex-start;
+  }
+
+  .summary-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-name {
+    margin-left: 0;
+    margin-top: 32px;
+    text-align: center;
+  }
+}
+
+/* Sidebar bleibt bis 820px sichtbar */
+@media (max-width: 820px) {
+  .content-left {
+    display: none !important;
+  }
+
+  .content-right {
+    width: 100% !important;
+  }
+
+  /* Mobile Bottom Navigation */
+  .nav-bar-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #2a3647;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .nav-bar-mobile button {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .nav-bar-mobile button img {
+    height: 24px;
+    width: 24px;
+  }
+
+  .nav-bar-mobile button.active {
+    color: #29abe2;
+  }
+
+  .main-summary {
+    padding-bottom: 100px;
+  }
+}
+
+/* Smartphones */
+@media (max-width: 480px) {
+  .summary-title {
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .summary-slash {
+    display: none;
+  }
+
+  .summary-title h1 {
+    font-size: 28px;
+  }
+
+  .summary-title p {
+    font-size: 16px;
+  }
+
+  .summary-tasks {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-task-medium,
+  .summary-task-big,
+  .summary-task-small {
+    width: 90%;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .summary-name {
+    margin-left: 0;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .summary-name h3 {
+    font-size: 18px;
+  }
+
+  .summary-name h2 {
+    font-size: 24px;
+  }
 }

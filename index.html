@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join - Summery</title>
+    <title>Join - Summary</title>
+
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/style.css" />
@@ -50,13 +51,14 @@
           <a href="./legal-notice.html">Legal notice</a>
         </div>
       </section>
+
       <section class="content-right">
         <header class="header-right">
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
-            <a href="./help.html"
-              ><img src="./assets/icons/help.svg" alt="Hilfe"
-            /></a>
+            <a href="./help.html">
+              <img src="./assets/icons/help.svg" alt="Hilfe" />
+            </a>
             <div class="dropdown">
               <button id="dropbtn" class="dropbtn"></button>
               <div class="dropdown-content">
@@ -67,12 +69,14 @@
             </div>
           </div>
         </header>
+
         <main class="main-summary">
           <div class="summary-title">
             <h1>Join 360</h1>
             <div class="summary-slash"></div>
             <p>Key Metrics at a Glance</p>
           </div>
+
           <div class="summary-wrapper">
             <section class="summary-tasks">
               <section class="summary-task-medium">
@@ -82,6 +86,7 @@
                   <p>To Do</p>
                 </div>
               </section>
+
               <section class="summary-task-medium">
                 <img class="checkIcon" src="./assets/icons/check.svg" alt="" />
                 <div class="summary-task-info">
@@ -89,6 +94,7 @@
                   <p>Done</p>
                 </div>
               </section>
+
               <section class="summary-task-big">
                 <div class="summary-task-big-left">
                   <img src="./assets/icons/urgent.svg" alt="" />
@@ -103,6 +109,7 @@
                   <p>Upcomming Deadline</p>
                 </div>
               </section>
+
               <section class="summary-task-small">
                 <h2 id="allTasks"></h2>
                 <p>
@@ -110,10 +117,12 @@
                   Board
                 </p>
               </section>
+
               <section class="summary-task-small">
                 <h2 id="inProgress"></h2>
                 <p>Tasks in <br />Progress</p>
               </section>
+
               <section class="summary-task-small">
                 <h2 id="awaitingFeedback"></h2>
                 <p>
@@ -122,6 +131,7 @@
                 </p>
               </section>
             </section>
+
             <div class="summary-name">
               <h3 id="summary-greeting">Good morning,</h3>
               <h2 id="summary-name">…</h2>
@@ -130,5 +140,25 @@
         </main>
       </section>
     </div>
+
+    <!-- 🔹 Mobile Bottom Navigation (nur sichtbar unter 820px) -->
+    <nav class="nav-bar-mobile">
+      <button id="summary">
+        <img src="./assets/icons/summary.svg" alt="">
+        Summary
+      </button>
+      <button id="add-task">
+        <img src="./assets/icons/addtask.svg" alt="">
+        Add Task
+      </button>
+      <button id="board">
+        <img src="./assets/icons/board.svg" alt="">
+        Board
+      </button>
+      <button id="contacts">
+        <img src="./assets/icons/contacts.svg" alt="">
+        Contacts
+      </button>
+    </nav>
   </body>
 </html>
