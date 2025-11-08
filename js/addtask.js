@@ -192,6 +192,8 @@ function buildAssigneeDropdown() {
   const list = document.getElementById("assignee-options");
   if (!trigger || !list) return;
 
+ 
+
   // Optionen rendern (mit Avatar + Name)
   list.innerHTML = contactsData
     .map(

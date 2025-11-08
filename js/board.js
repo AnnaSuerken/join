@@ -14,9 +14,9 @@ document.querySelectorAll(".open-add-task-overlay").forEach((btn)=>{
   btn.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
-  clearTask();
-  getContactsData();
   window.currentTaskColumn = btn.dataset.column; 
+  getContactsData();
+  clearTask();
 })
 });
 
