@@ -4,8 +4,7 @@
     flex-direction: column;
     gap: 35px;
     margin-top: 125px;
-    margin-left: 90px;
-    width: 1016px;   
+    max-width: 1016px;   
     height: 309px;  
 }
 
