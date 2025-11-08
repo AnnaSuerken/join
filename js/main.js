@@ -66,7 +66,7 @@ addEventListener("click", async (event) => {
     window.location.href = "./index.html";
   }
   if (event.target.closest("#add-task")) {
-    window.location.href = "./add-task.html";
+    window.location.href = "./add-task.html?column=todo";
   }
   if (event.target.closest("#board")) {
     window.location.href = "./board.html";

@@ -83,7 +83,11 @@
             <div class="action-container">
               <input id="task-search" type="search" placeholder="Find Task" />
               <img src="./assets/icons/search.svg" alt="Search" />
-              <button class="blue-btn-bold open-add-task-overlay" id="open-add-task-overlay" data-column="todo">
+              <button
+                class="blue-btn-bold open-add-task-overlay"
+                id="open-add-task-overlay"
+                data-column="todo"
+              >
                 Add Task
               </button>
             </div>
@@ -92,18 +96,40 @@
           <section>
             <div class="task-table">
               <div class="task-table-header">
-                <span>To Do</span><button class="white-btn-bold open-add-task-overlay" data-column="todo">+</button>
+                <span>To Do</span
+                ><button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="todo"
+                >
+                  +
+                </button>
               </div>
               <div class="task-table-header">
                 <span>In progress</span
-                ><button class="white-btn-bold open-add-task-overlay" data-column="inprogress">+</button>
+                ><button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="inprogress"
+                >
+                  +
+                </button>
               </div>
               <div class="task-table-header">
                 <span>Await Feedback</span
-                ><button class="white-btn-bold open-add-task-overlay" data-column="await">+</button>
+                ><button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="await"
+                >
+                  +
+                </button>
               </div>
               <div class="task-table-header">
-                <span>Done</span><button class="white-btn-bold open-add-task-overlay" data-column="done">+</button>
+                <span>Done</span
+                ><button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="done"
+                >
+                  +
+                </button>
               </div>
             </div>
           </section>
@@ -213,37 +239,41 @@
                   </div>
 
                   <label>Assigned to</label>
-                <div
-                  id="assignee-select"
-                  class="assignee-select"
-                  tabindex="0"
-                  aria-haspopup="listbox"
-                  aria-expanded="false"
-                >
-                  <span class="assignee-select-label"
-                    >Select contacts to assign</span
+                  <div
+                    id="assignee-select"
+                    class="assignee-select"
+                    tabindex="0"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
                   >
-                  <span class="chevron">▾</span>
+                    <span class="assignee-select-label"
+                      >Select contacts to assign</span
+                    >
+                    <span class="chevron">▾</span>
+                  </div>
+                  <ul
+                    id="assignee-options"
+                    class="assignee-options d_none"
+                    role="listbox"
+                    aria-multiselectable="true"
+                  ></ul>
+                  <div id="assignee-list" class="assignee-list"></div>
+
+                  <label for="category">Category<span>*</span></label>
+                  <select name="category" id="task-category">
+                    <option value="Select task category">Select task category</option>
+                    <option value="Technical Task">Technical Task</option>
+                    <option value="User Story">User Story</option>
+                  </select>
+
+                  <label for="subtask">Subtasks</label>
+                  <input
+                    type="text"
+                    placeholder="Add new subtask"
+                    id="subtask"
+                  />
+                  <div class="subtask-list" id="subtask-list"></div>
                 </div>
-                <ul
-                  id="assignee-options"
-                  class="assignee-options d_none"
-                  role="listbox"
-                  aria-multiselectable="true"
-                ></ul>
-                <div id="assignee-list" class="assignee-list"></div>
-
-                <label for="category">Category<span>*</span></label>
-                <select name="category" id="task-category" required>
-                  <option>Select task category</option>
-                  <option value="Technical Task">Technical Task</option>
-                  <option value="User Story">User Story</option>
-                </select>
-
-                <label for="subtask">Subtasks</label>
-                <input type="text" placeholder="Add new subtask" id="subtask" />
-                <div class="subtask-list" id="subtask-list"></div>
-              </div>
               </form>
               <div class="task-overlay-footer">
                 <p><span>*</span>This field is required</p>
@@ -252,7 +282,7 @@
                     Cancel X
                   </button>
                   <button onclick="createTask()" class="blue-btn-bold">
-                    Create Task 
+                    Create Task
                     <img src="./assets/icons/check.svg" alt="create" />
                   </button>
                 </div>

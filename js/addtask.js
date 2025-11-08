@@ -187,12 +187,11 @@ async function getContactsData() {
 }
 
 /** Custom „Select“: Button + Options-Liste mit Avatar-Layout */
+
 function buildAssigneeDropdown() {
   const trigger = document.getElementById("assignee-select");
   const list = document.getElementById("assignee-options");
   if (!trigger || !list) return;
-
- 
 
   // Optionen rendern (mit Avatar + Name)
   list.innerHTML = contactsData
@@ -209,71 +208,60 @@ function buildAssigneeDropdown() {
     )
     .join("");
 
-  // Öffnen/Schließen
-  function open() {
-    list.classList.remove("d_none");
-    trigger.setAttribute("aria-expanded", "true");
-  }
-  function close() {
-    list.classList.add("d_none");
-    trigger.setAttribute("aria-expanded", "false");
-  }
-  function toggleOpen() {
-    const isOpen = trigger.getAttribute("aria-expanded") === "true";
-    isOpen ? close() : open();
-  }
-
-  trigger.addEventListener("click", toggleOpen);
-  trigger.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
-      e.preventDefault();
-      toggleOpen();
-    } else if (e.key === "Escape") {
-      close();
-      trigger.blur();
-    }
-  });
-
-  // Klick außerhalb schließt
-  document.addEventListener("click", (e) => {
-    if (!trigger.contains(e.target) && !list.contains(e.target)) close();
-  });
-
-  // Option Klick -> Toggle Auswahl
-  list.addEventListener("click", (e) => {
-    const item = e.target.closest(".assignee-option");
-    if (!item) return;
-    const idx = Number(item.dataset.index);
-    toggleAssigneeByContactIndex(idx);
-    // ausgewählten Zustand visuell updaten
-    syncOptionSelectedStates();
-  });
-
   // initial Zustand
   trigger.setAttribute("aria-expanded", "false");
-  // für Screenreader Platzhaltertext
-  if (!trigger.querySelector(".assignee-select-label")) {
-    trigger.innerHTML = `<span class="assignee-select-label">Select contacts to assign</span><span class="chevron">▾</span>`;
-  }
 
-  // visuelle Selektionsmarkierung initial
-  syncOptionSelectedStates();
-
-  function syncOptionSelectedStates() {
-    const selectedNames = new Set(
-      selectedAssignees.map((a) => a.name.toLowerCase())
-    );
-    list.querySelectorAll(".assignee-option").forEach((node) => {
-      const i = Number(node.dataset.index);
-      const name = (contactsData[i]?.name || "").toLowerCase();
-      const isSel = selectedNames.has(name);
-      node.setAttribute("aria-selected", String(isSel));
-      node.classList.toggle("is-selected", isSel);
+  // Öffnen/Schließen
+  if (!trigger._listenersAdded) {
+    trigger.addEventListener("click", () => {
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        list.classList.add("d_none");
+        trigger.setAttribute("aria-expanded", "false");
+      } else {
+        list.classList.remove("d_none");
+        trigger.setAttribute("aria-expanded", "true");
+      }
     });
-  }
 
-  // Expose intern, falls nach getContactsData() erneut gebraucht
-  buildAssigneeDropdown._sync = syncOptionSelectedStates;
+    document.addEventListener("click", (e) => {
+      if (!trigger.contains(e.target) && !list.contains(e.target)) {
+        list.classList.add("d_none");
+        trigger.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    // Option Klick -> Toggle Auswahl
+    list.addEventListener("click", (e) => {
+      const item = e.target.closest(".assignee-option");
+      if (!item) return;
+      const idx = Number(item.dataset.index);
+      toggleAssigneeByContactIndex(idx);
+      // ausgewählten Zustand visuell updaten
+      syncOptionSelectedStates();
+    });
+
+    trigger._listenersAdded = true;
+
+    // visuelle Selektionsmarkierung initial
+    syncOptionSelectedStates();
+
+    function syncOptionSelectedStates() {
+      const selectedNames = new Set(
+        selectedAssignees.map((a) => a.name.toLowerCase())
+      );
+      list.querySelectorAll(".assignee-option").forEach((node) => {
+        const i = Number(node.dataset.index);
+        const name = (contactsData[i]?.name || "").toLowerCase();
+        const isSel = selectedNames.has(name);
+        node.setAttribute("aria-selected", String(isSel));
+        node.classList.toggle("is-selected", isSel);
+      });
+    }
+
+    // Expose intern, falls nach getContactsData() erneut gebraucht
+    buildAssigneeDropdown._sync = syncOptionSelectedStates;
+  }
 }
 
 /** Toggle per Index aus contactsData (aus Liste geklickt) */
@@ -355,6 +343,7 @@ function setPriority(status) {
 }
 
 /* ---------- Task-Erstellung ---------- */
+let currentTaskColumn = "todo";
 
 async function createTask() {
   const taskTitle = document.getElementById("task-title");
@@ -362,8 +351,12 @@ async function createTask() {
   const taskDueDate = document.getElementById("task-due-date");
   const taskCategory = document.getElementById("task-category");
 
-  if (!taskTitle?.value.trim() || !taskDueDate?.value) {
-    alert("Bitte Titel und Fälligkeitsdatum ausfüllen.");
+  if (
+    !taskTitle?.value.trim() ||
+    !taskDueDate?.value ||
+    taskCategory?.value === "Select task category"
+  ) {
+    alert("Please enter Title, Due date and choose Category");
     return;
   }
 

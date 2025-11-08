@@ -14,9 +14,9 @@ document.querySelectorAll(".open-add-task-overlay").forEach((btn)=>{
   btn.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
-  window.currentTaskColumn = btn.dataset.column; 
   getContactsData();
   clearTask();
+  if (btn.dataset.column) currentTaskColumn = btn.dataset.column;
 })
 });
 
@@ -25,7 +25,7 @@ const closeButton = document.getElementById("close-btn");
 closeButton?.addEventListener("click", () => {
   document.getElementById("add-task-overlay")?.classList.add("d_none");
   document.body.classList.remove("no-scroll");
-  window.currentTaskColumn = null;
+  currentTaskColumn = "todo";
 });
 
 
