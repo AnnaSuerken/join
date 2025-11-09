@@ -1,56 +1,94 @@
-.legal-scroll{
+
+.doc-wrap {
+  margin-top: 110px;
+  padding-bottom: 100px;
+}
+
+.doc-title {
+  font-size: 61px;
+  font-weight: 700;
+}
+
+.doc-subtitle {
+  margin: 24px 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.doc-text,
+.doc-list {
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.doc-list {
+  margin: 8px 0 16px 18px;
+}
+.doc-meta {
+  margin-top: 24px;
+  color: #6b7280;
+  font-size: 12px;
+}
+.doc-link {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 600;
+}
+.doc-link:hover {
+  text-decoration: underline;
+}
+
+.legal-scroll {
   flex: 1;
   overflow: auto;
   padding: 24px;
 }
 
 /* Karte/Wrapping  */
-.legal-wrap{
-  width: 1014px;   
-  height: 943px;   
+.legal-wrap {
+  max-width: 1014px;
+  height: 943px;
   margin: 0 auto;
-  background: none; 
+  background: none;
   border: none;
   border-radius: 0;
   padding: 0;
 }
 
-
-.legal-title{
+.legal-title {
   margin: 0 0 20px;
   font-size: 48px;
   font-weight: 800;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
 }
 
-.legal-subtitle{
+.legal-subtitle {
   margin: 24px 0 8px;
   font-size: 20px;
   font-weight: 700;
 }
 
-.legal-text{
+.legal-text {
   margin: 0 0 10px;
   line-height: 1.6;
   color: #374151;
   font-size: 14px;
 }
 
-.legal-list{
-  margin: 8px 0 16px 18px; 
+.legal-list {
+  margin: 8px 0 16px 18px;
   padding: 0;
   color: #374151;
   font-size: 14px;
 }
 
-.legal-meta{
+.legal-meta {
   margin-top: 24px;
   color: #6b7280;
   font-size: 12px;
 }
 
 /* Footer */
-.nav-bar-links a.active{
+.nav-bar-links a.active {
   display: block;
   background: #0f2236;
   color: #fff;
@@ -59,21 +97,25 @@
 }
 
 /* Responsive  */
-@media (max-width: 768px){
-  .legal-wrap{ padding: 24px; }
-  .legal-title{ font-size: 36px; }
+@media (max-width: 768px) {
+  .legal-wrap {
+    padding: 24px;
+  }
+  .legal-title {
+    font-size: 36px;
+  }
 }
 
-
-.doc-link{
-  color: #1d4ed8;              
+.doc-link {
+  color: #1d4ed8;
   text-decoration: none;
   font-weight: 600;
 }
-.doc-link:hover{ text-decoration: underline; }
+.doc-link:hover {
+  text-decoration: underline;
+}
 
-
-.doc-emph{
+.doc-emph {
   color: #1d4ed8;
   font-weight: 600;
 }

@@ -1,59 +1,26 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Join - Legal notice</title>
-  <script type="module" src="./js/main.js"></script>
-  <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
-  
-  <link rel="stylesheet" href="./css/assets.css" />
-  <link rel="stylesheet" href="./css/summary.css"/>
-  <link rel="stylesheet" href="./css/style.css" />
-  <script type="module" src="./js/main.js"></script>
-
-  
-  <style>
-    .doc-page .doc-wrap{
-      max-width: 900px; margin: 24px auto;
-      background:#fff; border:1px solid var(--line); border-radius:12px;
-      padding:32px 40px 40px;
-    }
-    .doc-page .doc-title{
-      margin:0 0 20px; font-size:48px; font-weight:800; letter-spacing:-.02em;
-    }
-    .doc-page .doc-subtitle{
-      margin:24px 0 8px; font-size:20px; font-weight:700;
-    }
-    .doc-page .doc-text, .doc-page .doc-list{
-      color:#374151; font-size:14px; line-height:1.6;
-    }
-    .doc-page .doc-list{ margin:8px 0 16px 18px; }
-    .doc-page .doc-meta{ margin-top:24px; color:#6b7280; font-size:12px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join - Privacy Policy</title>
+    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/assets.css">
+    <link rel="stylesheet" href="./css/legal-notice.css"/>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <script type="module" src="./js/main.js"></script>
     
-    .nav-bar-links a.active{
-      display:block; background:#0f2236; color:#fff; border-radius:10px; padding:8px 12px;
-    }
-    
-    .doc-link{
-      color:#1d4ed8;
-      text-decoration:none;
-      font-weight:600;
-    }
-    .doc-link:hover{ text-decoration:underline; }
-  </style>
-
-  <script type="module">
-    import { requireAuth } from "./js/authguard.js";
-    import { logout } from "./js/logout.js";
-    const user = await requireAuth({ redirectTo: "/login.html" });
-    export { logout };
-  </script>
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
+      export { logout };
+    </script>
 </head>
 <body class="doc-page">
-  <div class="content">
-    <section class="content-left">
-        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="" />
         <section class="nav-bar">
           <button id="summary">
             <img src="./assets/icons/summary.svg" alt="" />
@@ -75,24 +42,11 @@
             Contacts
           </button>
         </section>
-
-      <div class="nav-bar-links">
-        <a href="./privacy-policy.html">Privacy Policy</a>
-        <a href="./legal-notice.html" class="active" aria-current="page">Legal notice</a>
-      </div>
-    </section>
-
-    <section class="content-right">
-      <header class="header-right">
-        <span class="tool-name">Kanban Projekt Management Tool</span>
-        <div class="header-content-right">
-          <a href="./help.html"><img src="./assets/icons/help.svg" alt=""/></a>
-          <div class="dropdown">
-            <button class="dropbtn">JK</button>
-            <div class="dropdown-content">
-              <a href="./legal-notice.html">Legal Notice</a>
-              <a href="./privacy-policy.html">Privacy Policy</a>
-              <a id="logout-btn">Logout</a>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
+      </section>
       <section class="content-right">
         <header class="header-right">
           <span class="tool-name">Kanban Projekt Management Tool</span>
@@ -110,8 +64,7 @@
             </div>
           </div>
         </header>
-
-      <!-- DOKU-INHALT -->
+      
       <main class="doc-wrap">
         <h1 class="doc-title">Legal Notice</h1>
 
@@ -174,7 +127,6 @@
 
         <div class="doc-meta">Date: July 26, 2023</div>
       </main>
-    </section>
-  </div>
+    </div>
 </body>
 </html>

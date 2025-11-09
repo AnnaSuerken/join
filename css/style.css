@@ -8,15 +8,18 @@
   background-color: #293647;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  height: 100%;
 }
+
 .content-left img {
   margin-top: 25%;
   height: 120px;
 }
 
 .content-right {
+  margin-left: 230px;
   width: 90%;
-  height: 100vh;
   background-color: #f6f7f8;
   display: flex;
   flex-direction: column;
@@ -26,7 +29,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 120px;
-  width: 100%;
+  width: 100vh;
   gap: 20px;
 }
 
@@ -111,7 +114,7 @@
   font-size: 27px;
   font-weight: bold;
   text-align: center;
-  padding: 0;  
+  padding: 0;
   cursor: pointer;
 }
 
@@ -119,9 +122,6 @@
   position: relative;
   display: inline-block;
 }
-
-
-
 
 /*
 
@@ -136,9 +136,9 @@
 
   background-color: #2a3647;
 
-  right: 0;            
-  top: 60px;           
-  background-color: #2A3647;
+  right: 0;
+  top: 60px;
+  background-color: #2a3647;
 
   min-width: 160px;
   height: 130px;
@@ -152,7 +152,6 @@
   flex-direction: column;
 
   border-radius: 4px;
-
 }
 
 .dropdown-content a {
@@ -168,13 +167,11 @@
 }
 
 .dropdown-content a:hover {
-
   background-color: #29abe2;
   border-radius: 12px;
 
   background-color: #ddd;
-  color: #2A3647;
-
+  color: #2a3647;
 }
 
 .dropdown-content a:hover {
@@ -286,17 +283,15 @@
   text-decoration: none;
 }
 
-
 .dropdown-content.show {
   display: block;
 }
 
 /* === Scrollleisten ausblenden === */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   overflow-y: auto;
 }
-
-
