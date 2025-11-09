@@ -1,10 +1,10 @@
 .privacy-policy-section {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    gap: 35px;
-    margin-top: 110px;
-    max-width: 1016px;   
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 35px;
+  margin-top: 110px;
+  max-width: 1016px;
 }
 
 .privacy-policy-section h1 {
@@ -12,12 +12,18 @@
   font-size: 61px;
 }
 
+.privacy-policy-section h2 {
+  font-size: 27px;
+  font-weight: 700;
+}
 .privacy-policy-article {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .privacy-policy-article span {
-    margin-top: 16px;
+  margin-top: 16px;
+  color: #374151;
+  font-size: 16px;
 }
