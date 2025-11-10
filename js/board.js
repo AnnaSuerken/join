@@ -7,19 +7,16 @@ const TASKS_ROOT = "/board";
 const CONTACTS_ROOT = "/contacts";
 const COLS = ["todo", "inprogress", "await", "done"];
 
-/* ---------- UI ---------- */
-//const addTaskButton = document.getElementById("open-add-task-overlay");
-
-document.querySelectorAll(".open-add-task-overlay").forEach((btn)=>{
+/* ---------- UI: Add-Task öffnen/schließen ---------- */
+document.querySelectorAll(".open-add-task-overlay").forEach((btn) => {
   btn.addEventListener("click", () => {
-  document.getElementById("add-task-overlay")?.classList.remove("d_none");
-  document.body.classList.add("no-scroll");
-  getContactsData();
-  clearTask();
-  if (btn.dataset.column) currentTaskColumn = btn.dataset.column;
-})
+    document.getElementById("add-task-overlay")?.classList.remove("d_none");
+    document.body.classList.add("no-scroll");
+    getContactsData?.();
+    clearTask?.();
+    if (btn.dataset.column) currentTaskColumn = btn.dataset.column;
+  });
 });
-
 
 const closeButton = document.getElementById("close-btn");
 closeButton?.addEventListener("click", () => {
@@ -28,7 +25,7 @@ closeButton?.addEventListener("click", () => {
   currentTaskColumn = "todo";
 });
 
-
+/* ---------- DOM-Referenzen ---------- */
 const colsEl = {
   todo: document.getElementById("task-table-todo"),
   inprogress: document.getElementById("task-table-progress"),
@@ -40,13 +37,12 @@ const searchInput = document.getElementById("task-search");
 /* ---------- State ---------- */
 let data = { todo: {}, inprogress: {}, await: {}, done: {} };
 
-/** Live-Index aller Kontakte (für robuste Auflösung) */
-let contactsById = new Map(); // id -> contact
-let contactIdByName = new Map(); // lower(name) -> id
-let contactIdByEmail = new Map(); // lower(email) -> id
+// Kontakte-Indizes
+let contactsById = new Map();
+let contactIdByName = new Map();
+let contactIdByEmail = new Map();
 
 /* ---------- Live-Listener ---------- */
-// Board
 dbApi.onData(TASKS_ROOT, (val) => {
   data = {
     todo: val?.todo || {},
@@ -57,7 +53,6 @@ dbApi.onData(TASKS_ROOT, (val) => {
   render();
 });
 
-// Kontakte-Index
 dbApi.onData(CONTACTS_ROOT, (val) => {
   contactsById = new Map();
   contactIdByName = new Map();
@@ -78,7 +73,6 @@ dbApi.onData(CONTACTS_ROOT, (val) => {
       if (contact.email) contactIdByEmail.set(contact.email.toLowerCase(), id);
     }
   }
-  // Nachlade-Render (z. B. wenn beim ersten Render die Kontakte noch nicht da waren)
   render();
 });
 
@@ -146,9 +140,7 @@ function taskCard(task) {
     </div>
     <div class="task-users">
       <div class="assigned-avatars"></div>
-      <div class="task-priority">
-        <img src="./assets/icons/${prioIcon}.svg" alt="Priority" />
-      </div>
+      <div class="task-priority"><img src="./assets/icons/${prioIcon}.svg" alt="Priority" /></div>
     </div>
   `;
 
@@ -168,7 +160,7 @@ function taskCard(task) {
     await openDetailOverlayById(task.id);
   });
 
-  // Assigned-Chips füllen (IDs robust auflösen)
+  // Assigned-Chips
   const assigneeIds = normalizeAssigneesToIds(task.assignedContact);
   populateAssignedChips(assigneeIds, el.querySelector(".assigned-avatars"));
 
@@ -324,7 +316,6 @@ async function openDetailOverlayById(id) {
     (x) => x.done
   ).length;
 
-  // Assignees auf IDs auflösen + Kontakte aus Index holen
   const assigneeIds = normalizeAssigneesToIds(normalized.assignedContact);
   const assignedDetailed = assigneeIds
     .map((id2) => contactsById.get(id2))
@@ -429,7 +420,6 @@ async function saveSubtasksToFirebase(
 function normalizeAssigneesToIds(val) {
   if (!val) return [];
   const out = [];
-
   const pushIf = (id) => {
     if (id && contactsById.has(id)) out.push(id);
   };
@@ -438,17 +428,14 @@ function normalizeAssigneesToIds(val) {
     for (const x of val) {
       if (typeof x === "string") {
         const s = x.trim();
-        // ID direkt?
         if (contactsById.has(s)) {
           pushIf(s);
           continue;
         }
-        // Email?
         if (s.includes("@")) {
           pushIf(contactIdByEmail.get(s.toLowerCase()));
           continue;
         }
-        // Name?
         pushIf(contactIdByName.get(s.toLowerCase()));
       } else if (x && typeof x === "object") {
         const byId = (x.id || x.contactId || "").toString().trim();
@@ -483,7 +470,6 @@ function normalizeAssigneesToIds(val) {
       pushIf(contactIdByName.get(token.toLowerCase()));
     }
   }
-
   return out;
 }
 
@@ -491,7 +477,6 @@ function normalizeAssigneesToIds(val) {
 function populateAssignedChips(ids, containerEl) {
   if (!containerEl) return;
   containerEl.innerHTML = "";
-
   const contacts = ids.map((id) => contactsById.get(id)).filter(Boolean);
   if (!contacts.length) return;
 
@@ -515,7 +500,7 @@ function populateAssignedChips(ids, containerEl) {
     (more > 0 ? `<span class="avatar-chip more-chip">+${more}</span>` : "");
 }
 
-/* ---------- kleine Helper ---------- */
+/* ---------- Helpers ---------- */
 function normalizeSubtasks(task) {
   if (Array.isArray(task?.subtasks))
     return task.subtasks.map((s) => ({ text: s.text || s, done: !!s.done }));
@@ -533,4 +518,301 @@ function formatDate(s) {
   return `${String(d.getDate()).padStart(2, "0")}.${String(
     d.getMonth() + 1
   ).padStart(2, "0")}.${d.getFullYear()}`;
+}
+function toISODateOnly(d) {
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 10);
+}
+
+/* ====================================================================== */
+/* ============================ EDIT OVERLAY ============================ */
+/* ====================================================================== */
+const editSection = document.getElementById("task-edit-overlay");
+const editCloseBtn = document.getElementById("edit-close-btn");
+const editOkBtn = document.getElementById("edit-ok-btn");
+const detailEditBtn = document.getElementById("detail-edit");
+
+const editTitle = document.getElementById("edit-title");
+const editDesc = document.getElementById("edit-desc");
+const editDate = document.getElementById("edit-date");
+const editDateHint = document.getElementById("edit-date-hint");
+const editCategory = document.getElementById("edit-category");
+
+// Priority Buttons
+const prioBtns = {
+  urgent: document.getElementById("edit-prio-urgent"),
+  medium: document.getElementById("edit-prio-medium"),
+  low: document.getElementById("edit-prio-low"),
+};
+let editPriority = "medium";
+Object.entries(prioBtns).forEach(([key, btn]) =>
+  btn?.addEventListener("click", () => setEditPriority(key))
+);
+function setEditPriority(p) {
+  editPriority = p;
+  Object.entries(prioBtns).forEach(([key, btn]) =>
+    btn?.classList.toggle("active", key === p)
+  );
+}
+
+// Assignees im Edit
+const editAssigneeSelect = document.getElementById("edit-assignee-select");
+const editAssigneeOptions = document.getElementById("edit-assignee-options");
+const editAssigneeList = document.getElementById("edit-assignee-list");
+let selectedAssigneeIds = [];
+
+editAssigneeSelect?.addEventListener("click", () => {
+  const open = editAssigneeOptions.classList.contains("d_none");
+  toggleEditAssigneeDropdown(open);
+});
+document.addEventListener("click", (e) => {
+  if (editSection.classList.contains("d_none")) return;
+  if (
+    !editAssigneeSelect.contains(e.target) &&
+    !editAssigneeOptions.contains(e.target)
+  ) {
+    toggleEditAssigneeDropdown(false);
+  }
+});
+function toggleEditAssigneeDropdown(open) {
+  editAssigneeOptions.classList.toggle("d_none", !open);
+  editAssigneeSelect.setAttribute("aria-expanded", String(open));
+}
+function renderEditAssigneeChips() {
+  editAssigneeList.innerHTML = "";
+  const contacts = selectedAssigneeIds
+    .map((id) => contactsById.get(id))
+    .filter(Boolean);
+  contacts.forEach((c) => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "assignee-chip";
+    chip.title = `Entfernen: ${c.name}`;
+    chip.dataset.id = c.id;
+    chip.innerHTML = `
+      <span class="assignee-chip-initials" style="background:${escapeHtml(
+        c.color
+      )}">${escapeHtml(c.initials)}</span>
+      <span>${escapeHtml(c.name)}</span>
+      <span aria-hidden="true">✕</span>
+    `;
+    chip.addEventListener("click", () => {
+      selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== c.id);
+      renderEditAssigneeChips();
+      renderEditAssigneeOptions();
+    });
+    editAssigneeList.appendChild(chip);
+  });
+}
+function renderEditAssigneeOptions() {
+  editAssigneeOptions.innerHTML = "";
+  const all = [...contactsById.values()].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+  all.forEach((c) => {
+    const li = document.createElement("li");
+    li.role = "option";
+    li.className = "assignee-option";
+    li.tabIndex = 0;
+    const selected = selectedAssigneeIds.includes(c.id);
+    li.setAttribute("aria-selected", String(selected));
+    li.innerHTML = `
+      <span class="assignee-chip-initials" style="background:${escapeHtml(
+        c.color
+      )}">${escapeHtml(c.initials)}</span>
+      <span>${escapeHtml(c.name)}</span>
+      ${selected ? "<span>• ausgewählt</span>" : ""}
+    `;
+    const toggle = () => {
+      if (selectedAssigneeIds.includes(c.id)) {
+        selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== c.id);
+      } else {
+        selectedAssigneeIds.push(c.id);
+      }
+      renderEditAssigneeChips();
+      renderEditAssigneeOptions();
+    };
+    li.addEventListener("click", toggle);
+    li.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggle();
+      }
+    });
+    editAssigneeOptions.appendChild(li);
+  });
+}
+
+/* Subtasks im Edit */
+const editSubtaskInput = document.getElementById("edit-subtask-input");
+const editSubtaskAddBtn = document.getElementById("edit-subtask-add");
+const editSubtaskList = document.getElementById("edit-subtask-list");
+let editSubtasks = [];
+
+editSubtaskAddBtn?.addEventListener("click", () => addEditSubtask());
+editSubtaskInput?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    addEditSubtask();
+  }
+});
+function addEditSubtask() {
+  const val = (editSubtaskInput.value || "").trim();
+  if (!val) return;
+  editSubtasks.push({ text: val, done: false });
+  editSubtaskInput.value = "";
+  renderEditSubtasks();
+}
+function renderEditSubtasks() {
+  editSubtaskList.innerHTML = "";
+  editSubtasks.forEach((st, i) => {
+    const row = document.createElement("div");
+    row.className = "subtask-edit-row";
+    row.innerHTML = `
+      <input type="checkbox" ${st.done ? "checked" : ""} data-i="${i}" />
+      <input type="text" value="${escapeHtml(st.text)}" data-i="${i}" />
+      <button class="icon-btn" title="Löschen" data-i="${i}">🗑️</button>
+    `;
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    const textInput = row.querySelector('input[type="text"]');
+    const delBtn = row.querySelector("button");
+
+    checkbox.addEventListener("change", () => {
+      editSubtasks[i].done = checkbox.checked;
+    });
+    textInput.addEventListener("input", () => {
+      editSubtasks[i].text = textInput.value;
+    });
+    delBtn.addEventListener("click", () => {
+      editSubtasks.splice(i, 1);
+      renderEditSubtasks();
+    });
+
+    editSubtaskList.appendChild(row);
+  });
+}
+
+/* Öffnen / Schließen / Speichern */
+detailEditBtn?.addEventListener("click", openEditOverlay);
+editCloseBtn?.addEventListener("click", closeEditOverlay);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !editSection.classList.contains("d_none"))
+    closeEditOverlay();
+});
+editOkBtn?.addEventListener("click", saveEditOverlay);
+
+function openEditOverlay() {
+  if (!currentDetail?.task) return;
+  const task = currentDetail.task;
+
+  editTitle.value = task.title || "";
+  editDesc.value = task.secondline || "";
+
+  const createdAtStr =
+    task.createdAt || task.created || task.created_at || null;
+  const createdAt = createdAtStr ? new Date(createdAtStr) : new Date();
+  const minDateStr = toISODateOnly(createdAt);
+  editDate.min = minDateStr;
+  const hint = document.getElementById("edit-date-hint");
+  if (hint) hint.textContent = `Earliest: ${minDateStr}`;
+
+  if (task.deadline) {
+    const d = new Date(task.deadline);
+    editDate.value = isNaN(d) ? "" : toISODateOnly(d);
+  } else {
+    editDate.value = "";
+  }
+
+  setEditPriority((task.priority || "medium").toLowerCase());
+
+  selectedAssigneeIds = normalizeAssigneesToIds(task.assignedContact);
+  renderEditAssigneeChips();
+  renderEditAssigneeOptions();
+
+  editSubtasks = normalizeSubtasks(task).map((s) => ({
+    text: s.text,
+    done: !!s.done,
+  }));
+  renderEditSubtasks();
+
+  document.getElementById("task-detail-overlay")?.classList.add("d_none");
+  editSection.classList.remove("d_none");
+  document.body.classList.add("board-overlay-open");
+}
+
+function closeEditOverlay() {
+  editSection.classList.add("d_none");
+  document.body.classList.remove("board-overlay-open");
+}
+
+async function saveEditOverlay() {
+  if (!currentDetail?.id || !currentDetail?.col) return;
+
+  const title = editTitle.value.trim();
+  const secondline = editDesc.value.trim();
+
+  const task = currentDetail.task;
+  const createdAtStr =
+    task.createdAt || task.created || task.created_at || null;
+  const minDate = createdAtStr ? new Date(createdAtStr) : new Date();
+  minDate.setHours(0, 0, 0, 0);
+  let deadlineISO = "";
+  if (editDate.value) {
+    const chosen = new Date(editDate.value);
+    chosen.setHours(0, 0, 0, 0);
+    if (chosen < minDate) {
+      alert(
+        `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(
+          minDate
+        )}).`
+      );
+      return;
+    }
+    deadlineISO = new Date(
+      chosen.getTime() - chosen.getTimezoneOffset() * 60000
+    ).toISOString();
+  }
+
+  const priority = editPriority;
+  const assignedContact = [...selectedAssigneeIds];
+
+  const cleanedSubtasks = editSubtasks
+    .map((s) => ({ text: (s.text || "").trim(), done: !!s.done }))
+    .filter((s) => s.text.length > 0);
+  const doneCount = cleanedSubtasks.filter((s) => s.done).length;
+  const totalCount = cleanedSubtasks.length;
+
+  const updatedTask = {
+    ...task,
+    title,
+    secondline,
+    deadline: deadlineISO,
+    priority,
+    assignedContact,
+    subtasks: cleanedSubtasks,
+    subtasksCompleted: doneCount,
+    subtasksTotal: totalCount,
+    createdAt:
+      task.createdAt ||
+      task.created ||
+      task.created_at ||
+      new Date().toISOString(),
+  };
+
+  await dbApi.updateData(TASKS_ROOT, {
+    [`${currentDetail.col}/${currentDetail.id}`]: updatedTask,
+  });
+
+  currentDetail.task = {
+    ...updatedTask,
+    assignedDetailed: assignedContact
+      .map((id) => contactsById.get(id))
+      .filter(Boolean),
+  };
+
+  renderDetail(currentDetail.task);
+  editSection.classList.add("d_none");
+  document.getElementById("task-detail-overlay")?.classList.remove("d_none");
+  render();
 }

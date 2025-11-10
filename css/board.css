@@ -456,6 +456,55 @@
   border: none;
 }
 
+.task-overlay-edit input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+}
+.task-overlay-edit textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+  resize: vertical;
+  max-height: 80px;
+}
+.task-overlay-edit p {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.task-overlay-edit-due-date {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-overlay-edit-priority {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.task-overlay-edit-priority button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+  background: none;
+}
+.task-overlay-edit-assigned-to {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-overlay-edit-assigned-to-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+  cursor: pointer;
+}
+
 body.board-overlay-open .content {
   transition: filter 160ms ease;
   pointer-events: none;
