@@ -106,80 +106,19 @@ function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
 }
-
-function renderBoardSummary(board) {
-  if (!board) {
-    setText("summary-task-todo-number", 0);
-    setText("summary-task-done-number", 0);
-    setText("allTasks", 0);
-    setText("inProgress", 0);
-    setText("awaitingFeedback", 0);
-    setText("urgent-count", 0);
-    setText("next-deadline", "–");
-    return;
-  }
-
-  const { todo, inProgress, done, awaiting } = normalizeBoard(board);
-  const allTasks = [...todo, ...inProgress, ...done, ...awaiting];
-
-  // Spaltenzähler
-  setText("summary-task-todo-number", todo.length);
-  setText("summary-task-done-number", done.length);
-  setText("inProgress", inProgress.length);
-  setText("awaitingFeedback", awaiting.length);
-  setText("allTasks", allTasks.length);
-
-  // Urgent (über alle Spalten)
-  const urgentCount = allTasks.filter(isUrgent).length;
-  setText("urgent-count", urgentCount);
-
-  // Nächste zukünftige Deadline
-  const now = new Date();
-  const futureDueDates = allTasks
-    .map(parseDueDate)
-    .filter((d) => d && d.getTime() > now.getTime())
-    .sort((a, b) => a - b);
-
-  setText(
-    "next-deadline",
-    futureDueDates.length ? formatDateDE(futureDueDates[0]) : "–"
-  );
+async function loadTasksInProgress() {
+  let inProgressRef = document.getElementById("inProgress");
+  const board = await dbApi.getData("board");
+  const inprogressRaw = board.inprogress || board.inProgress;
+  const taskInProgress = toArray(inprogressRaw);
+  inProgressRef.textContent = taskInProgress.length;
 }
-
-let unsubscribeBoard = null;
-
-function startBoardLiveSubscription() {
-  unsubscribeBoard = window.dbApi.onData("board", (data) => {
-    renderBoardSummary(data);
-  });
-}
-
-function stopBoardLiveSubscription() {
-  try {
-    if (typeof unsubscribeBoard === "function") {
-      unsubscribeBoard();
-      unsubscribeBoard = null;
-    }
-  } catch (e) {
-    console.warn("Unsubscribe board listener failed:", e);
-  }
-}
-
-function initNavigation() {
-  const links = {
-    "add-task": "add_task.html",
-    board: "board.html",
-    contacts: "contacts.html",
-    summary: "index.html",
-  };
-
-  Object.entries(links).forEach(([id, href]) => {
-    const btn = document.getElementById(id);
-    if (btn) btn.addEventListener("click", () => (window.location.href = href));
-  });
-
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+async function loadTasksAwaitingFeedback() {
+  let awaitingRef = document.getElementById("awaitingFeedback");
+  const board = await dbApi.getData("board");
+  const awaitingRaw = board.await || board.await;
+  const taskAwaitingFeedback = toArray(awaitingRaw);
+  awaitingRef.textContent = taskAwaitingFeedback.length;
 }
 
 async function init() {
@@ -195,6 +134,7 @@ function cleanup() {
   stopBoardLiveSubscription();
 }
 
+// === Click auf Tasks führt zur Board-Seite ===
 addEventListener("click", async (event) => {
   if (
     event.target.closest(

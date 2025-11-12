@@ -1,11 +1,18 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
+/* ===== DEBUG START ===== */
+console.log("main.js läuft ✅");
+/* ===== DEBUG END ===== */
+
 addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
   }
 });
 
+/* ===========================
+   Benutzername laden & Initialen anzeigen
+=========================== */
 async function loadNameHeader() {
   const userNameRef = document.getElementById("dropbtn");
 
@@ -31,11 +38,8 @@ function nameToInitials(displayName, email) {
 
   if (n) {
     const parts = n.split(/\s+/).filter(Boolean);
-
     if (parts.length >= 2) {
-      return (parts[0][0] + parts[parts.length - 1][0]).toLocaleUpperCase(
-        "de-DE"
-      );
+      return (parts[0][0] + parts[parts.length - 1][0]).toLocaleUpperCase("de-DE");
     } else {
       return n.slice(0, 2).toLocaleUpperCase("de-DE");
     }
@@ -53,14 +57,17 @@ function nameToInitials(displayName, email) {
   return "G";
 }
 
+/* ===========================
+   Aufgaben-Handling
+=========================== */
 function delTask(id) {
   dbApi.deleteData("/board" + findColumnOfTask(id) + "/" + id);
 }
+window.delTask = delTask;
 
-addEventListener("load", async () => {
-  loadNameHeader();
-});
-
+/* ===========================
+   Navigation
+=========================== */
 addEventListener("click", async (event) => {
   if (event.target.closest("#summary")) {
     window.location.href = "./index.html";
@@ -76,28 +83,60 @@ addEventListener("click", async (event) => {
   }
 });
 
-window.delTask = delTask;
+addEventListener("load", async () => {
+  loadNameHeader();
+});
 
-// === Dropdown Toggle (oben rechts "G"-Button) ===
+/* ===========================
+   Dropdown Toggle ("G"-Button)
+=========================== */
 document.addEventListener("DOMContentLoaded", () => {
   const dropBtn = document.getElementById("dropbtn");
   const dropdown = document.querySelector(".dropdown-content");
 
-  if (!dropBtn || !dropdown) return;
+  console.log("dropBtn gefunden:", !!dropBtn);
+  console.log("dropdown gefunden:", !!dropdown);
+
+  if (!dropBtn || !dropdown) {
+    console.warn("⚠️ Dropdown-Elemente nicht gefunden – HTML prüfen.");
+    return;
+  }
 
   dropBtn.style.cursor = "pointer";
+  let isOpen = false; // Kontroll-Flag
 
+  // Klick auf G-Button
   dropBtn.addEventListener("click", (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    dropdown.classList.toggle("show");
+    console.log("G-Button geklickt ✅");
+
+    isOpen = !isOpen;
+    dropdown.classList.toggle("show", isOpen);
   });
 
-  // Klick außerhalb schließt das Dropdown
+  // Klick außerhalb schließt Dropdown
   document.addEventListener("click", (e) => {
-    if (!dropdown.contains(e.target) && e.target !== dropBtn) {
+    const clickedInside = dropBtn.contains(e.target) || dropdown.contains(e.target);
+    if (!clickedInside && isOpen) {
       dropdown.classList.remove("show");
+      isOpen = false;
     }
   });
+
+  // Schließen bei Fenster-Resize
+  window.addEventListener("resize", () => {
+    dropdown.classList.remove("show");
+    isOpen = false;
+  });
+});
+
+/* ===== SAFETY CHECK ===== */
+window.addEventListener("load", () => {
+  const btn = document.getElementById("dropbtn");
+  if (!btn) {
+    console.error("❌ Kein #dropbtn im DOM – HTML prüfen oder Script zu früh geladen!");
+  }
 });
 
 function showToast(message, isError = false) {
