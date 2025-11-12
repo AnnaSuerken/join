@@ -12,7 +12,6 @@
 
 /* MAIN LAYOUT unter dem Header */
 .contacts-main {
-  flex: 1;
   display: flex;
   background-color: #f6f7f8;
   height: calc(100vh - 96px);
