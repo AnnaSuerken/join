@@ -5,6 +5,9 @@ import {
   signOut,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
+/* ------------------------------------------
+   🔐 Auth-Guard & Logout
+------------------------------------------- */
 function requireAuth({ redirectTo = "/login.html" } = {}) {
   return new Promise((resolve) => {
     onAuthStateChanged(window.auth, (user) => {
@@ -24,6 +27,9 @@ async function handleLogout() {
   }
 }
 
+/* ------------------------------------------
+   🕒 Begrüßung nach Tageszeit
+------------------------------------------- */
 function getGreeting(now = new Date()) {
   const h = now.getHours();
   if (h >= 5 && h < 12) return "Good Morning,";
@@ -49,6 +55,9 @@ function scheduleGreetingRefresh() {
   }, Math.max(msToNextHour, 0));
 }
 
+/* ------------------------------------------
+   👤 Benutzername (live)
+------------------------------------------- */
 function initLiveName() {
   const userNameRef = document.getElementById("summary-name");
   onAuthStateChanged(window.auth, async (user) => {
@@ -68,6 +77,9 @@ function initLiveName() {
   });
 }
 
+/* ------------------------------------------
+   🧠 Helpers
+------------------------------------------- */
 function toArray(x) {
   if (Array.isArray(x)) return x;
   if (x && typeof x === "object") return Object.values(x);
@@ -84,6 +96,7 @@ function normalizeBoard(board) {
 }
 
 function parseDueDate(task) {
+  // Passe Feldnamen bei Bedarf an
   const raw = task?.dueDate || task?.deadline || task?.date;
   const d = raw ? new Date(raw) : null;
   return d && !isNaN(+d) ? d : null;
@@ -106,27 +119,101 @@ function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
 }
-async function loadTasksInProgress() {
-  let inProgressRef = document.getElementById("inProgress");
-  const board = await dbApi.getData("board");
-  const inprogressRaw = board.inprogress || board.inProgress;
-  const taskInProgress = toArray(inprogressRaw);
-  inProgressRef.textContent = taskInProgress.length;
-}
-async function loadTasksAwaitingFeedback() {
-  let awaitingRef = document.getElementById("awaitingFeedback");
-  const board = await dbApi.getData("board");
-  const awaitingRaw = board.await || board.await;
-  const taskAwaitingFeedback = toArray(awaitingRaw);
-  awaitingRef.textContent = taskAwaitingFeedback.length;
+
+/* ------------------------------------------
+   📊 Rendering der Board-Zusammenfassung
+------------------------------------------- */
+function renderBoardSummary(board) {
+  if (!board) {
+    setText("summary-task-todo-number", 0);
+    setText("summary-task-done-number", 0);
+    setText("allTasks", 0);
+    setText("inProgress", 0);
+    setText("awaitingFeedback", 0);
+    setText("urgent-count", 0);
+    setText("next-deadline", "–");
+    return;
+  }
+
+  const { todo, inProgress, done, awaiting } = normalizeBoard(board);
+  const allTasks = [...todo, ...inProgress, ...done, ...awaiting];
+
+  // Spaltenzähler
+  setText("summary-task-todo-number", todo.length);
+  setText("summary-task-done-number", done.length);
+  setText("inProgress", inProgress.length);
+  setText("awaitingFeedback", awaiting.length);
+  setText("allTasks", allTasks.length);
+
+  // Urgent (über alle Spalten)
+  const urgentCount = allTasks.filter(isUrgent).length;
+  setText("urgent-count", urgentCount);
+
+  // Nächste zukünftige Deadline
+  const now = new Date();
+  const futureDueDates = allTasks
+    .map(parseDueDate)
+    .filter((d) => d && d.getTime() > now.getTime())
+    .sort((a, b) => a - b);
+
+  setText("next-deadline", futureDueDates.length ? formatDateDE(futureDueDates[0]) : "–");
 }
 
+/* ------------------------------------------
+   🔄 Live-Subscription (onValue)
+------------------------------------------- */
+let unsubscribeBoard = null;
+
+function startBoardLiveSubscription() {
+  // dbApi.onData gibt eine Unsubscribe-Funktion zurück
+  unsubscribeBoard = window.dbApi.onData("board", (data) => {
+    renderBoardSummary(data);
+  });
+}
+
+function stopBoardLiveSubscription() {
+  try {
+    if (typeof unsubscribeBoard === "function") {
+      unsubscribeBoard();
+      unsubscribeBoard = null;
+    }
+  } catch (e) {
+    console.warn("Unsubscribe board listener failed:", e);
+  }
+}
+
+/* ------------------------------------------
+   🧭 Navigation
+------------------------------------------- */
+function initNavigation() {
+  const links = {
+    "add-task": "add_task.html",
+    board: "board.html",
+    contacts: "contacts.html",
+    summary: "index.html",
+  };
+
+  Object.entries(links).forEach(([id, href]) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", () => (window.location.href = href));
+  });
+
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+}
+
+/* ------------------------------------------
+   🚀 Init & Cleanup
+------------------------------------------- */
 async function init() {
   await requireAuth({ redirectTo: "/login.html" });
   initNavigation();
+
   setGreeting();
   scheduleGreetingRefresh();
   initLiveName();
+
+  // 🔴 Live-Updates starten
   startBoardLiveSubscription();
 }
 
@@ -134,7 +221,9 @@ function cleanup() {
   stopBoardLiveSubscription();
 }
 
-// === Click auf Tasks führt zur Board-Seite ===
+/* ------------------------------------------
+   🔗 Kacheln -> Board
+------------------------------------------- */
 addEventListener("click", async (event) => {
   if (
     event.target.closest(

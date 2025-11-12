@@ -1,7 +1,3 @@
-/* ============================== */
-/* ========== BASE STYLES ======= */
-/* ============================== */
-
 .main-summary {
   height: 100%;
   display: flex;
@@ -14,9 +10,6 @@
   display: flex;
   align-items: center;
   margin-bottom: 60px;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
 }
 
 .summary-title h1 {
@@ -29,9 +22,6 @@
   font-size: 24px;
   font-weight: 400;
   color: #757575;
-  white-space: normal;
-  word-break: break-word;
-  text-align: center;
 }
 
 .summary-slash {
@@ -46,58 +36,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .summary-tasks {
   display: flex;
   flex-wrap: wrap;
   width: 464px;
-  max-width: 100%;
-  justify-content: center;
 }
 
-.summary-task-medium,
-.summary-task-big,
-.summary-task-small {
+.summary-task-medium {
   background-color: #ffffff;
   border-radius: 16px;
+  width: 200px;
+  height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 16px;
   margin: 16px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.summary-task-medium {
-  width: 200px;
-  height: 150px;
-}
-
-.summary-task-big {
-  width: 432px;
-  height: 150px;
-}
-
-.summary-task-small {
-  width: 122px;
-  height: 150px;
-  flex-direction: column;
-}
-
-.summary-task-medium:hover,
-.summary-task-big:hover,
-.summary-task-small:hover {
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  transform: scale(1.029);
-  background-color: #293647;
-  color: white;
-  cursor: pointer;
 }
 
 .summary-task-medium img {
@@ -106,8 +62,31 @@
   margin-right: 12px;
 }
 
+.summary-task-medium:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform: scale(1.029);
+  background-color: #293647;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.summary-task-medium:hover p {
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.summary-task-medium:hover img.penIcon {
+  content: url("../assets/icons/pen_white.svg");
+}
+
+.summary-task-medium:hover img.checkIcon {
+  content: url("../assets/icons/check_white.svg");
+}
+
 .summary-task-info {
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
 }
@@ -136,285 +115,121 @@
   color: #29abe2;
 }
 
-/* ============================== */
-/* ====== HOVER INTERACTIONS ==== */
-/* ============================== */
-
-.summary-task-medium:hover img.penIcon {
-  content: url("../assets/icons/pen_white.svg");
+.summary-task-big {
+  width: 432px;
+  height: 150px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  margin: 16px;
 }
 
-.summary-task-medium:hover img.checkIcon {
-  content: url("../assets/icons/check_white.svg");
+.summary-task-big:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform: scale(1.029);
+  background-color: #293647;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.summary-task-medium:hover p,
-.summary-task-big:hover p,
+.summary-task-big-left {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.summary-task-big-left slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-task-big-split {
+  height: 90%;
+  width: 3px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #a8a8a8;
+  border-radius: 12px;
+}
+
+.summary-task-big-rigth {
+  width: 50%;
+  display: flex;
+  justify-content: left;
+}
+
+.summary-task-big-right h3 {
+  margin-bottom: 12px;
+}
+
+.summary-task-small {
+  width: 122px;
+  height: 150px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 16px;
+  margin: 16px;
+  text-align: center;
+}
+
+.summary-task-small:hover {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  transform: scale(1.029);
+  background-color: #293647;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .summary-task-small:hover p {
   color: white;
   transition: all 0.3s ease;
 }
 
 /* ============================== */
-/* ===== HEADER REWORK JOIN ===== */
+/* ========== RESPONSIVE ========= */
 /* ============================== */
 
-.header-right {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  box-sizing: border-box;
-  background-color: #f6f7f8;
-  border-bottom: 1px solid #dcdcdc;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.join-logo {
-  height: 36px;
-  width: auto;
-  cursor: pointer;
-}
-
-.header-content-right {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.header-content-right img {
-  height: 28px;
-  width: 28px;
-  cursor: pointer;
-}
-
-.dropbtn {
-  background-color: #2a3647;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #2a3647;
-  min-width: 160px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 8px 0;
-  z-index: 10;
-}
-
-.dropdown-content a {
-  color: #ffffff;
-  padding: 10px 16px;
-  text-decoration: none;
-  display: block;
-  font-size: 14px;
-  transition: background-color 0.2s;
-}
-
-.dropdown-content a:hover {
-  background-color: #1e2734;
-}
-
-/* ============================== */
-/* ========= RESPONSIVE ========= */
-/* ============================== */
-
-@media (max-width: 1200px) {
-  .summary-title h1 {
-    font-size: 40px;
+/* Tablets quer / kleine Laptops */
+@media (max-width: 1024px) {
+  .main-summary {
+    padding: 40px 20px;
+    justify-content: flex-start;
   }
-  .summary-title p {
-    font-size: 20px;
+
+  .summary-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-name {
+    margin-left: 0;
+    margin-top: 32px;
+    text-align: center;
   }
 }
 
-@media (max-width: 900px) {
-  .summary-title h1 {
-    font-size: 32px;
-  }
-  .summary-title p {
-    font-size: 18px;
-  }
-  .summary-task-medium,
-  .summary-task-big {
-    width: 80%;
-  }
-}
-
-/* ============================== */
-/* ===== MOBILE / TABLETS ======= */
-/* ============================== */
-
+/* Sidebar bleibt bis 820px sichtbar */
 @media (max-width: 820px) {
-  html,
-  body {
-    width: 100% !important;
-    overflow-x: hidden !important;
-    margin: 0;
-    padding: 0;
-  }
-
-  .content {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow-x: hidden !important;
-    box-sizing: border-box;
-  }
-
   .content-left {
     display: none !important;
-    width: 0 !important;
   }
 
   .content-right {
     width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 
-  .tool-name,
-  .header-title,
-  .header-text,
-  .help-icon,
-  .question-mark,
-  .header-help {
-    display: none !important;
-  }
-
-  .header-right {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 12px 16px !important;
-    box-sizing: border-box;
-  }
-
-  .join-logo {
-    height: 28px !important;
-  }
-
-  .dropbtn {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 14px !important;
-  }
-
-  .dropdown-content {
-    right: 0 !important;
-    left: auto !important;
-    transform: none !important;
-  }
-
-  .main-summary {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0 16px 140px 16px !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .summary-wrapper,
-  .summary-tasks {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-wrap: nowrap !important;
-    margin: 0 auto !important;
-    box-sizing: border-box !important;
-  }
-
-  .summary-task-medium,
-  .summary-task-big,
-  .summary-task-small {
-    width: 90% !important;
-    max-width: 420px !important;
-    height: auto !important;
-    margin: 10px 0 !important;
-  }
-
-  .summary-task-big {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    height: auto !important;
-    padding: 20px 10px !important;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-
-  .summary-task-big-left,
-  .summary-task-big-right {
-    width: 100% !important;
-    justify-content: center !important;
-  }
-
-  .summary-task-big-right h3,
-  .summary-task-big-right p {
-    text-align: center !important;
-    white-space: normal !important;
-  }
-
-  .summary-task-big-split {
-    display: none !important;
-  }
-
-  .summary-title {
-    flex-direction: column !important;
-    text-align: center !important;
-    margin-bottom: 24px !important;
-  }
-
-  .summary-slash {
-    display: none !important;
-  }
-
-  .summary-title h1 {
-    font-size: 32px !important;
-  }
-
-  .summary-title p {
-    font-size: 18px !important;
-  }
-
-  .summary-name {
-    margin-top: 24px !important;
-    text-align: center !important;
-  }
-
+  /* Mobile Bottom Navigation */
   .nav-bar-mobile {
     position: fixed;
     bottom: 0;
@@ -448,198 +263,57 @@
   .nav-bar-mobile button.active {
     color: #29abe2;
   }
+
+  .main-summary {
+    padding-bottom: 100px;
+  }
 }
 
-/* Smartphones Hochformat bis 480px */
+/* Smartphones */
 @media (max-width: 480px) {
-  .summary-task-medium,
-  .summary-task-big,
-  .summary-task-small {
-    width: 95% !important;
-    max-width: 360px !important;
+  .summary-title {
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .summary-slash {
+    display: none;
   }
 
   .summary-title h1 {
-    font-size: 28px !important;
+    font-size: 28px;
   }
 
   .summary-title p {
-    font-size: 16px !important;
+    font-size: 16px;
+  }
+
+  .summary-tasks {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-task-medium,
+  .summary-task-big,
+  .summary-task-small {
+    width: 90%;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .summary-name {
+    margin-left: 0;
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .summary-name h3 {
+    font-size: 18px;
+  }
+
+  .summary-name h2 {
+    font-size: 24px;
   }
 }
-
-/* Header-Fix für sehr kleine Screens */
-@media (max-width: 360px) {
-  .header-right {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 4px 8px !important;
-    gap: 0 !important;
-  }
-
-  .join-logo {
-    margin-right: auto !important;
-  }
-
-  .dropbtn {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    min-height: 32px !important;
-    border-radius: 50%;
-  }
-
-  .dropdown-content {
-    right: 0 !important;
-    left: auto !important;
-    transform: none !important;
-  }
-
-  .header-right * {
-    white-space: nowrap !important;
-  }
-
-  .nav-bar-mobile button {
-    font-size: 12px !important;
-  }
-}
-
-/* Mini-Smartphones bis 325px */
-@media (max-width: 325px) {
-  .tool-name {
-    display: none !important;
-  }
-
-  .header-right {
-    padding: 6px !important;
-  }
-
-  .nav-bar-mobile {
-    height: 64px !important;
-  }
-
-  .nav-bar-mobile button {
-    font-size: 11px !important;
-  }
-
-  .nav-bar-mobile button img {
-    width: 18px !important;
-    height: 18px !important;
-  }
-}
-
-/* Desktop: Mobile-Navigation ausblenden */
-@media (min-width: 821px) {
-  .nav-bar-mobile {
-    display: none !important;
-  }
-}
-
-/* ============================== */
-/* === HEADER VISIBILITY FIX ==== */
-/* ============================== */
-
-@media (min-width: 821px) {
-  .join-logo {
-    display: none !important;
-  }
-
-  .header-content-right a[href="./help.html"] {
-    display: flex !important;
-  }
-}
-
-@media (max-width: 820px) {
-  .join-logo {
-    display: flex !important;
-  }
-
-  .header-content-right a[href="./help.html"] {
-    display: none !important;
-  }
-}
-
-/* Kein horizontales Scrollen */
-body {
-  overflow-x: hidden !important;
-}
-
-/* ============================== */
-/* === DROPDOWN ANIMATION ======= */
-/* ============================== */
-
-.dropdown-content {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.dropdown-content.show {
-  display: block !important;
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* Hover nur auf Desktop aktivieren */
-@media (min-width: 821px) {
-  /* Hover nur aktiv, wenn keine .show-Klasse existiert */
-  .dropdown:hover .dropdown-content:not(.show) {
-    display: block !important;
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-}
-
-
-/* Hover auf Mobile ausschalten */
-@media (max-width: 820px) {
-  .dropdown:hover .dropdown-content {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    transform: translateY(-10px) !important;
-    pointer-events: none !important;
-  }
-
-  /* ✅ FIX: Klick auf Mobile aktivieren */
-  .dropdown-content.show {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-    pointer-events: auto !important;
-  }
-}
-/* ============================== */
-/* === FINAL DROPDOWN FIX ======= */
-/* ============================== */
-
-.dropdown-content {
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.dropdown-content.show {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
-  pointer-events: auto !important;
-  position: absolute !important;
-  right: 0 !important;
-  top: 48px !important;
-  z-index: 99999 !important;
-  background: #2a3647 !important;
-}
-
