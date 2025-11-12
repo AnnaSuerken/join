@@ -14,7 +14,6 @@ import {
 
 const form = document.getElementById("login-form");
 const guestBtn = document.getElementById("guest-login-btn");
-const statusBox = document.getElementById("status");
 
 function setStatus(msg, isError = false) {
   statusBox.style.display = "flex";
@@ -27,16 +26,16 @@ form?.addEventListener("submit", async (e) => {
   const email = e.target.email.value.trim();
   const password = e.target.password.value;
 
-  setStatus("Anmeldung läuft");
+  showToast("Anmeldung läuft");
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    setStatus("Erfolgreich angemeldet.");
+    showToast("Erfolgreich angemeldet.");
     window.location.href = "/index.html";
   } catch (err) {
     console.error(err);
     await setTimeout(() => {
-      setStatus(
+      showToast(
         "Login fehlgeschlagen überprüfe deine Email oder Passwort",
         true
       );
@@ -46,7 +45,7 @@ form?.addEventListener("submit", async (e) => {
 });
 
 guestBtn?.addEventListener("click", async () => {
-  setStatus("Gast-Anmeldung läuft...");
+  showToast("Gast-Anmeldung läuft...");
   try {
     const cred = await signInAnonymously(auth);
     await update(ref(db, `guests/${cred.user.uid}`), {
@@ -54,11 +53,11 @@ guestBtn?.addEventListener("click", async () => {
       lastLoginAt: serverTimestamp(),
       isAnonymous: true,
     });
-    setStatus("Als Gast angemeldet.");
+    showToast("Als Gast angemeldet.");
     window.location.href = "/index.html";
   } catch (err) {
     console.error(err);
-    setStatus(err.message || "Gast-Login fehlgeschlagen.", true);
+    showToast("Gast-Login fehlgeschlagen.", true);
   }
 });
 

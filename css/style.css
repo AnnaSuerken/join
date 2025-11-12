@@ -122,13 +122,6 @@
   display: inline-block;
 }
 
-/*
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-*/
-
 .dropdown-content {
   display: none;
   position: absolute;
@@ -163,18 +156,13 @@
   flex-direction: column;
   gap: 6px;
   width: 100%;
+  transition: all 0.5s ease;
 }
 
 .dropdown-content a:hover {
-  background-color: #29abe2;
-  border-radius: 12px;
-
   background-color: #ddd;
   color: #2a3647;
-}
-
-.dropdown-content a:hover {
-  background-color: #ddd;
+  cursor: pointer;
 }
 
 .header-right {
@@ -284,6 +272,26 @@
 
 .dropdown-content.show {
   display: block;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #2a3647;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 1000;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* === Scrollleisten ausblenden === */

@@ -12,7 +12,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 const form = document.getElementById("register-form");
-const statusBox = document.getElementById("status");
 const password = document.getElementById("password");
 const password2 = document.getElementById("password2");
 const checkBox = document.getElementById("checkbox");
@@ -27,7 +26,7 @@ function checkForm() {
   if ((password.value === password2.value) & checkBox.checked) {
     return true;
   } else {
-    setStatus(
+    showToast(
       "Passwörter stimmen nicht überein oder AGB nicht akzeptiert",
       true
     );
@@ -41,7 +40,7 @@ signupbutton?.addEventListener("click", async (e) => {
   const displayName = document.getElementById("displayName").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  setStatus("Registrierung läuft");
+  showToast("Registrierung läuft");
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, { displayName });
@@ -54,13 +53,13 @@ signupbutton?.addEventListener("click", async (e) => {
       provider: "password",
       isAnonymous: false,
     });
-    setStatus("Registrierung erfolgreich.");
+    showToast("Registrierung erfolgreich.");
     setTimeout(() => {
       window.location.href = "/login.html";
     }, 1500);
   } catch (err) {
     console.error(err);
-    setStatus(err.message || "Registrierung fehlgeschlagen.", true);
+    showToast(err.message || "Registrierung fehlgeschlagen.", true);
   }
 });
 

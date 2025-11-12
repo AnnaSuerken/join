@@ -354,19 +354,17 @@
   color: #ff8190;
 }
 
-.task-overlay-open {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  border-radius: 12px;
-  width: 390px;
-  padding: 24px;
-}
 .task-overlay-open-head {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.task-overlay-open-head-edit {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
   padding: 16px;
 }
@@ -392,7 +390,20 @@
   overflow-x: hidden;
 }
 
-/* Scrollbar Styling */
+.task-overlay-open-subtask-list {
+  overflow: scroll;
+}
+
+.task-overlay-open-subtask-list::-webkit-scrollbar {
+  width: 3px;
+}
+.task-overlay-open-subtask-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.task-overlay-open-subtask-list::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf;
+  border-radius: 3px;
+}
 .detail-assignees::-webkit-scrollbar {
   width: 3px;
 }
@@ -423,6 +434,15 @@
 }
 .task-overlay-open-priority {
   display: flex;
+}
+.task-overlay-open-priority img {
+  height: 24px;
+  width: 24px;
+  margin-left: 8px;
+}
+.task-overlay-open-priority span {
+  display: flex;
+  align-items: center;
 }
 .task-overlay-open-assigned-to {
   display: flex;
@@ -498,11 +518,116 @@
 }
 
 .task-overlay-edit-assigned-to-select {
-  width: 100%;
+  width: 100% !important;
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #d1d1d1;
   cursor: pointer;
+}
+.edit-assignee-options {
+  width: 100% !important;
+}
+.edit-assignee-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 140px;
+  overflow: scroll;
+  height: 30px;
+}
+.edit-assignee-list::-webkit-scrollbar {
+  width: 3px;
+}
+.edit-assignee-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.edit-assignee-list::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf;
+  border-radius: 3px;
+}
+
+/* kleine UX-Verbesserungen – frei anpassbar */
+.task-overlay-open {
+  transition: opacity 0.25s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+.task-overlay-open:not(.d_none) {
+  opacity: 1;
+  pointer-events: auto;
+}
+.board-overlay-open,
+.no-scroll {
+  overflow: hidden;
+}
+.assignee-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+}
+.assignee-chip-initials {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.75rem;
+}
+.assignee-options {
+  max-height: 220px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0;
+}
+.assignee-option {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.assignee-option[aria-selected="true"] {
+  background: #eef3ff;
+}
+.priority-btn.active {
+  outline: 2px solid #0038ff;
+}
+
+.subtask-edit-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+.subtask-edit-row input {
+  width: 100%;
+}
+.subtask-edit-row input[type="checkbox"] {
+  display: none;
+}
+
+.subtask-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.icon-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+.muted {
+  color: #666;
+  font-size: 0.9rem;
 }
 
 body.board-overlay-open .content {
@@ -520,15 +645,27 @@ body.board-overlay-open #task-detail-overlay {
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   border-radius: 12px;
-  width: 390px;
-  max-width: 92vw;
-  max-height: 90vh;
-  overflow: auto;
+  width: 30%;
+  height: 80%;
   padding: 24px;
-  z-index: 1000; /* über allem */
+  z-index: 1000;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
   transition: transform 200ms ease, opacity 200ms ease;
   opacity: 1;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.task-overlay-open::-webkit-scrollbar {
+  width: 6px;
+}
+.task-overlay-open::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf;
+  border-radius: 24px;
+  border: 2px solid transparent;
+}
+.task-overlay-open::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 24px;
 }
 
 .task-overlay-open-head button {
@@ -539,6 +676,17 @@ body.board-overlay-open #task-detail-overlay {
   cursor: pointer;
 }
 .task-overlay-open-head button:hover {
+  opacity: 0.7;
+}
+
+.task-overlay-open-head-edit button {
+  background: transparent;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+.task-overlay-open-head-edit button:hover {
   opacity: 0.7;
 }
 
@@ -561,7 +709,6 @@ body.board-overlay-open #task-detail-overlay {
   font-size: 14px;
 }
 
-/* Optional: dezenter Backdrop (wenn du zusätzlich zum Blur noch Abdunkeln willst) */
 body.board-overlay-open::before {
   content: "";
   position: fixed;
@@ -628,4 +775,31 @@ progress {
 .avatar-chip.more-chip {
   background: #e5e7eb;
   color: #111;
+}
+
+#edit-assignee-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+  max-height: 140px;
+  overflow: auto;
+}
+#edit-assignee-list::-webkit-scrollbar {
+  width: 3px;
+}
+#edit-assignee-list::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf;
+  border-radius: 3px;
+}
+#edit-assignee-list .remove-assignee {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #6b7280;
+}
+#edit-assignee-list .remove-assignee:hover {
+  color: #111827;
 }

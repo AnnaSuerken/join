@@ -579,53 +579,59 @@ function toggleEditAssigneeDropdown(open) {
   editAssigneeOptions.classList.toggle("d_none", !open);
   editAssigneeSelect.setAttribute("aria-expanded", String(open));
 }
+
+/* === NEU: Ausgewählte Kontakte im Edit wie im Detail-Overlay darstellen === */
 function renderEditAssigneeChips() {
   editAssigneeList.innerHTML = "";
   const contacts = selectedAssigneeIds
     .map((id) => contactsById.get(id))
     .filter(Boolean);
+  if (!contacts.length) return;
+
   contacts.forEach((c) => {
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "assignee-chip";
-    chip.title = `Entfernen: ${c.name}`;
-    chip.dataset.id = c.id;
-    chip.innerHTML = `
-      <span class="assignee-chip-initials" style="background:${escapeHtml(
-        c.color
-      )}">${escapeHtml(c.initials)}</span>
-      <span>${escapeHtml(c.name)}</span>
-      <span aria-hidden="true">✕</span>
+    const row = document.createElement("div");
+    row.className = "detail-user-row";
+    row.innerHTML = `
+      <div class="user" style="background:${escapeHtml(c.color || "#999")}">
+        ${escapeHtml(c.initials || "?")}
+      </div>
+      <p>${escapeHtml(c.name || "")}</p>
+      <button class="remove-assignee" title="Entfernen" data-id="${escapeHtml(
+        c.id
+      )}">✕</button>
     `;
-    chip.addEventListener("click", () => {
+    row.querySelector(".remove-assignee").addEventListener("click", () => {
       selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== c.id);
       renderEditAssigneeChips();
       renderEditAssigneeOptions();
     });
-    editAssigneeList.appendChild(chip);
+    editAssigneeList.appendChild(row);
   });
 }
+
+/* === NEU: Options-Popup wie Add Task (avatar + highlight + check) === */
 function renderEditAssigneeOptions() {
   editAssigneeOptions.innerHTML = "";
   const all = [...contactsById.values()].sort((a, b) =>
     a.name.localeCompare(b.name)
   );
+
   all.forEach((c) => {
+    const selected = selectedAssigneeIds.includes(c.id);
     const li = document.createElement("li");
     li.role = "option";
-    li.className = "assignee-option";
+    li.className = "assignee-option" + (selected ? " is-selected" : "");
     li.tabIndex = 0;
-    const selected = selectedAssigneeIds.includes(c.id);
-    li.setAttribute("aria-selected", String(selected));
     li.innerHTML = `
-      <span class="assignee-chip-initials" style="background:${escapeHtml(
+      <span class="assignee-avatar" style="background:${escapeHtml(
         c.color
       )}">${escapeHtml(c.initials)}</span>
       <span>${escapeHtml(c.name)}</span>
-      ${selected ? "<span>• ausgewählt</span>" : ""}
+      <span class="assignee-check">✔</span>
     `;
+
     const toggle = () => {
-      if (selectedAssigneeIds.includes(c.id)) {
+      if (selected) {
         selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== c.id);
       } else {
         selectedAssigneeIds.push(c.id);
@@ -633,6 +639,7 @@ function renderEditAssigneeOptions() {
       renderEditAssigneeChips();
       renderEditAssigneeOptions();
     };
+
     li.addEventListener("click", toggle);
     li.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
@@ -640,6 +647,7 @@ function renderEditAssigneeOptions() {
         toggle();
       }
     });
+
     editAssigneeOptions.appendChild(li);
   });
 }
@@ -672,7 +680,7 @@ function renderEditSubtasks() {
     row.innerHTML = `
       <input type="checkbox" ${st.done ? "checked" : ""} data-i="${i}" />
       <input type="text" value="${escapeHtml(st.text)}" data-i="${i}" />
-      <button class="icon-btn" title="Löschen" data-i="${i}">🗑️</button>
+      <button class="icon-btn" title="Löschen" data-i="${i}"><img src="./assets/icons/delete.svg" alt="" /></button>
     `;
     const checkbox = row.querySelector('input[type="checkbox"]');
     const textInput = row.querySelector('input[type="text"]');
@@ -730,6 +738,10 @@ function openEditOverlay() {
   renderEditAssigneeChips();
   renderEditAssigneeOptions();
 
+  // Optional: sichtbare Label-Aktualisierung wie Add Task
+  const lbl = editAssigneeSelect?.querySelector(".assignee-select-label");
+  if (lbl) lbl.textContent = "Select contacts to assign";
+
   editSubtasks = normalizeSubtasks(task).map((s) => ({
     text: s.text,
     done: !!s.done,
@@ -757,6 +769,7 @@ async function saveEditOverlay() {
     task.createdAt || task.created || task.created_at || null;
   const minDate = createdAtStr ? new Date(createdAtStr) : new Date();
   minDate.setHours(0, 0, 0, 0);
+
   let deadlineISO = "";
   if (editDate.value) {
     const chosen = new Date(editDate.value);

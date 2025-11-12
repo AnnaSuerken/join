@@ -15,6 +15,7 @@
 
     <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/login.js"></script>
+    <script type="module" src="./js/main.js"></script>
   </head>
   <body>
     <div class="loader">
@@ -33,7 +34,6 @@
         </div>
       </div>
     </header>
-    <div id="status" class="msg-box"></div>
     <main>
       <section class="sign-up-box">
         <h1 class="sign-up-box-h1">Login</h1>
@@ -91,5 +91,8 @@
         <a href="./legal-notice.html" class="footer-links">Legal notice</a>
       </div>
     </footer>
+        <!-- Toast / Erfolgsmeldung -->
+    <div id="toast" class="toast d_none" role="status" aria-live="polite">
+    </div>
   </body>
 </html>

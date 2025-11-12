@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Summary</title>
 
+    <!-- Styles -->
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/style.css" />
@@ -12,18 +13,13 @@
     <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/summary.js"></script>
     <script type="module" src="./js/main.js"></script>
-
-    <script type="module">
-      import { requireAuth } from "./js/authguard.js";
-      import { logout } from "./js/logout.js";
-      const user = await requireAuth({ redirectTo: "/login.html" });
-      export { logout };
-    </script>
   </head>
+
   <body>
     <div class="content">
       <section class="content-left">
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+
         <section class="nav-bar">
           <button class="nav-bar-button-active">
             <img src="./assets/icons/summary.svg" alt="" />
@@ -56,9 +52,9 @@
         <header class="header-right">
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
-            <a href="./help.html">
-              <img src="./assets/icons/help.svg" alt="Hilfe" />
-            </a>
+            <a href="./help.html"
+              ><img src="./assets/icons/help.svg" alt="Hilfe"
+            /></a>
             <div class="dropdown">
               <button id="dropbtn" class="dropbtn"></button>
               <div class="dropdown-content">
@@ -79,52 +75,58 @@
 
           <div class="summary-wrapper">
             <section class="summary-tasks">
+              <!-- To Do -->
               <section class="summary-task-medium">
                 <img class="penIcon" src="./assets/icons/pen.svg" alt="" />
                 <div class="summary-task-info">
-                  <h2 id="summary-task-todo-number">1</h2>
+                  <h2 id="summary-task-todo-number">0</h2>
                   <p>To Do</p>
                 </div>
               </section>
 
+              <!-- Done -->
               <section class="summary-task-medium">
                 <img class="checkIcon" src="./assets/icons/check.svg" alt="" />
                 <div class="summary-task-info">
-                  <h2 id="summary-task-done-number">1</h2>
+                  <h2 id="summary-task-done-number">0</h2>
                   <p>Done</p>
                 </div>
               </section>
 
+              <!-- Urgent + nächste Deadline -->
               <section class="summary-task-big">
                 <div class="summary-task-big-left">
                   <img src="./assets/icons/urgent.svg" alt="" />
                   <slot>
-                    <h2>1</h2>
+                    <h2 id="urgent-count">0</h2>
                     <p>Urgent</p>
                   </slot>
                 </div>
                 <div class="summary-task-big-split"></div>
                 <div class="summary-task-big-right">
-                  <h3>October 24, 2025</h3>
-                  <p>Upcomming Deadline</p>
+                  <h3 id="next-deadline">–</h3>
+                  <p>Upcoming Deadline</p>
                 </div>
               </section>
 
+              <!-- Alle Tasks -->
               <section class="summary-task-small">
-                <h2 id="allTasks"></h2>
+                <h2 id="allTasks">0</h2>
                 <p>
                   Tasks in <br />
                   Board
                 </p>
               </section>
 
+              <!-- In Progress -->
               <section class="summary-task-small">
-                <h2 id="inProgress"></h2>
+                <h2 id="inProgress">0</h2>
                 <p>Tasks in <br />Progress</p>
               </section>
 
+              <!-- Awaiting Feedback -->
               <section class="summary-task-small">
-                <h2 id="awaitingFeedback"></h2>
+                <h2 id="awaitingFeedback">0</h2>
                 <p>
                   Awaiting <br />
                   Feedback
@@ -141,24 +143,27 @@
       </section>
     </div>
 
-    <!-- 🔹 Mobile Bottom Navigation (nur sichtbar unter 820px) -->
+    <!-- 🔹 Mobile Bottom Navigation -->
     <nav class="nav-bar-mobile">
       <button id="summary">
-        <img src="./assets/icons/summary.svg" alt="">
+        <img src="./assets/icons/summary.svg" alt="" />
         Summary
       </button>
       <button id="add-task">
-        <img src="./assets/icons/addtask.svg" alt="">
+        <img src="./assets/icons/addtask.svg" alt="" />
         Add Task
       </button>
       <button id="board">
-        <img src="./assets/icons/board.svg" alt="">
+        <img src="./assets/icons/board.svg" alt="" />
         Board
       </button>
       <button id="contacts">
-        <img src="./assets/icons/contacts.svg" alt="">
+        <img src="./assets/icons/contacts.svg" alt="" />
         Contacts
       </button>
     </nav>
+        <!-- Toast / Erfolgsmeldung -->
+    <div id="toast" class="toast d_none" role="status" aria-live="polite">
+    </div>
   </body>
 </html>

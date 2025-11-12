@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Sign Up</title>
-    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/signup.css" />
     <link rel="stylesheet" href="./css/style.css" />
@@ -22,57 +26,67 @@
         />
       </div>
     </header>
-    <div id="status" class="msg-box">
-    </div>
+    <div id="status" class="msg-box"></div>
     <main>
       <section class="sign-up-box">
         <div class="sign-up-box-header">
-        <a href="./login.html"><img src="./assets/icons/return-arrow.svg" alt="return" class="return-arrow-btn"></a>
-        <h1 class="sign-up-box-h1">Sign up</h1>
+          <a href="./login.html"
+            ><img
+              src="./assets/icons/return-arrow.svg"
+              alt="return"
+              class="return-arrow-btn"
+          /></a>
+          <h1 class="sign-up-box-h1">Sign up</h1>
         </div>
         <div class="divider"></div>
-        
+
         <form id="register-form" action="">
           <div class="sign-up-input-container">
             <div class="input-wrapper">
-            <input
-              id="displayName"
-              type="text"
-              placeholder="Name"
-              class="signup-input"
-            /> <img src="./assets/icons/person.svg" alt="" class="input-icon">
+              <input
+                id="displayName"
+                type="text"
+                placeholder="Name"
+                class="signup-input"
+              />
+              <img src="./assets/icons/person.svg" alt="" class="input-icon" />
             </div>
             <div class="input-wrapper">
-            <input
-              id="email"
-              type="text"
-              placeholder="Email"
-              class="signup-input"
-            /> <img src="./assets/icons/mail.svg" alt="" class="input-icon">
+              <input
+                id="email"
+                type="text"
+                placeholder="Email"
+                class="signup-input"
+              />
+              <img src="./assets/icons/mail.svg" alt="" class="input-icon" />
             </div>
             <div class="input-wrapper">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Password"
-              class="signup-input"
-            /> <img src="./assets/icons/lock.svg" alt="" class="input-icon">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Password"
+                class="signup-input"
+              />
+              <img src="./assets/icons/lock.svg" alt="" class="input-icon" />
             </div>
             <div class="input-wrapper">
-            <input
-              id="password2"
-              name="password"
-              type="password"
-              placeholder="Confirm Password"
-              class="signup-input"
-            /> <img src="./assets/icons/lock.svg" alt="" class="input-icon">
+              <input
+                id="password2"
+                name="password"
+                type="password"
+                placeholder="Confirm Password"
+                class="signup-input"
+              />
+              <img src="./assets/icons/lock.svg" alt="" class="input-icon" />
             </div>
             <div class="checkbox-container">
               <input id="checkbox" type="checkbox" />I accept the
-              <a href="./privacy-policy.html" class="pivacy-policy-link">Privacy Policy</a>
+              <a href="./privacy-policy.html" class="pivacy-policy-link"
+                >Privacy Policy</a
+              >
             </div>
-          <button id="signupbutton"  class="blue-btn-bold">Sign up</button>
+            <button id="signupbutton" class="blue-btn-bold">Sign up</button>
           </div>
         </form>
       </section>
@@ -83,5 +97,7 @@
         <a href="./legal-notice.html" class="footer-links">Legal notice</a>
       </div>
     </footer>
+    <!-- Toast / Erfolgsmeldung -->
+    <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
   </body>
 </html>

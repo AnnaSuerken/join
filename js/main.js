@@ -99,3 +99,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+function showToast(message, isError = false) {
+  const toast = document.getElementById("toast");
+  if (!toast) {
+    alert(message);
+    return;
+  }
+  toast.textContent = message;
+  toast.style.background = isError ? "#C62828" : "#2a3647";
+  toast.classList.remove("d_none");
+  void toast.offsetWidth; // Reflow für Transition
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.classList.add("d_none"), 250);
+  }, 2000);
+}
+
+window.showToast = showToast;

@@ -25,96 +25,6 @@
       const user = await requireAuth({ redirectTo: "/login.html" });
       export { logout };
     </script>
-
-    <style>
-      /* kleine UX-Verbesserungen – frei anpassbar */
-      .task-overlay-open {
-        transition: opacity 0.25s ease;
-        opacity: 0;
-        pointer-events: none;
-      }
-      .task-overlay-open:not(.d_none) {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      .board-overlay-open,
-      .no-scroll {
-        overflow: hidden;
-      }
-
-      .assignee-list {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-      }
-      .assignee-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.25rem 0.5rem;
-        border: 1px solid #ccc;
-        border-radius: 999px;
-        cursor: pointer;
-        user-select: none;
-      }
-      .assignee-chip-initials {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 0.75rem;
-      }
-      .assignee-options {
-        max-height: 220px;
-        overflow: auto;
-        border: 1px solid #ddd;
-        border-radius: 0.5rem;
-        padding: 0.25rem 0;
-      }
-      .assignee-option {
-        padding: 0.5rem 0.75rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      .assignee-option[aria-selected="true"] {
-        background: #eef3ff;
-      }
-      .priority-btn.active {
-        outline: 2px solid #0038ff;
-      }
-
-      /* Subtasks (Edit) */
-      .subtask-edit-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.25rem 0;
-      }
-      .subtask-edit-row input[type="text"] {
-        flex: 1;
-      }
-      .subtask-toolbar {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-      }
-      .icon-btn {
-        border: 1px solid #ddd;
-        background: #fff;
-        border-radius: 0.5rem;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-      }
-      .muted {
-        color: #666;
-        font-size: 0.9rem;
-      }
-    </style>
   </head>
 
   <body>
@@ -229,7 +139,7 @@
             <div id="task-table-done" class="task-table-colum dropzone"></div>
           </section>
 
-          <!-- Add-Task-Overlay (unverändert, nur der Vollständigkeit halber) -->
+          <!-- Add-Task-Overlay -->
           <section class="task-overlay-section d_none" id="add-task-overlay">
             <div class="task-overlay">
               <div class="task-overlay-header">
@@ -443,9 +353,14 @@
             class="task-overlay-open task-overlay-edit d_none"
             id="task-edit-overlay"
           >
-            <div class="task-overlay-open-head">
+            <div class="task-overlay-open-head-edit">
               <button id="edit-close-btn" aria-label="Close">X</button>
             </div>
+
+            <form>
+
+              
+            </form>
 
             <div class="task-overlay-open-title">
               <p>Title</p>
@@ -458,13 +373,18 @@
             </div>
 
             <div class="task-overlay-open-footer">
-              <div class="task-overlay-open-due-date task-overlay-edit-due-date">
+              <div
+                class="task-overlay-open-due-date task-overlay-edit-due-date"
+              >
                 <p>Due Date:</p>
                 <input type="date" id="edit-date" />
                 <div class="muted" id="edit-date-hint"></div>
               </div>
 
-              <div class="task-overlay-open-priority task-overlay-edit-priority" id="edit-priority">
+              <div
+                class="task-overlay-open-priority task-overlay-edit-priority"
+                id="edit-priority"
+              >
                 <p>Priority:</p>
                 <div class="priority-container">
                   <button class="priority-btn" id="edit-prio-urgent">
@@ -481,7 +401,9 @@
                 </div>
               </div>
 
-              <div class="task-overlay-open-assigned-to task-overlay-edit-assigned-to">
+              <div
+                class="task-overlay-open-assigned-to task-overlay-edit-assigned-to"
+              >
                 <label>Assigned to</label>
                 <div
                   id="edit-assignee-select"
@@ -497,11 +419,11 @@
                 </div>
                 <ul
                   id="edit-assignee-options"
-                  class="assignee-options d_none"
+                  class="assignee-options edit-assignee-options d_none"
                   role="listbox"
                   aria-multiselectable="true"
                 ></ul>
-                <div id="edit-assignee-list" class="assignee-list"></div>
+                <div id="edit-assignee-list" class="edit-assignee-list"></div>
               </div>
             </div>
 
@@ -540,5 +462,7 @@
     </div>
 
     <script type="module" src="./js/board.js"></script>
+
+    <!-- Toast / Erfolgsmeldung (zweites Element entfernt, falls doppelt vorhanden) -->
   </body>
 </html>
