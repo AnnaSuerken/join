@@ -25,6 +25,10 @@
   flex-direction: column;
 }
 
+.help-btn:hover{
+  width: 23px;
+}
+
 .dropbtn {
   background-color: white;
   border-radius: 50%;

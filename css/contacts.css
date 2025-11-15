@@ -501,21 +501,6 @@
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* === HELP ICON HOVER === */
-.help-btn {
-  width: 34px;
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.2s ease;
-}
-
-.help-btn:hover {
-  background-color: #e9eef9;
-}
-
 /* === MOBILE === */
 @media (max-width: 820px) {
   .content-left {
