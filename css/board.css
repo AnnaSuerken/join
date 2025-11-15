@@ -106,13 +106,12 @@
   background-color: #ffffff;
   box-shadow:-1px 0px 6px 0px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  width: 100%;
   min-height: 225px;
   display: flex;
   flex-direction: column;
   padding: 12px;
   cursor: pointer;
-  margin-bottom: 16px;
+  margin: 16px;
 }
 
 .task:hover {
