@@ -63,8 +63,10 @@ function setSubtaskModeAdd() {
 function addSubtaskFromInput() {
   const input = document.getElementById("subtask");
   const value = input.value.trim();
+  const subtaskList = document.getElementById('subtask-list')
   if (!value) return;
   subtasks.push(value);
+  subtaskList.classList.add("add-scroll-bar")
   setSubtaskModeAdd();
   renderSubtasks();
 }
@@ -114,10 +116,12 @@ function renderSubtasks() {
 }
 
 function removeSubtask(index) {
+  const subtaskList = document.getElementById('subtask-list')
   subtasks.splice(index, 1);
   renderSubtasks();
   if (editingIndex === index) setSubtaskModeAdd();
   else if (editingIndex !== null && index < editingIndex) editingIndex -= 1;
+  subtaskList.classList.remove("add-scroll-bar")
 }
 
 function wireSubtaskEvents() {
@@ -337,7 +341,7 @@ async function createTask() {
     !taskDueDate?.value ||
     taskCategory?.value === "Select task category"
   ) {
-    alert("Please enter Title, Due date and choose Category");
+    showToast("Please enter Title, Due date and Category");
     return;
   }
 
@@ -362,35 +366,17 @@ async function createTask() {
 }
 
 async function progressTablePush(payload, currentTaskColumn) {
-  try {
-    if (currentTaskColumn === "todo") {
-      const key = await dbApi.pushData("/board/todo", payload);
-      await dbApi.updateData(`/board/todo/${key}`, { id: key });
-
-      showToast("Task wurde erfolgreich erstellt.");
+  switch (currentTaskColumn) {
+    case "todo":
+    case "inprogress":
+    case "await":
+    case "done": {
+      const key = await dbApi.pushData(`/board/${currentTaskColumn}`, payload);
+      await dbApi.updateData(`/board/${currentTaskColumn}/${key}`, { id: key });
+      showToast("Task was added.");
       clearTask();
-    } else if (currentTaskColumn === "inprogress") {
-      const key = await dbApi.pushData("/board/inprogress", payload);
-      await dbApi.updateData(`/board/inprogress/${key}`, { id: key });
-
-      showToast("Task wurde erfolgreich erstellt.");
-      clearTask();
-    } else if (currentTaskColumn === "await") {
-      const key = await dbApi.pushData("/board/await", payload);
-      await dbApi.updateData(`/board/await/${key}`, { id: key });
-
-      showToast("Task wurde erfolgreich erstellt.");
-      clearTask();
-    } else if (currentTaskColumn === "done") {
-      const key = await dbApi.pushData("/board/done", payload);
-      await dbApi.updateData(`/board/done/${key}`, { id: key });
-
-      showToast("Task wurde erfolgreich erstellt.");
-      clearTask();
+      break;
     }
-  } catch (err) {
-    console.error(err);
-    showToast("Fehler beim Speichern des Tasks.", true);
   }
 }
 
@@ -413,6 +399,7 @@ function clearTask() {
     subtaskInput.value = "";
     subtaskInput.placeholder = "Add new subtask";
     subtaskInput.classList.remove("is-editing");
+    subtaskList.classList.remove("add-scroll-bar")
   }
 
   priorities.forEach((prio) => {

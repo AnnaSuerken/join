@@ -74,7 +74,13 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  height: 70px;
 }
+
+.add-scroll-bar {
+  overflow-y: scroll;
+}
+
 .subtask-item {
   width: 100%;
   display: flex;

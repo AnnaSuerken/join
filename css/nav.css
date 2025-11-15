@@ -49,6 +49,12 @@
   padding-top: 8px;
   padding-bottom: 8px;
 }
+.nav-bar-button-active-a:hover {
+  background-color: #091931 !important;
+  cursor: default;
+  font-weight: 400 !important;
+  color: #a8a8a8!important;
+}
 
 .nav-bar-button-active img {
   filter: brightness(0) invert(1);
@@ -73,4 +79,11 @@
 .nav-bar-links a {
   color: #a8a8a8;
   margin-top: 20px;
+  font-weight: 400;
+}
+
+.nav-bar-links a:hover {
+  color: #29abe2;
+  margin-top: 20px;
+  font-weight: 700;
 }

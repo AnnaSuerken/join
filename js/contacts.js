@@ -451,7 +451,7 @@ async function createContact(name, email, phone, color) {
     state.selectedId = key;
   } catch (e) {
     console.error(e);
-    alert("Could not save contact");
+    ("Could not save contact");
   }
 }
 
@@ -462,7 +462,7 @@ async function saveEdit(name, email, phone) {
     await store.updateData(`contacts/${id}`, { name, email, phone, initials: initialsFromName(name), color: state.data[id]?.color });
   } catch (e) {
     console.error(e);
-    alert("Update failed");
+    showToast("Update failed");
   }
 }
 
@@ -475,7 +475,7 @@ async function onDelete() {
     state.selectedId = null;
   } catch (e) {
     console.error(e);
-    alert("Delete failed");
+    showToast("Delete failed");
   }
 }
 

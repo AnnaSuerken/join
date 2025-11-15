@@ -775,7 +775,7 @@ async function saveEditOverlay() {
     const chosen = new Date(editDate.value);
     chosen.setHours(0, 0, 0, 0);
     if (chosen < minDate) {
-      alert(
+      showToast(
         `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(
           minDate
         )}).`
