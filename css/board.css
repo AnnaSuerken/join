@@ -104,6 +104,7 @@
 
 .task {
   background-color: #ffffff;
+  box-shadow:-1px 0px 6px 0px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   width: 100%;
   min-height: 225px;
@@ -113,6 +114,11 @@
   cursor: pointer;
   margin-bottom: 16px;
 }
+
+.task:hover {
+  transform: rotate(4deg);
+} 
+
 .task-name {
   background-color: #0038ff;
   color: white;
@@ -122,6 +128,7 @@
   padding: 4px;
   margin-bottom: 12px;
 }
+
 .task-discription-headline {
   font-weight: 600;
   margin-bottom: 4px;

@@ -63,10 +63,10 @@ function setSubtaskModeAdd() {
 function addSubtaskFromInput() {
   const input = document.getElementById("subtask");
   const value = input.value.trim();
-  const subtaskList = document.getElementById('subtask-list')
+  const subtaskList = document.getElementById("subtask-list");
   if (!value) return;
   subtasks.push(value);
-  subtaskList.classList.add("add-scroll-bar")
+  subtaskList.classList.add("add-scroll-bar");
   setSubtaskModeAdd();
   renderSubtasks();
 }
@@ -116,12 +116,12 @@ function renderSubtasks() {
 }
 
 function removeSubtask(index) {
-  const subtaskList = document.getElementById('subtask-list')
+  const subtaskList = document.getElementById("subtask-list");
   subtasks.splice(index, 1);
   renderSubtasks();
   if (editingIndex === index) setSubtaskModeAdd();
   else if (editingIndex !== null && index < editingIndex) editingIndex -= 1;
-  subtaskList.classList.remove("add-scroll-bar")
+  subtaskList.classList.remove("add-scroll-bar");
 }
 
 function wireSubtaskEvents() {
@@ -399,7 +399,7 @@ function clearTask() {
     subtaskInput.value = "";
     subtaskInput.placeholder = "Add new subtask";
     subtaskInput.classList.remove("is-editing");
-    subtaskList.classList.remove("add-scroll-bar")
+    subtaskList.classList.remove("add-scroll-bar");
   }
 
   priorities.forEach((prio) => {
