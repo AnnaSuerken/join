@@ -25,84 +25,6 @@
   flex-direction: column;
 }
 
-.nav-bar {
-  display: flex;
-  flex-direction: column;
-  margin-top: 120px;
-  gap: 20px;
-}
-
-/* === SIDEBAR HOVER & ACTIVE STATE === */
-.nav-bar button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border: none;
-  background: transparent;
-  color: #cdcdcd;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 12px 18px;
-  border-radius: 8px;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.nav-bar button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-}
-
-.nav-bar button:hover img {
-  filter: brightness(0) invert(1);
-}
-
-.nav-bar a.menu-links {
-  text-decoration: none;
-  color: inherit;
-}
-
-.nav-bar button.active {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-}
-
-.nav-bar button.active img {
-  filter: brightness(0) invert(1);
-}
-
-/* === FIXED ACTIVE BUTTON STYLE === */
-.nav-bar-button-active {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.nav-bar-button-active img {
-  filter: brightness(0) invert(1);
-}
-
-.nav-bar img {
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-right: 15px;
-  margin: 0;
-}
-
-.nav-bar-links {
-  padding-top: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.nav-bar-links a {
-  color: #a8a8a8;
-  margin-top: 20px;
-}
-
 .dropbtn {
   background-color: white;
   border-radius: 50%;
@@ -115,6 +37,10 @@
   text-align: center;
   padding: 0;
   cursor: pointer;
+}
+
+.dropbtn:hover {
+  background-color: #0c2e6212;
 }
 
 .dropdown {
@@ -153,12 +79,11 @@
   flex-direction: column;
   gap: 5px;
   width: 100%;
-  transition: all 0.5s ease;
 }
 
 .dropdown-content a:hover {
-  background-color: #ddd;
-  color: #2a3647;
+  background-color: #21395a;
+  color: #f0f0f0;
   cursor: pointer;
 }
 
@@ -187,6 +112,10 @@
 #logout-btn {
   position: absolute;
   cursor: pointer;
+}
+
+#logout-btn:hover {
+  width: 140px;
 }
 
 .input-wrapper {

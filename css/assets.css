@@ -28,9 +28,11 @@ button {
   padding-left: 24px;
   border-radius: 8px;
   font-size: 21px;
+  cursor: pointer;
 }
 
 main {
   margin-left: 90px;
   width: 90%;
+  max-width: 1440px;
 }
