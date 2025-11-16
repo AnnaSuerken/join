@@ -126,4 +126,8 @@
   .nav-bar-mobile button.active {
     color: #29abe2;
   }
+  .nav-bar-button-active-a-mobile {
+  background-color: #091931 !important;
+  color: #ffffff;
+  }
 }

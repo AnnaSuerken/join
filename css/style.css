@@ -273,6 +273,7 @@ body {
   display: flex;
   width: 32px;
   margin-left: 10px;
+}
 
 #logout-btn {
   position: absolute;
