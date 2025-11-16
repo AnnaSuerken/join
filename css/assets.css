@@ -36,3 +36,16 @@ main {
   width: 90%;
   max-width: 1920px;
 }
+
+
+/* Tablets quer / kleine Laptops */
+@media (max-width: 900px) {
+
+main {
+  margin-left: 15px;
+  width: 100%;
+}
+
+
+
+}
