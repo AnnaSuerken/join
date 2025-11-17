@@ -54,7 +54,11 @@
 
       <section class="content-right">
         <header class="header-right">
-          <img src="./assets/imgs/join_logo_blue.svg" alt="Logo" class="logo-mobile">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
             <a href="./help.html"
@@ -360,10 +364,7 @@
               <button id="edit-close-btn" aria-label="Close">X</button>
             </div>
 
-            <form>
-
-              
-            </form>
+            <form></form>
 
             <div class="task-overlay-open-title">
               <p>Title</p>
@@ -390,16 +391,25 @@
               >
                 <p>Priority:</p>
                 <div class="priority-container">
-                  <button class="priority-btn" id="edit-prio-urgent">
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    id="edit-prio-urgent"
+                  >
                     Urgent
                     <img src="./assets/icons/urgent-red.svg" alt="urgent" />
                   </button>
-                  <button class="priority-btn" id="edit-prio-medium">
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    id="edit-prio-medium"
+                  >
                     Medium
                     <img src="./assets/icons/medium-orange.svg" alt="medium" />
                   </button>
-                  <button class="priority-btn" id="edit-prio-low">
-                    Low <img src="./assets/icons/low-green.svg" alt="low" />
+                  <button type="button" class="priority-btn" id="edit-prio-low">
+                    Low
+                    <img src="./assets/icons/low-green.svg" alt="low" />
                   </button>
                 </div>
               </div>
@@ -459,7 +469,8 @@
         </main>
       </section>
     </div>
-        <!-- 🔹 Mobile Bottom Navigation -->
+
+    <!-- 🔹 Mobile Bottom Navigation -->
     <nav class="nav-bar-mobile">
       <button id="summary">
         <img src="./assets/icons/summary.svg" alt="" />
@@ -484,7 +495,5 @@
     </div>
 
     <script type="module" src="./js/board.js"></script>
-
-    <!-- Toast / Erfolgsmeldung (zweites Element entfernt, falls doppelt vorhanden) -->
   </body>
 </html>

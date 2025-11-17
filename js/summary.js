@@ -5,9 +5,6 @@ import {
   signOut,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-/* ------------------------------------------
-   🔐 Auth-Guard & Logout
-------------------------------------------- */
 function requireAuth({ redirectTo = "/login.html" } = {}) {
   return new Promise((resolve) => {
     onAuthStateChanged(window.auth, (user) => {
@@ -27,9 +24,6 @@ async function handleLogout() {
   }
 }
 
-/* ------------------------------------------
-   🕒 Begrüßung nach Tageszeit
-------------------------------------------- */
 function getGreeting(now = new Date()) {
   const h = now.getHours();
   if (h >= 5 && h < 12) return "Good Morning,";
@@ -55,9 +49,6 @@ function scheduleGreetingRefresh() {
   }, Math.max(msToNextHour, 0));
 }
 
-/* ------------------------------------------
-   👤 Benutzername (live)
-------------------------------------------- */
 function initLiveName() {
   const userNameRef = document.getElementById("summary-name");
   onAuthStateChanged(window.auth, async (user) => {
@@ -77,9 +68,6 @@ function initLiveName() {
   });
 }
 
-/* ------------------------------------------
-   🧠 Helpers
-------------------------------------------- */
 function toArray(x) {
   if (Array.isArray(x)) return x;
   if (x && typeof x === "object") return Object.values(x);
@@ -91,12 +79,14 @@ function normalizeBoard(board) {
     todo: toArray(board?.todo),
     inProgress: toArray(board?.inprogress || board?.inProgress),
     done: toArray(board?.done),
-    awaiting: toArray(board?.awaitingfeedback || board?.awaitingFeedback),
+    // 🔴 Hier angepasst: Firebase-Feld heißt "await"
+    awaiting: toArray(
+      board?.await || board?.awaitingfeedback || board?.awaitingFeedback
+    ),
   };
 }
 
 function parseDueDate(task) {
-  // Passe Feldnamen bei Bedarf an
   const raw = task?.dueDate || task?.deadline || task?.date;
   const d = raw ? new Date(raw) : null;
   return d && !isNaN(+d) ? d : null;
@@ -120,9 +110,6 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
-/* ------------------------------------------
-   📊 Rendering der Board-Zusammenfassung
-------------------------------------------- */
 function renderBoardSummary(board) {
   if (!board) {
     setText("summary-task-todo-number", 0);
@@ -138,7 +125,6 @@ function renderBoardSummary(board) {
   const { todo, inProgress, done, awaiting } = normalizeBoard(board);
   const allTasks = [...todo, ...inProgress, ...done, ...awaiting];
 
-  // Spaltenzähler
   setText("summary-task-todo-number", todo.length);
   setText("summary-task-done-number", done.length);
   setText("inProgress", inProgress.length);
@@ -156,12 +142,12 @@ function renderBoardSummary(board) {
     .filter((d) => d && d.getTime() > now.getTime())
     .sort((a, b) => a - b);
 
-  setText("next-deadline", futureDueDates.length ? formatDateDE(futureDueDates[0]) : "–");
+  setText(
+    "next-deadline",
+    futureDueDates.length ? formatDateDE(futureDueDates[0]) : "–"
+  );
 }
 
-/* ------------------------------------------
-   🔄 Live-Subscription (onValue)
-------------------------------------------- */
 let unsubscribeBoard = null;
 
 function startBoardLiveSubscription() {
@@ -182,9 +168,6 @@ function stopBoardLiveSubscription() {
   }
 }
 
-/* ------------------------------------------
-   🧭 Navigation
-------------------------------------------- */
 function initNavigation() {
   const links = {
     "add-task": "add_task.html",
@@ -202,18 +185,12 @@ function initNavigation() {
   if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
 }
 
-/* ------------------------------------------
-   🚀 Init & Cleanup
-------------------------------------------- */
 async function init() {
   await requireAuth({ redirectTo: "/login.html" });
   initNavigation();
-
   setGreeting();
   scheduleGreetingRefresh();
   initLiveName();
-
-  // 🔴 Live-Updates starten
   startBoardLiveSubscription();
 }
 
@@ -221,9 +198,6 @@ function cleanup() {
   stopBoardLiveSubscription();
 }
 
-/* ------------------------------------------
-   🔗 Kacheln -> Board
-------------------------------------------- */
 addEventListener("click", async (event) => {
   if (
     event.target.closest(

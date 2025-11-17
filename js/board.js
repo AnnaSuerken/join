@@ -78,12 +78,26 @@ dbApi.onData(CONTACTS_ROOT, (val) => {
 
 /* ---------- Render Board ---------- */
 function render() {
-  COLS.forEach((c) => (colsEl[c].innerHTML = ""));
+  COLS.forEach((c) => {
+    if (colsEl[c]) colsEl[c].innerHTML = "";
+  });
+
   const filter = (searchInput?.value || "").trim().toLowerCase();
 
+  const emptyText = {
+    todo: "No task to do",
+    inprogress: "No task to do",
+    await: "No task to do",
+    done: "No task to do",
+  };
+
   for (const c of COLS) {
+    const colEl = colsEl[c];
+    if (!colEl) continue;
+
     const list = Object.values(data[c] || {});
-    list
+
+    const filtered = list
       .filter((t) => {
         if (!filter) return true;
         return (
@@ -91,8 +105,18 @@ function render() {
           (t.secondline || "").toLowerCase().includes(filter)
         );
       })
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-      .forEach((t) => colsEl[c].appendChild(taskCard(t)));
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+    // Wenn keine (sichtbaren) Tasks, Platzhalter anzeigen
+    if (!filtered.length) {
+      const placeholder = document.createElement("div");
+      placeholder.className = "no-task-placeholder";
+      placeholder.textContent = emptyText[c] || "No task to do";
+      colEl.appendChild(placeholder);
+      continue;
+    }
+
+    filtered.forEach((t) => colEl.appendChild(taskCard(t)));
   }
 }
 searchInput?.addEventListener("input", render);
@@ -539,7 +563,7 @@ const editDate = document.getElementById("edit-date");
 const editDateHint = document.getElementById("edit-date-hint");
 const editCategory = document.getElementById("edit-category");
 
-// Priority Buttons
+// Priority Buttons (im Edit-Overlay)
 const prioBtns = {
   urgent: document.getElementById("edit-prio-urgent"),
   medium: document.getElementById("edit-prio-medium"),
@@ -549,11 +573,34 @@ let editPriority = "medium";
 Object.entries(prioBtns).forEach(([key, btn]) =>
   btn?.addEventListener("click", () => setEditPriority(key))
 );
+
+// Priority im Edit-Overlay farblich/ikonisch wie im Add-Task
 function setEditPriority(p) {
   editPriority = p;
-  Object.entries(prioBtns).forEach(([key, btn]) =>
-    btn?.classList.toggle("active", key === p)
-  );
+
+  Object.entries(prioBtns).forEach(([key, btn]) => {
+    if (!btn) return;
+    const img = btn.querySelector("img");
+    const isActive = key === p;
+
+    btn.classList.toggle("active", isActive);
+
+    if (img) {
+      if (key === "urgent") {
+        img.src = isActive
+          ? "./assets/icons/urgent-white.svg"
+          : "./assets/icons/urgent-red.svg";
+      } else if (key === "medium") {
+        img.src = isActive
+          ? "./assets/icons/medium-white.svg"
+          : "./assets/icons/medium-orange.svg";
+      } else if (key === "low") {
+        img.src = isActive
+          ? "./assets/icons/low-white.svg"
+          : "./assets/icons/low-green.svg";
+      }
+    }
+  });
 }
 
 // Assignees im Edit
@@ -580,8 +627,9 @@ function toggleEditAssigneeDropdown(open) {
   editAssigneeSelect.setAttribute("aria-expanded", String(open));
 }
 
-/* === NEU: Ausgewählte Kontakte im Edit wie im Detail-Overlay darstellen === */
+/* Ausgewählte Kontakte im Edit wie im Detail-Overlay darstellen */
 function renderEditAssigneeChips() {
+  if (!editAssigneeList) return;
   editAssigneeList.innerHTML = "";
   const contacts = selectedAssigneeIds
     .map((id) => contactsById.get(id))
@@ -609,8 +657,9 @@ function renderEditAssigneeChips() {
   });
 }
 
-/* === NEU: Options-Popup wie Add Task (avatar + highlight + check) === */
+/* Options-Popup: alle Kontakte, ausgewählte hervorgehoben */
 function renderEditAssigneeOptions() {
+  if (!editAssigneeOptions) return;
   editAssigneeOptions.innerHTML = "";
   const all = [...contactsById.values()].sort((a, b) =>
     a.name.localeCompare(b.name)
@@ -638,6 +687,7 @@ function renderEditAssigneeOptions() {
       }
       renderEditAssigneeChips();
       renderEditAssigneeOptions();
+      // Dropdown bleibt offen -> kein close hier
     };
 
     li.addEventListener("click", toggle);
@@ -673,6 +723,7 @@ function addEditSubtask() {
   renderEditSubtasks();
 }
 function renderEditSubtasks() {
+  if (!editSubtaskList) return;
   editSubtaskList.innerHTML = "";
   editSubtasks.forEach((st, i) => {
     const row = document.createElement("div");
@@ -732,13 +783,13 @@ function openEditOverlay() {
     editDate.value = "";
   }
 
+  // Prio passend setzen (ruft setEditPriority und aktualisiert Buttons/Icons)
   setEditPriority((task.priority || "medium").toLowerCase());
 
   selectedAssigneeIds = normalizeAssigneesToIds(task.assignedContact);
   renderEditAssigneeChips();
   renderEditAssigneeOptions();
 
-  // Optional: sichtbare Label-Aktualisierung wie Add Task
   const lbl = editAssigneeSelect?.querySelector(".assignee-select-label");
   if (lbl) lbl.textContent = "Select contacts to assign";
 
