@@ -19,6 +19,10 @@ main {
   gap: 35px;
 }
 
+.sign-up-div-mobile {
+  display: none;
+}
+
 .sign-up-div span {
   font-size: 20px;
   font-weight: 400;
@@ -164,4 +168,110 @@ main {
   width: 148px;
   height: 3px;
   margin-top: 25px;
+}
+
+
+/* Responsive Design */
+
+/* Tablets quer / kleine Laptops */
+@media (max-width: 900px) {
+
+.logo-box-signup {
+  height: 150px;
+  margin-bottom: 65px;
+}
+
+.logo-box-signup img {
+  width: 64px;
+}
+
+}
+
+/* mobile version*/
+
+@media (max-width: 600px) {
+
+  main {
+  flex-direction: column;
+  padding-bottom: 35px;
+  margin: 0;
+}
+
+.logo-box-signup {
+  margin-left: 38px;
+  margin-top: 37px;
+  height: 64px;
+}
+
+.logo-box-signup img {
+  margin: 0;
+}
+
+.sign-up-div {
+  display: none;
+}
+
+.sign-up-div-mobile {
+  display:flex;
+  align-items: center;
+  gap: 35px;
+  margin-top: 35px;
+}
+
+
+.sign-up-div-mobile a {
+  font-weight: 700;
+  padding-top: 15px;
+  padding-right: 16px;
+  padding-bottom: 15px;
+  padding-left: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.sign-up-box {
+  padding: 0;
+  width: 286px;
+  margin: 0;
+
+}
+
+.sign-up-box-h1 {
+  color: #293647;
+  font-weight: 700;
+  font-size: 47px;
+  margin-top: 16px;
+}
+
+
+.signup-input {
+  padding-top: 15px;
+  padding-right: 70px;
+}
+
+.sign-up-box-footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 35px;
+}
+
+.sign-up-box-header {
+  justify-content: center;
+  gap: 24px;
+}
+
+.divider {
+    background-color: #29abe2;
+    width: 88px;
+    height: 3px;
+    margin-top: 25px;
+ 
+}
+
+.checkbox-container {
+  margin-top: 24px;
+}
+
 }

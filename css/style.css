@@ -304,3 +304,30 @@ body {
 }
 
 }
+
+
+@media (max-width: 600px) {
+
+  .blue-btn-bold {
+  background-color: #2a3647;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+.white-btn-bold {
+  background-color: white;
+  color: #2a3647;
+  border: 1px solid;
+  font-weight: 700;
+}
+
+.white-btn {
+  background-color: white;
+  color: #2a3647;
+  border: 1px solid;
+  font-weight: 400;
+}
+
+}
+
