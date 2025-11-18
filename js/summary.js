@@ -1,5 +1,3 @@
-// summary.js
-// Voraussetzung: firebase.js lädt vorher und stellt window.auth & window.dbApi bereit.
 import {
   onAuthStateChanged,
   signOut,

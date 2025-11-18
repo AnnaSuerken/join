@@ -1,4 +1,4 @@
-// auth-login.js
+// js/login.js
 import { auth, db } from "./firebase.js";
 import {
   signInWithEmailAndPassword,
@@ -12,40 +12,101 @@ import {
   update,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
+// DOM-Elemente
 const form = document.getElementById("login-form");
 const guestBtn = document.getElementById("guest-login-btn");
 
-function setStatus(msg, isError = false) {
-  statusBox.style.display = "flex";
-  statusBox.textContent = msg;
-  statusBox.style.color = isError ? "crimson" : "inherit";
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const emailError = document.getElementById("email-error");
+const passwordError = document.getElementById("password-error");
+
+function clearErrors() {
+  if (emailError) emailError.textContent = "";
+  if (passwordError) passwordError.textContent = "";
+  if (emailInput) emailInput.classList.remove("error");
+  if (passwordInput) passwordInput.classList.remove("error");
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  clearErrors();
+
   const email = e.target.email.value.trim();
   const password = e.target.password.value;
 
-  showToast("Anmeldung läuft");
+  if (!isValidEmail(email)) {
+    if (emailError) emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+    if (emailInput) emailInput.classList.add("error");
+    return;
+  }
+
+  if (!password) {
+    if (passwordError) passwordError.textContent = "Bitte gib ein Passwort ein.";
+    if (passwordInput) passwordInput.classList.add("error");
+    return;
+  }
+
+  if (typeof showToast === "function") {
+    showToast("Anmeldung läuft");
+  }
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    showToast("Erfolgreich angemeldet.");
+
+    if (typeof showToast === "function") {
+      showToast("Erfolgreich angemeldet.");
+    }
+
     window.location.href = "/index.html";
   } catch (err) {
     console.error(err);
-    await setTimeout(() => {
-      showToast(
-        "Login fehlgeschlagen überprüfe deine Email oder Passwort",
-        true
-      );
-    }, 3000);
-    form.reset();
+
+    switch (err.code) {
+      case "auth/user-not-found":
+        if (emailError)
+          emailError.textContent = "Diese Email ist nicht registriert.";
+        if (emailInput) emailInput.classList.add("error");
+        break;
+
+      case "auth/invalid-email":
+        if (emailError)
+          emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+        if (emailInput) emailInput.classList.add("error");
+        break;
+
+      case "auth/wrong-password":
+        if (passwordError) passwordError.textContent = "Falsches Passwort.";
+        if (passwordInput) passwordInput.classList.add("error");
+        break;
+
+      case "auth/too-many-requests":
+        if (passwordError)
+          passwordError.textContent =
+            "Zu viele fehlgeschlagene Versuche. Bitte später erneut versuchen.";
+        break;
+
+      default:
+        if (passwordError)
+          passwordError.textContent =
+            "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.";
+        break;
+    }
   }
 });
 
+// GAST-LOGIN
 guestBtn?.addEventListener("click", async () => {
-  showToast("Gast-Anmeldung läuft...");
+  clearErrors();
+
+  if (typeof showToast === "function") {
+    showToast("Gast-Anmeldung läuft...");
+  }
+
   try {
     const cred = await signInAnonymously(auth);
     await update(ref(db, `guests/${cred.user.uid}`), {
@@ -53,11 +114,17 @@ guestBtn?.addEventListener("click", async () => {
       lastLoginAt: serverTimestamp(),
       isAnonymous: true,
     });
-    showToast("Als Gast angemeldet.");
+
+    if (typeof showToast === "function") {
+      showToast("Als Gast angemeldet.");
+    }
+
     window.location.href = "/index.html";
   } catch (err) {
     console.error(err);
-    showToast("Gast-Login fehlgeschlagen.", true);
+    if (typeof showToast === "function") {
+      showToast("Gast-Login fehlgeschlagen.", true);
+    }
   }
 });
 
@@ -69,5 +136,5 @@ onAuthStateChanged(auth, (user) => {
 
 setTimeout(() => {
   const loader = document.querySelector(".loader");
-  loader.style.display = "none";
+  if (loader) loader.style.display = "none";
 }, 1000);

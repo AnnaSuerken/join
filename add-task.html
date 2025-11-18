@@ -14,21 +14,17 @@
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/add-task.css" />
     <link rel="stylesheet" href="./css/nav.css" />
- 
 
+    <script type="module" src="./js/logout.js"></script>
     <script type="module" src="./js/main.js"></script>
     <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/addtask.js"></script>
-
-    <script type="module">
-      import { requireAuth } from "./js/authguard.js";
-      import { logout } from "./js/logout.js";
-      const user = await requireAuth({ redirectTo: "/login.html" });
-      export { logout };
-    </script>
   </head>
 
   <body onload="getContactsData()">
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+    </div>
     <div class="content">
       <section class="content-left">
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
@@ -62,10 +58,14 @@
 
       <section class="content-right">
         <header class="header-right">
-          <img src="./assets/imgs/join_logo_blue.svg" alt="Logo" class="logo-mobile">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
-            <a href="./help.html" 
+            <a href="./help.html"
               ><img src="./assets/icons/help.svg" alt="help" class="help-btn"
             /></a>
             <div class="dropdown">
@@ -100,7 +100,7 @@
                 ></textarea>
 
                 <label for="task-due-date">Due date<span>*</span></label>
-                <input type="date" min="" id="task-due-date"/>
+                <input type="date" min="" id="task-due-date" />
               </div>
 
               <div class="divider"></div>
@@ -189,7 +189,9 @@
 
                 <label for="category">Category<span>*</span></label>
                 <select name="category" id="task-category">
-                  <option value="Select task category">Select task category</option>
+                  <option value="Select task category">
+                    Select task category
+                  </option>
                   <option value="Technical Task">Technical Task</option>
                   <option value="User Story">User Story</option>
                 </select>
@@ -203,20 +205,18 @@
             <div class="add-task-footer">
               <p><span>*</span>This field is required</p>
               <div>
-                <button class="white-btn" onclick="clearTask()">
-                    Clear X
-                  </button>
-                  <button onclick="createTask()" class="blue-btn-bold">
-                    Create Task 
-                    <img src="./assets/icons/check.svg" alt="create" />
-                  </button>
+                <button class="white-btn" onclick="clearTask()">Clear X</button>
+                <button onclick="createTask()" class="blue-btn-bold">
+                  Create Task
+                  <img src="./assets/icons/check.svg" alt="create" />
+                </button>
               </div>
             </div>
           </section>
         </main>
       </section>
     </div>
-        <!-- 🔹 Mobile Bottom Navigation -->
+
     <nav class="nav-bar-mobile">
       <button id="summary">
         <img src="./assets/icons/summary.svg" alt="" />
@@ -237,7 +237,6 @@
     </nav>
 
     <!-- Toast / Erfolgsmeldung -->
-    <div id="toast" class="toast d_none" role="status" aria-live="polite">
-    </div>
+    <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
   </body>
 </html>

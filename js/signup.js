@@ -1,3 +1,4 @@
+// js/signup.js
 import { auth, db } from "./firebase.js";
 import {
   createUserWithEmailAndPassword,
@@ -12,38 +13,123 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 const form = document.getElementById("register-form");
+const signupbutton = document.getElementById("signupbutton");
+
+const nameInput = document.getElementById("displayName");
+const emailInput = document.getElementById("email");
 const password = document.getElementById("password");
 const password2 = document.getElementById("password2");
 const checkBox = document.getElementById("checkbox");
 
-function setStatus(msg, isError = false) {
-  statusBox.style.display = "flex";
-  statusBox.textContent = msg;
-  statusBox.style.color = isError ? "crimson" : "inherit";
+const nameError = document.getElementById("name-error");
+const emailError = document.getElementById("email-error");
+const passwordError = document.getElementById("password-error");
+const password2Error = document.getElementById("password2-error");
+const checkboxError = document.getElementById("checkbox-error");
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function checkForm() {
-  if ((password.value === password2.value) & checkBox.checked) {
-    return true;
-  } else {
-    showToast(
-      "Passwörter stimmen nicht überein oder AGB nicht akzeptiert",
-      true
-    );
-    return false;
-  }
+function clearErrors() {
+  [nameError, emailError, passwordError, password2Error, checkboxError].forEach(
+    (el) => {
+      if (el) el.textContent = "";
+    }
+  );
+
+  [nameInput, emailInput, password, password2].forEach((input) => {
+    if (input) input.classList.remove("error");
+  });
 }
+
+function validateForm() {
+  clearErrors();
+  let isValid = true;
+
+  const nameVal = nameInput.value.trim();
+  const emailVal = emailInput.value.trim();
+  const pwdVal = password.value;
+  const pwd2Val = password2.value;
+
+  if (!nameVal) {
+    nameError.textContent = "Bitte gib deinen Namen ein.";
+    nameInput.classList.add("error");
+    isValid = false;
+  }
+
+  if (!emailVal) {
+    emailError.textContent = "Bitte gib eine Email-Adresse ein.";
+    emailInput.classList.add("error");
+    isValid = false;
+  } else if (!isValidEmail(emailVal)) {
+    emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+    emailInput.classList.add("error");
+    isValid = false;
+  }
+
+  if (!pwdVal) {
+    passwordError.textContent = "Bitte gib ein Passwort ein.";
+    password.classList.add("error");
+    isValid = false;
+  } else if (pwdVal.length < 6) {
+    passwordError.textContent =
+      "Das Passwort muss mindestens 6 Zeichen lang sein.";
+    password.classList.add("error");
+    isValid = false;
+  }
+
+  if (!pwd2Val) {
+    password2Error.textContent = "Bitte wiederhole dein Passwort.";
+    password2.classList.add("error");
+    isValid = false;
+  } else if (pwdVal && pwdVal !== pwd2Val) {
+    password2Error.textContent = "Die Passwörter stimmen nicht überein.";
+    password2.classList.add("error");
+    password.classList.add("error");
+    isValid = false;
+  }
+
+  if (!checkBox.checked) {
+    checkboxError.textContent =
+      "Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.";
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+form?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  await handleSignup();
+});
 
 signupbutton?.addEventListener("click", async (e) => {
   e.preventDefault();
-  if (!checkForm()) return;
-  const displayName = document.getElementById("displayName").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  showToast("Registrierung läuft");
+  await handleSignup();
+});
+
+async function handleSignup() {
+  if (!validateForm()) {
+    if (typeof showToast === "function") {
+      showToast("Bitte überprüfe deine Eingaben (Fehler sind markiert).", true);
+    }
+    return;
+  }
+
+  const displayName = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const pwd = password.value;
+
+  if (typeof showToast === "function") {
+    showToast("Registrierung läuft");
+  }
+
   try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const cred = await createUserWithEmailAndPassword(auth, email, pwd);
+
     await updateProfile(cred.user, { displayName });
+
     await set(ref(db, `users/${cred.user.uid}`), {
       uid: cred.user.uid,
       email,
@@ -53,15 +139,43 @@ signupbutton?.addEventListener("click", async (e) => {
       provider: "password",
       isAnonymous: false,
     });
-    showToast("Registrierung erfolgreich.");
+
+    if (typeof showToast === "function") {
+      showToast("Registrierung erfolgreich.");
+    }
+
     setTimeout(() => {
       window.location.href = "/login.html";
     }, 1500);
   } catch (err) {
     console.error(err);
-    showToast(err.message || "Registrierung fehlgeschlagen.", true);
+
+    switch (err.code) {
+      case "auth/email-already-in-use":
+        emailError.textContent =
+          "Diese Email wird bereits von einem anderen Konto verwendet.";
+        emailInput.classList.add("error");
+        break;
+      case "auth/invalid-email":
+        emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+        emailInput.classList.add("error");
+        break;
+      case "auth/weak-password":
+        passwordError.textContent =
+          "Das Passwort ist zu schwach. Bitte verwende ein stärkeres Passwort.";
+        password.classList.add("error");
+        break;
+      default:
+        checkboxError.textContent =
+          "Registrierung fehlgeschlagen. Bitte versuche es erneut.";
+        break;
+    }
+
+    if (typeof showToast === "function") {
+      showToast(err.message || "Registrierung fehlgeschlagen.", true);
+    }
   }
-});
+}
 
 onAuthStateChanged(auth, async (user) => {
   if (user?.isAnonymous) {

@@ -1,5 +1,14 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
+function requireAuth({ redirectTo = "/login.html" } = {}) {
+  return new Promise((resolve) => {
+    onAuthStateChanged(window.auth, (user) => {
+      if (user) resolve(user);
+      else window.location.href = redirectTo;
+    });
+  });
+}
+
 addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -62,11 +71,14 @@ addEventListener("load", async () => {
 });
 
 addEventListener("click", async (event) => {
+  if (event.target.closest("#login")) {
+    window.location.href = "./login.html";
+  }
   if (event.target.closest("#summary")) {
     window.location.href = "./index.html";
   }
   if (event.target.closest("#add-task")) {
-    window.location.href = "./add-task.html?column=todo";
+    window.location.href = "./add-task.html";
   }
   if (event.target.closest("#board")) {
     window.location.href = "./board.html";
@@ -117,4 +129,24 @@ function showToast(message, isError = false) {
   }, 2000);
 }
 
+addEventListener("load", async () => {
+  const overlay = document.getElementById("loading-overlay");
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+  }, 500);
+});
+
+window.addEventListener("load", () => {
+  if (
+    window.location.pathname === "/login.html" ||
+    window.location.pathname === "/signup.html" ||
+    window.location.pathname === "/legal-notice.html" ||
+    window.location.pathname === "/privacy-policy.html" ||
+    window.location.pathname === "/help.html"
+  )
+    return;
+  requireAuth();
+});
+
 window.showToast = showToast;
+window.requireAuth = requireAuth;

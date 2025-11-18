@@ -5,38 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join - Help</title>
 
-    <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
 
-    <!-- globale styles -->
     <link rel="stylesheet" href="./css/assets.css" />
     <link rel="stylesheet" href="./css/summary.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/nav.css" />
-
-    <!-- page specific -->
     <link rel="stylesheet" href="./css/help.css" />
 
+    <script type="module" src="./js/logout.js"></script>
+    <script type="module" src="./js/navakiv.js"></script>
     <script type="module" src="./js/main.js"></script>
-
-    <!-- auth / logout -->
-    <script type="module">
-      import { requireAuth } from "./js/authguard.js";
-      import { logout } from "./js/logout.js";
-
-      const user = await requireAuth({ redirectTo: "/login.html" });
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const logoutBtn = document.getElementById("logout-btn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => logout());
-        }
-      });
-    </script>
   </head>
 
   <body>
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+    </div>
     <div class="content">
-     <section class="content-left">
+      <section class="content-left">
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
         <section class="nav-bar">
           <button id="summary">
@@ -68,7 +59,11 @@
       <!-- RIGHT MAIN AREA -->
       <section class="content-right">
         <header class="header-right">
-          <img src="./assets/imgs/join_logo_blue.svg" alt="Logo" class="logo-mobile">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
           <span class="tool-name">Kanban Projekt Management Tool</span>
           <div class="header-content-right">
             <a href="./help.html"
@@ -93,11 +88,12 @@
 
             <!-- Intro-Text -->
             <p class="help-intro">
-              Welcome to the help page for 
-              <a href="./index.html" class="help-link">Join</a>,
-              your guide to using our kanban project management tool. Here,
-              we'll provide an overview of what 
-              <a href="./index.html" class="help-link">Join</a> is, how it can benefit you, and how to use it.
+              Welcome to the help page for
+              <a href="./index.html" class="help-link">Join</a>, your guide to
+              using our kanban project management tool. Here, we'll provide an
+              overview of what
+              <a href="./index.html" class="help-link">Join</a> is, how it can
+              benefit you, and how to use it.
             </p>
 
             <!-- SECTION  -->
@@ -105,26 +101,26 @@
               <h2 class="help-section-headline">What is Join?</h2>
 
               <p class="help-paragraph">
-                <a href="./index.html" class="help-link">Join</a> is a kanban-based project
-                management tool designed and built by a group of dedicated
-                students as part of their web development bootcamp at the
-                Developer Akademie.
+                <a href="./index.html" class="help-link">Join</a> is a
+                kanban-based project management tool designed and built by a
+                group of dedicated students as part of their web development
+                bootcamp at the Developer Akademie.
               </p>
 
               <p class="help-paragraph">
                 Kanban, a Japanese term meaning "billboard", is a highly
                 effective method to visualize work, limit work-in-progress, and
                 maximize efficiency (or flow).
-                <a href="./index.html" class="help-link">Join</a> leverages the principles of
-                kanban to help users manage their tasks and projects in an
-                intuitive, visual interface.
+                <a href="./index.html" class="help-link">Join</a> leverages the
+                principles of kanban to help users manage their tasks and
+                projects in an intuitive, visual interface.
               </p>
 
               <p class="help-paragraph">
                 It is important to note that
-                <a href="./index.html" class="help-link">Join</a> is designed as an
-                educational exercise and is not intended for extensive business
-                usage. While we strive to ensure the best possible user
+                <a href="./index.html" class="help-link">Join</a> is designed as
+                an educational exercise and is not intended for extensive
+                business usage. While we strive to ensure the best possible user
                 experience, we cannot guarantee consistent availability,
                 reliability, accuracy, or other aspects of quality regarding
                 <a href="./index.html" class="help-link">Join</a>.
@@ -146,11 +142,11 @@
                   <div class="help-list-content">
                     <div class="help-list-title">Exploring the Board</div>
                     <div class="help-list-text">
-                      When you log in to 
-                      <a href="./index.html" class="help-link">Join</a>,
-                      you'll find a default board. This board represents your
-                      project and contains four default lists: "To Do",
-                      "In Progress", "Await feedback" and "Done".
+                      When you log in to
+                      <a href="./index.html" class="help-link">Join</a>, you'll
+                      find a default board. This board represents your project
+                      and contains four default lists: "To Do", "In Progress",
+                      "Await feedback" and "Done".
                     </div>
                   </div>
                 </li>
@@ -160,12 +156,12 @@
                   <div class="help-list-content">
                     <div class="help-list-title">Creating Contacts</div>
                     <div class="help-list-text">
-                      In <a href="./index.html" class="help-link">Join</a>, you can add
-                      contacts to collaborate on your projects. Go to the
-                      "Contacts" section, click on "New contact", and fill in
-                      the required information. Once added, these contacts can
-                      be assigned tasks and they can interact with the tasks on
-                      the board.
+                      In <a href="./index.html" class="help-link">Join</a>, you
+                      can add contacts to collaborate on your projects. Go to
+                      the "Contacts" section, click on "New contact", and fill
+                      in the required information. Once added, these contacts
+                      can be assigned tasks and they can interact with the tasks
+                      on the board.
                     </div>
                   </div>
                 </li>
@@ -212,15 +208,15 @@
 
               <p class="help-paragraph">
                 Remember that using
-                <a href="./index.html" class="help-link">Join</a> effectively requires
-                consistent updates from you and your team to ensure the board
-                reflects the current state of your project.
+                <a href="./index.html" class="help-link">Join</a> effectively
+                requires consistent updates from you and your team to ensure the
+                board reflects the current state of your project.
               </p>
 
               <p class="help-paragraph">
                 Have more questions about
-                <a href="./index.html" class="help-link">Join</a>? Feel free to contact us at
-                [Your Contact Email]. We're here to help you!
+                <a href="./index.html" class="help-link">Join</a>? Feel free to
+                contact us at [Your Contact Email]. We're here to help you!
               </p>
             </section>
 
@@ -231,7 +227,7 @@
         </main>
       </section>
     </div>
-        <!-- 🔹 Mobile Bottom Navigation -->
+    <!-- 🔹 Mobile Bottom Navigation -->
     <nav class="nav-bar-mobile">
       <button id="summary">
         <img src="./assets/icons/summary.svg" alt="" />
@@ -253,6 +249,5 @@
 
     <script src="./js/help.js" defer></script>
     <script src="./js/nav-active.js" defer></script>
-
   </body>
 </html>

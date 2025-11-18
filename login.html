@@ -13,14 +13,18 @@
     <link rel="stylesheet" href="./css/signup.css" />
     <link rel="stylesheet" href="./css/style.css" />
 
+    <!-- Firebase-Init -->
     <script type="module" src="./js/firebase.js"></script>
+    <!-- Login-Logik -->
     <script type="module" src="./js/login.js"></script>
+    <!-- Sonstige JS (z.B. showToast) -->
     <script type="module" src="./js/main.js"></script>
   </head>
   <body>
     <div class="loader">
       <img src="./assets/imgs/join_logo_blue.svg" alt="" />
     </div>
+
     <header>
       <div class="logo-box-signup">
         <img
@@ -34,12 +38,15 @@
         </div>
       </div>
     </header>
+
     <main>
       <section class="sign-up-box">
         <h1 class="sign-up-box-h1">Login</h1>
         <div class="divider"></div>
-        <form id="login-form" action="">
+
+        <form id="login-form" action="" novalidate>
           <div class="sign-up-input-container">
+            <!-- E-Mail -->
             <div class="input-wrapper">
               <input
                 id="email"
@@ -48,12 +55,16 @@
                 required
                 placeholder="Email"
                 class="signup-input"
-              /><img
+              />
+              <img
                 class="input-icon"
                 src="./assets/icons/mail.svg"
                 alt="Email"
               />
             </div>
+            <p id="email-error" class="input-error"></p>
+
+            <!-- Passwort -->
             <div class="input-wrapper">
               <input
                 id="password"
@@ -66,9 +77,11 @@
               <img
                 class="input-icon"
                 src="./assets/icons/lock.svg"
-                alt="Email"
+                alt="Password"
               />
             </div>
+            <p id="password-error" class="input-error"></p>
+
             <div class="sign-up-box-footer">
               <button class="primary blue-btn-bold" type="submit">
                 Log in
@@ -77,6 +90,7 @@
                 id="guest-login-btn"
                 class="ghost white-btn-bold"
                 style="margin-top: 16px"
+                type="button"
               >
                 Guest Log in
               </button>
@@ -84,17 +98,20 @@
           </div>
         </form>
       </section>
+
       <div class="sign-up-div-mobile">
         <span>Not a Join user?</span>
         <a href="./signup.html" class="primary blue-btn-bold">Sign up</a>
       </div>
     </main>
+
     <footer>
       <div class="signup-footer-links-container">
         <a href="./privacy-policy.html" class="footer-links">Privacy Policy</a>
         <a href="./legal-notice.html" class="footer-links">Legal notice</a>
       </div>
     </footer>
+
     <!-- Toast / Erfolgsmeldung -->
     <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
   </body>

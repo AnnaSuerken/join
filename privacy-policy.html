@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="./css/nav.css"/>
     <script type="module" src="./js/main.js"></script>
     
-    <script type="module">
-      import { requireAuth } from "./js/authguard.js";
-      import { logout } from "./js/logout.js";
-      const user = await requireAuth({ redirectTo: "/login.html" });
-      export { logout };
-    </script>
+    <script type="module" src="./js/logout.js"></script>
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/navakiv.js"></script>
 </head>
 <body>
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+    </div>
     <div class="content">
       <section class="content-left">
         <img src="./assets/imgs/join_logo_white.svg" alt="" />

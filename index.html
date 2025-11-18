@@ -12,12 +12,16 @@
     <link rel="stylesheet" href="./css/nav.css" />
 
     <!-- Scripts: firebase.js liefert window.auth & window.dbApi -->
+    <script type="module" src="./js/logout.js"></script>
     <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/summary.js"></script>
     <script type="module" src="./js/main.js"></script>
   </head>
 
   <body>
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+    </div>
     <div class="content">
       <section class="content-left">
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
@@ -52,12 +56,16 @@
 
       <section class="content-right">
         <header class="header-right">
-          <img src="./assets/imgs/join_logo_blue.svg" alt="Logo" class="logo-mobile">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
           <span class="tool-name">Kanban Projekt Management Tool</span>
 
           <div class="header-content-right">
             <a href="./help.html">
-              <img src="./assets/icons/help.svg" alt="help" class="help-btn"/>
+              <img src="./assets/icons/help.svg" alt="help" class="help-btn" />
             </a>
 
             <div class="dropdown">

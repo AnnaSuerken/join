@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="./css/signup.css" />
     <link rel="stylesheet" href="./css/style.css" />
 
-    <script type="mobule" src="./js/firebase.js"></script>
+    <!-- Tippfehler korrigiert: module -->
+    <script type="module" src="./js/firebase.js"></script>
     <script type="module" src="./js/signup.js"></script>
     <script type="module" src="./js/main.js"></script>
   </head>
@@ -27,22 +28,26 @@
         />
       </div>
     </header>
+
     <div id="status" class="msg-box"></div>
+
     <main>
       <section class="sign-up-box">
         <div class="sign-up-box-header">
-          <a href="./login.html"
-            ><img
+          <a href="./login.html">
+            <img
               src="./assets/icons/return-arrow.svg"
               alt="return"
               class="return-arrow-btn"
-          /></a>
+            />
+          </a>
           <h1 class="sign-up-box-h1">Sign up</h1>
         </div>
         <div class="divider"></div>
 
-        <form id="register-form" action="">
+        <form id="register-form" action="" novalidate>
           <div class="sign-up-input-container">
+            <!-- Name -->
             <div class="input-wrapper">
               <input
                 id="displayName"
@@ -52,15 +57,19 @@
               />
               <img src="./assets/icons/person.svg" alt="" class="input-icon" />
             </div>
+            <p id="name-error" class="input-error"></p>
+
             <div class="input-wrapper">
               <input
                 id="email"
-                type="text"
+                type="email"
                 placeholder="Email"
                 class="signup-input"
               />
               <img src="./assets/icons/mail.svg" alt="" class="input-icon" />
             </div>
+            <p id="email-error" class="input-error"></p>
+
             <div class="input-wrapper">
               <input
                 id="password"
@@ -71,33 +80,46 @@
               />
               <img src="./assets/icons/lock.svg" alt="" class="input-icon" />
             </div>
+            <p id="password-error" class="input-error"></p>
+
+            <!-- Passwort wiederholen -->
             <div class="input-wrapper">
               <input
                 id="password2"
-                name="password"
+                name="password2"
                 type="password"
                 placeholder="Confirm Password"
                 class="signup-input"
               />
               <img src="./assets/icons/lock.svg" alt="" class="input-icon" />
             </div>
+            <p id="password2-error" class="input-error"></p>
+
+            <!-- Checkbox -->
             <div class="checkbox-container">
-              <input id="checkbox" type="checkbox" />I accept the
-              <a href="./privacy-policy.html" class="pivacy-policy-link"
-                >Privacy Policy</a
-              >
+              <input id="checkbox" type="checkbox" />
+              I accept the
+              <a href="./privacy-policy.html" class="pivacy-policy-link">
+                Privacy Policy
+              </a>
             </div>
-            <button id="signupbutton" class="blue-btn-bold">Sign up</button>
+            <p id="checkbox-error" class="input-error"></p>
+
+            <button id="signupbutton" class="blue-btn-bold" type="submit">
+              Sign up
+            </button>
           </div>
         </form>
       </section>
     </main>
+
     <footer>
       <div class="signup-footer-links-container">
         <a href="./privacy-policy.html" class="footer-links">Privacy Policy</a>
         <a href="./legal-notice.html" class="footer-links">Legal notice</a>
       </div>
     </footer>
+
     <!-- Toast / Erfolgsmeldung -->
     <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
   </body>
