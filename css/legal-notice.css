@@ -2,6 +2,11 @@
 .doc-wrap {
   margin-top: 110px;
   padding-bottom: 100px;
+  padding-right: 32px;
+}
+
+h2 {
+  font-size: 27px;
 }
 
 .doc-title {
@@ -117,4 +122,16 @@
 .doc-emph {
   color: #1d4ed8;
   font-weight: 600;
+}
+
+/* Responsive Design */
+
+/* Tablets quer / kleine Laptops */
+@media (max-width: 900px) {
+
+  .doc-wrap h1 {
+  font-size: 47px;
+  margin-right: 32px;
+}
+  
 }

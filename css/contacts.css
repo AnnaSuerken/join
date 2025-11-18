@@ -109,6 +109,11 @@
   font-size: 18px;
 }
 
+.contact-row:hover {
+background-color: #e4e4e4;
+border-radius: 15px;
+}
+
 /* Avatar  klein */
 .avatar-small {
   width: 40px;
@@ -255,6 +260,11 @@
   line-height: 1.2;
 }
 
+.contact-action-link:hover {
+  color: #29abe2;
+  font-weight: 700;
+}
+
 .contact-section-title {
   font-size: 20px;
   font-weight: 500;
@@ -343,7 +353,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 24px;
 }
 
@@ -408,6 +418,12 @@
   justify-content: center;
 }
 
+.modal-close-btn:hover {
+  background-color: #eeeeee;
+  border-radius: 100%;
+}
+
+
 /* Avatar / Formularrow */
 .modal-form-row {
   display: flex;
@@ -415,6 +431,7 @@
   gap: 24px;
   margin-top: 48px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 /* Avatar Kreis */
@@ -466,7 +483,7 @@
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 4px;
   margin-top: 32px;
 }
 
@@ -484,23 +501,6 @@
   display: flex;
   align-items: center;
   gap: 4px;
-}
-
-/* Create contact Button */
-.btn-create {
-  background-color: #29abe2;
-  border: 1px solid #29abe2;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #ffffff;
-  padding: 10px 16px;
-  line-height: 1.2;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* === MOBILE === */
