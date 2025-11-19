@@ -10,6 +10,14 @@ body {
   background-color: #f6f7f8;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 a {
   text-decoration: none;
 }
@@ -23,9 +31,9 @@ input {
 button {
   border: none;
   padding-top: 15px;
-  padding-right: 24px;
+  padding-right: 16px;
   padding-bottom: 15px;
-  padding-left: 24px;
+  padding-left: 16px;
   border-radius: 8px;
   font-size: 21px;
   cursor: pointer;

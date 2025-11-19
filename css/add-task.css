@@ -63,7 +63,7 @@
 .divider {
   background-color: #d1d1d1;
   width: 1px;
-  height: 590px;
+  height: 424px;
   margin-right: 10px;
 }
 
@@ -151,8 +151,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-top: 136px;
-  width: 76%;
+  margin-top: 135px;
+  width: 65%;
 }
 .add-task-footer span {
   color: #ff8190;

@@ -127,7 +127,125 @@
       </section>
     </div>
 
-    <!-- MOBILE NAV (RICHTIG!) -->
+    <!-- MOBILE NAVIGATION -->
+    <nav class="mobile-nav">
+      <a href="./index.html" class="mobile-link">
+        <img src="./assets/icons/summary.svg" alt="Summary" />
+        <span>Summary</span>
+      </a>
+      <a href="./add-task.html" class="mobile-link">
+        <img src="./assets/icons/addtask.svg" alt="Add Task" />
+        <span>Add Task</span>
+      </a>
+      <a href="./board.html" class="mobile-link">
+        <img src="./assets/icons/board.svg" alt="Board" />
+        <span>Board</span>
+      </a>
+      <a href="./contacts.html" class="mobile-link active">
+        <img src="./assets/icons/contacts.svg" alt="Contacts" />
+        <span>Contacts</span>
+      </a>
+    </nav>
+
+    <!-- ADD CONTACT MODAL -->
+    <section class="modal-overlay d_none" id="add-contact-overlay">
+      <div class="add-contact-modal">
+        <!-- LINKE SEITE -->
+        <div class="add-contact-left">
+          <div class="add-contact-left-text">
+            <img
+              class="join-big-logo"
+              src="./assets/imgs/join_logo_white.svg"
+              alt="Join Logo"
+            />
+
+            <h2 class="add-contact-headline">Add contact</h2>
+            <div class="add-contact-underline"></div>
+            <p class="add-contact-sub">Tasks are better with a team!</p>
+          </div>
+        </div>
+
+        <!-- RECHTE SEITE -->
+        <div class="add-contact-right">
+          <button
+            class="modal-close-btn"
+            id="close-add-contact-overlay"
+            aria-label="close"
+          >
+            <img src="./assets/icons/Close.svg" alt="close" />
+          </button>
+
+          <div class="modal-form-row">
+            <!-- Avatar -->
+            <div class="modal-avatar-circle" id="modal-avatar-preview">
+              <img src="./assets/icons/person.svg" alt="avatar placeholder" />
+            </div>
+
+            <form
+              id="add-contact-form"
+              class="modal-form"
+              onsubmit="return false;"
+            >
+              <div class="input-wrapper">
+                <input
+                  id="contact-name-input"
+                  class="modal-input"
+                  type="text"
+                  placeholder="Name"
+                  required
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/person.svg"
+                  alt="name"
+                />
+              </div>
+
+              <div class="input-wrapper">
+                <input
+                  id="contact-email-input"
+                  class="modal-input"
+                  type="email"
+                  placeholder="Email"
+                  required
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/mail.svg"
+                  alt="email"
+                />
+              </div>
+
+              <div class="input-wrapper">
+                <input
+                  id="contact-phone-input"
+                  class="modal-input"
+                  type="tel"
+                  placeholder="Phone"
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/call.svg"
+                  alt="phone"
+                />
+              </div>
+            </form>
+          </div>
+
+          <!-- FOOTER BUTTONS -->
+          <div class="modal-footer">
+            <button class="white-btn" id="cancel-add-contact-overlay">
+              Cancel ✕
+            </button>
+
+            <button class="blue-btn-bold" id="create-contact-btn">
+              Create contact ✓
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- 🔹 Mobile Bottom Navigation -->
     <nav class="nav-bar-mobile">
       <button id="summary">
         <img src="./assets/icons/summary.svg" alt="" />
@@ -147,70 +265,7 @@
       </button>
     </nav>
 
-    <!-- ADD CONTACT MODAL -->
-    <section class="modal-overlay d_none" id="add-contact-overlay">
-      <div class="add-contact-modal">
-
-        <!-- LEFT SIDE -->
-        <div class="add-contact-left">
-          <div class="add-contact-left-text">
-            <img class="join-big-logo" src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
-            <h2 class="add-contact-headline">Add contact</h2>
-            <div class="add-contact-underline"></div>
-            <p class="add-contact-sub">Tasks are better with a team!</p>
-          </div>
-
-          <h2 class="modal-title" id="modalTitle">Add contact</h2>
-          <p class="modal-sub">Tasks are better with a team!</p>
-          <div class="modal-underline"></div>
-        </div>
-
-        <!-- RIGHT SIDE -->
-        <div class="add-contact-right">
-          <button class="modal-close-btn" id="close-add-contact-overlay" aria-label="close">
-            <img src="./assets/icons/Close.svg" alt="close" />
-          </button>
-
-          <div class="modal-form-row">
-
-            <div class="modal-avatar-circle" id="modal-avatar-preview">
-              <img src="./assets/icons/person.svg" alt="avatar placeholder" />
-            </div>
-
-            <form id="add-contact-form" class="modal-form" onsubmit="return false;">
-              <div class="input-wrapper">
-                <input id="contact-name-input" class="modal-input" type="text" placeholder="Name" required />
-                <img class="input-icon" src="./assets/icons/person.svg" alt="name" />
-              </div>
-
-              <div class="input-wrapper">
-                <input id="contact-email-input" class="modal-input" type="email" placeholder="Email" required />
-                <img class="input-icon" src="./assets/icons/mail.svg" alt="email" />
-              </div>
-
-              <div class="input-wrapper">
-                <input id="contact-phone-input" class="modal-input" type="tel" placeholder="Phone" />
-                <img class="input-icon" src="./assets/icons/call.svg" alt="phone" />
-              </div>
-            </form>
-
-          </div>
-
-          <div class="modal-footer">
-            <button class="btn-cancel" id="cancel-add-contact-overlay">
-              Cancel ✕
-            </button>
-
-            <button class="btn-create" id="create-contact-btn">
-              Create contact ✓
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- LOGIC -->
+    <!-- PAGE LOGIC -->
     <script type="module" src="./js/contacts.js"></script>
     <script src="./js/nav.js" defer></script>
 

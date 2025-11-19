@@ -118,6 +118,12 @@
   font-size: 18px;
 }
 
+.contact-row:hover {
+background-color: #e4e4e4;
+border-radius: 15px;
+}
+
+/* Avatar  klein */
 .avatar-small {
   width: 40px;
   height: 40px;
@@ -243,6 +249,12 @@
   border: none;
   cursor: pointer;
   font-size: 14px;
+  line-height: 1.2;
+}
+
+.contact-action-link:hover {
+  color: #29abe2;
+  font-weight: 700;
 }
 
 /* INFO BLOCKS */
@@ -326,6 +338,7 @@
   padding: 32px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 24px;
 }
 
@@ -352,12 +365,27 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.modal-close-btn:hover {
+  background-color: #eeeeee;
+  border-radius: 100%;
+}
+
+
+/* Avatar / Formularrow */
 .modal-form-row {
   display: flex;
   gap: 24px;
   margin-top: 48px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .modal-avatar-circle {
@@ -388,34 +416,29 @@
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 4px;
   margin-top: 32px;
 }
 
-
-/* ============================= */
-/* MOBILE FIXES (Logo) */
-/* ============================= */
-
-.contacts-page .logo-mobile {
-  display: none !important;
+/* Cancel Button  */
+.btn-cancel {
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #000000;
+  padding: 10px 16px;
+  line-height: 1.2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-
-/* ===================================================================== */
-/* === MOBILE/TABLET LAYOUT AB 965px (C – vollständiges mobiles Layout) */
-/* ===================================================================== */
-
-@media (max-width: 965px) {
-
-  .contacts-page .logo-mobile {
-    display: block !important;
-    width: 32px !important;
-  }
-
-  .content-left {
-    display: none !important;
-  }
+/* === MOBILE === */
+@media (max-width: 820px) {
 
   .contacts-main {
     flex-direction: column !important;
