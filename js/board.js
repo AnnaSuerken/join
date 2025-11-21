@@ -76,7 +76,6 @@ dbApi.onData(CONTACTS_ROOT, (val) => {
   render();
 });
 
-/* ---------- Render Board ---------- */
 function render() {
   COLS.forEach((c) => {
     if (colsEl[c]) colsEl[c].innerHTML = "";
@@ -86,9 +85,9 @@ function render() {
 
   const emptyText = {
     todo: "No task to do",
-    inprogress: "No task to do",
-    await: "No task to do",
-    done: "No task to do",
+    inprogress: "No task in progress",
+    await: "No Tasks Awaiting Feedback",
+    done: "No Tasks Done",
   };
 
   for (const c of COLS) {
@@ -107,7 +106,6 @@ function render() {
       })
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-    // Wenn keine (sichtbaren) Tasks, Platzhalter anzeigen
     if (!filtered.length) {
       const placeholder = document.createElement("div");
       placeholder.className = "no-task-placeholder";
@@ -121,7 +119,6 @@ function render() {
 }
 searchInput?.addEventListener("input", render);
 
-/* ---------- Task-Karte ---------- */
 function taskCard(task) {
   let completed = Number.isFinite(task.subtasksCompleted)
     ? task.subtasksCompleted
@@ -191,17 +188,18 @@ function taskCard(task) {
   return el;
 }
 
-/* ---------- Dropzones ---------- */
 document.querySelectorAll(".dropzone").forEach((zone) => {
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     zone.classList.add("over");
+    document.getElementsByClassName("no-task-placeholder")[0].classList.add("d_none");  
   });
   zone.addEventListener("dragleave", () => zone.classList.remove("over"));
   zone.addEventListener("drop", async (e) => {
     e.preventDefault();
     zone.classList.remove("over");
+
 
     const payload = safeParse(e.dataTransfer.getData("text/plain"));
     if (!payload) return;

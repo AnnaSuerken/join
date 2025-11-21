@@ -40,30 +40,29 @@ button {
 }
 
 main {
-  margin-left: 90px;
-  width: 90%;
+  margin-left: 60px;
+  margin-right: 60px;
+  max-width: 1920px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.board-section {
+  margin-left: 60px;
+  margin-right: 60px;
   max-width: 1920px;
 }
 
-
 /* Tablets quer / kleine Laptops */
 @media (max-width: 900px) {
-
-main {
-  margin-left: 15px;
-  width: 100%;
-}
-
-
-
+  main {
+    margin-left: 15px;
+    width: 100%;
+  }
 }
 
 @media (max-width: 600px) {
-
-button {
-  width: 180px;
-}
-
-
-
+  button {
+    width: 180px;
+  }
 }

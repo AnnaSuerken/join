@@ -74,7 +74,7 @@
           </div>
         </header>
 
-        <main>
+        <section class="board-section">
           <section class="board-header">
             <h1>Board</h1>
             <div class="action-container">
@@ -156,25 +156,28 @@
                   class="close-btn"
                 />
               </div>
-              <form class="task-overlay-content">
-                <div class="task-overlay-content-right">
+              <form class="add-task-content">
+                <div class="add-task-content-right">
                   <label for="task-title">Title<span>*</span></label>
                   <input
                     type="text"
                     placeholder="Enter a Title"
                     id="task-title"
-                    required
                   />
+
                   <label for="task-description">Description</label>
                   <textarea
                     placeholder="Enter a Description"
                     id="task-description"
                   ></textarea>
+
                   <label for="task-due-date">Due date<span>*</span></label>
-                  <input type="date" id="task-due-date" required />
+                  <input type="date" min="" id="task-due-date" />
                 </div>
+
                 <div class="divider"></div>
-                <div class="task-overlay-content-left">
+
+                <div class="add-task-content-left">
                   <label>Priority</label>
                   <div class="priority-container">
                     <div
@@ -182,7 +185,8 @@
                       id="prio-urgent"
                       onclick="setPriority('urgent')"
                     >
-                      Urgent<img
+                      Urgent
+                      <img
                         src="./assets/icons/urgent-red.svg"
                         alt="urgent"
                         class="urgent-img"
@@ -193,18 +197,21 @@
                       id="prio-urgent-active"
                       onclick="setPriority('urgent')"
                     >
-                      Urgent<img
+                      Urgent
+                      <img
                         src="./assets/icons/urgent-white.svg"
                         alt="urgent"
                         class="urgent-img"
                       />
                     </div>
+
                     <div
                       class="priority-btn"
                       id="prio-medium"
                       onclick="setPriority('medium')"
                     >
-                      Medium<img
+                      Medium
+                      <img
                         src="./assets/icons/medium-orange.svg"
                         alt="medium"
                       />
@@ -214,11 +221,10 @@
                       id="prio-medium-active"
                       onclick="setPriority('medium')"
                     >
-                      Medium<img
-                        src="./assets/icons/medium-white.svg"
-                        alt="medium"
-                      />
+                      Medium
+                      <img src="./assets/icons/medium-white.svg" alt="medium" />
                     </div>
+
                     <div
                       class="priority-btn"
                       id="prio-low"
@@ -266,11 +272,21 @@
                   </select>
 
                   <label for="subtask">Subtasks</label>
-                  <input
-                    type="text"
-                    placeholder="Add new subtask"
-                    id="subtask"
-                  />
+                  <div class="subtask-input-row">
+                    <input
+                      type="text"
+                      placeholder="Add new subtask"
+                      id="subtask"
+                    />
+                    <button
+                      type="button"
+                      id="subtask-add-btn"
+                      class="subtask-add-btn d_none"
+                      aria-label="Add subtask"
+                    >
+                      <img src="./assets/icons/hug.svg" alt="add subtask" />
+                    </button>
+                  </div>
                   <div class="subtask-list" id="subtask-list"></div>
                 </div>
               </form>
@@ -464,7 +480,7 @@
               </div>
             </div>
           </section>
-        </main>
+        </section>
       </section>
     </div>
 
