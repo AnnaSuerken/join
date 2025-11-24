@@ -259,7 +259,12 @@ function buildAssigneeDropdown() {
     // visuelle Selektionsmarkierung initial
     syncOptionSelectedStates();
 
-    function syncOptionSelectedStates() {
+    // Expose intern, falls nach getContactsData() erneut gebraucht
+    buildAssigneeDropdown._sync = syncOptionSelectedStates;
+  }
+}
+
+function syncOptionSelectedStates() {
       const selectedNames = new Set(
         selectedAssignees.map((a) => a.name.toLowerCase())
       );
@@ -271,11 +276,6 @@ function buildAssigneeDropdown() {
         node.classList.toggle("is-selected", isSel);
       });
     }
-
-    // Expose intern, falls nach getContactsData() erneut gebraucht
-    buildAssigneeDropdown._sync = syncOptionSelectedStates;
-  }
-}
 
 /** Toggle per Index aus contactsData (aus Liste geklickt) */
 function toggleAssigneeByContactIndex(contactIndex) {
@@ -357,9 +357,8 @@ function setPriority(status) {
 
 let currentTaskColumn = "todo";
 
-async function createTask() {
+function setMandatoryInputs() {
   const taskTitle = document.getElementById("task-title");
-  const taskDescription = document.getElementById("task-description");
   const taskDueDate = document.getElementById("task-due-date");
   const taskCategory = document.getElementById("task-category");
 
@@ -369,8 +368,18 @@ async function createTask() {
     taskCategory?.value === "Select task category"
   ) {
     showToast("Please enter Title, Due date and Category");
-    return;
+    return false;
   }
+  return true;
+}
+
+async function createTask() {
+  if (!setMandatoryInputs()) return;
+  
+  const taskTitle = document.getElementById("task-title");
+  const taskDescription = document.getElementById("task-description");
+  const taskDueDate = document.getElementById("task-due-date");
+  const taskCategory = document.getElementById("task-category");
 
   const assigneeNames = selectedAssignees.map((a) => a.name);
 
@@ -391,6 +400,8 @@ async function createTask() {
 
   progressTablePush(payload, currentTaskColumn);
 }
+
+
 
 async function progressTablePush(payload, currentTaskColumn) {
   switch (currentTaskColumn) {
