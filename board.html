@@ -91,8 +91,9 @@
             </div>
           </section>
 
-          <section>
-            <div class="task-table">
+          <section class="task-board">
+            <!-- To Do -->
+            <div class="task-column">
               <div class="task-table-header">
                 <span>To Do</span>
                 <button
@@ -102,6 +103,11 @@
                   +
                 </button>
               </div>
+              <div id="task-table-todo" class="task-table-colum dropzone"></div>
+            </div>
+
+            <!-- In progress -->
+            <div class="task-column">
               <div class="task-table-header">
                 <span>In progress</span>
                 <button
@@ -111,6 +117,14 @@
                   +
                 </button>
               </div>
+              <div
+                id="task-table-progress"
+                class="task-table-colum dropzone"
+              ></div>
+            </div>
+
+            <!-- Await Feedback -->
+            <div class="task-column">
               <div class="task-table-header">
                 <span>Await Feedback</span>
                 <button
@@ -120,6 +134,14 @@
                   +
                 </button>
               </div>
+              <div
+                id="task-table-feedback"
+                class="task-table-colum dropzone"
+              ></div>
+            </div>
+
+            <!-- Done -->
+            <div class="task-column">
               <div class="task-table-header">
                 <span>Done</span>
                 <button
@@ -129,20 +151,8 @@
                   +
                 </button>
               </div>
+              <div id="task-table-done" class="task-table-colum dropzone"></div>
             </div>
-          </section>
-
-          <section class="task-table-tasks">
-            <div id="task-table-todo" class="task-table-colum dropzone"></div>
-            <div
-              id="task-table-progress"
-              class="task-table-colum dropzone"
-            ></div>
-            <div
-              id="task-table-feedback"
-              class="task-table-colum dropzone"
-            ></div>
-            <div id="task-table-done" class="task-table-colum dropzone"></div>
           </section>
 
           <!-- Add-Task-Overlay -->

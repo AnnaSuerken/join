@@ -6,7 +6,7 @@
   height: 232px;
 }
 
-.board-header H1 {
+.board-header h1 {
   font-size: 61px;
   font-weight: 700;
 }
@@ -21,53 +21,64 @@
   padding-left: 32px;
 }
 
-.task-table {
+/* ===================================== */
+/* BOARD-SPALTEN (Header + Tasks zusammen) */
+/* ===================================== */
+
+.task-board {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
   width: 100%;
-  font-size: 20px;
-  font-weight: 700;
-  color: #42526e;
-  margin-bottom: 24px;
 }
 
-.task-table button {
-  height: 32px;
-  width: 32px;
-  margin: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.task-table-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 24%;
-}
-
-.task-table-tasks {
-  display: flex;
-  justify-content: space-between;
-}
-
-
-.task-table-colum {
+/* Eine Spalte: Header + Tasks */
+.task-column {
   display: flex;
   flex-direction: column;
   background-color: #f4f5f7;
   border-radius: 6px;
-  width: 24%;
-  overflow: scroll;
-  height: calc(100vh - 393px);
-  overflow-x: hidden;
+  flex: 1 1 calc(25% - 16px); /* 4 Spalten auf Desktop */
+  min-width: 260px; /* bei kleiner Breite umbrechen */
 }
 
-.task-table-colum::-webkit-scrollbar {
-display: none;
+/* Header in jeder Spalte */
+.task-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #42526e;
 }
+
+.task-table-header button {
+  height: 32px;
+  width: 32px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Task-Container in der Spalte */
+.task-table-colum {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 393px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 8px;
+}
+
+/* Scrollbar verstecken */
+.task-table-colum::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===================================== */
+/* TASK-KARTE */
+/* ===================================== */
+
 .task {
   background-color: #ffffff;
   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.1);
@@ -98,6 +109,7 @@ display: none;
   font-weight: 600;
   margin-bottom: 4px;
 }
+
 .task-discription-secontline {
   font-weight: 400;
   margin-bottom: 12px;
@@ -128,11 +140,13 @@ display: none;
   height: 32px;
 }
 
+/* Platzhalter, wenn keine Tasks in der Spalte */
 .no-task-placeholder {
   outline: 2px dashed #6b7280;
   background: #ffffff;
-  width: 95%;
+  width: calc(100% - 16px);
   height: 25%;
+  min-height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,17 +156,21 @@ display: none;
   color: #a8a8a8;
 }
 
+
 .dropzone {
-  width: 24%;
+  width: 100%;
+  height: 100%;
 }
+
 .dropzone.over {
   outline: 2px dashed #8aa7ff;
   background: #ffffff;
-  width: 24%;
 }
+
 .task.dragging {
   opacity: 0.3;
 }
+
 
 .task-overlay-section {
   position: fixed;
@@ -180,6 +198,7 @@ display: none;
   flex-direction: column;
   align-items: center;
 }
+
 .task-overlay::-webkit-scrollbar {
   width: 0px;
 }
@@ -353,34 +372,42 @@ display: none;
   color: #ff8190;
 }
 
+/* ===================================== */
+/* RESPONSIVE */
+/* ===================================== */
 
-
-/* Responsive Design */
-
-@media (max-width: 1500px) {
-
-  
-
+@media (max-width: 1550px) {
+  /* hier kannst du bei Bedarf noch Feinheiten ergänzen */
 }
 
 @media (max-width: 1024px) {
-
+  .task-column {
+    flex: 1 1 calc(50% - 16px); /* 2 Spalten */
+  }
+  .task-table-colum {
+    max-height: 600px;
+  }
+  .task-overlay-open {
+    width: 60%!important;
+  }
 }
-
 
 @media (max-width: 780px) {
-.task-overlay-footer {
-  flex-direction: column;
-  gap: 16px;
+  .task-overlay-footer {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 
-}
 /* Smartphones */
 @media (max-width: 600px) {
+  .task-column {
+    flex: 1 1 100%; /* 1 Spalte pro Reihe */
+  }
 
   .task-overlay-footer {
-  width: 100%;
-} 
+    width: 100%;
+  }
 
   .task-overlay-footer button {
     padding-left: 16px;

@@ -192,8 +192,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-    zone.classList.add("over");
-    document.getElementsByClassName("no-task-placeholder")[0].classList.add("d_none");  
+    zone.classList.add("over"); 
   });
   zone.addEventListener("dragleave", () => zone.classList.remove("over"));
   zone.addEventListener("drop", async (e) => {

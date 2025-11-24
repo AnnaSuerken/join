@@ -101,6 +101,9 @@
 
 @media (max-width: 900px) {
   /* Mobile Bottom Navigation */
+  body{
+    padding-bottom: 70px;
+  }
   .nav-bar-mobile {
     position: fixed;
     bottom: 0;

@@ -577,9 +577,14 @@ async function onDelete() {
   }
 }
 
-/****************
- * Wiring & Init *
- ****************/
+qsa(".contact-row").forEach((r) => {
+  r.classList.toggle("active", r.dataset.id === targetId);
+});
+
+qsa(".row").forEach((r) => {
+  r.classList.toggle("active", r.dataset.id === targetId);
+});
+
 function attachModernHandlers() {
   byId("openAddModal")?.addEventListener("click", () => openModal("create"));
   byId("cancelBtn")?.addEventListener("click", closeModal);
