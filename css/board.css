@@ -38,8 +38,8 @@
   flex-direction: column;
   background-color: #f4f5f7;
   border-radius: 6px;
-  flex: 1 1 calc(25% - 16px); /* 4 Spalten auf Desktop */
-  min-width: 260px; /* bei kleiner Breite umbrechen */
+  flex: 1 1 calc(25% - 16px);
+  min-width: 340px; /* Wichtig für Mobile + Task Mindestbreite */
 }
 
 /* Header in jeder Spalte */
@@ -156,7 +156,6 @@
   color: #a8a8a8;
 }
 
-
 .dropzone {
   width: 100%;
   height: 100%;
@@ -170,7 +169,6 @@
 .task.dragging {
   opacity: 0.3;
 }
-
 
 .task-overlay-section {
   position: fixed;
@@ -377,7 +375,9 @@
 /* ===================================== */
 
 @media (max-width: 1550px) {
-  /* hier kannst du bei Bedarf noch Feinheiten ergänzen */
+  .task-overlay-open {
+    width: 60% !important;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -388,7 +388,10 @@
     max-height: 600px;
   }
   .task-overlay-open {
-    width: 60%!important;
+    width: 60% !important;
+  }
+  .action-container input {
+    width: 180px;
   }
 }
 

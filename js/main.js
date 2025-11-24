@@ -133,7 +133,7 @@ addEventListener("load", async () => {
   const overlay = document.getElementById("loading-overlay");
   setTimeout(() => {
     overlay.classList.add("hidden");
-  }, 500);
+  }, 700);
 });
 
 window.addEventListener("load", () => {
