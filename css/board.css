@@ -80,7 +80,7 @@ display: none;
   margin: 16px;
 }
 
-.task:hover {
+.task:active {
   transform: rotate(4deg);
 }
 
