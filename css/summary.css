@@ -15,13 +15,13 @@
 .summary-title h1 {
   font-size: 48px;
   font-weight: 700;
-  color: #293647;
+  color: #000000;
 }
 
 .summary-title p {
   font-size: 24px;
   font-weight: 400;
-  color: #757575;
+  color: #2a3647;
 }
 
 .summary-slash {
@@ -30,6 +30,10 @@
   background-color: #29abe2;
   margin-left: 18px;
   margin-right: 18px;
+}
+
+.summary-slash-mobile {
+  display: none;
 }
 
 .summary-wrapper {
@@ -46,7 +50,7 @@
 
 .summary-task-medium {
   background-color: #ffffff;
-  box-shadow:0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   width: 200px;
   height: 150px;
@@ -126,7 +130,7 @@
   align-items: center;
   padding: 16px;
   margin: 16px;
-  box-shadow:-1px 0px 6px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: -1px 0px 6px 0px rgba(0, 0, 0, 0.1);
 }
 
 .summary-task-big:hover {
@@ -182,7 +186,7 @@
   padding: 16px;
   margin: 16px;
   text-align: center;
-  box-shadow:-1px 0px 6px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: -1px 0px 6px 0px rgba(0, 0, 0, 0.1);
 }
 
 .summary-task-small:hover {
@@ -212,7 +216,8 @@
 
   .summary-wrapper {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .summary-name {
@@ -228,26 +233,52 @@
   .main-summary {
     padding-bottom: 100px;
   }
+
+  .summary-title {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  margin-top: 28px;
+}
+
 }
 
 /* Smartphones */
-@media (max-width: 480px) {
+@media (max-width: 520px) {
+
+  .main-summary {
+    padding: 10px;
+  }
+
+  .summary-tasks {
+    display: flex;
+    flex-wrap: wrap;
+    width: 320px;
+  }
+
   .summary-title {
     flex-direction: column;
-    text-align: center;
     margin-bottom: 24px;
+    gap: 8px;
   }
 
   .summary-slash {
     display: none;
   }
 
+  .summary-slash-mobile {
+    display: block;
+    height: 3px;
+    width: 90px;
+    background-color: #29abe2;
+  }
+
   .summary-title h1 {
-    font-size: 28px;
+    font-size: 47px;
   }
 
   .summary-title p {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .summary-tasks {
@@ -256,25 +287,64 @@
     align-items: center;
   }
 
-  .summary-task-medium,
-  .summary-task-big,
-  .summary-task-small {
-    width: 90%;
-    height: auto;
-    margin: 10px 0;
+  .summary-tasks h2 {
+    font-size: 47px;
+
+  }
+
+  .summary-tasks p {
+    font-size: 16px;
+  }
+
+  .summary-tasks h3 {
+    font-size: 16px;
+  }
+
+
+  .summary-task-medium {
+    width: 130px;
+    height: 110px;
+    margin: 10px;
+  }
+
+  .summary-task-medium img {
+    width: 40px;
+  }
+
+  .summary-task-big {
+    width: 265px;
+    height: 110px;
+    padding: 0px;
+    margin: 10px;
+    gap: 20px;
+
+  }
+
+  .summary-task-big img {
+    width: 40px;
+    margin-left: 8px;
+  }
+
+  .summary-task-big-split {
+    margin-left: 0px;
+    margin-right: 0px;
+    height: 68px;
+  }
+
+  .summary-task-big-left {
+    width: auto;
   }
 
   .summary-name {
-    margin-left: 0;
-    margin-top: 16px;
-    text-align: center;
+    display: none;
   }
 
-  .summary-name h3 {
-    font-size: 18px;
+
+  .summary-task-small {
+  width: 116px;
+  height: 116px;
+  padding: 0px;
+  margin: 0px;
   }
 
-  .summary-name h2 {
-    font-size: 24px;
-  }
 }
