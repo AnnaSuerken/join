@@ -63,6 +63,7 @@ main {
   justify-content: center;
   transition: all 0.5s ease;
 }
+
 .loader img {
   height: 300px;
   width: auto;
@@ -74,15 +75,15 @@ main {
   animation-fill-mode: both;
   transition: all 0.5s ease;
 }
+
 @keyframes zoomOutLeft {
   40% {
     opacity: 1;
-    -webkit-transform: scale3d(0.475, 0.475, 0.475)
-      translate3d(calc(-100vw - 1500px), calc(-100vh - 1500px), 150px);
-    transform: scale3d(0.475, 0.475, 0.475)
-      translate3d(calc(-100vw - 1500px), calc(-100vh - 1500px), 150px);
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(calc(-100vw - 1500px), calc(-100vh - 1500px), 150px);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(calc(-100vw - 1500px), calc(-100vh - 1500px), 150px);
     background-color: none;
   }
+
   100% {
     opacity: 0;
     -webkit-transform: scale(0.1) translate3d(-10000px, 0, 0);
@@ -117,8 +118,15 @@ main {
 .sign-up-box-header {
   display: flex;
   align-items: center;
-  width: 95%;
-  gap: 48px;
+  width: 100%;
+  margin-left: 15px ;
+  justify-content: space-evenly;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sign-up-input-container {
@@ -129,6 +137,7 @@ main {
 
   padding: 48px;
 }
+
 .signup-input {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -175,7 +184,6 @@ main {
 
 /* Responsive Design */
 
-/* Tablets quer / kleine Laptops */
 @media (max-width: 900px) {
   main {
     padding-bottom: 35px;
@@ -191,9 +199,10 @@ main {
   }
 }
 
+
 /* mobile version*/
 
-@media (max-width: 600px) {
+@media (max-width: 660px) {
   main {
     flex-direction: column;
     margin: 0;
@@ -270,5 +279,10 @@ main {
 
   .checkbox-container {
     margin-top: 24px;
+  }
+
+  .sign-up-input-container {
+    margin-left: 15px;
+    margin-right: 15px;
   }
 }
