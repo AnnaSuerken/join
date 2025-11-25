@@ -194,6 +194,7 @@
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 24px;
+  align-items: center;
 }
 
 .contacts-headline {
@@ -264,7 +265,7 @@
   display: flex;
   flex-direction: row;
   gap: 12px;
-  flex-wrap: nowrap;       /* Buttons selbst bleiben nebeneinander */
+  flex-wrap: nowrap; /* Buttons selbst bleiben nebeneinander */
   align-items: center;
 }
 
@@ -279,7 +280,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap;    /* Text in Button bricht nicht um */
+  white-space: nowrap; /* Text in Button bricht nicht um */
   color: #000;
 }
 
@@ -501,16 +502,19 @@
     width: 100%;
     padding: 24px 16px 16px;
     height: auto;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
   }
 
   /* Detail-Header auf Mobile: Avatar oben, darunter Name + Buttons-Gruppe */
   .contact-header-row {
-    flex-direction: column;
     align-items: flex-start;
   }
 
   .contact-name-row {
-    flex-direction: column;      /* Name oben, Buttons-Gruppe darunter */
+    flex-direction: column; /* Name oben, Buttons-Gruppe darunter */
     align-items: flex-start;
     gap: 8px;
   }
@@ -680,5 +684,13 @@
   .contact-action-link {
     padding: 4px 8px;
     font-size: 12px;
+  }
+  .contact-header-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  .contacts-headline-row {
+    gap: 10px;
+    align-items: center;
   }
 }
