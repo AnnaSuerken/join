@@ -54,12 +54,6 @@ main {
 }
 
 /* Tablets quer / kleine Laptops */
-@media (max-width: 900px) {
-  main {
-    margin-left: 15px;
-    width: 100%;
-  }
-}
 
 @media (max-width: 600px) {
   button {

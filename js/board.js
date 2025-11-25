@@ -165,7 +165,7 @@ function taskCard(task) {
     </div>
   `;
 
-  // Drag & Drop
+  // Desktop Drag & Drop
   el.addEventListener("dragstart", (e) => {
     el.classList.add("dragging");
     const id = task.id;
@@ -174,6 +174,87 @@ function taskCard(task) {
     e.dataTransfer.setData("text/plain", JSON.stringify({ id, fromCol }));
   });
   el.addEventListener("dragend", () => el.classList.remove("dragging"));
+
+  // 🔹 Touch-Drag & Drop (Mobile / Tablet)
+  if ("ontouchstart" in window) {
+    let currentZone = null;
+
+    const onTouchStart = (e) => {
+      const touch = e.touches[0];
+      // optional: Start-Position merken, falls du visuell noch was machen willst
+      el.classList.add("dragging");
+      el.dataset.fromCol = findColumnOfTask(task.id) || "";
+    };
+
+    const onTouchMove = (e) => {
+      // verhindert Scrollen während Drag
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const zone = target?.closest(".dropzone");
+
+      // visuelles Feedback zurücksetzen
+      document
+        .querySelectorAll(".dropzone.over")
+        .forEach((z) => z.classList.remove("over"));
+
+      if (zone) {
+        zone.classList.add("over");
+        currentZone = zone;
+      } else {
+        currentZone = null;
+      }
+    };
+
+    const onTouchEnd = async (e) => {
+      el.classList.remove("dragging");
+      document
+        .querySelectorAll(".dropzone.over")
+        .forEach((z) => z.classList.remove("over"));
+
+      const fromCol = el.dataset.fromCol;
+      const zone = currentZone;
+      currentZone = null;
+      if (!zone || !fromCol) return;
+
+      const toCol = getZoneStatus(zone);
+      if (!toCol) return;
+
+      const touch = e.changedTouches[0];
+      const y = touch ? touch.clientY : 0;
+
+      // Position im DOM bestimmen (wie bei Maus-drop)
+      const afterEl = getDragAfterElement(zone, y);
+
+      if (afterEl == null) zone.appendChild(el);
+      else zone.insertBefore(el, afterEl);
+
+      // jetzt wie im normalen Drop in Firebase speichern
+      if (fromCol && fromCol !== toCol) {
+        const taskObj = data[fromCol]?.[task.id];
+        if (!taskObj) return;
+
+        const orderMap = buildOrderMapForZone(zone, toCol, task.id);
+        const updates = {};
+        updates[`${fromCol}/${task.id}`] = null;
+        updates[`${toCol}/${task.id}`] = {
+          ...taskObj,
+          order: orderMap[task.id],
+        };
+
+        await dbApi.updateData(TASKS_ROOT, updates);
+        await persistColumnOrder(zone, toCol);
+      } else {
+        await persistColumnOrder(zone, toCol);
+      }
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+  }
 
   // Klick -> Detail
   el.addEventListener("click", async () => {
@@ -192,13 +273,12 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-    zone.classList.add("over"); 
+    zone.classList.add("over");
   });
   zone.addEventListener("dragleave", () => zone.classList.remove("over"));
   zone.addEventListener("drop", async (e) => {
     e.preventDefault();
     zone.classList.remove("over");
-
 
     const payload = safeParse(e.dataTransfer.getData("text/plain"));
     if (!payload) return;
