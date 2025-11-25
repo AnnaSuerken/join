@@ -680,7 +680,6 @@ function setEditPriority(p) {
   });
 }
 
-// Assignees im Edit
 const editAssigneeSelect = document.getElementById("edit-assignee-select");
 const editAssigneeOptions = document.getElementById("edit-assignee-options");
 const editAssigneeList = document.getElementById("edit-assignee-list");
@@ -704,7 +703,6 @@ function toggleEditAssigneeDropdown(open) {
   editAssigneeSelect.setAttribute("aria-expanded", String(open));
 }
 
-/* Ausgewählte Kontakte im Edit wie im Detail-Overlay darstellen */
 function renderEditAssigneeChips() {
   if (!editAssigneeList) return;
   editAssigneeList.innerHTML = "";
@@ -734,7 +732,6 @@ function renderEditAssigneeChips() {
   });
 }
 
-/* Options-Popup: alle Kontakte, ausgewählte hervorgehoben */
 function renderEditAssigneeOptions() {
   if (!editAssigneeOptions) return;
   editAssigneeOptions.innerHTML = "";
