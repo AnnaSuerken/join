@@ -197,7 +197,21 @@
                 </select>
 
                 <label for="subtask">Subtasks</label>
-                <input type="text" placeholder="Add new subtask" id="subtask" />
+                <div class="subtask-input-row">
+                  <input
+                    type="text"
+                    placeholder="Add new subtask"
+                    id="subtask"
+                  />
+                  <button
+                    type="button"
+                    id="subtask-add-btn"
+                    class="subtask-add-btn d_none"
+                    aria-label="Add subtask"
+                  >
+                    <img src="./assets/icons/hug.svg" alt="add subtask" />
+                  </button>
+                </div>
                 <div class="subtask-list" id="subtask-list"></div>
               </div>
             </form>
@@ -236,7 +250,6 @@
       </button>
     </nav>
 
-    <!-- Toast / Erfolgsmeldung -->
     <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
   </body>
 </html>

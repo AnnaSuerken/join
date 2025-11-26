@@ -3,11 +3,9 @@
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  margin-top: 64px;
   overflow: scroll;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  width: 100%;
 }
 .add-task-section h1 {
   font-size: 61px;
@@ -60,6 +58,37 @@
   border-radius: 10px;
 }
 
+/* 🔹 Subtask-Input mit Haken IM Feld */
+.subtask-input-row {
+  position: relative;
+  width: 440px;
+}
+
+.subtask-input-row #subtask {
+  width: 100%;
+  padding-right: 40px; /* Platz für den Haken im Feld */
+  box-sizing: border-box;
+}
+
+.subtask-add-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subtask-add-btn img {
+  width: 18px;
+  height: 18px;
+}
+
 .divider {
   background-color: #d1d1d1;
   width: 1px;
@@ -67,14 +96,13 @@
   margin-right: 10px;
 }
 
-/* Subtasks */
 .subtask-list {
   width: 100%;
   margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  height: 70px;
+  height: 148px;
 }
 
 .add-scroll-bar {
@@ -263,6 +291,10 @@
     width: 290px;
   }
 
+  .subtask-input-row {
+    width: 290px;
+  }
+
   /* Priority Buttons */
   .priority-container {
     width: 290px;
@@ -278,21 +310,20 @@
     width: 16px;
   }
 
-
   .priority-btn-urgent {
     padding: 10px 12px 10px 12px;
     font-size: 16px;
   }
 
   .priority-btn-urgent img {
-   width: 16px;
+    width: 16px;
   }
   .priority-btn-medium {
     padding: 10px 12px 10px 12px;
     font-size: 16px;
   }
-   .priority-btn-medium img {
-   width: 16px;
+  .priority-btn-medium img {
+    width: 16px;
   }
 
   .priority-btn-low {
@@ -300,15 +331,13 @@
     font-size: 16px;
   }
 
-   .priority-btn-low img {
-   width: 16px;
+  .priority-btn-low img {
+    width: 16px;
   }
+
   /* Trigger (sieht aus wie Select) */
   .assignee-select {
     width: 290px;
-  }
-  .assignee-select:focus {
-    outline: 2px solid #4b83ff;
   }
 
   /* Options-Popup */
@@ -357,6 +386,10 @@
     padding: 12px;
   }
 
+  .subtask-input-row {
+    width: 220px;
+  }
+
   /* Subtasks */
   .subtask-list {
     width: 100%;
@@ -374,16 +407,13 @@
 
   /* Priority Buttons */
   .priority-container {
-   width: 220px;
-   gap: 10px;
+    width: 220px;
+    gap: 10px;
   }
 
   /* Trigger (sieht aus wie Select) */
   .assignee-select {
     width: 220px;
-  }
-  .assignee-select:focus {
-    outline: 2px solid #4b83ff;
   }
 
   /* Options-Popup */
@@ -444,13 +474,16 @@
     padding: 12px;
   }
 
+  .subtask-input-row {
+    width: 396px;
+  }
+
   /* Priority Buttons */
   .priority-container {
     flex-direction: unset;
     width: 396px;
   }
 
-  /* Priority Buttons */
   .priority-btn {
     padding: 15px 18px;
   }
@@ -477,12 +510,8 @@
     height: auto;
   }
 
-  /* Trigger (sieht aus wie Select) */
   .assignee-select {
     width: 396px;
-  }
-  .assignee-select:focus {
-    outline: 2px solid #4b83ff;
   }
 
   /* Options-Popup */
@@ -509,7 +538,6 @@
 }
 
 /* mobile version*/
-
 @media (max-width: 430px) {
   .add-task-content {
     align-items: center;
@@ -542,12 +570,15 @@
     padding: 12px;
   }
 
+  .subtask-input-row {
+    width: 286px;
+  }
+
   /* Priority Buttons */
   .priority-container {
     flex-direction: unset;
   }
 
-  /* Priority Buttons */
   .priority-btn {
     padding: 10px 10px;
     font-size: 16px;
@@ -591,7 +622,6 @@
     height: auto;
   }
 
-  /* Trigger (sieht aus wie Select) */
   .assignee-select {
     width: 286px;
   }
@@ -602,7 +632,6 @@
   }
 
   /* Footer */
-
   .add-task-footer div {
     width: 286px;
     display: flex;

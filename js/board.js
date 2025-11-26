@@ -76,7 +76,6 @@ dbApi.onData(CONTACTS_ROOT, (val) => {
   render();
 });
 
-/* ---------- Render Board ---------- */
 function render() {
   COLS.forEach((c) => {
     if (colsEl[c]) colsEl[c].innerHTML = "";
@@ -86,9 +85,9 @@ function render() {
 
   const emptyText = {
     todo: "No task to do",
-    inprogress: "No task to do",
-    await: "No task to do",
-    done: "No task to do",
+    inprogress: "No task in progress",
+    await: "No Tasks Awaiting Feedback",
+    done: "No Tasks Done",
   };
 
   for (const c of COLS) {
@@ -107,7 +106,6 @@ function render() {
       })
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-    // Wenn keine (sichtbaren) Tasks, Platzhalter anzeigen
     if (!filtered.length) {
       const placeholder = document.createElement("div");
       placeholder.className = "no-task-placeholder";
@@ -121,7 +119,6 @@ function render() {
 }
 searchInput?.addEventListener("input", render);
 
-/* ---------- Task-Karte ---------- */
 function taskCard(task) {
   let completed = Number.isFinite(task.subtasksCompleted)
     ? task.subtasksCompleted
@@ -168,7 +165,7 @@ function taskCard(task) {
     </div>
   `;
 
-  // Drag & Drop
+  // Desktop Drag & Drop
   el.addEventListener("dragstart", (e) => {
     el.classList.add("dragging");
     const id = task.id;
@@ -177,6 +174,87 @@ function taskCard(task) {
     e.dataTransfer.setData("text/plain", JSON.stringify({ id, fromCol }));
   });
   el.addEventListener("dragend", () => el.classList.remove("dragging"));
+
+  // 🔹 Touch-Drag & Drop (Mobile / Tablet)
+  if ("ontouchstart" in window) {
+    let currentZone = null;
+
+    const onTouchStart = (e) => {
+      const touch = e.touches[0];
+      // optional: Start-Position merken, falls du visuell noch was machen willst
+      el.classList.add("dragging");
+      el.dataset.fromCol = findColumnOfTask(task.id) || "";
+    };
+
+    const onTouchMove = (e) => {
+      // verhindert Scrollen während Drag
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const zone = target?.closest(".dropzone");
+
+      // visuelles Feedback zurücksetzen
+      document
+        .querySelectorAll(".dropzone.over")
+        .forEach((z) => z.classList.remove("over"));
+
+      if (zone) {
+        zone.classList.add("over");
+        currentZone = zone;
+      } else {
+        currentZone = null;
+      }
+    };
+
+    const onTouchEnd = async (e) => {
+      el.classList.remove("dragging");
+      document
+        .querySelectorAll(".dropzone.over")
+        .forEach((z) => z.classList.remove("over"));
+
+      const fromCol = el.dataset.fromCol;
+      const zone = currentZone;
+      currentZone = null;
+      if (!zone || !fromCol) return;
+
+      const toCol = getZoneStatus(zone);
+      if (!toCol) return;
+
+      const touch = e.changedTouches[0];
+      const y = touch ? touch.clientY : 0;
+
+      // Position im DOM bestimmen (wie bei Maus-drop)
+      const afterEl = getDragAfterElement(zone, y);
+
+      if (afterEl == null) zone.appendChild(el);
+      else zone.insertBefore(el, afterEl);
+
+      // jetzt wie im normalen Drop in Firebase speichern
+      if (fromCol && fromCol !== toCol) {
+        const taskObj = data[fromCol]?.[task.id];
+        if (!taskObj) return;
+
+        const orderMap = buildOrderMapForZone(zone, toCol, task.id);
+        const updates = {};
+        updates[`${fromCol}/${task.id}`] = null;
+        updates[`${toCol}/${task.id}`] = {
+          ...taskObj,
+          order: orderMap[task.id],
+        };
+
+        await dbApi.updateData(TASKS_ROOT, updates);
+        await persistColumnOrder(zone, toCol);
+      } else {
+        await persistColumnOrder(zone, toCol);
+      }
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+  }
 
   // Klick -> Detail
   el.addEventListener("click", async () => {
@@ -191,7 +269,6 @@ function taskCard(task) {
   return el;
 }
 
-/* ---------- Dropzones ---------- */
 document.querySelectorAll(".dropzone").forEach((zone) => {
   zone.addEventListener("dragover", (e) => {
     e.preventDefault();
@@ -603,7 +680,6 @@ function setEditPriority(p) {
   });
 }
 
-// Assignees im Edit
 const editAssigneeSelect = document.getElementById("edit-assignee-select");
 const editAssigneeOptions = document.getElementById("edit-assignee-options");
 const editAssigneeList = document.getElementById("edit-assignee-list");
@@ -627,7 +703,6 @@ function toggleEditAssigneeDropdown(open) {
   editAssigneeSelect.setAttribute("aria-expanded", String(open));
 }
 
-/* Ausgewählte Kontakte im Edit wie im Detail-Overlay darstellen */
 function renderEditAssigneeChips() {
   if (!editAssigneeList) return;
   editAssigneeList.innerHTML = "";
@@ -657,7 +732,6 @@ function renderEditAssigneeChips() {
   });
 }
 
-/* Options-Popup: alle Kontakte, ausgewählte hervorgehoben */
 function renderEditAssigneeOptions() {
   if (!editAssigneeOptions) return;
   editAssigneeOptions.innerHTML = "";

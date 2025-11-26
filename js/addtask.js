@@ -49,6 +49,11 @@ function setSubtaskModeEdit(i) {
   input.classList.add("is-editing");
   input.focus();
   input.select();
+
+  const addBtn = document.getElementById("subtask-add-btn");
+  if (addBtn) {
+    addBtn.classList.toggle("d_none", !input.value.trim());
+  }
 }
 
 function setSubtaskModeAdd() {
@@ -58,6 +63,9 @@ function setSubtaskModeAdd() {
   input.value = "";
   input.placeholder = "Add new subtask";
   input.classList.remove("is-editing");
+
+  const addBtn = document.getElementById("subtask-add-btn");
+  if (addBtn) addBtn.classList.add("d_none");
 }
 
 function addSubtaskFromInput() {
@@ -127,8 +135,18 @@ function removeSubtask(index) {
 function wireSubtaskEvents() {
   const input = document.getElementById("subtask");
   const list = document.getElementById("subtask-list");
+  const addBtn = document.getElementById("subtask-add-btn");
   if (!input || !list) return;
 
+  // Eingabe -> Haken ein-/ausblenden
+  input.addEventListener("input", () => {
+    const hasValue = input.value.trim().length > 0;
+    if (addBtn) {
+      addBtn.classList.toggle("d_none", !hasValue);
+    }
+  });
+
+  // Enter / ESC
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -140,6 +158,16 @@ function wireSubtaskEvents() {
     }
   });
 
+  // Klick auf Haken-Button
+  if (addBtn && !addBtn._wired) {
+    addBtn.addEventListener("click", () => {
+      if (editingIndex === null) addSubtaskFromInput();
+      else saveEditFromInput();
+    });
+    addBtn._wired = true;
+  }
+
+  // Edit / Delete Buttons in der Liste
   list.addEventListener("click", (e) => {
     const btn = e.target.closest("button");
     if (!btn) return;
@@ -231,7 +259,12 @@ function buildAssigneeDropdown() {
     // visuelle Selektionsmarkierung initial
     syncOptionSelectedStates();
 
-    function syncOptionSelectedStates() {
+    // Expose intern, falls nach getContactsData() erneut gebraucht
+    buildAssigneeDropdown._sync = syncOptionSelectedStates;
+  }
+}
+
+function syncOptionSelectedStates() {
       const selectedNames = new Set(
         selectedAssignees.map((a) => a.name.toLowerCase())
       );
@@ -243,11 +276,6 @@ function buildAssigneeDropdown() {
         node.classList.toggle("is-selected", isSel);
       });
     }
-
-    // Expose intern, falls nach getContactsData() erneut gebraucht
-    buildAssigneeDropdown._sync = syncOptionSelectedStates;
-  }
-}
 
 /** Toggle per Index aus contactsData (aus Liste geklickt) */
 function toggleAssigneeByContactIndex(contactIndex) {
@@ -327,12 +355,10 @@ function setPriority(status) {
   currentPriority = status;
 }
 
-/* ---------- Task-Erstellung ---------- */
 let currentTaskColumn = "todo";
 
-async function createTask() {
+function setMandatoryInputs() {
   const taskTitle = document.getElementById("task-title");
-  const taskDescription = document.getElementById("task-description");
   const taskDueDate = document.getElementById("task-due-date");
   const taskCategory = document.getElementById("task-category");
 
@@ -342,8 +368,18 @@ async function createTask() {
     taskCategory?.value === "Select task category"
   ) {
     showToast("Please enter Title, Due date and Category");
-    return;
+    return false;
   }
+  return true;
+}
+
+async function createTask() {
+  if (!setMandatoryInputs()) return;
+  
+  const taskTitle = document.getElementById("task-title");
+  const taskDescription = document.getElementById("task-description");
+  const taskDueDate = document.getElementById("task-due-date");
+  const taskCategory = document.getElementById("task-category");
 
   const assigneeNames = selectedAssignees.map((a) => a.name);
 
@@ -365,6 +401,8 @@ async function createTask() {
   progressTablePush(payload, currentTaskColumn);
 }
 
+
+
 async function progressTablePush(payload, currentTaskColumn) {
   switch (currentTaskColumn) {
     case "todo":
@@ -380,8 +418,6 @@ async function progressTablePush(payload, currentTaskColumn) {
   }
 }
 
-/* ---------- Formular-Reset ---------- */
-
 function clearTask() {
   const priorities = ["urgent", "medium", "low"];
   const titleEl = document.getElementById("task-title");
@@ -390,6 +426,7 @@ function clearTask() {
   const categoryEl = document.getElementById("task-category");
   const subtaskInput = document.getElementById("subtask");
   const subtaskList = document.getElementById("subtask-list");
+  const addBtn = document.getElementById("subtask-add-btn");
 
   if (titleEl) titleEl.value = "";
   if (descEl) descEl.value = "";
@@ -399,8 +436,12 @@ function clearTask() {
     subtaskInput.value = "";
     subtaskInput.placeholder = "Add new subtask";
     subtaskInput.classList.remove("is-editing");
+  }
+  if (subtaskList) {
+    subtaskList.innerHTML = "";
     subtaskList.classList.remove("add-scroll-bar");
   }
+  if (addBtn) addBtn.classList.add("d_none");
 
   priorities.forEach((prio) => {
     document.getElementById(`prio-${prio}`)?.classList.remove("d_none");
@@ -410,7 +451,6 @@ function clearTask() {
   currentPriority = null;
   subtasks = [];
   editingIndex = null;
-  if (subtaskList) subtaskList.innerHTML = "";
 
   selectedAssignees = [];
   renderAssignees();

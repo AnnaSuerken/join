@@ -108,14 +108,61 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
+function animateCounter(element, target, duration = 200) {
+  if (!element) return;
+
+  const currentText = (element.textContent || "").replace(/[^\d-]/g, "");
+  const start = Number.isFinite(parseInt(currentText, 10))
+    ? parseInt(currentText, 10)
+    : 0;
+  const end = Number(target) || 0;
+
+  const diff = end - start;
+  if (diff === 0) {
+    element.textContent = end;
+    return;
+  }
+
+  // kleine dynamische Anpassung: große Sprünge dauern minimal länger
+  const baseDuration = duration;
+  const extra = Math.min(Math.abs(diff) * 20, 600); // max +600ms
+  const totalDuration = baseDuration + extra;
+
+  const startTime = performance.now();
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / totalDuration, 1); // 0..1
+    const value = Math.round(start + diff * progress);
+    element.textContent = value;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = end; // sicherheitshalber
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+function setNumberAnimated(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  animateCounter(el, value);
+}
+
+/* ---------------------------------------------------------- */
+
 function renderBoardSummary(board) {
   if (!board) {
-    setText("summary-task-todo-number", 0);
-    setText("summary-task-done-number", 0);
-    setText("allTasks", 0);
-    setText("inProgress", 0);
-    setText("awaitingFeedback", 0);
-    setText("urgent-count", 0);
+    // auch bei leerem Board animiert von aktuellem Wert auf 0
+    setNumberAnimated("summary-task-todo-number", 0);
+    setNumberAnimated("summary-task-done-number", 0);
+    setNumberAnimated("allTasks", 0);
+    setNumberAnimated("inProgress", 0);
+    setNumberAnimated("awaitingFeedback", 0);
+    setNumberAnimated("urgent-count", 0);
     setText("next-deadline", "–");
     return;
   }
@@ -123,17 +170,17 @@ function renderBoardSummary(board) {
   const { todo, inProgress, done, awaiting } = normalizeBoard(board);
   const allTasks = [...todo, ...inProgress, ...done, ...awaiting];
 
-  setText("summary-task-todo-number", todo.length);
-  setText("summary-task-done-number", done.length);
-  setText("inProgress", inProgress.length);
-  setText("awaitingFeedback", awaiting.length);
-  setText("allTasks", allTasks.length);
+  setNumberAnimated("summary-task-todo-number", todo.length);
+  setNumberAnimated("summary-task-done-number", done.length);
+  setNumberAnimated("inProgress", inProgress.length);
+  setNumberAnimated("awaitingFeedback", awaiting.length);
+  setNumberAnimated("allTasks", allTasks.length);
 
   // Urgent (über alle Spalten)
   const urgentCount = allTasks.filter(isUrgent).length;
-  setText("urgent-count", urgentCount);
+  setNumberAnimated("urgent-count", urgentCount);
 
-  // Nächste zukünftige Deadline
+
   const now = new Date();
   const futureDueDates = allTasks
     .map(parseDueDate)
