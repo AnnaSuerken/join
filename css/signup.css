@@ -2,7 +2,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 120px;
+  padding-bottom: 32px;
 }
 
 .logo-box-signup {
@@ -102,10 +102,8 @@ main {
   border-radius: 25px;
   box-shadow: -1px 0px 6px 0px rgb(0, 0, 0, 0.2);
   padding-top: 32px;
-  padding-bottom: 32px;
-  padding-left: 16px;
-  padding-right: 16px;
-  width: 50%;
+  padding-left: 32px;
+  padding-right: 32px;
   color: #f6f7f8;
 }
 
@@ -134,7 +132,6 @@ main {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
   padding: 48px;
 }
 

@@ -86,12 +86,13 @@
 
             <form class="add-task-content">
               <div class="add-task-content-right">
-                <label for="task-title">Title<span>*</span></label>
+                <label for="task-title">Title<span class="mandatory-field">*</span></label>
                 <input
                   type="text"
                   placeholder="Enter a Title"
                   id="task-title"
                 />
+                <p id="add-task-title-error" class="input-error"></p>
 
                 <label for="task-description">Description</label>
                 <textarea
@@ -99,8 +100,9 @@
                   id="task-description"
                 ></textarea>
 
-                <label for="task-due-date">Due date<span>*</span></label>
+                <label for="task-due-date">Due date<span class="mandatory-field">*</span></label>
                 <input type="date" min="" id="task-due-date" />
+                <p id="add-task-date-error" class="input-error"></p>
               </div>
 
               <div class="divider"></div>
@@ -187,14 +189,15 @@
                 ></ul>
                 <div id="assignee-list" class="assignee-list"></div>
 
-                <label for="category">Category<span>*</span></label>
-                <select name="category" id="task-category">
+                <label for="category">Category<span class="mandatory-field">*</span></label>
+                <select name="category" id="task-category" class="select">
                   <option value="Select task category">
                     Select task category
                   </option>
                   <option value="Technical Task">Technical Task</option>
                   <option value="User Story">User Story</option>
                 </select>
+                <p id="add-task-category-error" class="input-error"></p>
 
                 <label for="subtask">Subtasks</label>
                 <div class="subtask-input-row">
@@ -217,7 +220,7 @@
             </form>
 
             <div class="add-task-footer">
-              <p><span>*</span>This field is required</p>
+              <p><span class="mandatory-field">*</span>This field is required</p>
               <div>
                 <button class="white-btn" onclick="clearTask()">Clear X</button>
                 <button onclick="createTask()" class="blue-btn-bold">

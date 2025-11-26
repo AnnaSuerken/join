@@ -265,17 +265,17 @@ function buildAssigneeDropdown() {
 }
 
 function syncOptionSelectedStates() {
-      const selectedNames = new Set(
-        selectedAssignees.map((a) => a.name.toLowerCase())
-      );
-      list.querySelectorAll(".assignee-option").forEach((node) => {
-        const i = Number(node.dataset.index);
-        const name = (contactsData[i]?.name || "").toLowerCase();
-        const isSel = selectedNames.has(name);
-        node.setAttribute("aria-selected", String(isSel));
-        node.classList.toggle("is-selected", isSel);
-      });
-    }
+  const selectedNames = new Set(
+    selectedAssignees.map((a) => a.name.toLowerCase())
+  );
+  list.querySelectorAll(".assignee-option").forEach((node) => {
+    const i = Number(node.dataset.index);
+    const name = (contactsData[i]?.name || "").toLowerCase();
+    const isSel = selectedNames.has(name);
+    node.setAttribute("aria-selected", String(isSel));
+    node.classList.toggle("is-selected", isSel);
+  });
+}
 
 /** Toggle per Index aus contactsData (aus Liste geklickt) */
 function toggleAssigneeByContactIndex(contactIndex) {
@@ -357,29 +357,40 @@ function setPriority(status) {
 
 let currentTaskColumn = "todo";
 
-function setMandatoryInputs() {
-  const taskTitle = document.getElementById("task-title");
-  const taskDueDate = document.getElementById("task-due-date");
-  const taskCategory = document.getElementById("task-category");
+//Form validation//
 
-  if (
-    !taskTitle?.value.trim() ||
-    !taskDueDate?.value ||
-    taskCategory?.value === "Select task category"
-  ) {
-    showToast("Please enter Title, Due date and Category");
-    return false;
+const taskTitle = document.getElementById("task-title");
+const taskDescription = document.getElementById("task-description");
+const taskDueDate = document.getElementById("task-due-date");
+const taskCategory = document.getElementById("task-category");
+const titleError = document.getElementById("add-task-title-error");
+const dateError = document.getElementById("add-task-date-error");
+const categoryError = document.getElementById("add-task-category-error");
+
+function setMandatoryInputs() {
+  clearAddTaskErrors();
+  let isValid = true;
+
+  if (!taskTitle?.value.trim()) {
+    titleError.textContent = "This field is required";
+    taskTitle.classList.add("error");
+    isValid = false;
   }
-  return true;
+  if (!taskDueDate?.value) {
+    dateError.textContent = "This field is required";
+    taskDueDate.classList.add("error");
+    isValid = false;
+  }
+  if (taskCategory?.value === "Select task category") {
+    categoryError.textContent = "This field is required";
+    taskCategory.classList.add("error");
+    isValid = false;
+  }
+  return isValid;
 }
 
 async function createTask() {
   if (!setMandatoryInputs()) return;
-  
-  const taskTitle = document.getElementById("task-title");
-  const taskDescription = document.getElementById("task-description");
-  const taskDueDate = document.getElementById("task-due-date");
-  const taskCategory = document.getElementById("task-category");
 
   const assigneeNames = selectedAssignees.map((a) => a.name);
 
@@ -401,8 +412,6 @@ async function createTask() {
   progressTablePush(payload, currentTaskColumn);
 }
 
-
-
 async function progressTablePush(payload, currentTaskColumn) {
   switch (currentTaskColumn) {
     case "todo":
@@ -418,7 +427,20 @@ async function progressTablePush(payload, currentTaskColumn) {
   }
 }
 
+function clearAddTaskErrors() {
+  [titleError, dateError, categoryError].forEach(
+    (el) => {
+      if (el) el.textContent = "";
+    }
+  );
+
+  [taskTitle, taskDueDate, taskCategory].forEach((input) => {
+    if (input) input.classList.remove("error");
+  });
+}
+
 function clearTask() {
+  clearAddTaskErrors(); 
   const priorities = ["urgent", "medium", "low"];
   const titleEl = document.getElementById("task-title");
   const descEl = document.getElementById("task-description");

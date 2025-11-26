@@ -127,7 +127,6 @@
 }
 
 .input-wrapper {
-  padding-top: 15px;
   position: relative;
   display: flex;
   align-items: center;
@@ -259,8 +258,15 @@
   min-height: 18px; 
 }
 
-.signup-input.error {
+.error {
   border: 1px solid crimson;
+}
+
+select.error {
+  border: 1px solid crimson !important;
+  border-radius: 6px;
+  background-color: white;
+  outline: none;
 }
 
 @keyframes spin {
