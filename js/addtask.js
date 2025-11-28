@@ -355,20 +355,42 @@ function setPriority(status) {
   currentPriority = status;
 }
 
-let currentTaskColumn = "todo";
+
 
 //Form validation//
+function getTaskFormElements(form) {
+  return {
+    taskTitle: form.querySelector(".task-title"),
+    taskDescription: form.querySelector(".task-description"),
+    taskDueDate: form.querySelector(".task-due-date"),
+    taskCategory: form.querySelector(".task-category"),
+    titleError: form.querySelector(".title-error, #add-task-title-error"),
+    dateError: form.querySelector(".date-error, #add-task-date-error"),
+    categoryError: form.querySelector(
+      ".category-error, #add-task-category-error"
+    ),
+  };
+}
 
-const taskTitle = document.getElementById("task-title");
-const taskDescription = document.getElementById("task-description");
-const taskDueDate = document.getElementById("task-due-date");
-const taskCategory = document.getElementById("task-category");
-const titleError = document.getElementById("add-task-title-error");
-const dateError = document.getElementById("add-task-date-error");
-const categoryError = document.getElementById("add-task-category-error");
+function setMandatoryInputs(form) {
+  const {
+    taskTitle,
+    taskDueDate,
+    taskCategory,
+    titleError,
+    dateError,
+    categoryError,
+  } = getTaskFormElements(form);
 
-function setMandatoryInputs() {
-  clearAddTaskErrors();
+  clearAddTaskErrors(form);
+
+  [titleError, dateError, categoryError].forEach(
+    (el) => el && (el.textContent = "")
+  );
+  [taskTitle, taskDueDate, taskCategory].forEach(
+    (el) => el && el.classList.remove("error")
+  );
+
   let isValid = true;
 
   if (!taskTitle?.value.trim()) {
@@ -386,12 +408,15 @@ function setMandatoryInputs() {
     taskCategory.classList.add("error");
     isValid = false;
   }
+
   return isValid;
 }
 
-async function createTask() {
-  if (!setMandatoryInputs()) return;
+async function createTask(form) {
+  if (!setMandatoryInputs(form)) return;
 
+  const { taskTitle, taskDescription, taskDueDate, taskCategory } =
+    getTaskFormElements(form);
   const assigneeNames = selectedAssignees.map((a) => a.name);
 
   const payload = {
@@ -399,8 +424,8 @@ async function createTask() {
     id: "",
     secondline: taskDescription?.value || "",
     deadline: taskDueDate.value,
-    assignedContacts: assigneeNames, // Array (neu)
-    assignedContact: assigneeNames.join(", "), // String (kompatibel)
+    assignedContacts: assigneeNames,
+    assignedContact: assigneeNames.join(", "),
     category: taskCategory?.value || "",
     categorycolor:
       taskCategoryColor.find((c) => c.name === taskCategory?.value)?.color ||
@@ -409,10 +434,13 @@ async function createTask() {
     priority: currentPriority,
   };
 
-  progressTablePush(payload, currentTaskColumn);
+  progressTablePush(payload, currentTaskColumn, form);
+  clearTask(form);
 }
 
-async function progressTablePush(payload, currentTaskColumn) {
+let currentTaskColumn = "todo";
+
+async function progressTablePush(payload, currentTaskColumn, form) {
   switch (currentTaskColumn) {
     case "todo":
     case "inprogress":
@@ -421,39 +449,46 @@ async function progressTablePush(payload, currentTaskColumn) {
       const key = await dbApi.pushData(`/board/${currentTaskColumn}`, payload);
       await dbApi.updateData(`/board/${currentTaskColumn}/${key}`, { id: key });
       showToast("Task was added.");
-      clearTask();
+      clearTask(form);
       break;
     }
   }
 }
 
-function clearAddTaskErrors() {
-  [titleError, dateError, categoryError].forEach(
-    (el) => {
-      if (el) el.textContent = "";
-    }
-  );
+function clearAddTaskErrors(form) {
+  const {
+    taskTitle,
+    taskDueDate,
+    taskCategory,
+    titleError,
+    dateError,
+    categoryError,
+  } = getTaskFormElements(form);
 
-  [taskTitle, taskDueDate, taskCategory].forEach((input) => {
-    if (input) input.classList.remove("error");
-  });
+  [titleError, dateError, categoryError].forEach(
+    (el) => el && (el.textContent = "")
+  );
+  [taskTitle, taskDueDate, taskCategory].forEach(
+    (el) => el && el.classList.remove("error")
+  );
 }
 
-function clearTask() {
-  clearAddTaskErrors(); 
+function clearTask(form) {
+  if (!form) return;
+
+  const { taskTitle, taskDescription, taskDueDate, taskCategory } =
+    getTaskFormElements(form);
+
+  clearAddTaskErrors(form);
   const priorities = ["urgent", "medium", "low"];
-  const titleEl = document.getElementById("task-title");
-  const descEl = document.getElementById("task-description");
-  const dateEl = document.getElementById("task-due-date");
-  const categoryEl = document.getElementById("task-category");
   const subtaskInput = document.getElementById("subtask");
   const subtaskList = document.getElementById("subtask-list");
   const addBtn = document.getElementById("subtask-add-btn");
 
-  if (titleEl) titleEl.value = "";
-  if (descEl) descEl.value = "";
-  if (dateEl) dateEl.value = "";
-  if (categoryEl) categoryEl.value = "Select task category";
+  if (taskTitle) taskTitle.value = "";
+  if (taskDescription) taskDescription.value = "";
+  if (taskDueDate) taskDueDate.value = "";
+  if (taskCategory) taskCategory.value = "Select task category";
   if (subtaskInput) {
     subtaskInput.value = "";
     subtaskInput.placeholder = "Add new subtask";
@@ -482,7 +517,7 @@ function clearTask() {
 /* ---------- Init ---------- */
 
 addEventListener("load", function () {
-  const dayRef = document.getElementById("task-due-date");
+  const dayRef = document.querySelector(".task-due-date");
   if (dayRef) {
     const day = new Date();
     dayRef.min = day.toISOString().split("T")[0];

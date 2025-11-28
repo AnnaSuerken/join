@@ -16,23 +16,32 @@ const TASKS_ROOT = "/board";
 const CONTACTS_ROOT = "/contacts";
 const COLS = ["todo", "inprogress", "await", "done"];
 
-/* ---------- UI: Add-Task Overlay ---------- */
-document.querySelectorAll(".open-add-task-overlay").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.getElementById("add-task-overlay")?.classList.remove("d_none");
-    document.body.classList.add("no-scroll");
-    // kommen aus deiner bestehenden Add-Task-Logik
-    window.getContactsData?.();
-    window.clearTask?.();
-    if (btn.dataset.column) window.currentTaskColumn = btn.dataset.column;
-  });
-});
+/* ---------- UI: Add-Task Overlay open/close ---------- */
+function openAddTaskOverlay(btn) {
+  const overlay = document.getElementById("add-task-overlay");
+  const form = overlay?.querySelector(".task-form");
+  overlay?.classList.remove("d_none");
+  document.body.classList.add("no-scroll");
+  window.getContactsData?.();
+  if (form) window.clearTask?.(form);
+  if (btn.dataset.column) currentTaskColumn = btn.dataset.column;
+  console.log(currentTaskColumn)
+}
 
-const closeButton = document.getElementById("close-btn");
-closeButton?.addEventListener("click", () => {
-  document.getElementById("add-task-overlay")?.classList.add("d_none");
+function closeAddTaskOverlay() {
+  const overlay = document.getElementById("add-task-overlay");
+  const form = overlay?.querySelector(".task-form");
+  if (form) window.clearTask?.(form);
+  overlay?.classList.add("d_none");
   document.body.classList.remove("no-scroll");
   window.currentTaskColumn = "todo";
+}
+
+document.addEventListener("click", e => {
+  const openBtn = e.target.closest(".open-add-task-overlay");
+  if (openBtn) return openAddTaskOverlay(openBtn);
+
+  if (e.target.closest("#add-task-overlay .close-btn")) return closeAddTaskOverlay();
 });
 
 /* ---------- DOM-Referenzen ---------- */
@@ -84,10 +93,8 @@ dbApi.onData(CONTACTS_ROOT, (val) => {
         phone: c?.phone ?? "",
       };
       contactsById.set(id, contact);
-      if (contact.name)
-        contactIdByName.set(contact.name.toLowerCase(), id);
-      if (contact.email)
-        contactIdByEmail.set(contact.email.toLowerCase(), id);
+      if (contact.name) contactIdByName.set(contact.name.toLowerCase(), id);
+      if (contact.email) contactIdByEmail.set(contact.email.toLowerCase(), id);
     }
   }
 
