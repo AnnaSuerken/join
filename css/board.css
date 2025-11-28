@@ -3,7 +3,8 @@
   justify-content: space-between;
   align-items: center;
   width: auto;
-  height: 232px;
+  padding-top: 106px;
+  padding-bottom: 32px;
 }
 
 .board-header h1 {
@@ -51,7 +52,7 @@
   font-size: 20px;
   font-weight: 700;
   color: #42526e;
-  width: clamp(300px, 100%, 400px);
+  width: clamp(240px, 100%, 400px);
 }
 
 .task-table-header button {
@@ -91,7 +92,8 @@
   padding: 12px;
   cursor: pointer;
   margin: 16px;
-  width: clamp(280px, 95%, 400px);
+  max-width: 300px;
+  min-width: 200px;
   touch-action: none;
 }
 
@@ -103,7 +105,7 @@
   background-color: #0038ff;
   color: white;
   border-radius: 4px;
-  width: 50%;
+  width: 62%;
   text-align: center;
   padding: 4px;
   margin-bottom: 12px;
