@@ -368,6 +368,7 @@ body.board-overlay-open::before {
 progress {
   -webkit-appearance: none;
   height: 5px;
+  width: auto;
 }
 
 ::-webkit-progress-bar {
@@ -381,7 +382,6 @@ progress {
 }
 
 .task-subtasks p {
-  display: flex;
   align-items: center;
   width: 100%;
   text-align: center;

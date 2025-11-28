@@ -106,6 +106,25 @@ const store =
       }
     : localStore;
 
+/*************** Mobile Helper ***************/
+
+function isMobileLayout() {
+  return window.innerWidth <= 820;
+}
+
+function showDetailFullscreenIfMobile() {
+  if (!isMobileLayout()) return;
+  const cm = qs(".contacts-main");
+  const backBtn = byId("return-arrow");
+  if (backBtn) backBtn.classList.remove("d_none");
+  if (cm) cm.classList.add("show-detail");
+}
+
+function hideDetailFullscreen() {
+  const cm = qs(".contacts-main");
+  if (cm) cm.classList.remove("show-detail");
+}
+
 /*************** Normalisierung & Helper ***************/
 
 function normalizeContact(id, raw) {
@@ -161,9 +180,9 @@ function renderContactListLegacy() {
         <div class="contact-row-email">${c.email}</div>
       </div>`;
     row.addEventListener("click", () => {
-      // ✅ Kontakt markieren + Detail rendern
       setActiveRow(c.id);
       renderContactDetailLegacy(c.id);
+      showDetailFullscreenIfMobile();
     });
     listEl.appendChild(row);
   });
@@ -266,24 +285,22 @@ function makeRow(c) {
       <a class="row-email" href="mailto:${c.email}">${c.email}</a>
     </div>`;
   b.addEventListener("click", () => {
-    // ✅ markiert bleiben
     setActiveRow(c.id);
     updateDetailModern(c.id);
+    showDetailFullscreenIfMobile();
   });
   return b;
 }
 
-/** 🔥 Hier wird der aktive Kontakt in beiden Layouts markiert */
+/** aktive Kontaktzeile markieren */
 function setActiveRow(cid) {
   state.selectedId = cid;
   const targetId = String(cid);
 
-  // Modern
   qsa(".row").forEach((r) => {
     r.classList.toggle("active", r.dataset.id === targetId);
   });
 
-  // Legacy
   qsa(".contact-row").forEach((r) => {
     r.classList.toggle("active", r.dataset.id === targetId);
   });
@@ -368,17 +385,78 @@ function openOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
   if (overlay) overlay.classList.remove("d_none");
 }
+
 function closeOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
   if (overlay) overlay.classList.add("d_none");
   byId("add-contact-form")?.reset();
+
+  // Avatar im Overlay wieder zurück auf Standard
+  const avatar = byId("modal-avatar-preview");
+  if (avatar) {
+    avatar.style.backgroundColor = "#efefef";
+    avatar.innerHTML =
+      '<img src="./assets/icons/person.svg" alt="avatar placeholder" />';
+  }
+}
+
+/**
+ * Gemeinsamer Einstieg für Create & Edit – nutzt den Legacy-Overlay
+ */
+function openModal(mode = "create", cid = state.selectedId) {
+  modalMode = mode;
+
+  const nameInput = byId("contact-name-input");
+  const emailInput = byId("contact-email-input");
+  const phoneInput = byId("contact-phone-input");
+  const titleEl = qs(".add-contact-headline");
+  const primaryBtn = byId("create-contact-btn");
+  const avatar = byId("modal-avatar-preview");
+
+  if (!nameInput || !emailInput || !phoneInput) {
+    openOverlayLegacy();
+    return;
+  }
+
+  if (mode === "edit" && cid && state.data[cid]) {
+    const c = normalizeContact(cid, state.data[cid]);
+    nameInput.value = c.name;
+    emailInput.value = c.email;
+    phoneInput.value = c.phone || "";
+
+    if (titleEl) titleEl.textContent = "Edit contact";
+    if (primaryBtn) primaryBtn.textContent = "Save contact ✓";
+
+    // 🔥 Avatar des Kontakts im Overlay anzeigen
+    if (avatar) {
+      avatar.style.backgroundColor = c.color;
+      avatar.innerHTML = `<span style="color:#fff; font-size:24px; font-weight:500;">${c.initials}</span>`;
+    }
+  } else {
+    // Create-Modus
+    nameInput.value = "";
+    emailInput.value = "";
+    phoneInput.value = "";
+
+    if (titleEl) titleEl.textContent = "Add contact";
+    if (primaryBtn) primaryBtn.textContent = "Create contact ✓";
+
+    // Standard-Avatar (Icon)
+    if (avatar) {
+      avatar.style.backgroundColor = "#efefef";
+      avatar.innerHTML =
+        '<img src="./assets/icons/person.svg" alt="avatar placeholder" />';
+    }
+  }
+
+  openOverlayLegacy();
 }
 
 function attachLegacyOverlayHandlers() {
-  byId("open-add-contact-overlay")?.addEventListener(
-    "click",
-    openOverlayLegacy
+  byId("open-add-contact-overlay")?.addEventListener("click", () =>
+    openModal("create")
   );
+
   byId("close-add-contact-overlay")?.addEventListener(
     "click",
     closeOverlayLegacy
@@ -387,144 +465,33 @@ function attachLegacyOverlayHandlers() {
     "click",
     closeOverlayLegacy
   );
+
   byId("create-contact-btn")?.addEventListener("click", () => {
     const name = byId("contact-name-input")?.value.trim();
     const email = byId("contact-email-input")?.value.trim();
     const phone = byId("contact-phone-input")?.value.trim();
-    const color = colorPool[hashStr(name) % colorPool.length];
+
     if (!name || !email) return;
-    createContact(name, email, phone, color).then(closeOverlayLegacy);
+
+    if (modalMode === "edit" && state.selectedId) {
+      saveEdit(name, email, phone).then(() => {
+        closeOverlayLegacy();
+      });
+    } else {
+      const color = colorPool[hashStr(name) % colorPool.length];
+      createContact(name, email, phone, color).then(() => {
+        closeOverlayLegacy();
+      });
+    }
   });
 }
 
-function openModal(mode = "create", cid = state.selectedId) {
-  modalMode = mode;
-  const overlay = byId("contactModal");
-  const card = overlay?.querySelector(".modal");
-  const form = byId("contactForm");
-  const name = byId("nameInput");
-  const email = byId("emailInput");
-  const phone = byId("phoneInput");
-  if (!overlay || !card || !form || !name || !email || !phone) {
-    // Fallback: Legacy-Overlay
-    if (mode === "create") openOverlayLegacy();
-    else if (cid) {
-      byId("contact-name-input") &&
-        (byId("contact-name-input").value = state.data[cid]?.name || "");
-      byId("contact-email-input") &&
-        (byId("contact-email-input").value = state.data[cid]?.email || "");
-      byId("contact-phone-input") &&
-        (byId("contact-phone-input").value = state.data[cid]?.phone || "");
-      openOverlayLegacy();
-    }
-    return;
-  }
-
-  if (mode === "edit") {
-    const c = normalizeContact(cid, state.data[cid]);
-    name.value = c.name;
-    email.value = c.email;
-    phone.value = c.phone;
-    byId("formAvatar") && (byId("formAvatar").textContent = c.initials);
-  } else {
-    form.reset();
-    byId("formAvatar") && (byId("formAvatar").textContent = "?");
-  }
-
-  byId("modalTitle") &&
-    (byId("modalTitle").textContent =
-      mode === "edit" ? "Edit contact" : "Add contact");
-  byId("submitBtn") &&
-    (byId("submitBtn").textContent =
-      mode === "edit" ? "Save changes ▾" : "Create contact ▾");
-
-  overlay.hidden = false;
-  overlay.classList.add("is-open");
-  card.classList.remove("is-leaving");
-  void card.offsetWidth;
-  card.classList.add("is-entering");
-  setTimeout(() => name.focus(), 0);
-
-  const cleanupTrap = trapFocus(card);
-  const doClose = () => {
-    cleanupTrap();
-    closeModal();
-  };
-
-  const escHandler = (e) => {
-    if (e.key === "Escape") {
-      document.removeEventListener("keydown", escHandler);
-      doClose();
-    }
-  };
-  document.addEventListener("keydown", escHandler);
-  const clickHandler = (e) => {
-    if (e.target === overlay) {
-      overlay.removeEventListener("click", clickHandler);
-      doClose();
-    }
-  };
-  overlay.addEventListener("click", clickHandler);
-  const animHandler = (e) => {
-    if (e.animationName === "modalIn") card.classList.remove("is-entering");
-  };
-  card.addEventListener("animationend", animHandler, { once: true });
-}
-
 function closeModal() {
-  const overlay = byId("contactModal");
-  const card = overlay?.querySelector(".modal");
-  const form = byId("contactForm");
-  if (!overlay || !card) return;
-  card.classList.remove("is-entering");
-  card.classList.add("is-leaving");
-  const onEnd = (e) => {
-    if (e.animationName !== "modalOut") return;
-    card.removeEventListener("animationend", onEnd);
-    overlay.classList.remove("is-open");
-    overlay.hidden = true;
-    card.classList.remove("is-leaving");
-    form?.reset();
-    byId("formAvatar") && (byId("formAvatar").textContent = "?");
-  };
-  card.addEventListener("animationend", onEnd);
+  // moderner Modal wird aktuell nicht genutzt
 }
 
 function onSubmitForm(e) {
   e?.preventDefault?.();
-  const btn = byId("submitBtn");
-  if (btn?.dataset?.busy) return;
-  if (btn) btn.dataset.busy = "1";
-
-  const name = (
-    byId("nameInput")?.value ||
-    byId("contact-name-input")?.value ||
-    ""
-  ).trim();
-  const email = (
-    byId("emailInput")?.value ||
-    byId("contact-email-input")?.value ||
-    ""
-  ).trim();
-  const phone = (
-    byId("phoneInput")?.value ||
-    byId("contact-phone-input")?.value ||
-    ""
-  ).trim();
-  if (!name || !email) {
-    if (btn) btn.dataset.busy = "";
-    return;
-  }
-
-  const op =
-    modalMode === "edit"
-      ? saveEdit(name, email, phone)
-      : createContact(name, email, phone);
-  Promise.resolve(op).finally(() => {
-    if (btn) btn.dataset.busy = "";
-    closeModal();
-    closeOverlayLegacy();
-  });
 }
 
 /****************
@@ -560,7 +527,7 @@ async function saveEdit(name, email, phone) {
     });
   } catch (e) {
     console.error(e);
-    showToast("Update failed");
+    typeof showToast === "function" && showToast("Update failed");
   }
 }
 
@@ -571,30 +538,11 @@ async function onDelete() {
   try {
     await store.deleteData(`contacts/${id}`);
     state.selectedId = null;
+    hideDetailFullscreen();
   } catch (e) {
     console.error(e);
-    showToast("Delete failed");
+    typeof showToast === "function" && showToast("Delete failed");
   }
-}
-
-qsa(".contact-row").forEach((r) => {
-  r.classList.toggle("active", r.dataset.id === targetId);
-});
-
-qsa(".row").forEach((r) => {
-  r.classList.toggle("active", r.dataset.id === targetId);
-});
-
-function attachModernHandlers() {
-  byId("openAddModal")?.addEventListener("click", () => openModal("create"));
-  byId("cancelBtn")?.addEventListener("click", closeModal);
-  byId("modalCloseBtn")?.addEventListener("click", closeModal);
-  byId("contactForm")?.addEventListener("submit", onSubmitForm);
-  byId("nameInput")?.addEventListener("input", (e) => {
-    const v = e.target.value;
-    const el = byId("formAvatar");
-    if (el) el.textContent = initialsFromName(v) || "?";
-  });
 }
 
 /** Nach jedem Render aktive Zeile erneut setzen */
@@ -604,7 +552,6 @@ function afterRenderSelectFallback() {
     (qs(`.row[data-id="${state.selectedId}"]`) ||
       qs(`.contact-row[data-id="${state.selectedId}"]`))
   ) {
-    // 🔥 aktive Markierung wiederherstellen
     setActiveRow(state.selectedId);
 
     if (qs(".detail-card")) updateDetailModern(state.selectedId);
@@ -612,7 +559,6 @@ function afterRenderSelectFallback() {
     return;
   }
 
-  // Wenn noch nichts gewählt -> ersten Kontakt auswählen
   const firstModern = qs(".row");
   const firstLegacy = qs(".contact-row");
   const first = firstModern || firstLegacy;
@@ -653,10 +599,31 @@ function startLiveView() {
   });
 }
 
+function attachModernHandlers() {
+  byId("openAddModal")?.addEventListener("click", () => openModal("create"));
+
+  const backBtn = byId("return-arrow");
+  if (backBtn && !backBtn.dataset.bound) {
+    backBtn.addEventListener("click", () => {
+      backBtn.classList.add("d_none");
+      hideDetailFullscreen();
+    });
+    backBtn.dataset.bound = "1";
+  }
+}
+
 function init() {
   startLiveView();
   attachModernHandlers();
   attachLegacyOverlayHandlers();
+
+  window.addEventListener("resize", () => {
+    if (!isMobileLayout()) {
+      hideDetailFullscreen();
+      const backBtn = byId("return-arrow");
+      if (backBtn) backBtn.classList.add("d_none");
+    }
+  });
 }
 
 window.addEventListener("load", init);

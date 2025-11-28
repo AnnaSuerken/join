@@ -14,6 +14,11 @@
   background-color: #fff;
 }
 
+/* Back-Button im Detail (Standard: nur auf Mobile sichtbar) */
+.contact-back-btn {
+  display: none;
+}
+
 /* ============================= */
 /* MAIN LAYOUT */
 /* ============================= */
@@ -29,7 +34,6 @@
 /* ============================= */
 
 .contacts-panel {
-  flex: 0 0 360px;
   max-width: 360px;
   min-width: 360px;
   border-right: 1px solid #d1d1d1;
@@ -218,7 +222,6 @@
 
 .contact-header-row {
   display: flex;
-  align-items: center;
   gap: 24px;
   margin-bottom: 24px;
   flex-wrap: wrap;
@@ -251,7 +254,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  flex-wrap: wrap; /* darf umbrechen, Buttons gehen dann in die nächste Zeile */
+  flex-wrap: wrap;
 }
 
 .contact-name {
@@ -265,7 +268,7 @@
   display: flex;
   flex-direction: row;
   gap: 12px;
-  flex-wrap: nowrap; /* Buttons selbst bleiben nebeneinander */
+  flex-wrap: nowrap;
   align-items: center;
 }
 
@@ -280,7 +283,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap; /* Text in Button bricht nicht um */
+  white-space: nowrap;
   color: #000;
 }
 
@@ -353,12 +356,13 @@
   z-index: 2000;
 }
 
+/* 🔧 Nicht mehr fullscreen, sondern zentriert und begrenzt */
 .add-contact-modal {
   background-color: #fff;
   border-radius: 12px;
-  min-width: 800px;
+  width: 100%;
   max-width: 900px;
-  width: 90%;
+  max-height: 90vh;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   overflow: hidden;
@@ -468,18 +472,22 @@
   }
 
   .contacts-panel {
-    flex: 0 0 320px;
     max-width: 320px;
     min-width: 320px;
   }
+
+  /* Modal kleiner auf Tablet */
+  .add-contact-modal {
+    max-width: 720px;
+  }
 }
 
-/* Handy-Layout: Liste + Detail untereinander */
+/* Handy-Layout: Liste + Detail als Screens */
 @media (max-width: 820px) {
   .contacts-main {
     flex-direction: column;
-    height: auto;
-    overflow: visible;
+    height: calc(100vh - 180px);
+    overflow: hidden;
   }
 
   .contacts-panel {
@@ -488,8 +496,8 @@
     min-width: 0 !important;
     border-right: none !important;
     border-bottom: 1px solid #d1d1d1;
-    height: auto;
-    overflow-y: visible !important;
+    height: calc(100vh - 180px);
+    overflow-y: auto !important;
     padding-bottom: 16px !important;
   }
 
@@ -501,25 +509,40 @@
     flex: 0 0 auto;
     width: 100%;
     padding: 24px 16px 16px;
-    height: auto;
-    justify-content: center;
-    display: flex;
-    align-items: center;
+    height: calc(100vh - 180px);
+    justify-content: flex-start;
+    display: none;
+    align-items: flex-start;
     flex-direction: column;
+    overflow-y: auto;
   }
 
-  /* Detail-Header auf Mobile: Avatar oben, darunter Name + Buttons-Gruppe */
+  #return-arrow {
+    cursor: pointer;
+    position: absolute;
+    top: 220.5px;
+    right: 8%;
+  }
+
+  /* Wenn wir in den Detail-Screen wechseln */
+  .contacts-main.show-detail .contacts-panel {
+    display: none;
+  }
+
+  .contacts-main.show-detail .contacts-detail {
+    display: flex;
+  }
+
   .contact-header-row {
     align-items: flex-start;
   }
 
   .contact-name-row {
-    flex-direction: column; /* Name oben, Buttons-Gruppe darunter */
+    flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
 
-  /* Buttons selbst bleiben nebeneinander */
   .contact-actions {
     flex-direction: row;
     flex-wrap: nowrap;
@@ -557,13 +580,12 @@
     height: 28px !important;
   }
 
-  /* Modal fullscreen auf Mobile/Tablet */
+  /* 🔧 Modal auf Mobile: NICHT fullscreen, nur zentrierter Dialog */
   .add-contact-modal {
-    width: 100%;
-    min-width: 0;
-    height: 100%;
-    max-width: none;
-    border-radius: 0;
+    width: 90%;
+    max-width: 540px;
+    max-height: 90vh;
+    border-radius: 12px;
     flex-direction: column;
   }
 
@@ -574,6 +596,17 @@
 
   .add-contact-right {
     padding: 24px;
+  }
+
+  .contact-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
   }
 }
 
@@ -628,7 +661,6 @@
     justify-content: center;
   }
 
-  /* Buttons etwas kleiner, damit sie auf 320px nebeneinander passen */
   .contact-actions {
     gap: 10px;
     display: flex;
@@ -638,6 +670,23 @@
   .contact-action-link {
     padding: 5px 10px;
     font-size: 13px;
+  }
+
+  .contact-header-row {
+    justify-content: center;
+  }
+  .contacts-main {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+  .main {
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .add-contact-modal {
+    width: 94%;
+    max-width: 420px;
   }
 }
 
@@ -676,7 +725,6 @@
     padding: 10px 36px 10px 10px;
   }
 
-  /* ganz kleine Schrift & Padding für Buttons, damit sie sicher nebeneinander passen */
   .contact-actions {
     gap: 8px;
   }
@@ -685,10 +733,12 @@
     padding: 4px 8px;
     font-size: 12px;
   }
+
   .contact-header-row {
     flex-direction: column;
     align-items: center;
   }
+
   .contacts-headline-row {
     gap: 10px;
     align-items: center;
