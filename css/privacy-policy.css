@@ -7,7 +7,7 @@ article {
   justify-content: center;
   flex-direction: column;
   gap: 35px;
-  margin-top: 110px;
+  margin-top: 106px;
   max-width: 1016px;
   padding-bottom: 100px;
 }
@@ -31,6 +31,24 @@ article {
   margin-top: 16px;
   color: #374151;
   font-size: 16px;
+}
+
+ul {
+  margin-top: 32px;
+  color: #374151;
+}
+
+a {
+    color: #374151;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #29abe2;
+}
+
+main {
+  margin-left: 16px;
 }
 
 

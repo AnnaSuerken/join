@@ -240,9 +240,22 @@
 .assignee-option[aria-selected="true"] {
   background: #eef3ff;
 }
-.priority-btn.active {
-  outline: 2px solid #0038ff;
+
+.priority-btn.urgent {
+  background-color: red;
+  color: white;
 }
+
+.priority-btn.medium {
+  background-color: orange;
+  color: white;
+}
+
+.priority-btn.low {
+  background-color: green;
+  color: white;
+}
+
 
 .subtask-edit-row {
   display: flex;

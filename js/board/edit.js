@@ -60,6 +60,22 @@ function setEditPriority(p) {
           : "./assets/icons/low-green.svg";
       }
     }
+
+    if (button) {
+      if (key === "urgent") {
+        button.class = isActive
+          ? "prioritx"
+          : "priority-btn-urgent";
+      } else if (key === "medium") {
+        img.src = isActive
+          ? "./assets/icons/medium-white.svg"
+          : "./assets/icons/medium-orange.svg";
+      } else if (key === "low") {
+        img.src = isActive
+          ? "./assets/icons/low-white.svg"
+          : "./assets/icons/low-green.svg";
+      }
+    }
   });
 }
 

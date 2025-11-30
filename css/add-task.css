@@ -536,7 +536,11 @@
 }
 
 /* mobile version*/
-@media (max-width: 430px) {
+@media (max-width: 540px) {
+
+  .priority-container {
+    width: 265px;
+  }
 
   .add-task-section {
     margin-left: 16px;
