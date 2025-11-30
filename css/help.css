@@ -1,8 +1,9 @@
+/* ========== Basis ========== */
 
 html,
 body {
   background-color: #ffffff;
-  height: 100vh;
+  min-height: 100vh; /* statt height -> besseres Scrollen */
   margin: 0;
   padding: 0;
 }
@@ -16,18 +17,19 @@ body {
 
 .content {
   display: flex;
-  height: 100vh;                     
+  height: 100vh;
 }
 
-
+/* content-right  */
 .content-right {
   flex: 1;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;          
+  overflow-x: hidden;
 }
 
-
+/* Scrollbar nur für Desktop relevant */
 .content-right::-webkit-scrollbar {
   width: 8px;
 }
@@ -41,10 +43,19 @@ body {
   background: #999;
 }
 
+/* Standard: Mobile-Logo / Bottom-Nav ausblenden (Desktop zeigt Sidebar-Navi) */
+.logo-mobile {
+  display: none;
+}
 
+.nav-bar-mobile {
+  display: none;
+}
+
+/* ========== Help-Content ========== */
 
 .help-main {
-  flex: 1;                      
+  flex: 1;
   background-color: #ffffff;
   width: 100%;
 
@@ -57,7 +68,6 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
 }
-
 
 .help-wrapper {
   border: none;
@@ -92,7 +102,6 @@ body {
   color: #000;
   margin: 0;
 }
-
 
 .help-section-headline {
   font-size: 24px;
@@ -176,3 +185,116 @@ body {
 .help-back-btn img:hover {
   opacity: 1;
 }
+
+/* ========== Responsive: Mobile ========== */
+/* An Handy-Größe anpassen – kannst du bei Bedarf die Breite anpassen */
+
+@media (max-width: 900px) {
+  html,
+  body {
+    min-height: 100vh;
+  }
+
+  .content {
+    flex-direction: column;
+    height: auto;
+  }
+
+  /* Sidebar links ausblenden */
+  .content-left {
+    display: none;
+  }
+
+  /* Header zeigt Logo + Profil, Main nutzt ganze Breite */
+  .content-right {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .help-main {
+    padding: 24px 16px 96px 16px; /* extra Platz nach unten für Bottom-Nav */
+    align-items: stretch;
+  }
+
+  .help-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .help-headline {
+    font-size: 32px;
+  }
+
+  /* Desktop-Schrift im Header ggf. ausblenden / kleiner machen */
+  .tool-name {
+    font-size: 12px;
+  }
+
+  /* Logo oben links wie im Screenshot anzeigen */
+  .logo-mobile {
+    display: block;
+    height: 32px;
+  }
+
+  /* Mobile Bottom Navigation wie im Screenshot einblenden */
+  .nav-bar-mobile {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    background-color: #2a3647;
+    border-top: 1px solid #1f2833;
+
+    justify-content: space-around;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    box-sizing: border-box;
+    z-index: 100;
+  }
+
+  .nav-bar-mobile button {
+    background: none;
+    border: none;
+    color: #cdcdcd;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-bar-mobile button img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  /* active state kannst du mit zusätzlicher Klasse steuern */
+  .nav-bar-mobile button.active {
+    color: #ffffff;
+  }
+}
+
+/* ========== Optional: sehr kleine Screens ========== */
+@media (max-width: 480px) {
+  .help-main {
+    padding: 16px 12px 96px 12px;
+  }
+
+  .help-headline {
+    font-size: 28px;
+  }
+}
+/* globales main aus assets.css für Help überschreiben */
+main.help-main {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: none;
+  display: block;                 
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
