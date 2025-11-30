@@ -275,7 +275,7 @@
   flex-direction: column;
   align-items: flex-start;
   color: #2a3647;
-  gap: 24px;
+  gap: 16px;
 }
 
 .task-overlay-content-left input {
@@ -381,8 +381,22 @@
 /* ===================================== */
 
 @media (max-width: 1550px) {
+  .task-overlay-header {
+    width: 65%;
+  }
+
   .task-overlay-open {
     width: 60% !important;
+  }
+}
+
+@media (max-width: 1340px) {
+  .task-overlay-content-right input {
+    width: 290px;
+  }
+
+  .task-overlay-content-left select {
+    width: 290px;
   }
 }
 
@@ -408,11 +422,46 @@
   .action-container input {
     width: 180px;
   }
+
+  .task-overlay-content-right input {
+    width: 220px;
+  }
+
+  .task-overlay-content-left select {
+    width: 220px;
+  }
 }
 
 @media (max-width: 1100px) {
-  .task{
+  .task {
     width: 100% !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .task-overlay {
+    padding-bottom: 100px;
+  }
+  .task-overlay-content-right input {
+    width: 396px;
+  }
+
+  .task-overlay-content-left select {
+    width: 396px;
+  }
+
+  .task-overlay-footer {
+    justify-content: flex-end;
+    width: 50%;
+  }
+
+  .task-overlay-footer div {
+    width: 396px;
+    display: flex;
+    gap: 32px;
+    justify-content: flex-end;
+    position: fixed;
+    bottom: 100px;
   }
 }
 
@@ -441,52 +490,115 @@
   .task-overlay-open {
     width: 90% !important;
   }
-  @media (max-width: 600px) {
-    #detail-close-btn {
-      padding: 0;
-      margin: 0 !important;
-      margin-right: 12px !important;
-    }
-    .task-overlay-open-head {
-      align-items: center;
-      justify-content: space-between !important;
-      padding-left: 12px !important;
-      padding-right: 12px !important;
-    }
-    .task-overlay-open-head button {
-      width: 0px !important;
-    }
+}
+
+@media (max-width: 605px) {
+  #detail-close-btn {
+    padding: 0;
+    margin: 0 !important;
+    margin-right: 12px !important;
+  }
+  .task-overlay-open-head {
+    align-items: center;
+    justify-content: space-between !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .task-overlay-open-head button {
+    width: 0px !important;
+  }
+
+  .task-overlay-footer {
+    width: 100%;
+  }
+  .task-overlay-open-actions button {
+    width: 12px !important;
+  }
+
+  .task-overlay-footer button {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 18px;
+    width: unset;
+  }
+
+  .task-overlay-footer img {
+    width: 14px;
+  }
+  .task-table-header {
+    max-width: 100%;
+  }
+  .task {
+    max-width: 320px !important;
+    margin-left: 0;
+    margin-right: 0;
+    width: none !important;
+  }
+  .task-column {
+    align-items: center;
+  }
+
+  .task-overlay {
+    width: 100%;
+  }
+
+  .task-overlay-header {
+    margin-left: 16px;
+    margin-right: 16px;
+    width: 70%;
+    align-items: center;
+  }
+
+  .task-overlay-header h1 {
+    font-size: 56px;
+  }
+
+  .task-overlay-content {
+    margin-left: 16px;
+    margin-right: 16px;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .task-overlay-content {
+    margin-left: 16px;
+    margin-right: 16px;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .task-overlay-footer {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+}
+
+@media (max-width: 430px) {
+  .task-overlay-header {
+    width: 100%;
+  }
+
+  .task-overlay-content-right,
+  .task-overlay-content-left {
+    margin-left: 100px;
+  }
+
+  .task-overlay-content-right input {
+    width: 265px;
+  }
+
+  .task-overlay-content-left select {
+    width: 265px;
+  }
 
     .task-overlay-footer {
-      width: 100%;
-    }
-    .task-overlay-open-actions button {
-      width: 12px !important;
-    }
+    justify-content: center;
+    width: 50%;
+  }
 
-    .task-overlay-footer button {
-      padding-left: 16px;
-      padding-right: 16px;
-      padding-top: 8px;
-      padding-bottom: 8px;
-      font-size: 18px;
-      width: unset;
-    }
-
-    .task-overlay-footer img {
-      width: 14px;
-    }
-    .task-table-header {
-      max-width: 100%;
-    }
-    .task {
-      max-width: 320px !important;
-      margin-left: 0;
-      margin-right: 0;
-      width: none !important;
-    }
-    .task-column {
-      align-items: center;
-    }
+  .task-overlay-footer div {
+    justify-content: center;
   }
 }

@@ -522,11 +522,11 @@
     width: 90%;
     flex-direction: column;
     margin-top: 0;
-    padding-bottom: 200px;
+    padding-bottom: 100px;
   }
 
   .add-task-footer div {
-    width: 396px;
+    width: 286px;
     display: flex;
     gap: 32px;
     justify-content: flex-end;
@@ -537,9 +537,10 @@
 
 /* mobile version*/
 @media (max-width: 430px) {
-  .add-task-content {
-    align-items: center;
-    justify-content: center;
+
+  .add-task-section {
+    margin-left: 16px;
+    margin-right: 16px;
   }
 
   .add-task-content-right {
@@ -549,27 +550,26 @@
   .add-task-section h1 {
     font-size: 47px;
     font-weight: 700;
-    text-align: left;
   }
 
   .add-task-content textarea {
-    max-width: 286px;
-    min-width: 286px;
+    max-width: 175px;
+    min-width: 265px;
   }
 
   .add-task-content-right input {
-    max-width: 286px;
-    min-width: 286px;
+    max-width: 265px;
+    min-width: 265px;
   }
 
   .add-task-content-left input,
   .add-task-content-left select {
-    width: 286px;
+    width: 265px;
     padding: 12px;
   }
 
   .subtask-input-row {
-    width: 286px;
+    width: 265px;
   }
 
   /* Priority Buttons */
@@ -611,17 +611,17 @@
 
   /* Trigger (sieht aus wie Select) */
   .assignee-select {
-    width: 286px;
+    width: 265px;
   }
 
   /* Subtasks */
   .subtask-list {
-    width: 286px;
+    width: 265px;
     height: auto;
   }
 
   .assignee-select {
-    width: 286px;
+    width: 265px;
   }
 
   /* Options-Popup */
@@ -636,7 +636,6 @@
     gap: 32px;
     justify-content: flex-end;
     position: fixed;
-    bottom: 100px;
   }
 
   .add-task-footer button {

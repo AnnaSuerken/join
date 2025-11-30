@@ -18,6 +18,9 @@ const CONTACTS_ROOT = "/contacts";
 const COLS = ["todo", "inprogress", "await", "done"];
 
 /* ---------- UI: Add-Task Overlay open/close ---------- */
+
+window.currentTaskColumn = "todo";
+
 function openAddTaskOverlay(btn) {
   const overlay = document.getElementById("add-task-overlay");
   const form = overlay?.querySelector(".task-form");
@@ -25,8 +28,8 @@ function openAddTaskOverlay(btn) {
   document.body.classList.add("no-scroll");
   window.getContactsData?.();
   if (form) window.clearTask?.(form);
-  if (btn.dataset.column) currentTaskColumn = btn.dataset.column;
-  console.log(currentTaskColumn)
+  if (btn.dataset.column) window.currentTaskColumn = btn.dataset.column;
+    console.log(window.currentTaskColumn)
 }
 
 function closeAddTaskOverlay() {
@@ -35,7 +38,6 @@ function closeAddTaskOverlay() {
   if (form) window.clearTask?.(form);
   overlay?.classList.add("d_none");
   document.body.classList.remove("no-scroll");
-  window.currentTaskColumn = "todo";
 }
 
 document.addEventListener("click", e => {

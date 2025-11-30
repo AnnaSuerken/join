@@ -60,3 +60,11 @@ main {
     width: 180px;
   }
 }
+
+@media (max-width: 430px) {
+  main {
+    margin: 0;
+  }
+  
+}
+

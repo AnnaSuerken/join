@@ -434,11 +434,11 @@ async function createTask(form) {
     priority: currentPriority,
   };
 
-  progressTablePush(payload, currentTaskColumn, form);
+  progressTablePush(payload, currentTaskColumn || "todo", form);
   clearTask(form);
 }
 
-let currentTaskColumn = "todo";
+
 
 async function progressTablePush(payload, currentTaskColumn, form) {
   switch (currentTaskColumn) {
@@ -527,6 +527,7 @@ addEventListener("load", function () {
 });
 
 /* ---------- Exports für Inline-Handler ---------- */
+window.currentTaskColumn = window.currentTaskColumn || "todo";
 window.createTask = createTask;
 window.clearTask = clearTask;
 window.setPriority = setPriority;
