@@ -19,7 +19,7 @@ const COLS = ["todo", "inprogress", "await", "done"];
 
 /* ---------- UI: Add-Task Overlay open/close ---------- */
 
-window.currentTaskColumn = "todo";
+window.currentTaskColumn = window.currentTaskColumn || "todo";
 
 function openAddTaskOverlay(btn) {
   const overlay = document.getElementById("add-task-overlay");

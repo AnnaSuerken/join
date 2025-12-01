@@ -1,10 +1,12 @@
 .doc-wrap {
-  margin-top: 106px;
-  padding-bottom: 100px;
-  padding-right: 32px;
+  display: flex;
+  justify-content: center;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  gap: 35px;
+  margin-top: 106px;
+  max-width: 1016px;
+  padding-bottom: 100px;
+  margin-left: 32px;
 }
 
 h2 {
@@ -35,12 +37,8 @@ h2 {
   font-size: 12px;
 }
 .doc-link {
-  color: #1d4ed8;
-  text-decoration: none;
-  font-weight: 600;
-}
-.doc-link:hover {
-  text-decoration: underline;
+  color: #29abe2;
+  font-weight: bold;
 }
 
 .legal-scroll {
@@ -48,6 +46,7 @@ h2 {
   overflow: auto;
   padding: 24px;
 }
+
 
 /* Karte/Wrapping  */
 .legal-wrap {
@@ -112,14 +111,6 @@ h2 {
   }
 }
 
-.doc-link {
-  color: #1d4ed8;
-  text-decoration: none;
-  font-weight: 600;
-}
-.doc-link:hover {
-  text-decoration: underline;
-}
 
 .doc-emph {
   color: #1d4ed8;

@@ -53,6 +53,10 @@ main {
   max-width: 1920px;
 }
 
+article {
+  margin-right: 32px;
+}
+
 /* Tablets quer / kleine Laptops */
 
 @media (max-width: 600px) {
