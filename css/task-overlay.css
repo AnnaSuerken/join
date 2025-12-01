@@ -73,12 +73,11 @@
 .task-overlay-open-footer span {
   padding-left: 8px;
 }
-.task-overlay-open-due-date {
-  display: flex;
-}
+.task-overlay-open-due-date,
 .task-overlay-open-priority {
   display: flex;
 }
+
 .task-overlay-open-priority img {
   height: 24px;
   width: 24px;
@@ -138,27 +137,20 @@
   font-size: 1rem;
   font-weight: 600;
 }
-.task-overlay-edit-due-date {
+
+.task-overlay-edit-priority,
+.task-overlay-edit-due-date,
+.task-overlay-edit-assigned-to {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.task-overlay-edit-priority {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 .task-overlay-edit-priority button {
   padding: 8px 16px;
   border-radius: 6px;
   border: 1px solid #d1d1d1;
   background: none;
-}
-.task-overlay-edit-assigned-to {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 .task-overlay-edit-assigned-to-select {
@@ -189,7 +181,6 @@
   border-radius: 3px;
 }
 
-/* kleine UX-Verbesserungen – frei anpassbar */
 .task-overlay-open {
   transition: opacity 0.25s ease;
   opacity: 0;
@@ -255,7 +246,6 @@
   background-color: green;
   color: white;
 }
-
 
 .subtask-edit-row {
   display: flex;
@@ -347,7 +337,6 @@ body.board-overlay-open #task-detail-overlay {
   opacity: 0.7;
 }
 
-/* Assigned rows */
 .detail-user-row {
   display: flex;
   align-items: center;
@@ -411,7 +400,6 @@ progress {
   pointer-events: none;
 }
 
-/* Avatar Stack */
 .assigned-avatars {
   display: flex;
   align-items: center;

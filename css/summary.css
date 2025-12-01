@@ -204,11 +204,8 @@
   transition: all 0.3s ease;
 }
 
-/* ============================== */
 /* ========== RESPONSIVE ========= */
-/* ============================== */
 
-/* Tablets quer / kleine Laptops */
 @media (max-width: 1140px) {
   .summary-name {
     display: none;
@@ -221,7 +218,6 @@
   text-align: center;
 }
 
-/* Sidebar bleibt bis 820px sichtbar */
 @media (max-width: 820px) {
   .summary-title {
     display: flex;
@@ -331,9 +327,5 @@
     padding: 0px;
     margin: 0px;
   }
-  @media (max-height: 1070px) {
-    .main-summary {
-      height: 100vh;
-    }
-  }
+
 }

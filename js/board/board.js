@@ -21,6 +21,8 @@ const COLS = ["todo", "inprogress", "await", "done"];
 
 window.currentTaskColumn = window.currentTaskColumn || "todo";
 
+/**opens and closes add-task-overlay within board.html
+ */
 function openAddTaskOverlay(btn) {
   const overlay = document.getElementById("add-task-overlay");
   const form = overlay?.querySelector(".task-form");

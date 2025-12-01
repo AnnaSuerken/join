@@ -329,7 +329,10 @@ function toggleAssigneeByIndex(i) {
   buildAssigneeDropdown._sync?.();
 }
 
-/* ---------- Priority ---------- */
+
+/**Setting Priority within Add-Task Function
+ * @param {string} status - status of Priority Button (high, medium,low)
+ */
 
 let currentPriority = null;
 
@@ -357,7 +360,10 @@ function setPriority(status) {
 
 
 
-//Form validation//
+/**Form Validation for Add-Task form
+ * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
+ */
+
 function getTaskFormElements(form) {
   return {
     taskTitle: form.querySelector(".task-title"),
@@ -373,23 +379,9 @@ function getTaskFormElements(form) {
 }
 
 function setMandatoryInputs(form) {
-  const {
-    taskTitle,
-    taskDueDate,
-    taskCategory,
-    titleError,
-    dateError,
-    categoryError,
-  } = getTaskFormElements(form);
+  const {taskTitle, taskDueDate, taskCategory, titleError, dateError, categoryError,} = getTaskFormElements(form);
 
   clearAddTaskErrors(form);
-
-  [titleError, dateError, categoryError].forEach(
-    (el) => el && (el.textContent = "")
-  );
-  [taskTitle, taskDueDate, taskCategory].forEach(
-    (el) => el && el.classList.remove("error")
-  );
 
   let isValid = true;
 
@@ -412,11 +404,14 @@ function setMandatoryInputs(form) {
   return isValid;
 }
 
+/**Creates new task within board overview
+ * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
+ */
+
 async function createTask(form) {
   if (!setMandatoryInputs(form)) return;
 
-  const { taskTitle, taskDescription, taskDueDate, taskCategory } =
-    getTaskFormElements(form);
+  const { taskTitle, taskDescription, taskDueDate, taskCategory } = getTaskFormElements(form);
   const assigneeNames = selectedAssignees.map((a) => a.name);
 
   const payload = {
@@ -438,7 +433,11 @@ async function createTask(form) {
   clearTask(form);
 }
 
-
+/**distributes the new task into different progress groupd within oard overview (todo, in progress, await feedback, done)
+ * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
+ * @param {string} payload - defines whichinput values are pushed into database
+ * @param {string} currentTaskColumn - defines with progress status is currently active
+ */
 
 async function progressTablePush(payload, currentTaskColumn, form) {
   switch (currentTaskColumn) {
@@ -455,15 +454,12 @@ async function progressTablePush(payload, currentTaskColumn, form) {
   }
 }
 
+/**clears add-task form of all mandatory field errors
+ * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
+ */
+
 function clearAddTaskErrors(form) {
-  const {
-    taskTitle,
-    taskDueDate,
-    taskCategory,
-    titleError,
-    dateError,
-    categoryError,
-  } = getTaskFormElements(form);
+  const {taskTitle, taskDueDate, taskCategory, titleError, dateError, categoryError,} = getTaskFormElements(form);
 
   [titleError, dateError, categoryError].forEach(
     (el) => el && (el.textContent = "")
@@ -473,11 +469,14 @@ function clearAddTaskErrors(form) {
   );
 }
 
+/**clears add-task form of all inputs e.i resets the form
+ * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
+ */
+
 function clearTask(form) {
   if (!form) return;
 
-  const { taskTitle, taskDescription, taskDueDate, taskCategory } =
-    getTaskFormElements(form);
+  const { taskTitle, taskDescription, taskDueDate, taskCategory } = getTaskFormElements(form);
 
   clearAddTaskErrors(form);
   const priorities = ["urgent", "medium", "low"];
