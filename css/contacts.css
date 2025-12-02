@@ -1,12 +1,10 @@
-/* ============================= */
-/* GLOBAL */
-/* ============================= */
+
 
 .d_none {
   display: none !important;
 }
 
-/* content-right fallback */
+
 .content-right {
   display: flex;
   flex-direction: column;
@@ -14,14 +12,12 @@
   background-color: #fff;
 }
 
-/* Back-Button im Detail (Standard: nur auf Mobile sichtbar) */
+
 .contact-back-btn {
   display: none;
 }
 
-/* ============================= */
-/* MAIN LAYOUT */
-/* ============================= */
+
 
 .contacts-main {
   display: flex;
@@ -29,9 +25,7 @@
   overflow: hidden;
 }
 
-/* ============================= */
-/* LEFT PANEL */
-/* ============================= */
+
 
 .contacts-panel {
   max-width: 360px;
@@ -80,7 +74,7 @@
   height: 24px;
 }
 
-/* Scrollbereich */
+
 .contacts-scroll {
   flex: 1;
   overflow-y: auto;
@@ -102,7 +96,7 @@
   border-radius: 3px;
 }
 
-/* Buchstaben */
+
 .contacts-letter {
   font-size: 14px;
   font-weight: 400;
@@ -174,9 +168,7 @@
   word-break: break-word;
 }
 
-/* ============================= */
-/* RIGHT DETAIL PANEL */
-/* ============================= */
+
 
 .contacts-detail {
   flex: 1;
@@ -247,7 +239,7 @@
   flex: 1;
 }
 
-/* Name + Buttons */
+
 
 .contact-name-row {
   display: flex;
@@ -262,7 +254,7 @@
   font-weight: 500;
 }
 
-/* ==== BUBBLE BUTTONS (Edit / Delete) ==== */
+
 
 .contact-actions {
   display: flex;
@@ -292,7 +284,7 @@
   border-color: #b5b5b5;
 }
 
-/* INFO BLOCKS */
+
 
 .contact-section-title {
   font-size: 20px;
@@ -339,9 +331,7 @@
   height: 16px;
 }
 
-/* ============================= */
-/* MODAL LEGACY */
-/* ============================= */
+
 
 .modal-overlay {
   position: fixed;
@@ -356,7 +346,7 @@
   z-index: 2000;
 }
 
-/* 🔧 Nicht mehr fullscreen, sondern zentriert und begrenzt */
+
 .add-contact-modal {
   background-color: #fff;
   border-radius: 12px;
@@ -415,7 +405,7 @@
   border-radius: 100%;
 }
 
-/* Avatar / Formularrow */
+
 .modal-form-row {
   display: flex;
   gap: 24px;

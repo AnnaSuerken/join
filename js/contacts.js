@@ -106,7 +106,7 @@ const store =
       }
     : localStore;
 
-/*************** Mobile Helper ***************/
+/*Mobile Helper */
 
 function isMobileLayout() {
   return window.innerWidth <= 820;
@@ -125,7 +125,7 @@ function hideDetailFullscreen() {
   if (cm) cm.classList.remove("show-detail");
 }
 
-/*************** Normalisierung & Helper ***************/
+
 
 function normalizeContact(id, raw) {
   const name = raw?.name ?? "";
@@ -149,7 +149,7 @@ function sortContactsInPlace(arr) {
   );
 }
 
-/**************** Legacy-Render ****************/
+
 
 function renderContactListLegacy() {
   const listEl = byId("contacts-scroll");
@@ -233,7 +233,7 @@ function renderEmptyDetailLegacy() {
   detailEl.innerHTML = `<p style="color:#aaa; font-size:16px; margin:0;">Select a contact to view details.</p>`;
 }
 
-/**************** Modern-Render ****************/
+/* Modern-Render */
 
 function ensureGroup(letter) {
   letter = (letter || "#").toUpperCase();
@@ -292,7 +292,7 @@ function makeRow(c) {
   return b;
 }
 
-/** aktive Kontaktzeile markieren */
+
 function setActiveRow(cid) {
   state.selectedId = cid;
   const targetId = String(cid);
@@ -356,9 +356,7 @@ function renderContactsModern() {
   return true;
 }
 
-/*************************
- * Modal & Overlay
- *************************/
+
 let modalMode = "create";
 
 function trapFocus(scope) {
@@ -400,9 +398,9 @@ function closeOverlayLegacy() {
   }
 }
 
-/**
- * Gemeinsamer Einstieg für Create & Edit – nutzt den Legacy-Overlay
- */
+
+ 
+
 function openModal(mode = "create", cid = state.selectedId) {
   modalMode = mode;
 
@@ -427,7 +425,7 @@ function openModal(mode = "create", cid = state.selectedId) {
     if (titleEl) titleEl.textContent = "Edit contact";
     if (primaryBtn) primaryBtn.textContent = "Save contact ✓";
 
-    // 🔥 Avatar des Kontakts im Overlay anzeigen
+    
     if (avatar) {
       avatar.style.backgroundColor = c.color;
       avatar.innerHTML = `<span style="color:#fff; font-size:24px; font-weight:500;">${c.initials}</span>`;
@@ -441,7 +439,7 @@ function openModal(mode = "create", cid = state.selectedId) {
     if (titleEl) titleEl.textContent = "Add contact";
     if (primaryBtn) primaryBtn.textContent = "Create contact ✓";
 
-    // Standard-Avatar (Icon)
+    
     if (avatar) {
       avatar.style.backgroundColor = "#efefef";
       avatar.innerHTML =
@@ -487,16 +485,14 @@ function attachLegacyOverlayHandlers() {
 }
 
 function closeModal() {
-  // moderner Modal wird aktuell nicht genutzt
+  
 }
 
 function onSubmitForm(e) {
   e?.preventDefault?.();
 }
 
-/****************
- * CRUD actions *
- ****************/
+
 async function createContact(name, email, phone, color) {
   const payload = {
     name,
@@ -545,7 +541,7 @@ async function onDelete() {
   }
 }
 
-/** Nach jedem Render aktive Zeile erneut setzen */
+
 function afterRenderSelectFallback() {
   if (
     state.selectedId &&
