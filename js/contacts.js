@@ -530,7 +530,6 @@ async function saveEdit(name, email, phone) {
 async function onDelete() {
   const id = state.selectedId;
   if (!id) return;
-  if (!confirm("Delete this contact?")) return;
   try {
     await store.deleteData(`contacts/${id}`);
     state.selectedId = null;
