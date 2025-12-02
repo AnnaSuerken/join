@@ -59,6 +59,12 @@ article {
 
 /* Tablets quer / kleine Laptops */
 
+@media (max-width: 900px) {
+  .dropdown-content {
+    right: 0 !important;
+  }
+}
+
 @media (max-width: 600px) {
   button {
     width: 180px;
@@ -69,6 +75,4 @@ article {
   main {
     margin: 0;
   }
-  
 }
-

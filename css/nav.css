@@ -138,6 +138,13 @@
   }
 }
 
+@media (max-width: 900px) {
+  .nav-bar-mobile button {
+    width: 100%!important;
+    height: 100%!important;
+  }
+}
+
 @media (max-width: 440px) {
   .nav-bar-mobile button {
     padding-right: 5px;
