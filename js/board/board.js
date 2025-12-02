@@ -9,7 +9,7 @@ import {
 } from "../board/helpers.js";
 import { openDetailOverlayById } from "./detail.js";
 import "../board/edit.js";
-import "../addtask.js";
+
 
 await requireAuth({ redirectTo: "/login.html" });
 

@@ -177,7 +177,9 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
+  transition: transform 0.3s ease, opacity 0.3s ease; /* statt all */
 }
+
 
 .contact-detail-inner {
   max-width: 600px;

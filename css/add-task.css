@@ -129,6 +129,8 @@
   border-radius: 8px;
   font-size: 21px;
   cursor: pointer;
+  display: flex;
+  gap: 4px;
 }
 .priority-btn-urgent {
   background-color: red;

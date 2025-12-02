@@ -94,7 +94,9 @@
 .task-overlay-open-actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 16px;
+  margin-top: 16px;
 }
 .task-overlay-open-subtask-list {
   display: flex;
@@ -117,6 +119,10 @@
   cursor: pointer;
   background: none;
   border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 .task-overlay-edit input {
@@ -151,6 +157,12 @@
   border-radius: 6px;
   border: 1px solid #d1d1d1;
   background: none;
+  flex-wrap: wrap;
+  width: 100% !important;
+  height: 42px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .task-overlay-edit-assigned-to-select {
@@ -253,11 +265,13 @@
   gap: 0.5rem;
   padding: 0.25rem 0;
 }
-.subtask-edit-row input {
-  width: 100%;
-}
+
 .subtask-edit-row input[type="checkbox"] {
   display: none;
+}
+
+.subtask-list {
+  width: 100% !important;
 }
 
 .subtask-toolbar {
@@ -293,7 +307,7 @@ body.board-overlay-open #task-detail-overlay {
   background-color: #ffffff;
   border-radius: 12px;
   width: 30%;
-  height: 80%;
+  max-height: 80%;
   padding: 24px;
   z-index: 1000;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
@@ -344,8 +358,8 @@ body.board-overlay-open #task-detail-overlay {
   margin-top: 6px;
 }
 .detail-user-row .user {
-  width: 32px;
-  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -444,7 +458,29 @@ progress {
   font-weight: 700;
   font-size: 14px;
   color: #6b7280;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #edit-assignee-list .remove-assignee:hover {
   color: #111827;
+}
+
+@media (max-width: 545px) {
+  .task-overlay-edit-priority button {
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .priority-container {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 1340px) {
+  .priority-container {
+    width: 100% !important;
+  }
+  .priority-container img {
+    padding-left: 2px;
+  }
 }
