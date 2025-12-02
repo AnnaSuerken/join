@@ -168,7 +168,9 @@
               </div>
               <form class="add-task-content task-form">
                 <div class="task-overlay-content-right">
-                  <label for="task-title">Title<span class="mandatory-field">*</span></label>
+                  <label for="task-title"
+                    >Title<span class="mandatory-field">*</span></label
+                  >
                   <input
                     type="text"
                     placeholder="Enter a Title"
@@ -182,7 +184,9 @@
                     class="task-description"
                   ></textarea>
 
-                  <label for="task-due-date">Due date<span class="mandatory-field">*</span></label>
+                  <label for="task-due-date"
+                    >Due date<span class="mandatory-field">*</span></label
+                  >
                   <input type="date" min="" class="task-due-date" />
                   <p class="date-error input-error"></p>
                 </div>
@@ -274,7 +278,9 @@
                   ></ul>
                   <div id="assignee-list" class="assignee-list"></div>
 
-                  <label for="category">Category<span class="mandatory-field">*</span></label>
+                  <label for="category"
+                    >Category<span class="mandatory-field">*</span></label
+                  >
                   <select name="category" class="task-category select">
                     <option value="Select task category">
                       Select task category
@@ -283,7 +289,6 @@
                     <option value="User Story">User Story</option>
                   </select>
                   <p class="category-error input-error"></p>
-                  
 
                   <label for="subtask">Subtasks</label>
                   <div class="subtask-input-row">
@@ -305,12 +310,20 @@
                 </div>
               </form>
               <div class="task-overlay-footer">
-                <p><span class="mandatory-field">*</span>This field is required</p>
+                <p>
+                  <span class="mandatory-field">*</span>This field is required
+                </p>
                 <div>
-                  <button class="white-btn" onclick="clearTask(document.querySelector('#add-task-overlay .add-task-content'))">
+                  <button
+                    class="white-btn"
+                    onclick="clearTask(document.querySelector('#add-task-overlay .add-task-content'))"
+                  >
                     Cancel X
                   </button>
-                  <button onclick="createTask(document.querySelector('#add-task-overlay .add-task-content'))" class="blue-btn-bold">
+                  <button
+                    onclick="createTask(document.querySelector('#add-task-overlay .add-task-content'))"
+                    class="blue-btn-bold"
+                  >
                     Create Task
                     <img src="./assets/icons/check.svg" alt="create" />
                   </button>
@@ -426,7 +439,7 @@
                   >
                     Urgent
                     <img src="./assets/icons/urgent-red.svg" alt="urgent" />
-                </button>
+                  </button>
                   <button
                     type="button"
                     class="priority-btn"

@@ -10,7 +10,6 @@ import {
 import { openDetailOverlayById } from "./detail.js";
 import "../board/edit.js";
 
-
 await requireAuth({ redirectTo: "/login.html" });
 
 const TASKS_ROOT = "/board";
@@ -31,7 +30,7 @@ function openAddTaskOverlay(btn) {
   window.getContactsData?.();
   if (form) window.clearTask?.(form);
   if (btn.dataset.column) window.currentTaskColumn = btn.dataset.column;
-    console.log(window.currentTaskColumn)
+  console.log(window.currentTaskColumn);
 }
 
 function closeAddTaskOverlay() {
@@ -42,11 +41,12 @@ function closeAddTaskOverlay() {
   document.body.classList.remove("no-scroll");
 }
 
-document.addEventListener("click", e => {
+document.addEventListener("click", (e) => {
   const openBtn = e.target.closest(".open-add-task-overlay");
   if (openBtn) return openAddTaskOverlay(openBtn);
 
-  if (e.target.closest("#add-task-overlay .close-btn")) return closeAddTaskOverlay();
+  if (e.target.closest("#add-task-overlay .close-btn"))
+    return closeAddTaskOverlay();
 });
 
 /* ---------- DOM-Referenzen ---------- */
