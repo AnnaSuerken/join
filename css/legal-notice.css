@@ -23,6 +23,7 @@ h2 {
   font-size: 27px;
   font-weight: 700;
 }
+
 .doc-text,
 .doc-list {
   color: #374151;
@@ -47,8 +48,6 @@ h2 {
   padding: 24px;
 }
 
-
-/* Karte/Wrapping  */
 .legal-wrap {
   max-width: 1014px;
   height: 943px;
@@ -111,7 +110,6 @@ h2 {
   }
 }
 
-
 .doc-emph {
   color: #1d4ed8;
   font-weight: 600;
@@ -119,7 +117,6 @@ h2 {
 
 /* Responsive Design */
 
-/* Tablets quer / kleine Laptops */
 @media (max-width: 900px) {
   .doc-wrap h1 {
     font-size: 47px;

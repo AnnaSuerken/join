@@ -95,7 +95,6 @@
 /* //Responsive */
 
 @media (max-width: 900px) {
-  /* Mobile Bottom Navigation */
   body {
     padding-bottom: 70px;
   }
@@ -135,13 +134,6 @@
   .nav-bar-button-active-a-mobile {
     background-color: #091931 !important;
     color: #ffffff;
-  }
-}
-
-@media (max-width: 900px) {
-  .nav-bar-mobile button {
-    width: 100%!important;
-    height: 100%!important;
   }
 }
 

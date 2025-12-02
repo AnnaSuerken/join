@@ -474,7 +474,7 @@
 }
 
 @media (max-width: 600px) {
-  button {
+  .icon-btn {
     height: 40px !important;
     width: 40px !important;
   }

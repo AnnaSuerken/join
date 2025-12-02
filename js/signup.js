@@ -43,6 +43,72 @@ function clearErrors() {
   });
 }
 
+/**
+ * 
+ * Valites from within sign-up and log-in 
+ */
+
+function validateName(nameVal) {
+  if (!nameVal) {
+    nameError.textContent = "Bitte gib deinen Namen ein.";
+    nameInput.classList.add("error");
+    return false;
+  }
+  return true;
+}
+
+function validateEmailValue(emailVal) {
+  if (!emailVal) {
+    emailError.textContent = "Bitte gib eine Email-Adresse ein.";
+    emailInput.classList.add("error");
+    return false;
+  }
+  if (!isValidEmail(emailVal)) {
+    emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+    emailInput.classList.add("error");
+    return false;
+  }
+  return true;
+}
+
+function validatePasswordValue(pwdVal) {
+  if (!pwdVal) {
+    passwordError.textContent = "Bitte gib ein Passwort ein.";
+    password.classList.add("error");
+    return false;
+  }
+  if (pwdVal.length < 6) {
+    passwordError.textContent = "Das Passwort muss mindestens 6 Zeichen lang sein.";
+    password.classList.add("error");
+    return false;
+  }
+  return true;
+}
+
+
+function validatePasswordConfirmation(pwdVal, pwd2Val) {
+  if (!pwd2Val) {
+    password2Error.textContent = "Bitte wiederhole dein Passwort.";
+    password2.classList.add("error");
+    return false;
+  }
+  if (pwdVal && pwdVal !== pwd2Val) {
+    password2Error.textContent = "Die Passwörter stimmen nicht überein.";
+    password2.classList.add("error");
+    password.classList.add("error");
+    return false;
+  }
+  return true;
+}
+
+function validatePrivacyBox() {
+  if (!checkBox.checked) {
+    checkboxError.textContent = "Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.";
+    return false;
+  }
+  return true;
+}
+
 function validateForm() {
   clearErrors();
   let isValid = true;
@@ -52,49 +118,11 @@ function validateForm() {
   const pwdVal = password.value;
   const pwd2Val = password2.value;
 
-  if (!nameVal) {
-    nameError.textContent = "Bitte gib deinen Namen ein.";
-    nameInput.classList.add("error");
-    isValid = false;
-  }
-
-  if (!emailVal) {
-    emailError.textContent = "Bitte gib eine Email-Adresse ein.";
-    emailInput.classList.add("error");
-    isValid = false;
-  } else if (!isValidEmail(emailVal)) {
-    emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
-    emailInput.classList.add("error");
-    isValid = false;
-  }
-
-  if (!pwdVal) {
-    passwordError.textContent = "Bitte gib ein Passwort ein.";
-    password.classList.add("error");
-    isValid = false;
-  } else if (pwdVal.length < 6) {
-    passwordError.textContent =
-      "Das Passwort muss mindestens 6 Zeichen lang sein.";
-    password.classList.add("error");
-    isValid = false;
-  }
-
-  if (!pwd2Val) {
-    password2Error.textContent = "Bitte wiederhole dein Passwort.";
-    password2.classList.add("error");
-    isValid = false;
-  } else if (pwdVal && pwdVal !== pwd2Val) {
-    password2Error.textContent = "Die Passwörter stimmen nicht überein.";
-    password2.classList.add("error");
-    password.classList.add("error");
-    isValid = false;
-  }
-
-  if (!checkBox.checked) {
-    checkboxError.textContent =
-      "Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.";
-    isValid = false;
-  }
+  if (!validateName(nameVal)) isValid = false;
+  if (!validateEmailValue(emailVal)) isValid = false;
+  if (!validatePasswordValue(pwdVal)) isValid = false;
+  if (!validatePasswordConfirmation(pwdVal, pwd2Val)) isValid = false;
+  if (!validatePrivacyBox()) isValid = false;
 
   return isValid;
 }
