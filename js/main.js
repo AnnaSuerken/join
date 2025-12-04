@@ -119,7 +119,7 @@ function showToast(message, isError = false) {
     return;
   }
   toast.textContent = message;
-  toast.style.background = isError ? "#C62828" : "#2a3647";
+  toast.style.background = isError ? "#C62828" : "#2fff28";
   toast.classList.remove("d_none");
   void toast.offsetWidth; // Reflow für Transition
   toast.classList.add("show");
