@@ -127,9 +127,11 @@ function handleCreateClick() {
 
   if (isEdit) {
     saveEdit(name, email, phone).then(() => closeOverlayLegacy());
+    showToast("Contact updated successfully.");
   } else {
     const color = colorPool[hashStr(name) % colorPool.length];
     createContact(name, email, phone, color).then(() => closeOverlayLegacy());
+    showToast("Contact created successfully.");
   }
 }
 
@@ -140,6 +142,7 @@ async function onDelete() {
   await deleteContactById(id);
   state.selectedId = null;
   hideDetailFullscreen();
+  showToast("Contact deleted successfully.");
 }
 
 /* Auswahl / Fallback */

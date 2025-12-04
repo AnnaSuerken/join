@@ -29,13 +29,22 @@ const prioBtns = {
   medium: document.getElementById("edit-prio-medium"),
   low: document.getElementById("edit-prio-low"),
 };
+
+// Default, falls ein Task keine Priority gespeichert hat
 let editPriority = "medium";
 
+// Klick-Listener für die Buttons
 Object.entries(prioBtns).forEach(([key, btn]) =>
   btn?.addEventListener("click", () => setEditPriority(key))
 );
 
 function setEditPriority(p) {
+  // Fallback, falls irgendwas Komisches reinkommt
+  const allowed = ["urgent", "medium", "low"];
+  if (!allowed.includes(p)) {
+    p = "medium";
+  }
+
   editPriority = p;
 
   Object.entries(prioBtns).forEach(([key, btn]) => {
@@ -43,8 +52,10 @@ function setEditPriority(p) {
     const img = btn.querySelector("img");
     const isActive = key === p;
 
+    // Klasse für Styling
     btn.classList.toggle("active", isActive);
 
+    // Icon anpassen wie bei Add-Task
     if (img) {
       if (key === "urgent") {
         img.src = isActive
@@ -255,8 +266,11 @@ function openEditOverlay() {
     editDate.value = "";
   }
 
-  setEditPriority((task.priority || "medium").toLowerCase());
+  // 🔹 aktuelle Priority aus dem Task übernehmen
+  const rawPrio = (task.priority || "medium").toString().toLowerCase();
+  setEditPriority(rawPrio);
 
+  // Assignees
   selectedAssigneeIds = normalizeAssigneesToIds(task.assignedContact);
   renderEditAssigneeChips();
   renderEditAssigneeOptions();
@@ -264,12 +278,14 @@ function openEditOverlay() {
   const lbl = editAssigneeSelect?.querySelector(".assignee-select-label");
   if (lbl) lbl.textContent = "Select contacts to assign";
 
+  // Subtasks
   editSubtasks = normalizeSubtasks(task).map((s) => ({
     text: s.text,
     done: !!s.done,
   }));
   renderEditSubtasks();
 
+  // Overlays toggeln
   document.getElementById("task-detail-overlay")?.classList.add("d_none");
   editSection.classList.remove("d_none");
   document.body.classList.add("board-overlay-open");
@@ -299,7 +315,6 @@ async function saveEditOverlay() {
     const chosen = new Date(editDate.value);
     chosen.setHours(0, 0, 0, 0);
     if (chosen < minDate) {
-      // showToast kommt aus deiner bestehenden UI
       if (typeof window.showToast === "function") {
         window.showToast(
           `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(
@@ -320,7 +335,7 @@ async function saveEditOverlay() {
     ).toISOString();
   }
 
-  const priority = editPriority;
+  const priority = editPriority; // 🔹 aktuelle Auswahl aus dem Overlay
   const assignedContact = [...selectedAssigneeIds];
 
   const cleanedSubtasks = editSubtasks
@@ -361,10 +376,10 @@ async function saveEditOverlay() {
     ...detail,
     task: { ...updatedTask, assignedDetailed },
   };
-  // Wir können getCurrentDetail() nicht direkt überschreiben, aber
-  // detail.js nutzt das Modul-interne currentDetail, das hier schon geändert ist.
+
   renderDetail(newDetail.task);
 
   closeEditOverlay();
-  // Board-Render passiert automatisch über onData in board.js
+  showToast("Task updated successfully.");
+  // Board-Render passiert separat über board.js / onData
 }
