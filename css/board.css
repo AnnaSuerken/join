@@ -46,7 +46,7 @@
   font-size: 20px;
   font-weight: 700;
   color: #42526e;
-  width: clamp(240px, 100%, 400px);
+  width: clamp(240px, 100%, 280px);
 }
 
 .task-table-header button {
@@ -154,7 +154,7 @@
 .dropzone {
   width: 100%;
   height: 100%;
-  width: clamp(240px, 100%, 400px);
+  width: clamp(240px, 100%, 280px);
 }
 
 .dropzone.over {

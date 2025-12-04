@@ -222,8 +222,10 @@ function startLiveView() {
     state.unsubscribe();
   }
 
-  state.unsubscribe = store.onData("contacts", (data) => {
+  state.unsubscribe = dbApi.onData("/contacts", (data) => {
     state.data = data || {};
+    console.log(data);
+    
     scheduleRender();
   });
 }

@@ -174,7 +174,7 @@ async function createContact(name, email, phone, color) {
   };
 
   try {
-    const key = await store.pushData("contacts", payload);
+    const key = await dbApi.pushData("contacts", payload);
     state.selectedId = key;
   } catch (e) {
     console.error(e);
@@ -194,7 +194,7 @@ async function saveEdit(name, email, phone) {
   };
 
   try {
-    await store.updateData(`contacts/${id}`, patch);
+    await dbApi.updateData(`contacts/${id}`, patch);
   } catch (e) {
     console.error(e);
     if (typeof showToast === "function") {
@@ -205,7 +205,7 @@ async function saveEdit(name, email, phone) {
 
 async function deleteContactById(id) {
   try {
-    await store.deleteData(`contacts/${id}`);
+    await dbApi.deleteData(`contacts/${id}`);
   } catch (e) {
     console.error(e);
     if (typeof showToast === "function") {
