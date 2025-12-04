@@ -20,7 +20,6 @@ const initialsFromName = (n) => {
     .trim()
     .split(/\s+/)
     .filter(Boolean);
-
   if (!p.length) return "";
   if (p.length === 1) {
     return p[0].substring(0, 2).toUpperCase();
@@ -44,86 +43,80 @@ const state = {
   unsubscribe: null,
 };
 
-const localStore = (() => {
-  const KEY = "contactsStoreV1";
+/* LocalStore ohne IIFE */
 
-  function load() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch (e) {
-      console.warn("Local store load failed", e);
-      return {};
-    }
+const LOCAL_STORE_KEY = "contactsStoreV1";
+
+function loadLocalMem() {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    console.warn("Local store load failed", e);
+    return {};
   }
+}
 
-  function save(obj) {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(obj || {}));
-    } catch (e) {
-      console.warn("Local store save failed", e);
-    }
+function saveLocalMem(obj) {
+  try {
+    localStorage.setItem(LOCAL_STORE_KEY, JSON.stringify(obj || {}));
+  } catch (e) {
+    console.warn("Local store save failed", e);
   }
+}
 
-  let mem = load();
-  const listeners = new Set();
+let localMem = loadLocalMem();
+const localListeners = new Set();
 
-  function emit() {
-    for (const cb of listeners) {
-      cb(mem);
-    }
+function emitLocalMem() {
+  for (const cb of localListeners) {
+    cb(localMem);
   }
+}
 
-  async function pushData(path, payload) {
+const localStore = {
+  async pushData(path, payload) {
     const id = payload.id || genId();
-    mem[id] = { ...payload, id };
-    save(mem);
-    emit();
+    localMem[id] = { ...payload, id };
+    saveLocalMem(localMem);
+    emitLocalMem();
     return id;
-  }
+  },
 
-  async function updateData(path, patch) {
+  async updateData(path, patch) {
     const id = path.split("/").pop();
-    if (!mem[id]) {
-      mem[id] = { id };
+    if (!localMem[id]) {
+      localMem[id] = { id };
     }
-    mem[id] = { ...mem[id], ...patch };
-    save(mem);
-    emit();
-  }
+    localMem[id] = { ...localMem[id], ...patch };
+    saveLocalMem(localMem);
+    emitLocalMem();
+  },
 
-  async function deleteData(path) {
+  async deleteData(path) {
     const id = path.split("/").pop();
-    delete mem[id];
-    save(mem);
-    emit();
-  }
+    delete localMem[id];
+    saveLocalMem(localMem);
+    emitLocalMem();
+  },
 
-  function onData(path, cb) {
-    listeners.add(cb);
-    cb(mem);
-    return () => listeners.delete(cb);
-  }
+  onData(path, cb) {
+    localListeners.add(cb);
+    cb(localMem);
+    return () => localListeners.delete(cb);
+  },
 
-  function seedIfEmpty(seedArr) {
-    if (Object.keys(mem).length) {
+  seedIfEmpty(seedArr) {
+    if (Object.keys(localMem).length) {
       return;
     }
     for (const c of seedArr) {
       const id = c.id || genId();
-      mem[id] = { ...c, id };
+      localMem[id] = { ...c, id };
     }
-    save(mem);
-  }
-
-  return {
-    pushData,
-    updateData,
-    deleteData,
-    onData,
-    seedIfEmpty,
-  };
-})();
+    saveLocalMem(localMem);
+  },
+};
 
 const store =
   typeof window !== "undefined" && window.dbApi
@@ -164,6 +157,13 @@ function sortContactsInPlace(arr) {
   });
 }
 
+function showStoreError(msg, e) {
+  console.error(e);
+  if (typeof showToast === "function") {
+    showToast(msg);
+  }
+}
+
 async function createContact(name, email, phone, color) {
   const payload = {
     name,
@@ -172,9 +172,8 @@ async function createContact(name, email, phone, color) {
     initials: initialsFromName(name),
     color,
   };
-
   try {
-    const key = await dbApi.pushData("contacts", payload);
+    const key = await store.pushData("contacts", payload);
     state.selectedId = key;
   } catch (e) {
     console.error(e);
@@ -194,22 +193,16 @@ async function saveEdit(name, email, phone) {
   };
 
   try {
-    await dbApi.updateData(`contacts/${id}`, patch);
+    await store.updateData(`contacts/${id}`, patch);
   } catch (e) {
-    console.error(e);
-    if (typeof showToast === "function") {
-      showToast("Update failed");
-    }
+    showStoreError("Update failed", e);
   }
 }
 
 async function deleteContactById(id) {
   try {
-    await dbApi.deleteData(`contacts/${id}`);
+    await store.deleteData(`contacts/${id}`);
   } catch (e) {
-    console.error(e);
-    if (typeof showToast === "function") {
-      showToast("Delete failed");
-    }
+    showStoreError("Delete failed", e);
   }
 }
