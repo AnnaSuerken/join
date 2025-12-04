@@ -172,7 +172,7 @@ function wireSubtaskEvents() {
 /* ---------- Contacts / Custom Dropdown ---------- */
 
 let contactsData = [];
-let selectedAssignees = []; 
+let selectedAssignees = [];
 
 async function getContactsData() {
   const data = await dbApi.getData(`contacts/`);
@@ -200,8 +200,8 @@ function buildAssigneeDropdown() {
       (c, i) => `
       <li class="assignee-option" role="option" aria-selected="false" data-index="${i}">
         <span class="assignee-avatar" style="background:${escapeHtml(
-          c.color
-        )}">${escapeHtml(c.initials)}</span>
+        c.color
+      )}">${escapeHtml(c.initials)}</span>
         <span class="assignee-option-name">${escapeHtml(c.name)}</span>
         <span class="assignee-check" aria-hidden="true">✓</span>
       </li>
@@ -247,6 +247,9 @@ function buildAssigneeDropdown() {
 }
 
 function syncOptionSelectedStates() {
+  const list = document.getElementById("assignee-options");
+  if (!list) return;
+
   const selectedNames = new Set(
     selectedAssignees.map((a) => a.name.toLowerCase())
   );
@@ -307,11 +310,7 @@ function toggleAssigneeByIndex(i) {
   buildAssigneeDropdown._sync?.();
 }
 
-
-/**Setting Priority within Add-Task Function
- * @param {string} status - status of Priority Button (high, medium,low)
- * @param {string} priorities - callback to different priorities within add-task form
- */
+/** Priority innerhalb Add-Task Function */
 
 let currentPriority = null;
 
@@ -322,7 +321,7 @@ function setPriority(status) {
     resetAllPriorities(priorities);
     currentPriority = null;
     return;
-    };
+  }
 
   resetAllPriorities(priorities);
   activateSelectedPriority(status);
@@ -341,6 +340,50 @@ function activateSelectedPriority(status) {
   document.getElementById(`prio-${status}-active`)?.classList.remove("d_none");
 }
 
+/* ---------- Priority im Edit-Overlay ---------- */
+
+function setEditPriority(status) {
+  // globale Priorität mitnehmen
+  currentPriority = status;
+
+  const priorities = ["urgent", "medium", "low"];
+
+  priorities.forEach((prio) => {
+    const btn = document.getElementById(`edit-prio-${prio}`);
+    if (!btn) return;
+    btn.classList.toggle("is-active", prio === status);
+  });
+}
+
+function wireEditPriorityButtons() {
+  const config = [
+    { id: "edit-prio-urgent", status: "urgent" },
+    { id: "edit-prio-medium", status: "medium" },
+    { id: "edit-prio-low", status: "low" },
+  ];
+
+  config.forEach(({ id, status }) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    if (btn._wired) return;
+
+    btn.addEventListener("click", () => {
+      if (currentPriority === status) {
+        // gleicher Button nochmal -> abwählen
+        currentPriority = null;
+        config.forEach(({ id }) => {
+          const b = document.getElementById(id);
+          if (b) b.classList.remove("is-active");
+        });
+      } else {
+        setEditPriority(status);
+      }
+    });
+
+    btn._wired = true;
+  });
+}
+
 /**Creates new task within board overview
  * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
  */
@@ -355,7 +398,9 @@ function createPayload(formElements, assigneeNames) {
     assignedContact: assigneeNames.join(", "),
     category: formElements.taskCategory?.value || "",
     categorycolor:
-      taskCategoryColor.find((c) => c.name === formElements.taskCategory?.value)?.color || "",
+      taskCategoryColor.find(
+        (c) => c.name === formElements.taskCategory?.value
+      )?.color || "",
     subtask: subtasks,
     priority: currentPriority,
   };
@@ -406,12 +451,18 @@ function resetGlobalArrays() {
   selectedAssignees = [];
   renderAssignees();
   buildAssigneeDropdown._sync?.();
+
+  // Edit-Priority-Buttons auch zurücksetzen
+  ["urgent", "medium", "low"].forEach((prio) => {
+    document.getElementById(`edit-prio-${prio}`)?.classList.remove("is-active");
+  });
 }
 
 function clearTask(form) {
   if (!form) return;
 
-  const { taskTitle, taskDescription, taskDueDate, taskCategory } = getTaskFormElements(form);
+  const { taskTitle, taskDescription, taskDueDate, taskCategory } =
+    getTaskFormElements(form);
   const subtaskInput = document.getElementById("subtask");
   const subtaskList = document.getElementById("subtask-list");
   const addBtn = document.getElementById("subtask-add-btn");
@@ -420,7 +471,7 @@ function clearTask(form) {
   resetTaskInputs(taskTitle, taskDescription, taskDueDate, taskCategory);
   resetSubtaskFields(subtaskInput, subtaskList, addBtn);
   resetAllPriorities(["urgent", "medium", "low"]);
-  resetGlobalArrays() 
+  resetGlobalArrays();
 }
 
 /* ---------- Init ---------- */
@@ -433,6 +484,7 @@ addEventListener("load", function () {
   }
   wireSubtaskEvents();
   renderSubtasks();
+  wireEditPriorityButtons(); // 🔹 Edit-Prios aktivieren
 });
 
 /* ---------- Exports für Inline-Handler ---------- */
