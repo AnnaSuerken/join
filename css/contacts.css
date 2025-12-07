@@ -165,7 +165,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  transition: transform 0.3s ease, opacity 0.3s ease; /* statt all */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  position: relative;
 }
 
 .contact-detail-inner {
@@ -190,7 +191,7 @@
 .contacts-headline-separator {
   width: 2px;
   height: 56px;
-  background-color: #29abe2;;
+  background-color: #29abe2;
 }
 
 .contacts-subline {
@@ -314,6 +315,8 @@
   height: 16px;
 }
 
+/* MODAL / OVERLAY */
+
 .modal-overlay {
   position: fixed;
   left: 0;
@@ -367,10 +370,10 @@
   flex: 1;
   padding: 32px;
   position: relative;
-  overflow: scroll;
+  overflow: visible;
   scrollbar-width: none;
   overflow-x: hidden;
-  max-height: 40vh;
+  max-height: none;
 }
 
 .modal-close-btn {
@@ -434,9 +437,72 @@
   margin-top: 32px;
 }
 
-/* ============================= */
+/* =MOBILE CONTACT ACTION FAB = */
+
+.contact-menu-btn {
+  position: fixed;
+  bottom: 120px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background-color: #2a3647;
+  color: #ffffff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.contact-menu {
+  position: fixed;
+  bottom: 190px;
+  right: 20px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.contact-menu-item {
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.contact-menu-item:hover {
+  background-color: #f1f1f1;
+}
+
+/*  kein FAB / Menü */
+@media (min-width: 821px) {
+  .contact-menu-btn,
+  .contact-menu {
+    display: none !important;
+  }
+}
+
+/* Mobile: alte Edit/Delete  */
+@media (max-width: 820px) {
+  .contacts-detail .contact-actions,
+  .contacts-detail .actions {
+    display: none;
+  }
+}
+
+
 /* RESPONSIVE */
-/* ============================= */
+
 
 /* Tablets / kleine Laptops */
 @media (max-width: 1024px) {
@@ -453,13 +519,12 @@
     min-width: 320px;
   }
 
-  /* Modal kleiner auf Tablet */
   .add-contact-modal {
     max-width: 720px;
   }
 }
 
-/* Handy-Layout: Liste + Detail als Screens */
+/* Handy-Layout */
 @media (max-width: 820px) {
   .contacts-main {
     flex-direction: column;
@@ -494,14 +559,14 @@
     overflow-y: auto;
   }
 
-  #return-arrow {
+    #return-arrow {
     cursor: pointer;
     position: absolute;
     top: 220.5px;
     right: 8%;
   }
 
-  /* Wenn wir in den Detail-Screen wechseln */
+  /*  Detail-Screen */
   .contacts-main.show-detail .contacts-panel {
     display: none;
   }
@@ -534,7 +599,7 @@
     font-size: 20px;
   }
 
-  /* Floating Add-Contact Button */
+  /*  Add-Contact Button */
   .add-contact-btn {
     position: fixed !important;
     bottom: 90px !important;
@@ -557,22 +622,30 @@
     height: 28px !important;
   }
 
-  /* 🔧 Modal auf Mobile: NICHT fullscreen, nur zentrierter Dialog */
+  /* MOBILE FIX: Add-Contact Modal */
   .add-contact-modal {
     width: 90%;
-    max-width: 540px;
-    max-height: 90vh;
-    border-radius: 12px;
+    max-width: 460px;
+    border-radius: 16px;
     flex-direction: column;
+    max-height: none;
+    height: auto;
+    overflow: visible;
   }
 
   .add-contact-left {
-    flex: 0 0 auto;
-    align-items: flex-start;
+    padding: 24px;
+    text-align: left;
   }
 
   .add-contact-right {
     padding: 24px;
+    overflow: visible;
+    max-height: none;
+  }
+
+  .modal-form-row {
+    margin-top: 32px;
   }
 
   .contact-back-btn {
@@ -587,7 +660,7 @@
   }
 }
 
-/* Smartphones ca. <= 600px */
+/* Smartphones ca.600px */
 @media (max-width: 600px) {
   .contacts-headline {
     font-size: 32px;
@@ -652,10 +725,12 @@
   .contact-header-row {
     justify-content: center;
   }
+
   .contacts-main {
     margin-left: 8px !important;
     margin-right: 8px !important;
   }
+
   .main {
     margin-left: 8px !important;
     margin-right: 8px !important;
@@ -667,7 +742,7 @@
   }
 }
 
-/* Sehr kleine Geräte, ~320–360px */
+/*  kleine Geräte ~320–360px */
 @media (max-width: 360px) {
   .contact-row {
     gap: 12px;

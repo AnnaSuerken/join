@@ -100,19 +100,29 @@ function handleCreateClick() {
   const { name, email, phone } = getModalValues();
   if (!name || !email) return;
   const isEdit = modalMode === "edit" && state.selectedId;
+
   if (isEdit) {
     saveEdit(name, email, phone).then(() => {
       closeOverlayLegacy();
       showToast("Contact updated successfully.");
     });
-  } else {
-    const color = colorPool[hashStr(name) % colorPool.length];
-    createContact(name, email, phone, color).then(() => {
-      closeOverlayLegacy();
-      showToast("Contact created successfully.");
-    });
+    return;
   }
+
+  const color = colorPool[hashStr(name) % colorPool.length];
+  createContact(name, email, phone, color).then(() => {
+    const id = state.selectedId;
+    closeOverlayLegacy();
+    if (id) {
+      renderDetailForId(id);
+      setActiveRow(id);
+      showDetailFullscreenIfMobile();
+      if (typeof updateFabForContact === "function") updateFabForContact(id);
+    }
+    showToast("Contact created successfully.");
+  });
 }
+
 
 async function onDelete() {
   const id = state.selectedId;
@@ -120,6 +130,7 @@ async function onDelete() {
   await deleteContactById(id);
   state.selectedId = null;
   hideDetailFullscreen();
+  if (typeof updateFabForContact === "function") updateFabForContact(null);
   showToast("Contact deleted successfully.");
 }
 
@@ -162,25 +173,25 @@ function afterRenderSelectFallback() {
   selectFirstAvailable();
 }
 
-/* Live View + Handlers */
+/* FAB / Mobile Menu */
 
-/**
- * Wandelt beliebige DB-Strukturen in ein flaches Objekt
- * { id: { ...contact } } um.
- */
+function updateFabForContact(id) {
+  const btn = byId("contact-menu-btn");
+  const menu = byId("contact-menu");
+  if (!btn || !menu) return;
+  const show = isMobileLayout() && !!id;
+  btn.classList.toggle("d_none", !show);
+  menu.classList.add("d_none");
+}
+
 function normalizeStoreData(raw) {
   if (!raw) return {};
-
-  // Wenn es schon ein plain Object ist
   if (typeof raw === "object" && !Array.isArray(raw) && raw !== null) {
-    // Falls deine DB sowas wie { contacts: {...} } zurückgibt
     if (raw.contacts && typeof raw.contacts === "object") {
       return normalizeStoreData(raw.contacts);
     }
     return raw;
   }
-
-  // Array von Kontakten
   if (Array.isArray(raw)) {
     const obj = {};
     for (const item of raw) {
@@ -190,7 +201,6 @@ function normalizeStoreData(raw) {
     }
     return obj;
   }
-
   return {};
 }
 
@@ -211,7 +221,6 @@ function scheduleRender() {
 function startLiveView() {
   if (state.unsubscribe) state.unsubscribe();
   state.unsubscribe = store.onData("contacts", (data) => {
-    // WICHTIG: hier wird das Format aus der DB normalisiert
     state.data = normalizeStoreData(data);
     scheduleRender();
   });
@@ -241,12 +250,41 @@ function attachModernHandlers() {
   }
 }
 
+function initFabMenu() {
+  const btn = byId("contact-menu-btn");
+  const menu = byId("contact-menu");
+  const edit = byId("contact-menu-edit");
+  const del = byId("contact-menu-delete");
+  if (!btn || !menu) return;
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu.classList.toggle("d_none");
+  });
+  if (edit) edit.addEventListener("click", () => {
+    if (!state.selectedId) return;
+    openModal("edit", state.selectedId);
+    menu.classList.add("d_none");
+  });
+  if (del) del.addEventListener("click", () => {
+    if (!state.selectedId) return;
+    onDelete();
+    menu.classList.add("d_none");
+  });
+  document.addEventListener("click", (e) => {
+    if (menu.classList.contains("d_none")) return;
+    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+      menu.classList.add("d_none");
+    }
+  });
+}
+
 /* Init */
 
 function init() {
   startLiveView();
   attachModernHandlers();
   attachLegacyOverlayHandlers();
+  initFabMenu();
   window.addEventListener("resize", () => {
     if (!isMobileLayout()) {
       hideDetailFullscreen();

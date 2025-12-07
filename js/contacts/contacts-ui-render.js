@@ -112,6 +112,7 @@ function renderContactDetailLegacy(id) {
   const delBtn = byId("legacyDelete");
   if (editBtn) editBtn.addEventListener("click", () => openModal("edit", c.id));
   if (delBtn) delBtn.addEventListener("click", onDelete);
+  if (typeof updateFabForContact === "function") updateFabForContact(c.id);
 }
 
 function renderEmptyDetailLegacy() {
@@ -251,6 +252,7 @@ function updateDetailModern(cid) {
   const delBtn = byId("deleteBtn");
   if (editBtn) editBtn.addEventListener("click", () => openModal("edit", cid));
   if (delBtn) delBtn.addEventListener("click", onDelete);
+  if (typeof updateFabForContact === "function") updateFabForContact(c.id);
 }
 
 function addButtonTemplate() {
