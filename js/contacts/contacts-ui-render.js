@@ -93,7 +93,7 @@ function legacyDetailTemplate(c) {
               <img src="./assets/icons/call.svg" alt="phone icon" class="phone-icon-img" />
             </div>
             <span class="contact-info-value">
-              ${c.phone || "-"}
+               ${c.phone || "-"}
             </span>
           </div>
         </div>

@@ -1,51 +1,84 @@
-// === Einstellungen ===
-const SCROLL_SPEED = 8; // Scroll-Geschwindigkeit
-const SCROLL_AREA = 80; // Bereich oben/unten in px, der Auto-Scroll aktiviert
+const MAX_SPEED = 35; // maximale Scrollgeschwindigkeit (je höher, desto schneller)
+const SCROLL_ZONE = 600; // Bereich in px (größer = Scroll startet früher)
 
-let scrollInterval = null;
+let scrollRafId = null;
+let scrollSpeed = 0;
 
-// Den Container auswählen, der gescrollt werden soll
-const scrollContainer = document.querySelector(".board-container");
-// ❗ Ändere die Klasse auf deinen echten Wrapper: z.B. .board, .columns-wrapper, etc.
+function getScrollTarget() {
+  const board = document.querySelector(".task");
+  if (!board) return document.scrollingElement || document.documentElement;
 
-// === Auto-Scroll starten ===
-function startAutoScroll(direction) {
-  stopAutoScroll(); // doppelte Intervalle verhindern
-  scrollInterval = setInterval(() => {
-    scrollContainer.scrollTop += direction * SCROLL_SPEED;
-  }, 16); // 60fps
+  const canScrollBoard = board.scrollHeight - board.clientHeight > 10;
+  return canScrollBoard ? board : document.scrollingElement;
 }
 
-// === Auto-Scroll stoppen ===
-function stopAutoScroll() {
-  if (scrollInterval) {
-    clearInterval(scrollInterval);
-    scrollInterval = null;
+function scrollStep(direction) {
+  const target = getScrollTarget();
+
+  if (scrollSpeed <= 0) {
+    scrollRafId = null;
+    return;
   }
+
+  target.scrollTop += direction * scrollSpeed;
+
+  scrollRafId = requestAnimationFrame(() => scrollStep(direction));
 }
 
-// === Touch-Move überwachen ===
-function onTouchMove(e) {
+function calculateSpeed(distanceToEdge) {
+  const ratio = 1 - distanceToEdge / SCROLL_ZONE; // 0 → 1
+  return Math.min(MAX_SPEED, Math.max(5, ratio * MAX_SPEED));
+}
+
+function handleTouchMove(e) {
   if (!e.touches?.length) return;
+
   const touchY = e.touches[0].clientY;
-  const rect = scrollContainer.getBoundingClientRect();
+  const h = window.innerHeight;
 
-  const topZone = rect.top + SCROLL_AREA;
-  const bottomZone = rect.bottom - SCROLL_AREA;
+  const topZone = SCROLL_ZONE;
+  const bottomZone = h - SCROLL_ZONE;
 
+  // Finger oben → hoch scrollen
   if (touchY < topZone) {
-    // Finger oben → nach oben scrollen
-    startAutoScroll(-1);
-  } else if (touchY > bottomZone) {
-    // Finger unten → nach unten scrollen
-    startAutoScroll(1);
-  } else {
-    // Finger ist mittig → Auto-Scroll stoppen
-    stopAutoScroll();
+    const dist = topZone - touchY;
+    scrollSpeed = calculateSpeed(dist);
+    if (!scrollRafId) scrollStep(-1);
+    return;
   }
+
+  // Finger unten → runter scrollen
+  if (touchY > bottomZone) {
+    const dist = touchY - bottomZone;
+    scrollSpeed = calculateSpeed(dist);
+    if (!scrollRafId) scrollStep(1);
+    return;
+  }
+
+  // Finger in der Mitte → kein Scrollen
+  stopAutoScroll();
 }
 
-// === Events binden ===
-scrollContainer.addEventListener("touchmove", onTouchMove, { passive: false });
-scrollContainer.addEventListener("touchend", stopAutoScroll);
-scrollContainer.addEventListener("touchcancel", stopAutoScroll);
+function stopAutoScroll() {
+  scrollSpeed = 0;
+  if (scrollRafId) cancelAnimationFrame(scrollRafId);
+  scrollRafId = null;
+}
+
+function initMobileAutoScroll() {
+  const board = document.querySelector(".task-board");
+  if (!board) return;
+
+  const isTouch =
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0;
+
+  if (!isTouch) return;
+
+  board.addEventListener("touchmove", handleTouchMove, { passive: true });
+  board.addEventListener("touchend", stopAutoScroll);
+  board.addEventListener("touchcancel", stopAutoScroll);
+}
+
+window.addEventListener("load", initMobileAutoScroll);
