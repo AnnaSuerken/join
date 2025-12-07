@@ -1,84 +1,158 @@
-const MAX_SPEED = 35; // maximale Scrollgeschwindigkeit (je höher, desto schneller)
-const SCROLL_ZONE = 600; // Bereich in px (größer = Scroll startet früher)
+// js/board/mobile-drag-scroll.js
 
-let scrollRafId = null;
+/**
+ * Auto-Scroll beim Draggen von Tasks (.task.dragging)
+ * - funktioniert auf Desktop (dragover) und Mobile (touchmove)
+ * - nutzt die vorhandene Klasse .dragging aus board.js
+ */
+
+const EDGE_SIZE = 140; // Randbereich in px oben/unten
+const MAX_SPEED = 50; // maximale Scrollgeschwindigkeit (sehr schnell)
+const MIN_SPEED = 10; // minimale Geschwindigkeit
+
+let scrollDir = 0; // -1 = hoch, 1 = runter
 let scrollSpeed = 0;
+let scrollRafId = null;
 
+/* ----------------- Helper ----------------- */
+
+function isDraggingTask() {
+  return !!document.querySelector(".task.dragging");
+}
+
+/**
+ * Wählt den besten Scroll-Container:
+ * 1) .task-board, wenn sie scrollbar ist
+ * 2) .content-right, wenn die scrollbar ist
+ * 3) ansonsten Dokument
+ */
 function getScrollTarget() {
-  const board = document.querySelector(".task");
-  if (!board) return document.scrollingElement || document.documentElement;
+  const candidates = [
+    document.querySelector(".task-board"),
+    document.querySelector(".content-right"),
+    document.scrollingElement || document.documentElement,
+  ];
 
-  const canScrollBoard = board.scrollHeight - board.clientHeight > 10;
-  return canScrollBoard ? board : document.scrollingElement;
-}
-
-function scrollStep(direction) {
-  const target = getScrollTarget();
-
-  if (scrollSpeed <= 0) {
-    scrollRafId = null;
-    return;
+  for (const el of candidates) {
+    if (!el) continue;
+    const canScroll = el.scrollHeight - el.clientHeight > 5;
+    if (canScroll) return el;
   }
 
-  target.scrollTop += direction * scrollSpeed;
-
-  scrollRafId = requestAnimationFrame(() => scrollStep(direction));
-}
-
-function calculateSpeed(distanceToEdge) {
-  const ratio = 1 - distanceToEdge / SCROLL_ZONE; // 0 → 1
-  return Math.min(MAX_SPEED, Math.max(5, ratio * MAX_SPEED));
-}
-
-function handleTouchMove(e) {
-  if (!e.touches?.length) return;
-
-  const touchY = e.touches[0].clientY;
-  const h = window.innerHeight;
-
-  const topZone = SCROLL_ZONE;
-  const bottomZone = h - SCROLL_ZONE;
-
-  // Finger oben → hoch scrollen
-  if (touchY < topZone) {
-    const dist = topZone - touchY;
-    scrollSpeed = calculateSpeed(dist);
-    if (!scrollRafId) scrollStep(-1);
-    return;
-  }
-
-  // Finger unten → runter scrollen
-  if (touchY > bottomZone) {
-    const dist = touchY - bottomZone;
-    scrollSpeed = calculateSpeed(dist);
-    if (!scrollRafId) scrollStep(1);
-    return;
-  }
-
-  // Finger in der Mitte → kein Scrollen
-  stopAutoScroll();
+  return document.scrollingElement || document.documentElement;
 }
 
 function stopAutoScroll() {
+  scrollDir = 0;
   scrollSpeed = 0;
-  if (scrollRafId) cancelAnimationFrame(scrollRafId);
-  scrollRafId = null;
+  if (scrollRafId !== null) {
+    cancelAnimationFrame(scrollRafId);
+    scrollRafId = null;
+  }
 }
 
-function initMobileAutoScroll() {
-  const board = document.querySelector(".task-board");
-  if (!board) return;
+function stepScroll() {
+  if (!scrollDir || !isDraggingTask()) {
+    stopAutoScroll();
+    return;
+  }
 
-  const isTouch =
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    navigator.msMaxTouchPoints > 0;
+  const el = getScrollTarget();
+  el.scrollTop += scrollDir * scrollSpeed;
 
-  if (!isTouch) return;
-
-  board.addEventListener("touchmove", handleTouchMove, { passive: true });
-  board.addEventListener("touchend", stopAutoScroll);
-  board.addEventListener("touchcancel", stopAutoScroll);
+  scrollRafId = requestAnimationFrame(stepScroll);
 }
 
-window.addEventListener("load", initMobileAutoScroll);
+/**
+ * direction: -1 (hoch) oder 1 (runter)
+ * intensity: 0..1 wie nah am Rand
+ */
+function setScroll(direction, intensity) {
+  scrollDir = direction;
+
+  const speed = MIN_SPEED + intensity * (MAX_SPEED - MIN_SPEED);
+  scrollSpeed = Math.max(MIN_SPEED, Math.min(MAX_SPEED, speed));
+
+  if (!scrollRafId) {
+    scrollRafId = requestAnimationFrame(stepScroll);
+  }
+}
+
+/**
+ * Nimmt eine clientY-Position und entscheidet,
+ * ob oben / unten gescrollt wird und wie stark.
+ */
+function handleY(clientY) {
+  if (!isDraggingTask()) {
+    stopAutoScroll();
+    return;
+  }
+
+  const h = window.innerHeight;
+  const topZone = EDGE_SIZE;
+  const bottomZone = h - EDGE_SIZE;
+
+  // oberer Rand
+  if (clientY < topZone) {
+    const dist = topZone - clientY; // 0 .. EDGE_SIZE
+    const intensity = Math.min(1, dist / EDGE_SIZE);
+    setScroll(-1, intensity);
+    return;
+  }
+
+  // unterer Rand
+  if (clientY > bottomZone) {
+    const dist = clientY - bottomZone;
+    const intensity = Math.min(1, dist / EDGE_SIZE);
+    setScroll(1, intensity);
+    return;
+  }
+
+  // Mitte -> kein Scrollen
+  stopAutoScroll();
+}
+
+/* ----------------- Desktop: dragover ----------------- */
+
+function onDragOver(e) {
+  if (!isDraggingTask()) return;
+  if (typeof e.clientY !== "number") return;
+  handleY(e.clientY);
+}
+
+/* ----------------- Mobile: touchmove ----------------- */
+
+function onTouchMove(e) {
+  if (!isDraggingTask()) return;
+  if (!e.touches || !e.touches.length) return;
+  const touch = e.touches[0];
+  handleY(touch.clientY);
+}
+
+/* ----------------- Drag-End-Events ----------------- */
+
+function onDragEndOrCancel() {
+  stopAutoScroll();
+}
+
+/* ----------------- Init ----------------- */
+
+function initDragAutoScroll() {
+  // Desktop: während HTML5-Drag laufen dragover-Events
+  document.addEventListener("dragover", onDragOver);
+
+  // Mobile: deine board.js macht eigenes touch-Dragging mit .dragging
+  document.addEventListener("touchmove", onTouchMove, { passive: true });
+
+  // Drag-End auf Desktop
+  document.addEventListener("dragend", onDragEndOrCancel);
+  document.addEventListener("drop", onDragEndOrCancel);
+  document.addEventListener("mouseleave", onDragEndOrCancel);
+  window.addEventListener("blur", onDragEndOrCancel);
+
+  // Drag-End auf Mobile
+  document.addEventListener("touchend", onDragEndOrCancel);
+  document.addEventListener("touchcancel", onDragEndOrCancel);
+}
+
+window.addEventListener("load", initDragAutoScroll);
