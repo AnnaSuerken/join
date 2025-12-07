@@ -43,93 +43,47 @@ const state = {
   unsubscribe: null,
 };
 
-/* LocalStore ohne IIFE */
+/* ===== NUR DB-API, KEIN LOCAL STORAGE ===== */
 
-const LOCAL_STORE_KEY = "contactsStoreV1";
-
-function loadLocalMem() {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch (e) {
-    console.warn("Local store load failed", e);
-    return {};
+function assertDbApi() {
+  if (!window.dbApi) {
+    console.error(
+      "[contacts] window.dbApi ist nicht definiert. Stelle sicher, dass dein DB-Skript VOR contacts-core.js geladen wird."
+    );
+    throw new Error("dbApi not available");
   }
 }
 
-function saveLocalMem(obj) {
-  try {
-    localStorage.setItem(LOCAL_STORE_KEY, JSON.stringify(obj || {}));
-  } catch (e) {
-    console.warn("Local store save failed", e);
-  }
-}
-
-let localMem = loadLocalMem();
-const localListeners = new Set();
-
-function emitLocalMem() {
-  for (const cb of localListeners) {
-    cb(localMem);
-  }
-}
-
-const localStore = {
+const store = {
   async pushData(path, payload) {
-    const id = payload.id || genId();
-    localMem[id] = { ...payload, id };
-    saveLocalMem(localMem);
-    emitLocalMem();
-    return id;
+    assertDbApi();
+    return window.dbApi.pushData(path, payload);
   },
 
   async updateData(path, patch) {
-    const id = path.split("/").pop();
-    if (!localMem[id]) {
-      localMem[id] = { id };
-    }
-    localMem[id] = { ...localMem[id], ...patch };
-    saveLocalMem(localMem);
-    emitLocalMem();
+    assertDbApi();
+    return window.dbApi.updateData(path, patch);
   },
 
   async deleteData(path) {
-    const id = path.split("/").pop();
-    delete localMem[id];
-    saveLocalMem(localMem);
-    emitLocalMem();
+    assertDbApi();
+    return window.dbApi.deleteData(path);
   },
 
   onData(path, cb) {
-    localListeners.add(cb);
-    cb(localMem);
-    return () => localListeners.delete(cb);
+    assertDbApi();
+    return window.dbApi.onData(path, cb);
   },
 
-  seedIfEmpty(seedArr) {
-    if (Object.keys(localMem).length) {
-      return;
-    }
-    for (const c of seedArr) {
-      const id = c.id || genId();
-      localMem[id] = { ...c, id };
-    }
-    saveLocalMem(localMem);
+  seedIfEmpty() {
+    // no-op; wird bei dbApi nicht gebraucht
   },
 };
 
-const store =
-  typeof window !== "undefined" && window.dbApi
-    ? {
-        pushData: (p, v) => window.dbApi.pushData(p, v),
-        updateData: (p, v) => window.dbApi.updateData(p, v),
-        deleteData: (p) => window.dbApi.deleteData(p),
-        onData: (p, cb) => window.dbApi.onData(p, cb),
-        seedIfEmpty: () => {},
-      }
-    : localStore;
+/* ===== CONTACT-NORMALISIERUNG ===== */
 
 function normalizeContact(id, raw) {
+  if (!raw) return null;
   const name = raw?.name ?? "";
   const email = raw?.email ?? "";
   const phone = raw?.phone ?? "";
@@ -148,7 +102,7 @@ function normalizeContact(id, raw) {
 
 function contactsArrayFromState() {
   const entries = Object.entries(state.data || {});
-  return entries.map(([id, raw]) => normalizeContact(id, raw));
+  return entries.map(([id, raw]) => normalizeContact(id, raw)).filter(Boolean);
 }
 
 function sortContactsInPlace(arr) {
@@ -164,6 +118,8 @@ function showStoreError(msg, e) {
   }
 }
 
+/* ===== CREATE / UPDATE / DELETE ===== */
+
 async function createContact(name, email, phone, color) {
   const payload = {
     name,
@@ -176,7 +132,7 @@ async function createContact(name, email, phone, color) {
     const key = await store.pushData("contacts", payload);
     state.selectedId = key;
   } catch (e) {
-    console.error(e);
+    showStoreError("Create failed", e);
   }
 }
 

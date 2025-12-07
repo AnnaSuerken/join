@@ -164,6 +164,36 @@ function afterRenderSelectFallback() {
 
 /* Live View + Handlers */
 
+/**
+ * Wandelt beliebige DB-Strukturen in ein flaches Objekt
+ * { id: { ...contact } } um.
+ */
+function normalizeStoreData(raw) {
+  if (!raw) return {};
+
+  // Wenn es schon ein plain Object ist
+  if (typeof raw === "object" && !Array.isArray(raw) && raw !== null) {
+    // Falls deine DB sowas wie { contacts: {...} } zurückgibt
+    if (raw.contacts && typeof raw.contacts === "object") {
+      return normalizeStoreData(raw.contacts);
+    }
+    return raw;
+  }
+
+  // Array von Kontakten
+  if (Array.isArray(raw)) {
+    const obj = {};
+    for (const item of raw) {
+      if (!item) continue;
+      const id = item.id || genId();
+      obj[id] = { ...item, id };
+    }
+    return obj;
+  }
+
+  return {};
+}
+
 let scheduled = false;
 
 function scheduleRender() {
@@ -181,7 +211,8 @@ function scheduleRender() {
 function startLiveView() {
   if (state.unsubscribe) state.unsubscribe();
   state.unsubscribe = store.onData("contacts", (data) => {
-    state.data = data || {};
+    // WICHTIG: hier wird das Format aus der DB normalisiert
+    state.data = normalizeStoreData(data);
     scheduleRender();
   });
 }
