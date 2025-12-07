@@ -33,23 +33,3 @@ document.addEventListener("click", (e) => {
 });
 
 
-/**distributes the new task into different progress groupd within oard overview (todo, in progress, await feedback, done)
- * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
- * @param {string} payload - defines whichinput values are pushed into database
- * @param {string} currentTaskColumn - defines with progress status is currently active
- */
-
-async function progressTablePush(payload, currentTaskColumn, form) {
-  switch (currentTaskColumn) {
-    case "todo":
-    case "inprogress":
-    case "await":
-    case "done": {
-      const key = await dbApi.pushData(`/board/${currentTaskColumn}`, payload);
-      await dbApi.updateData(`/board/${currentTaskColumn}/${key}`, { id: key });
-      showToast("Task was added.");
-      clearTask(form);
-      break;
-    }
-  }
-}
