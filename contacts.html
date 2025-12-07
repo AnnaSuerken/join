@@ -1,209 +1,259 @@
 <!DOCTYPE html>
 <html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Contacts</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join - Contacts</title>
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
 
-  <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/summary.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/nav.css" />
+    <link rel="stylesheet" href="./css/contacts.css" />
 
-  <link rel="stylesheet" href="./css/assets.css" />
-  <link rel="stylesheet" href="./css/summary.css" />
-  <link rel="stylesheet" href="./css/style.css" />
-  <link rel="stylesheet" href="./css/nav.css" />
-  <link rel="stylesheet" href="./css/contacts.css" />
+    <script type="module" src="./js/core/main.js"></script>
+    <script type="module" src="./js/core/firebase.js"></script>
+    <script src="./js/contacts/contacts-core.js"></script>
+    <script src="./js/contacts/contacts-ui-render.js"></script>
+    <script src="./js/contacts/contacts-ui-main.js"></script>
+    <script src="./js/ui/nav-auth.js" defer></script>
 
-  <script type="module" src="./js/main.js"></script>
-  <script type="module" src="./js/firebase.js"></script>
-  <script src="./js/contacts/contacts-core.js"></script>
-  <script src="./js/contacts/contacts-ui-render.js"></script>
-  <script src="./js/contacts/contacts-ui-main.js"></script>
-  <script src="./js/nav.js" defer></script>
+    <!-- contacts.js wurde entfernt -->
 
-  <!-- contacts.js wurde entfernt -->
+    <script type="module">
+      import { requireAuth } from "./js/authguard.js";
+      import { logout } from "./js/logout.js";
 
-  <script type="module">
-    import { requireAuth } from "./js/authguard.js";
-    import { logout } from "./js/logout.js";
+      const user = await requireAuth({ redirectTo: "/login.html" });
 
-    const user = await requireAuth({ redirectTo: "/login.html" });
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutBtn = document.getElementById("logout-btn");
+        if (logoutBtn) logoutBtn.addEventListener("click", logout);
+      });
+    </script>
+  </head>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const logoutBtn = document.getElementById("logout-btn");
-      if (logoutBtn) logoutBtn.addEventListener("click", logout);
-    });
-  </script>
+  <body class="contacts-page">
+    <div class="content">
+      <div id="loading-overlay">
+        <div class="spinner"></div>
+      </div>
 
-</head>
+      <!-- LEFT SIDEBAR -->
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
 
-<body class="contacts-page">
-  <div class="content">
-    <div id="loading-overlay">
-      <div class="spinner"></div>
-    </div>
+        <section class="nav-bar">
+          <button id="summary">
+            <img src="./assets/icons/summary.svg" alt="" />
+            Summary
+          </button>
 
-    <!-- LEFT SIDEBAR -->
-    <section class="content-left">
-      <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+          <button id="add-task">
+            <img src="./assets/icons/addtask.svg" alt="" />
+            Add Task
+          </button>
 
-      <section class="nav-bar">
-        <button id="summary">
-          <img src="./assets/icons/summary.svg" alt="" />
-          Summary
-        </button>
+          <button id="board">
+            <img src="./assets/icons/board.svg" alt="" />
+            Board
+          </button>
 
-        <button id="add-task">
-          <img src="./assets/icons/addtask.svg" alt="" />
-          Add Task
-        </button>
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/contacts.svg" alt="" />
+            Contacts
+          </button>
+        </section>
 
-        <button id="board">
-          <img src="./assets/icons/board.svg" alt="" />
-          Board
-        </button>
-
-        <button class="nav-bar-button-active">
-          <img src="./assets/icons/contacts.svg" alt="" />
-          Contacts
-        </button>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
       </section>
 
-      <div class="nav-bar-links">
-        <a href="./privacy-policy.html">Privacy Policy</a>
-        <a href="./legal-notice.html">Legal notice</a>
-      </div>
-    </section>
+      <!-- RIGHT MAIN AREA -->
+      <section class="content-right">
+        <header class="header-right">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
 
-    <!-- RIGHT MAIN AREA -->
-    <section class="content-right">
-      <header class="header-right">
-        <img src="./assets/imgs/join_logo_blue.svg" alt="Logo" class="logo-mobile" />
+          <span class="tool-name">Kanban Projekt Management Tool</span>
 
-        <span class="tool-name">Kanban Projekt Management Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html">
+              <img src="./assets/icons/help.svg" alt="help" class="help-btn" />
+            </a>
 
-        <div class="header-content-right">
-          <a href="./help.html">
-            <img src="./assets/icons/help.svg" alt="help" class="help-btn" />
-          </a>
-
-          <div class="dropdown">
-            <button id="dropbtn" class="dropbtn"></button>
-            <div class="dropdown-content">
-              <a href="./help.html">Help</a>
-              <a href="./legal-notice.html">Legal Notice</a>
-              <a href="./privacy-policy.html">Privacy Policy</a>
-              <a id="logout-btn">Logout</a>
+            <div class="dropdown">
+              <button id="dropbtn" class="dropbtn"></button>
+              <div class="dropdown-content">
+                <a href="./help.html">Help</a>
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main class="contacts-main">
-        <aside class="contacts-panel">
-          <div class="contacts-panel-inner">
-            <button id="open-add-contact-overlay" class="add-contact-btn">
-              <span class="add-contact-text">Add new contact</span>
-              <span class="add-contact-icon">
-                <img src="./assets/icons/person_add.svg" alt="add person" />
-              </span>
+        <main class="contacts-main">
+          <aside class="contacts-panel">
+            <div class="contacts-panel-inner">
+              <button id="open-add-contact-overlay" class="add-contact-btn">
+                <span class="add-contact-text">Add new contact</span>
+                <span class="add-contact-icon">
+                  <img src="./assets/icons/person_add.svg" alt="add person" />
+                </span>
+              </button>
+
+              <div id="contacts-scroll" class="contacts-scroll"></div>
+            </div>
+          </aside>
+
+          <!-- RIGHT DETAIL PANEL -->
+          <section class="contacts-detail">
+            <div class="contacts-headline-row">
+              <div class="contacts-headline">Contacts</div>
+              <div class="contacts-headline-separator"></div>
+              <div class="contacts-subline">Better with a team</div>
+            </div>
+
+            <img
+              id="return-arrow"
+              src="./assets/icons/return-arrow.svg"
+              alt="return"
+              class="d_none"
+            />
+
+            <div id="contact-detail" class="contact-detail-inner"></div>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <!-- ADD CONTACT MODAL -->
+    <section class="modal-overlay d_none" id="add-contact-overlay">
+      <div class="add-contact-modal">
+        <div class="add-contact-left">
+          <div class="add-contact-left-text">
+            <img
+              class="join-big-logo"
+              src="./assets/imgs/join_logo_white.svg"
+              alt="Join Logo"
+            />
+
+            <h2 class="add-contact-headline">Add contact</h2>
+            <div class="add-contact-underline"></div>
+            <p class="add-contact-sub">Tasks are better with a team!</p>
+          </div>
+        </div>
+
+        <div class="add-contact-right">
+          <button
+            class="modal-close-btn"
+            id="close-add-contact-overlay"
+            aria-label="close"
+          >
+            <img src="./assets/icons/Close.svg" alt="close" />
+          </button>
+
+          <div class="modal-form-row">
+            <div class="modal-avatar-circle" id="modal-avatar-preview">
+              <img src="./assets/icons/person.svg" alt="avatar placeholder" />
+            </div>
+
+            <form
+              id="add-contact-form"
+              class="modal-form"
+              onsubmit="return false;"
+            >
+              <div class="input-wrapper">
+                <input
+                  id="contact-name-input"
+                  class="modal-input"
+                  type="text"
+                  placeholder="Name"
+                  required
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/person.svg"
+                  alt="name"
+                />
+              </div>
+
+              <div class="input-wrapper">
+                <input
+                  id="contact-email-input"
+                  class="modal-input"
+                  type="email"
+                  placeholder="Email"
+                  required
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/mail.svg"
+                  alt="email"
+                />
+              </div>
+
+              <div class="input-wrapper">
+                <input
+                  id="contact-phone-input"
+                  class="modal-input"
+                  type="tel"
+                  placeholder="Phone"
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/call.svg"
+                  alt="phone"
+                />
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button class="white-btn" id="cancel-add-contact-overlay">
+              Cancel ✕
             </button>
 
-            <div id="contacts-scroll" class="contacts-scroll"></div>
+            <button class="blue-btn-bold" id="create-contact-btn">
+              Create contact ✓
+            </button>
           </div>
-        </aside>
-
-        <!-- RIGHT DETAIL PANEL -->
-        <section class="contacts-detail">
-          <div class="contacts-headline-row">
-            <div class="contacts-headline">Contacts</div>
-            <div class="contacts-headline-separator"></div>
-            <div class="contacts-subline">Better with a team</div>
-          </div>
-
-          <img id="return-arrow" src="./assets/icons/return-arrow.svg" alt="return" class="d_none" />
-
-          <div id="contact-detail" class="contact-detail-inner"></div>
-        </section>
-      </main>
+        </div>
+      </div>
     </section>
-  </div>
 
-  <!-- ADD CONTACT MODAL -->
-  <section class="modal-overlay d_none" id="add-contact-overlay">
-    <div class="add-contact-modal">
-      <div class="add-contact-left">
-        <div class="add-contact-left-text">
-          <img class="join-big-logo" src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
-
-          <h2 class="add-contact-headline">Add contact</h2>
-          <div class="add-contact-underline"></div>
-          <p class="add-contact-sub">Tasks are better with a team!</p>
-        </div>
-      </div>
-
-      <div class="add-contact-right">
-        <button class="modal-close-btn" id="close-add-contact-overlay" aria-label="close">
-          <img src="./assets/icons/Close.svg" alt="close" />
-        </button>
-
-        <div class="modal-form-row">
-          <div class="modal-avatar-circle" id="modal-avatar-preview">
-            <img src="./assets/icons/person.svg" alt="avatar placeholder" />
-          </div>
-
-          <form id="add-contact-form" class="modal-form" onsubmit="return false;">
-            <div class="input-wrapper">
-              <input id="contact-name-input" class="modal-input" type="text" placeholder="Name" required />
-              <img class="input-icon" src="./assets/icons/person.svg" alt="name" />
-            </div>
-
-            <div class="input-wrapper">
-              <input id="contact-email-input" class="modal-input" type="email" placeholder="Email" required />
-              <img class="input-icon" src="./assets/icons/mail.svg" alt="email" />
-            </div>
-
-            <div class="input-wrapper">
-              <input id="contact-phone-input" class="modal-input" type="tel" placeholder="Phone" />
-              <img class="input-icon" src="./assets/icons/call.svg" alt="phone" />
-            </div>
-          </form>
-        </div>
-
-        <div class="modal-footer">
-          <button class="white-btn" id="cancel-add-contact-overlay">
-            Cancel ✕
-          </button>
-
-          <button class="blue-btn-bold" id="create-contact-btn">
-            Create contact ✓
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MOBILE NAV -->
-  <nav class="nav-bar-mobile">
-    <button id="summary">
-      <img src="./assets/icons/summary.svg" alt="" />
-      Summary
-    </button>
-    <button id="add-task">
-      <img src="./assets/icons/addtask.svg" alt="" />
-      Add Task
-    </button>
-    <button id="board">
-      <img src="./assets/icons/board.svg" alt="" />
-      Board
-    </button>
-    <button id="contacts" class="nav-bar-button-active-a-mobile">
-      <img src="./assets/icons/contacts.svg" alt="" />
-      Contacts
-    </button>
-  </nav>
-  <div id="toast" class="toast d_none" role="status" aria-live="polite">
-  </div>
-</body>
-
+    <!-- MOBILE NAV -->
+    <nav class="nav-bar-mobile">
+      <button id="summary">
+        <img src="./assets/icons/summary.svg" alt="" />
+        Summary
+      </button>
+      <button id="add-task">
+        <img src="./assets/icons/addtask.svg" alt="" />
+        Add Task
+      </button>
+      <button id="board">
+        <img src="./assets/icons/board.svg" alt="" />
+        Board
+      </button>
+      <button id="contacts" class="nav-bar-button-active-a-mobile">
+        <img src="./assets/icons/contacts.svg" alt="" />
+        Contacts
+      </button>
+    </nav>
+    <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
+  </body>
 </html>

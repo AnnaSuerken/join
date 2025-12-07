@@ -1,5 +1,5 @@
-// js/signup.js
-import { auth, db } from "./firebase.js";
+// js/auth/signup.js
+import { auth, db } from "../core/firebase.js";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -33,20 +33,13 @@ function isValidEmail(email) {
 
 function clearErrors() {
   [nameError, emailError, passwordError, password2Error, checkboxError].forEach(
-    (el) => {
-      if (el) el.textContent = "";
-    }
+    (el) => el && (el.textContent = "")
   );
 
   [nameInput, emailInput, password, password2].forEach((input) => {
     if (input) input.classList.remove("error");
   });
 }
-
-/**
- * 
- * Valites from within sign-up and log-in 
- */
 
 function validateName(nameVal) {
   if (!nameVal) {
@@ -78,13 +71,13 @@ function validatePasswordValue(pwdVal) {
     return false;
   }
   if (pwdVal.length < 6) {
-    passwordError.textContent = "Das Passwort muss mindestens 6 Zeichen lang sein.";
+    passwordError.textContent =
+      "Das Passwort muss mindestens 6 Zeichen lang sein.";
     password.classList.add("error");
     return false;
   }
   return true;
 }
-
 
 function validatePasswordConfirmation(pwdVal, pwd2Val) {
   if (!pwd2Val) {
@@ -103,7 +96,8 @@ function validatePasswordConfirmation(pwdVal, pwd2Val) {
 
 function validatePrivacyBox() {
   if (!checkBox.checked) {
-    checkboxError.textContent = "Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.";
+    checkboxError.textContent =
+      "Bitte akzeptiere die Datenschutzerklärung, um fortzufahren.";
     return false;
   }
   return true;
@@ -127,6 +121,105 @@ function validateForm() {
   return isValid;
 }
 
+function getSignupFormValues() {
+  return {
+    displayName: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    pwd: password.value,
+  };
+}
+
+function showValidationToast() {
+  if (typeof showToast === "function") {
+    showToast("Bitte überprüfe deine Eingaben (Fehler sind markiert).", true);
+  }
+}
+
+function showSignupRunningToast() {
+  if (typeof showToast === "function") {
+    showToast("Registrierung läuft");
+  }
+}
+
+function showSignupSuccessToast() {
+  if (typeof showToast === "function") {
+    showToast("Registrierung erfolgreich.");
+  }
+}
+
+async function registerUser(email, pwd) {
+  return createUserWithEmailAndPassword(auth, email, pwd);
+}
+
+async function saveUserProfile(user, displayName, email) {
+  await updateProfile(user, { displayName });
+  await set(ref(db, `users/${user.uid}`), {
+    uid: user.uid,
+    email,
+    displayName,
+    createdAt: serverTimestamp(),
+    lastLoginAt: serverTimestamp(),
+    provider: "password",
+    isAnonymous: false,
+  });
+}
+
+function redirectToLoginDelayed() {
+  setTimeout(() => {
+    window.location.href = "/login.html";
+  }, 1500);
+}
+
+function applySignupErrorToForm(err) {
+  switch (err.code) {
+    case "auth/email-already-in-use":
+      emailError.textContent =
+        "Diese Email wird bereits von einem anderen Konto verwendet.";
+      emailInput.classList.add("error");
+      break;
+    case "auth/invalid-email":
+      emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+      emailInput.classList.add("error");
+      break;
+    case "auth/weak-password":
+      passwordError.textContent =
+        "Das Passwort ist zu schwach. Bitte verwende ein stärkeres Passwort.";
+      password.classList.add("error");
+      break;
+    default:
+      checkboxError.textContent =
+        "Registrierung fehlgeschlagen. Bitte versuche es erneut.";
+      break;
+  }
+}
+
+function showSignupErrorToast(err) {
+  if (typeof showToast === "function") {
+    showToast(err.message || "Registrierung fehlgeschlagen.", true);
+  }
+}
+
+async function handleSignup() {
+  if (!validateForm()) {
+    showValidationToast();
+    return;
+  }
+
+  const { displayName, email, pwd } = getSignupFormValues();
+  showSignupRunningToast();
+
+  try {
+    const cred = await registerUser(email, pwd);
+    await saveUserProfile(cred.user, displayName, email);
+    showSignupSuccessToast();
+    redirectToLoginDelayed();
+  } catch (err) {
+    console.error(err);
+    applySignupErrorToForm(err);
+    showSignupErrorToast(err);
+  }
+}
+
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
   await handleSignup();
@@ -137,82 +230,13 @@ signupbutton?.addEventListener("click", async (e) => {
   await handleSignup();
 });
 
-async function handleSignup() {
-  if (!validateForm()) {
-    if (typeof showToast === "function") {
-      showToast("Bitte überprüfe deine Eingaben (Fehler sind markiert).", true);
-    }
-    return;
-  }
-
-  const displayName = nameInput.value.trim();
-  const email = emailInput.value.trim();
-  const pwd = password.value;
-
-  if (typeof showToast === "function") {
-    showToast("Registrierung läuft");
-  }
-
-  try {
-    const cred = await createUserWithEmailAndPassword(auth, email, pwd);
-
-    await updateProfile(cred.user, { displayName });
-
-    await set(ref(db, `users/${cred.user.uid}`), {
-      uid: cred.user.uid,
-      email,
-      displayName,
-      createdAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp(),
-      provider: "password",
-      isAnonymous: false,
-    });
-
-    if (typeof showToast === "function") {
-      showToast("Registrierung erfolgreich.");
-    }
-
-    setTimeout(() => {
-      window.location.href = "/login.html";
-    }, 1500);
-  } catch (err) {
-    console.error(err);
-
-    switch (err.code) {
-      case "auth/email-already-in-use":
-        emailError.textContent =
-          "Diese Email wird bereits von einem anderen Konto verwendet.";
-        emailInput.classList.add("error");
-        break;
-      case "auth/invalid-email":
-        emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
-        emailInput.classList.add("error");
-        break;
-      case "auth/weak-password":
-        passwordError.textContent =
-          "Das Passwort ist zu schwach. Bitte verwende ein stärkeres Passwort.";
-        password.classList.add("error");
-        break;
-      default:
-        checkboxError.textContent =
-          "Registrierung fehlgeschlagen. Bitte versuche es erneut.";
-        break;
-    }
-
-    if (typeof showToast === "function") {
-      showToast(err.message || "Registrierung fehlgeschlagen.", true);
-    }
-  }
-}
-
 onAuthStateChanged(auth, async (user) => {
-  if (user?.isAnonymous) {
-    try {
-      await dbUpdate(ref(db, `guests/${user.uid}`), {
-        lastLoginAt: serverTimestamp(),
-      });
-    } catch (e) {
-      console.warn("Konnte Gast-Datensatz nicht aktualisieren:", e);
-    }
+  if (!user?.isAnonymous) return;
+  try {
+    await dbUpdate(ref(db, `guests/${user.uid}`), {
+      lastLoginAt: serverTimestamp(),
+    });
+  } catch (e) {
+    console.warn("Konnte Gast-Datensatz nicht aktualisieren:", e);
   }
 });

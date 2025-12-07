@@ -1,6 +1,6 @@
 // js/board.js
-import { dbApi } from "../firebase.js";
-import { requireAuth } from "../authguard.js";
+import { dbApi } from "../core/firebase.js";
+import { requireAuth } from "../core/auth-guard.js";
 import {
   escapeHtml,
   safeParse,

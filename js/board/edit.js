@@ -1,5 +1,5 @@
 // js/edit.js
-import { dbApi } from "../firebase.js";
+import { dbApi } from "../core/firebase.js";
 import {
   escapeHtml,
   normalizeSubtasks,

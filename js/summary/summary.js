@@ -1,9 +1,10 @@
+// js/summary/summary.js
 import {
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-function requireAuth({ redirectTo = "/login.html" } = {}) {
+function requireAuthSummary({ redirectTo = "/login.html" } = {}) {
   return new Promise((resolve) => {
     onAuthStateChanged(window.auth, (user) => {
       if (user) resolve(user);
@@ -34,17 +35,20 @@ function setGreeting() {
   if (el) el.textContent = getGreeting();
 }
 
-function scheduleGreetingRefresh() {
-  const now = new Date();
-  const msToNextHour =
+function getNextHourDelay(now = new Date()) {
+  return (
     (60 - now.getMinutes()) * 60_000 -
     now.getSeconds() * 1000 -
-    now.getMilliseconds();
+    now.getMilliseconds()
+  );
+}
 
+function scheduleGreetingRefresh() {
+  const msToNextHour = Math.max(getNextHourDelay(), 0);
   setTimeout(() => {
     setGreeting();
     setInterval(setGreeting, 60 * 60 * 1000);
-  }, Math.max(msToNextHour, 0));
+  }, msToNextHour);
 }
 
 function initLiveName() {
@@ -77,7 +81,6 @@ function normalizeBoard(board) {
     todo: toArray(board?.todo),
     inProgress: toArray(board?.inprogress || board?.inProgress),
     done: toArray(board?.done),
-    // 🔴 Hier angepasst: Firebase-Feld heißt "await"
     awaiting: toArray(
       board?.await || board?.awaitingfeedback || board?.awaitingFeedback
     ),
@@ -108,42 +111,48 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
-function animateCounter(element, target, duration = 200) {
+/* ---- Counter Animation ---- */
+
+function getCounterStartValue(element) {
+  const text = (element.textContent || "").replace(/[^\d-]/g, "");
+  const parsed = parseInt(text, 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function getCounterDuration(diff, baseDuration = 200) {
+  const extra = Math.min(Math.abs(diff) * 20, 600);
+  return baseDuration + extra;
+}
+
+function runCounterAnimation(element, start, end, totalDuration) {
+  const startTime = performance.now();
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / totalDuration, 1);
+    const value = Math.round(start + (end - start) * progress);
+    element.textContent = value;
+    if (progress < 1) requestAnimationFrame(update);
+    else element.textContent = end;
+  }
+
+  requestAnimationFrame(update);
+}
+
+function animateCounter(element, target) {
   if (!element) return;
 
-  const currentText = (element.textContent || "").replace(/[^\d-]/g, "");
-  const start = Number.isFinite(parseInt(currentText, 10))
-    ? parseInt(currentText, 10)
-    : 0;
+  const start = getCounterStartValue(element);
   const end = Number(target) || 0;
-
   const diff = end - start;
+
   if (diff === 0) {
     element.textContent = end;
     return;
   }
 
-  // kleine dynamische Anpassung: große Sprünge dauern minimal länger
-  const baseDuration = duration;
-  const extra = Math.min(Math.abs(diff) * 20, 600); // max +600ms
-  const totalDuration = baseDuration + extra;
-
-  const startTime = performance.now();
-
-  function update(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / totalDuration, 1); // 0..1
-    const value = Math.round(start + diff * progress);
-    element.textContent = value;
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    } else {
-      element.textContent = end; // sicherheitshalber
-    }
-  }
-
-  requestAnimationFrame(update);
+  const totalDuration = getCounterDuration(diff);
+  runCounterAnimation(element, start, end, totalDuration);
 }
 
 function setNumberAnimated(id, value) {
@@ -152,35 +161,38 @@ function setNumberAnimated(id, value) {
   animateCounter(el, value);
 }
 
-/* ---------------------------------------------------------- */
+/* ---- Board Summary ---- */
 
-function renderBoardSummary(board) {
-  if (!board) {
-    // auch bei leerem Board animiert von aktuellem Wert auf 0
-    setNumberAnimated("summary-task-todo-number", 0);
-    setNumberAnimated("summary-task-done-number", 0);
-    setNumberAnimated("allTasks", 0);
-    setNumberAnimated("inProgress", 0);
-    setNumberAnimated("awaitingFeedback", 0);
-    setNumberAnimated("urgent-count", 0);
-    setText("next-deadline", "–");
-    return;
-  }
+function renderEmptyBoardSummary() {
+  setNumberAnimated("summary-task-todo-number", 0);
+  setNumberAnimated("summary-task-done-number", 0);
+  setNumberAnimated("allTasks", 0);
+  setNumberAnimated("inProgress", 0);
+  setNumberAnimated("awaitingFeedback", 0);
+  setNumberAnimated("urgent-count", 0);
+  setText("next-deadline", "–");
+}
 
+function getBoardArrays(board) {
   const { todo, inProgress, done, awaiting } = normalizeBoard(board);
   const allTasks = [...todo, ...inProgress, ...done, ...awaiting];
+  return { todo, inProgress, done, awaiting, allTasks };
+}
 
+function updateSummaryCounts(todo, inProgress, done, awaiting, allTasks) {
   setNumberAnimated("summary-task-todo-number", todo.length);
   setNumberAnimated("summary-task-done-number", done.length);
   setNumberAnimated("inProgress", inProgress.length);
   setNumberAnimated("awaitingFeedback", awaiting.length);
   setNumberAnimated("allTasks", allTasks.length);
+}
 
-  // Urgent (über alle Spalten)
+function updateUrgentCount(allTasks) {
   const urgentCount = allTasks.filter(isUrgent).length;
   setNumberAnimated("urgent-count", urgentCount);
+}
 
-
+function updateNextDeadline(allTasks) {
   const now = new Date();
   const futureDueDates = allTasks
     .map(parseDueDate)
@@ -193,10 +205,23 @@ function renderBoardSummary(board) {
   );
 }
 
+function renderBoardSummary(board) {
+  if (!board) {
+    renderEmptyBoardSummary();
+    return;
+  }
+
+  const { todo, inProgress, done, awaiting, allTasks } = getBoardArrays(board);
+  updateSummaryCounts(todo, inProgress, done, awaiting, allTasks);
+  updateUrgentCount(allTasks);
+  updateNextDeadline(allTasks);
+}
+
+/* ---- Live Board Subscription ---- */
+
 let unsubscribeBoard = null;
 
 function startBoardLiveSubscription() {
-  // dbApi.onData gibt eine Unsubscribe-Funktion zurück
   unsubscribeBoard = window.dbApi.onData("board", (data) => {
     renderBoardSummary(data);
   });
@@ -212,6 +237,8 @@ function stopBoardLiveSubscription() {
     console.warn("Unsubscribe board listener failed:", e);
   }
 }
+
+/* ---- Navigation ---- */
 
 function initNavigation() {
   const links = {
@@ -230,8 +257,10 @@ function initNavigation() {
   if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
 }
 
-async function init() {
-  await requireAuth({ redirectTo: "/login.html" });
+/* ---- Init & Cleanup ---- */
+
+async function initSummary() {
+  await requireAuthSummary({ redirectTo: "/login.html" });
   initNavigation();
   setGreeting();
   scheduleGreetingRefresh();
@@ -239,11 +268,13 @@ async function init() {
   startBoardLiveSubscription();
 }
 
-function cleanup() {
+function cleanupSummary() {
   stopBoardLiveSubscription();
 }
 
-addEventListener("click", async (event) => {
+/* ---- Events ---- */
+
+addEventListener("click", (event) => {
   if (
     event.target.closest(
       ".summary-task-big, .summary-task-medium, .summary-task-small"
@@ -253,5 +284,5 @@ addEventListener("click", async (event) => {
   }
 });
 
-window.addEventListener("load", init);
-window.addEventListener("beforeunload", cleanup);
+window.addEventListener("load", initSummary);
+window.addEventListener("beforeunload", cleanupSummary);

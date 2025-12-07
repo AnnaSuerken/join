@@ -1,3 +1,4 @@
+// js/core/firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import {
@@ -29,25 +30,21 @@ export const auth = getAuth(app);
 export const db = getDatabase(app);
 
 export const dbApi = {
-  /** @param {string} path @param {any} data */
   async setData(path, data) {
     await set(ref(db, path), data);
   },
 
-  /** @param {string} path @param {any} data */
   async pushData(path, data) {
     const r = push(ref(db, path));
     await set(r, data);
     return r.key;
   },
 
-  /** @param {string} path */
   async getData(path) {
     const snap = await get(child(ref(db), path));
     return snap.exists() ? snap.val() : null;
   },
 
-  /** @param {string} path @param {(value:any)=>void} callback */
   onData(path, callback) {
     const r = ref(db, path);
     const handler = (snap) => callback(snap.exists() ? snap.val() : null);
@@ -55,16 +52,15 @@ export const dbApi = {
     return () => off(r, "value", handler);
   },
 
-  /** @param {string} path @param {Record<string, any>} partial */
   async updateData(path, partial) {
     await update(ref(db, path), partial);
   },
 
-  /** @param {string} path */
   async deleteData(path) {
     await remove(ref(db, path));
   },
 };
 
+// global verfügbar lassen, damit alte Skripte weiterlaufen
 window.dbApi = dbApi;
 window.auth = auth;

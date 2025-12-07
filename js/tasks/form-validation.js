@@ -1,21 +1,4 @@
-/**clears add-task form of all mandatory field errors
- * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
- */
-
-function clearAddTaskErrors(form) {
-  const {taskTitle, taskDueDate, taskCategory, titleError, dateError, categoryError,} = getTaskFormElements(form);
-
-  [titleError, dateError, categoryError].forEach(
-    (el) => el && (el.textContent = "")
-  );
-  [taskTitle, taskDueDate, taskCategory].forEach(
-    (el) => el && el.classList.remove("error")
-  );
-}
-
-/**Form Validation for Add-Task form
- * @param {string} form - defines which form is currently used (within add-task.html or within board.html/overlay)
- */
+// js/tasks/form-validation.js
 
 function getTaskFormElements(form) {
   return {
@@ -29,6 +12,24 @@ function getTaskFormElements(form) {
       ".category-error, #add-task-category-error"
     ),
   };
+}
+
+function clearAddTaskErrors(form) {
+  const {
+    taskTitle,
+    taskDueDate,
+    taskCategory,
+    titleError,
+    dateError,
+    categoryError,
+  } = getTaskFormElements(form);
+
+  [titleError, dateError, categoryError].forEach(
+    (el) => el && (el.textContent = "")
+  );
+  [taskTitle, taskDueDate, taskCategory].forEach(
+    (el) => el && el.classList.remove("error")
+  );
 }
 
 function validateTitle(taskTitle, titleError) {
@@ -59,15 +60,26 @@ function validateCategory(taskCategory, categoryError) {
 }
 
 function setMandatoryInputs(form) {
-  const {taskTitle, taskDueDate, taskCategory, titleError, dateError, categoryError,} = getTaskFormElements(form);
+  const {
+    taskTitle,
+    taskDueDate,
+    taskCategory,
+    titleError,
+    dateError,
+    categoryError,
+  } = getTaskFormElements(form);
 
   clearAddTaskErrors(form);
 
   let isValid = true;
-
   if (!validateTitle(taskTitle, titleError)) isValid = false;
   if (!validateDueDate(taskDueDate, dateError)) isValid = false;
   if (!validateCategory(taskCategory, categoryError)) isValid = false;
 
   return isValid;
 }
+
+// export für andere Dateien
+window.getTaskFormElements = getTaskFormElements;
+window.clearAddTaskErrors = clearAddTaskErrors;
+window.setMandatoryInputs = setMandatoryInputs;
