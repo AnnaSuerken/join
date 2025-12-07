@@ -86,7 +86,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  height: 106px;
+  height: 80px;
 }
 
 .add-scroll-bar {
@@ -324,62 +324,6 @@
 
   .btn-edit,
   .btn-delete {
-    width: 10px;
-    margin: 0px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .add-task-content {
-    gap: 20px;
-  }
-
-  .add-task-content-right {
-    gap: 15px;
-  }
-
-  .add-task-content textarea {
-    width: 220px;
-    height: 120px;
-  }
-
-  .add-task-content-right input,
-  .add-task-content-left input,
-  .add-task-content-left select {
-    width: 220px;
-    padding: 12px;
-  }
-
-  .subtask-input-row {
-    width: 220px;
-  }
-
-  .subtask-list {
-    width: 100%;
-  }
-
-  .subtask-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 8px;
-  }
-
-  .priority-container {
-    width: 220px;
-    gap: 8px;
-  }
-
-  .assignee-select,
-  .assignee-options {
-    width: 220px;
-  }
-
-  .btn-delete,
-  .btn-edit {
     width: 10px;
     margin: 0px;
   }

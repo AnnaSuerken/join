@@ -279,7 +279,12 @@ select.error {
 
 /* Responsive */
 
-@media (max-width: 900px) {
+@media (max-width: 1050px) {
+
+  .help-btn {
+    display: none;
+  }
+  
   .content-left {
     display: none !important;
   }
