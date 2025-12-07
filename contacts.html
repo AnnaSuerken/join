@@ -22,21 +22,8 @@
     <script src="./js/contacts/contacts-core.js"></script>
     <script src="./js/contacts/contacts-ui-render.js"></script>
     <script src="./js/contacts/contacts-ui-main.js"></script>
-    <script src="./js/ui/nav-auth.js" defer></script>
+    <script type="module" src="./js/ui/nav-auth.js" defer></script>
 
-    <!-- contacts.js wurde entfernt -->
-
-    <script type="module">
-      import { requireAuth } from "./js/authguard.js";
-      import { logout } from "./js/logout.js";
-
-      const user = await requireAuth({ redirectTo: "/login.html" });
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const logoutBtn = document.getElementById("logout-btn");
-        if (logoutBtn) logoutBtn.addEventListener("click", logout);
-      });
-    </script>
   </head>
 
   <body class="contacts-page">

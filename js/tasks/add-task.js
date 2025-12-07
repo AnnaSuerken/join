@@ -1,5 +1,3 @@
-// js/tasks/add-task.js
-
 /* ---------- Konfiguration ---------- */
 let taskCategoryColor = [
   { name: "Technical Task", color: "#20D7C1" },
