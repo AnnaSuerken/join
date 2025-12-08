@@ -309,8 +309,13 @@
 @media (max-width: 1340px) {
   .task-overlay-content-right input,
   .task-overlay-content-left select,
-  .task-overlay-content-right textarea {
-    width: 290px;
+  .task-overlay-content-right textarea,
+  .subtask-list,
+  .subtask-item {
+    max-width: 290px;
+  }
+  #edit-subtask-list {
+    max-width: 100% !important;
   }
 }
 
@@ -337,15 +342,6 @@
   .task-overlay-open {
     width: 80% !important;
   }
-  .action-container input {
-    width: 180px;
-  }
-
-  .task-overlay-content-right input,
-  .task-overlay-content-left select,
-  .task-overlay-content-right textarea {
-    width: 220px;
-  }
 }
 
 @media (max-width: 900px) {
@@ -355,7 +351,7 @@
   .task-overlay-content-right input,
   .task-overlay-content-left select,
   .task-overlay-content-right textarea {
-    width: 396px;
+    max-width: 396px;
   }
 
   .task-overlay-footer {
@@ -364,12 +360,25 @@
   }
 
   .task-overlay-footer div {
-    width: 396px;
+    max-width: 396px;
     display: flex;
     gap: 32px;
     justify-content: flex-end;
     position: fixed;
     bottom: 100px;
+  }
+  .task-overlay-content-right input,
+  .task-overlay-content-left select,
+  .task-overlay-content-right textarea,
+  .subtask-list,
+  .subtask-item {
+    max-width: 396px;
+  }
+  .task-overlay-content-right textarea {
+    min-width: 396px;
+  }
+  .priority-container {
+    justify-content: space-between;
   }
 }
 
@@ -404,6 +413,15 @@
     padding: 0;
     margin: 0 !important;
     margin-right: 12px !important;
+  }
+
+  .detail-user-row button {
+    padding-top: 15px;
+    padding-right: 16px;
+    padding-bottom: 15px;
+    padding-left: 16px;
+    border-radius: 8px;
+    width: auto !important;
   }
 
   .task-overlay-open-head {
@@ -473,6 +491,21 @@
   .task-overlay-footer {
     margin-left: 32px;
     margin-right: 32px;
+  }
+  .task-overlay-content-right input,
+  .task-overlay-content-left select,
+  .task-overlay-content-right textarea,
+  .subtask-list,
+  .subtask-item {
+    max-width: 396px;
+    width: auto !important;
+  }
+  .task-overlay-content-right textarea {
+    min-width: 300px;
+    width: auto !important;
+  }
+  .priority-container {
+    justify-content: space-between;
   }
 }
 

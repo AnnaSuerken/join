@@ -81,7 +81,7 @@
 }
 
 .subtask-list {
-  width: 100%;
+  width: 440px;
   margin-top: 10px;
   display: flex;
   flex-direction: column;
@@ -94,7 +94,7 @@
 }
 
 .subtask-item {
-  width: 100%;
+  max-width: 440px;
   display: flex;
   align-items: center;
   justify-content: space-between;
