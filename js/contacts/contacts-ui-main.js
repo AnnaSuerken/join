@@ -4,7 +4,11 @@ let modalMode = "create";
 
 function openOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
-  if (overlay) overlay.classList.remove("d_none");
+  if (!overlay) return;
+  overlay.classList.remove("d_none");
+  // Reflow, damit die CSS-Transition sicher triggert
+  void overlay.offsetWidth;
+  overlay.classList.add("modal-open");
 }
 
 function resetOverlayAvatar() {
@@ -17,10 +21,17 @@ function resetOverlayAvatar() {
 
 function closeOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
-  if (overlay) overlay.classList.add("d_none");
-  const form = byId("add-contact-form");
-  if (form) form.reset();
-  resetOverlayAvatar();
+  if (!overlay) return;
+  const modal = overlay.querySelector(".add-contact-modal");
+  const hide = () => {
+    overlay.classList.add("d_none");
+    const form = byId("add-contact-form");
+    if (form) form.reset();
+    resetOverlayAvatar();
+  };
+  if (modal) modal.addEventListener("transitionend", hide, { once: true });
+  else hide();
+  overlay.classList.remove("modal-open");
 }
 
 function getModalElements() {
@@ -122,7 +133,6 @@ function handleCreateClick() {
     showToast("Contact created successfully.");
   });
 }
-
 
 async function onDelete() {
   const id = state.selectedId;

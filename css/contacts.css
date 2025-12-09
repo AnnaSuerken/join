@@ -330,6 +330,7 @@
   z-index: 2000;
 }
 
+/* Basis: Modal steht rechts draußen, slidet bei .modal-open in die Mitte */
 .add-contact-modal {
   background-color: #fff;
   border-radius: 12px;
@@ -342,6 +343,12 @@
   position: absolute;
   left: 50%;
   top: 50%;
+  transform: translate(100%, -50%);
+  transition: transform 0.35s ease;
+}
+
+/* Wenn Overlay aktiv ist, Modal in die Mitte sliden */
+.modal-overlay.modal-open .add-contact-modal {
   transform: translate(-50%, -50%);
 }
 
@@ -500,9 +507,7 @@
   }
 }
 
-
 /* RESPONSIVE */
-
 
 /* Tablets / kleine Laptops */
 @media (max-width: 1024px) {
@@ -559,7 +564,7 @@
     overflow-y: auto;
   }
 
-    #return-arrow {
+  #return-arrow {
     cursor: pointer;
     position: absolute;
     top: 220.5px;
