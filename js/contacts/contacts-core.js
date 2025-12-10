@@ -43,7 +43,7 @@ const state = {
   unsubscribe: null,
 };
 
-/* ===== NUR DB-API, KEIN LOCAL STORAGE ===== */
+/* ===== NUR DB-API ===== */
 
 function assertDbApi() {
   if (!window.dbApi) {
@@ -76,7 +76,7 @@ const store = {
   },
 
   seedIfEmpty() {
-    // no-op; wird bei dbApi nicht gebraucht
+    
   },
 };
 

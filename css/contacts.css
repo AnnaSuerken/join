@@ -158,6 +158,8 @@
   word-break: break-word;
 }
 
+/* Detail-Bereich rechts */
+
 .contacts-detail {
   flex: 1;
   padding: 32px 24px;
@@ -315,12 +317,11 @@
   height: 16px;
 }
 
-/* MODAL / OVERLAY */
+/* MODAL / OVERLAY – Desktop */
 
 .modal-overlay {
   position: fixed;
-  left: 0;
-  top: 0;
+  inset: 0;
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
@@ -330,7 +331,6 @@
   z-index: 2000;
 }
 
-/* Basis: Modal steht rechts draußen, slidet bei .modal-open in die Mitte */
 .add-contact-modal {
   background-color: #fff;
   border-radius: 12px;
@@ -347,7 +347,12 @@
   transition: transform 0.35s ease;
 }
 
-/* Wenn Overlay aktiv ist, Modal in die Mitte sliden */
+/* Closed-State: rechts außerhalb  */
+.modal-overlay:not(.modal-open) .add-contact-modal {
+  transform: translate(100%, -50%);
+}
+
+/* Open-State: mittig */
 .modal-overlay.modal-open .add-contact-modal {
   transform: translate(-50%, -50%);
 }
@@ -491,7 +496,7 @@
   background-color: #f1f1f1;
 }
 
-/*  kein FAB / Menü */
+/*  kein FAB  */
 @media (min-width: 821px) {
   .contact-menu-btn,
   .contact-menu {
@@ -499,7 +504,7 @@
   }
 }
 
-/* Mobile: alte Edit/Delete  */
+/* Mobile: alte Edit/Delete ausblenden */
 @media (max-width: 820px) {
   .contacts-detail .contact-actions,
   .contacts-detail .actions {
@@ -571,7 +576,7 @@
     right: 8%;
   }
 
-  /*  Detail-Screen */
+  /* Detail-Screen */
   .contacts-main.show-detail .contacts-panel {
     display: none;
   }
@@ -627,20 +632,47 @@
     height: 28px !important;
   }
 
-  /* MOBILE FIX: Add-Contact Modal */
+  /* MOBILE: Modal als echtes Bottom-Sheet */
+  .modal-overlay {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
   .add-contact-modal {
-    width: 90%;
-    max-width: 460px;
-    border-radius: 16px;
+    position: relative;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+
+    width: 100%;
+    max-width: 100%;
+    border-radius: 24px 24px 0 0;
+
+    margin: 0;
+    margin-bottom: 80px; 
+
     flex-direction: column;
     max-height: none;
     height: auto;
     overflow: visible;
+
+    transform: translateY(100%);
+    transition: transform 0.35s ease;
+  }
+
+  .modal-overlay:not(.modal-open) .add-contact-modal {
+    transform: translateY(100%);
+  }
+
+  .modal-overlay.modal-open .add-contact-modal {
+    transform: translateY(0);
   }
 
   .add-contact-left {
     padding: 24px;
     text-align: left;
+    flex: 0 0 auto;
   }
 
   .add-contact-right {
@@ -741,9 +773,10 @@
     margin-right: 8px !important;
   }
 
+  /* für kleine Geräte weiter vollbreit lassen */
   .add-contact-modal {
-    width: 94%;
-    max-width: 420px;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -799,5 +832,45 @@
   .contacts-headline-row {
     gap: 10px;
     align-items: center;
+  }
+}
+/* == OVERRIDE: Mobile Add-Contact wie Figma-Card == */
+@media (max-width: 820px) {
+  /* Overlay ist egal */
+  .modal-overlay {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  /* Card: zentriert */
+  .modal-overlay .add-contact-modal {
+    position: absolute;
+    left: 50%;
+    top: auto;
+    bottom: 80px;              
+
+    width: 94%;                
+    max-width: 420px;          
+    border-radius: 24px;       
+
+    margin: 0;
+    flex-direction: column;
+    max-height: none;
+    height: auto;
+    overflow: visible;
+
+    /* Startposition */
+    transform: translate(-50%, 100%);
+    transition: transform 0.35s ease;
+  }
+
+  /* geschlossen: Card  */
+  .modal-overlay:not(.modal-open) .add-contact-modal {
+    transform: translate(-50%, 100%);
+  }
+
+  /* Card Bottom-Nav */
+  .modal-overlay.modal-open .add-contact-modal {
+    transform: translate(-50%, 0);
   }
 }

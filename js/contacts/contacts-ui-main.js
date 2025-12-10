@@ -241,10 +241,16 @@ function attachLegacyOverlayHandlers() {
   const closeBtn = byId("close-add-contact-overlay");
   const cancelBtn = byId("cancel-add-contact-overlay");
   const createBtn = byId("create-contact-btn");
+  const overlay = byId("add-contact-overlay");
+
   if (openBtn) openBtn.addEventListener("click", () => openModal("create"));
   if (closeBtn) closeBtn.addEventListener("click", closeOverlayLegacy);
   if (cancelBtn) cancelBtn.addEventListener("click", closeOverlayLegacy);
   if (createBtn) createBtn.addEventListener("click", handleCreateClick);
+  if (overlay)
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeOverlayLegacy();
+    });
 }
 
 function attachModernHandlers() {
