@@ -57,6 +57,14 @@ article {
   margin-right: 32px;
 }
 
+.maxsice {
+  max-width: 1440px; 
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+}
+
 /* Tablets quer / kleine Laptops */
 
 @media (max-width: 900px) {

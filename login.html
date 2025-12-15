@@ -21,99 +21,112 @@
     <script type="module" src="./js/core/main.js"></script>
   </head>
   <body>
-    <div class="loader">
-      <img src="./assets/imgs/join_logo_blue.svg" alt="" class="loader-img" />
-      <img src="./assets/imgs/join_logo_white.svg" alt="" class="loader-img-mobile"/>
-    </div>
-
-    <header>
-      <div class="logo-box-signup">
+    <div class="maxsice">
+      <div class="loader">
+        <img src="./assets/imgs/join_logo_blue.svg" alt="" class="loader-img" />
         <img
-          src="./assets/imgs/join_logo_blue.svg"
-          alt="Join Logo"
-          class="logo-login"
+          src="./assets/imgs/join_logo_white.svg"
+          alt=""
+          class="loader-img-mobile"
         />
-        <div class="sign-up-div">
+      </div>
+
+      <header>
+        <div class="logo-box-signup">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Join Logo"
+            class="logo-login"
+          />
+          <div class="sign-up-div">
+            <span>Not a Join user?</span>
+            <a href="./signup.html" class="primary blue-btn-bold">Sign up</a>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="sign-up-box">
+          <h1 class="sign-up-box-h1">Login</h1>
+          <div class="divider"></div>
+
+          <form id="login-form" action="" novalidate>
+            <div class="sign-up-input-container">
+              <!-- E-Mail -->
+              <div class="input-wrapper">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Email"
+                  class="signup-input"
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/mail.svg"
+                  alt="Email"
+                />
+              </div>
+              <p id="email-error" class="input-error"></p>
+
+              <!-- Passwort -->
+              <div class="input-wrapper">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="Password"
+                  class="signup-input"
+                />
+                <img
+                  class="input-icon"
+                  src="./assets/icons/lock.svg"
+                  alt="Password"
+                />
+              </div>
+              <p id="password-error" class="input-error"></p>
+
+              <div class="sign-up-box-footer">
+                <button class="primary blue-btn-bold" type="submit">
+                  Log in
+                </button>
+                <button
+                  id="guest-login-btn"
+                  class="ghost white-btn-bold"
+                  style="margin-top: 16px"
+                  type="button"
+                >
+                  Guest Log in
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <div class="sign-up-div-mobile">
           <span>Not a Join user?</span>
           <a href="./signup.html" class="primary blue-btn-bold">Sign up</a>
         </div>
-      </div>
-    </header>
+      </main>
 
-    <main>
-      <section class="sign-up-box">
-        <h1 class="sign-up-box-h1">Login</h1>
-        <div class="divider"></div>
+      <footer>
+        <div class="signup-footer-links-container">
+          <a href="./privacy-policy.html" class="footer-links"
+            >Privacy Policy</a
+          >
+          <a href="./legal-notice.html" class="footer-links">Legal notice</a>
+        </div>
+      </footer>
 
-        <form id="login-form" action="" novalidate>
-          <div class="sign-up-input-container">
-            <!-- E-Mail -->
-            <div class="input-wrapper">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="Email"
-                class="signup-input"
-              />
-              <img
-                class="input-icon"
-                src="./assets/icons/mail.svg"
-                alt="Email"
-              />
-            </div>
-            <p id="email-error" class="input-error"></p>
-
-            <!-- Passwort -->
-            <div class="input-wrapper">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="Password"
-                class="signup-input"
-              />
-              <img
-                class="input-icon"
-                src="./assets/icons/lock.svg"
-                alt="Password"
-              />
-            </div>
-            <p id="password-error" class="input-error"></p>
-
-            <div class="sign-up-box-footer">
-              <button class="primary blue-btn-bold" type="submit">
-                Log in
-              </button>
-              <button
-                id="guest-login-btn"
-                class="ghost white-btn-bold"
-                style="margin-top: 16px"
-                type="button"
-              >
-                Guest Log in
-              </button>
-            </div>
-          </div>
-        </form>
-      </section>
-
-      <div class="sign-up-div-mobile">
-        <span>Not a Join user?</span>
-        <a href="./signup.html" class="primary blue-btn-bold">Sign up</a>
-      </div>
-    </main>
-
-    <footer>
-      <div class="signup-footer-links-container">
-        <a href="./privacy-policy.html" class="footer-links">Privacy Policy</a>
-        <a href="./legal-notice.html" class="footer-links">Legal notice</a>
-      </div>
-    </footer>
-
-    <!-- Toast / Erfolgsmeldung -->
-    <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
+      <!-- Toast / Erfolgsmeldung -->
+      <div
+        id="toast"
+        class="toast d_none"
+        role="status"
+        aria-live="polite"
+      ></div>
+    </div>
   </body>
 </html>
