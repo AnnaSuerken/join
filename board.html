@@ -269,24 +269,26 @@
                   </div>
 
                   <label>Assigned to</label>
-                  <div
-                    id="assignee-select"
-                    class="assignee-select"
-                    tabindex="0"
-                    aria-haspopup="listbox"
-                    aria-expanded="false"
+                <div class="assignee-wrapper">
+                <div
+                  id="assignee-select"
+                  class="assignee-select"
+                  tabindex="0"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span class="assignee-select-label"
+                    >Select contacts to assign</span
                   >
-                    <span class="assignee-select-label"
-                      >Select contacts to assign</span
-                    >
-                    <span class="chevron">▾</span>
-                  </div>
-                  <ul
-                    id="assignee-options"
-                    class="assignee-options d_none"
-                    role="listbox"
-                    aria-multiselectable="true"
-                  ></ul>
+                  <span class="chevron">▾</span>
+                </div>
+                <ul
+                  id="assignee-options"
+                  class="assignee-options d_none"
+                  role="listbox"
+                  aria-multiselectable="true"
+                ></ul>
+                </div>
                   <div id="assignee-list" class="assignee-list"></div>
 
                   <label for="category"

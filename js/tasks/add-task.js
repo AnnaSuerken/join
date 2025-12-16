@@ -70,7 +70,7 @@ function buildAssigneeOptionHtml(c, i) {
         c.color
       )}">${escapeHtml(c.initials)}</span>
       <span class="assignee-option-name">${escapeHtml(c.name)}</span>
-      <span class="assignee-check" aria-hidden="true">✓</span>
+      <span class="assignee-indicator"></span>
     </li>
   `;
 }

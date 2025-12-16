@@ -205,7 +205,11 @@
 }
 
 .assignee-options {
-  width: 440px;
+  position: absolute;
+  top: 100%;      
+  left: 0;
+
+  width: 100%;
   margin-top: 6px;
   max-height: 110px;
   overflow: auto;
@@ -214,6 +218,12 @@
   border-radius: 10px;
   background: #fff;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  z-index: 10; 
+}
+
+.assignee-wrapper {
+  position: relative;
+  width: 440px;
 }
 
 .assignee-option {
@@ -229,14 +239,38 @@
   background: #f5f5f5;
 }
 
-.assignee-option.is-selected {
-  background: #eef8ff;
+.assignee-indicator {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+}
+
+
+.assignee-option.is-selected .assignee-indicator {
+  border-color: #2a3647;
+}
+
+.assignee-option.is-selected .assignee-indicator::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  color: #2a3647;
+  font-size: 12px;
 }
 
 .assignee-check {
   margin-left: auto;
   opacity: 0;
   transition: opacity 0.15s ease;
+}
+
+.assignee-checkbox:not(:checked) + .assignee-check {
+  visibility: hidden;
 }
 
 .assignee-option.is-selected .assignee-check {
