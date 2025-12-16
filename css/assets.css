@@ -82,5 +82,6 @@ article {
 @media (max-width: 430px) {
   main {
     margin: 0;
+    height: 100%;
   }
 }
