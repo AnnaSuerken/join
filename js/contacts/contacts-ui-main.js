@@ -1,6 +1,137 @@
+/* contacts-ui-main.js */
+
 /* Modal / Overlay */
 
 let modalMode = "create";
+
+/* ====== NON-BLOCKING TOAST (ohne OK / ohne alert) ====== */
+
+function showInlineToast(message, isError = false, duration = 2500) {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.textContent = message;
+
+  // optional: CSS z.B. .toast.error
+  toast.classList.toggle("error", !!isError);
+
+  toast.classList.remove("d_none");
+
+  clearTimeout(showInlineToast._t);
+  showInlineToast._t = setTimeout(() => {
+    toast.classList.add("d_none");
+    toast.classList.remove("error");
+    toast.textContent = "";
+  }, duration);
+}
+
+/**
+ * Einheitliche Meldungs-Funktion:
+ * - nutzt showToast, wenn vorhanden (dein bestehendes System)
+ * - fallback auf showInlineToast, falls showToast fehlt/Probleme macht
+ */
+function notify(message, isError = false) {
+  try {
+    if (typeof showToast === "function") {
+      // wichtig: KEIN alert hier – wir rufen nur deine showToast-Funktion auf
+      showToast(message, isError);
+      return;
+    }
+  } catch (e) {
+    console.warn("[contacts] showToast failed, fallback to inline toast", e);
+  }
+  showInlineToast(message, isError);
+}
+
+/* ====== VALIDATION (wie login.js) ====== */
+
+const nameError = () => byId("contact-name-error");
+const emailError = () => byId("contact-email-error");
+const phoneError = () => byId("contact-phone-error");
+
+function clearContactErrors() {
+  const nErr = nameError();
+  const eErr = emailError();
+  const pErr = phoneError();
+
+  const nIn = byId("contact-name-input");
+  const eIn = byId("contact-email-input");
+  const pIn = byId("contact-phone-input");
+
+  if (nErr) nErr.textContent = "";
+  if (eErr) eErr.textContent = "";
+  if (pErr) pErr.textContent = "";
+
+  nIn?.classList.remove("error");
+  eIn?.classList.remove("error");
+  pIn?.classList.remove("error");
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+/**
+ * Sehr einfache Phone-Validierung:
+ * - erlaubt: +, Zahlen, Leerzeichen, /, -, (), .
+ * - mind. 6 Ziffern insgesamt
+ */
+function isValidPhone(phone) {
+  const p = String(phone || "").trim();
+  if (!p) return true; // optional
+  if (!/^[0-9+\-()./\s]+$/.test(p)) return false;
+  const digits = (p.match(/\d/g) || []).length;
+  return digits >= 6;
+}
+
+function showNameError(msg) {
+  const el = nameError();
+  const input = byId("contact-name-input");
+  if (el) el.textContent = msg;
+  input?.classList.add("error");
+}
+
+function showEmailError(msg) {
+  const el = emailError();
+  const input = byId("contact-email-input");
+  if (el) el.textContent = msg;
+  input?.classList.add("error");
+}
+
+function showPhoneError(msg) {
+  const el = phoneError();
+  const input = byId("contact-phone-input");
+  if (el) el.textContent = msg;
+  input?.classList.add("error");
+}
+
+function validateContactForm({ name, email, phone }) {
+  clearContactErrors();
+
+  let ok = true;
+
+  if (!name) {
+    showNameError("Bitte gib einen Namen ein.");
+    ok = false;
+  }
+
+  if (!email) {
+    showEmailError("Bitte gib eine Email-Adresse ein.");
+    ok = false;
+  } else if (!isValidEmail(email)) {
+    showEmailError("Bitte gib eine gültige Email-Adresse ein.");
+    ok = false;
+  }
+
+  if (phone && !isValidPhone(phone)) {
+    showPhoneError("Bitte gib eine gültige Telefonnummer ein.");
+    ok = false;
+  }
+
+  return ok;
+}
+
+/* ====== Overlay / Modal ====== */
 
 function openOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
@@ -28,6 +159,7 @@ function closeOverlayLegacy() {
     const form = byId("add-contact-form");
     if (form) form.reset();
     resetOverlayAvatar();
+    clearContactErrors();
   };
   if (modal) modal.addEventListener("transitionend", hide, { once: true });
   else hide();
@@ -62,6 +194,7 @@ function updateModalAvatar(avatar, color, initials) {
 }
 
 function fillModalForEdit(contact, els) {
+  clearContactErrors();
   els.nameInput.value = contact.name;
   els.emailInput.value = contact.email;
   els.phoneInput.value = contact.phone || "";
@@ -71,6 +204,7 @@ function fillModalForEdit(contact, els) {
 }
 
 function resetModalForCreate(els) {
+  clearContactErrors();
   els.nameInput.value = "";
   els.emailInput.value = "";
   els.phoneInput.value = "";
@@ -108,14 +242,21 @@ function getModalValues() {
 }
 
 function handleCreateClick() {
-  const { name, email, phone } = getModalValues();
-  if (!name || !email) return;
+  const values = getModalValues();
+
+  // ✅ Validierung wie im Login (nur inline Fehler, kein Popup)
+  if (!validateContactForm(values)) {
+    notify("Bitte überprüfe deine Eingaben.", true);
+    return;
+  }
+
+  const { name, email, phone } = values;
   const isEdit = modalMode === "edit" && state.selectedId;
 
   if (isEdit) {
     saveEdit(name, email, phone).then(() => {
       closeOverlayLegacy();
-      showToast("Contact updated successfully.");
+      notify("Contact updated successfully.");
     });
     return;
   }
@@ -130,18 +271,22 @@ function handleCreateClick() {
       showDetailFullscreenIfMobile();
       if (typeof updateFabForContact === "function") updateFabForContact(id);
     }
-    showToast("Contact created successfully.");
+    notify("Contact created successfully.");
   });
 }
 
 async function onDelete() {
   const id = state.selectedId;
   if (!id) return;
+
+  // ✅ Kein confirm/alert — direkt löschen
   await deleteContactById(id);
+
   state.selectedId = null;
   hideDetailFullscreen();
   if (typeof updateFabForContact === "function") updateFabForContact(null);
-  showToast("Contact deleted successfully.");
+
+  notify("Contact deleted successfully.");
 }
 
 /* Auswahl / Fallback */
@@ -251,6 +396,14 @@ function attachLegacyOverlayHandlers() {
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeOverlayLegacy();
     });
+
+  // Optional: beim Tippen Errors sofort entfernen
+  const nIn = byId("contact-name-input");
+  const eIn = byId("contact-email-input");
+  const pIn = byId("contact-phone-input");
+  [nIn, eIn, pIn].forEach((el) => {
+    el?.addEventListener("input", () => clearContactErrors());
+  });
 }
 
 function attachModernHandlers() {
@@ -272,20 +425,26 @@ function initFabMenu() {
   const edit = byId("contact-menu-edit");
   const del = byId("contact-menu-delete");
   if (!btn || !menu) return;
+
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
     menu.classList.toggle("d_none");
   });
-  if (edit) edit.addEventListener("click", () => {
-    if (!state.selectedId) return;
-    openModal("edit", state.selectedId);
-    menu.classList.add("d_none");
-  });
-  if (del) del.addEventListener("click", () => {
-    if (!state.selectedId) return;
-    onDelete();
-    menu.classList.add("d_none");
-  });
+
+  if (edit)
+    edit.addEventListener("click", () => {
+      if (!state.selectedId) return;
+      openModal("edit", state.selectedId);
+      menu.classList.add("d_none");
+    });
+
+  if (del)
+    del.addEventListener("click", () => {
+      if (!state.selectedId) return;
+      onDelete();
+      menu.classList.add("d_none");
+    });
+
   document.addEventListener("click", (e) => {
     if (menu.classList.contains("d_none")) return;
     if (!menu.contains(e.target) && !btn.contains(e.target)) {
@@ -301,6 +460,7 @@ function init() {
   attachModernHandlers();
   attachLegacyOverlayHandlers();
   initFabMenu();
+
   window.addEventListener("resize", () => {
     if (!isMobileLayout()) {
       hideDetailFullscreen();

@@ -24,263 +24,253 @@
   </head>
 
   <body onload="getContactsData()">
-    <div class="maxsice">
-      <div id="loading-overlay">
-        <div class="spinner"></div>
-      </div>
-      <div class="content">
-        <section class="content-left">
-          <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
-          <section class="nav-bar">
-            <button id="summary">
-              <img src="./assets/icons/summary.svg" alt="" />
-              Summary
-            </button>
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <section class="nav-bar">
+          <button id="summary">
+            <img src="./assets/icons/summary.svg" alt="" />
+            Summary
+          </button>
 
-            <button class="nav-bar-button-active">
-              <img src="./assets/icons/addtask.svg" alt="" />
-              Add Task
-            </button>
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/addtask.svg" alt="" />
+            Add Task
+          </button>
 
-            <button id="board">
-              <img src="./assets/icons/board.svg" alt="" />
-              Board
-            </button>
+          <button id="board">
+            <img src="./assets/icons/board.svg" alt="" />
+            Board
+          </button>
 
-            <button id="contacts">
-              <img src="./assets/icons/contacts.svg" alt="" />
-              Contacts
-            </button>
-          </section>
-
-          <div class="nav-bar-links">
-            <a href="./privacy-policy.html">Privacy Policy</a>
-            <a href="./legal-notice.html">Legal notice</a>
-          </div>
+          <button id="contacts">
+            <img src="./assets/icons/contacts.svg" alt="" />
+            Contacts
+          </button>
         </section>
 
-        <section class="content-right">
-          <header class="header-right">
-            <img
-              src="./assets/imgs/join_logo_blue.svg"
-              alt="Logo"
-              class="logo-mobile"
-            />
-            <span class="tool-name">Kanban Projekt Management Tool</span>
-            <div class="header-content-right">
-              <a href="./help.html"
-                ><img src="./assets/icons/help.svg" alt="help" class="help-btn"
-              /></a>
-              <div class="dropdown">
-                <button id="dropbtn" class="dropbtn"></button>
-                <div class="dropdown-content">
-                  <a href="./help.html">Help</a>
-                  <a href="./legal-notice.html">Legal Notice</a>
-                  <a href="./privacy-policy.html">Privacy Policy</a>
-                  <a id="logout-btn">Logout</a>
-                </div>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
+        </div>
+      </section>
+
+      <section class="content-right">
+        <header class="header-right">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
+          <span class="tool-name">Kanban Projekt Management Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html"
+              ><img src="./assets/icons/help.svg" alt="help" class="help-btn"
+            /></a>
+            <div class="dropdown">
+              <button id="dropbtn" class="dropbtn"></button>
+              <div class="dropdown-content">
+                <a href="./help.html">Help</a>
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
               </div>
             </div>
-          </header>
+          </div>
+        </header>
 
-          <main>
-            <section class="add-task-section">
-              <h1>Add Task</h1>
+        <main>
+          <section class="add-task-section">
+            <h1>Add Task</h1>
 
-              <form class="add-task-content task-form">
-                <div class="add-task-content-right">
-                  <label for="task-title"
-                    >Title<span class="mandatory-field">*</span></label
+            <form class="add-task-content task-form">
+              <div class="add-task-content-right">
+                <label for="task-title"
+                  >Title<span class="mandatory-field">*</span></label
+                >
+                <input
+                  type="text"
+                  placeholder="Enter a Title"
+                  class="task-title"
+                />
+                <p class="title-error input-error"></p>
+
+                <label for="task-description">Description</label>
+                <textarea
+                  placeholder="Enter a Description"
+                  class="task-description"
+                ></textarea>
+
+                <label for="task-due-date"
+                  >Due date<span class="mandatory-field">*</span></label
+                >
+                <input type="date" min="" class="task-due-date" />
+                <p class="date-error input-error"></p>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="add-task-content-left">
+                <label>Priority</label>
+                <div class="priority-container">
+                  <div
+                    class="priority-btn"
+                    id="prio-urgent"
+                    onclick="setPriority('urgent')"
                   >
+                    Urgent
+                    <img
+                      src="./assets/icons/urgent-red.svg"
+                      alt="urgent"
+                      class="urgent-img"
+                    />
+                  </div>
+                  <div
+                    class="priority-btn-urgent d_none"
+                    id="prio-urgent-active"
+                    onclick="setPriority('urgent')"
+                  >
+                    Urgent
+                    <img
+                      src="./assets/icons/urgent-white.svg"
+                      alt="urgent"
+                      class="urgent-img"
+                    />
+                  </div>
+
+                  <div
+                    class="priority-btn"
+                    id="prio-medium"
+                    onclick="setPriority('medium')"
+                  >
+                    Medium
+                    <img src="./assets/icons/medium-orange.svg" alt="medium" />
+                  </div>
+                  <div
+                    class="priority-btn-medium d_none"
+                    id="prio-medium-active"
+                    onclick="setPriority('medium')"
+                  >
+                    Medium
+                    <img src="./assets/icons/medium-white.svg" alt="medium" />
+                  </div>
+
+                  <div
+                    class="priority-btn"
+                    id="prio-low"
+                    onclick="setPriority('low')"
+                  >
+                    Low <img src="./assets/icons/low-green.svg" alt="low" />
+                  </div>
+                  <div
+                    class="priority-btn-low d_none"
+                    id="prio-low-active"
+                    onclick="setPriority('low')"
+                  >
+                    Low <img src="./assets/icons/low-white.svg" alt="low" />
+                  </div>
+                </div>
+
+                <label>Assigned to</label>
+                <div
+                  id="assignee-select"
+                  class="assignee-select"
+                  tabindex="0"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span class="assignee-select-label"
+                    >Select contacts to assign</span
+                  >
+                  <span class="chevron">▾</span>
+                </div>
+                <ul
+                  id="assignee-options"
+                  class="assignee-options d_none"
+                  role="listbox"
+                  aria-multiselectable="true"
+                ></ul>
+                <div id="assignee-list" class="assignee-list"></div>
+
+                <label for="category"
+                  >Category<span class="mandatory-field">*</span></label
+                >
+                <select name="category" class="task-category select">
+                  <option value="Select task category">
+                    Select task category
+                  </option>
+                  <option value="Technical Task">Technical Task</option>
+                  <option value="User Story">User Story</option>
+                </select>
+                <p class="category-error input-error"></p>
+
+                <label for="subtask">Subtasks</label>
+                <div class="subtask-input-row">
                   <input
                     type="text"
-                    placeholder="Enter a Title"
-                    class="task-title"
+                    placeholder="Add new subtask"
+                    id="subtask"
                   />
-                  <p class="title-error input-error"></p>
-
-                  <label for="task-description">Description</label>
-                  <textarea
-                    placeholder="Enter a Description"
-                    class="task-description"
-                  ></textarea>
-
-                  <label for="task-due-date"
-                    >Due date<span class="mandatory-field">*</span></label
-                  >
-                  <input type="date" min="" class="task-due-date" />
-                  <p class="date-error input-error"></p>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="add-task-content-left">
-                  <label>Priority</label>
-                  <div class="priority-container">
-                    <div
-                      class="priority-btn"
-                      id="prio-urgent"
-                      onclick="setPriority('urgent')"
-                    >
-                      Urgent
-                      <img
-                        src="./assets/icons/urgent-red.svg"
-                        alt="urgent"
-                        class="urgent-img"
-                      />
-                    </div>
-                    <div
-                      class="priority-btn-urgent d_none"
-                      id="prio-urgent-active"
-                      onclick="setPriority('urgent')"
-                    >
-                      Urgent
-                      <img
-                        src="./assets/icons/urgent-white.svg"
-                        alt="urgent"
-                        class="urgent-img"
-                      />
-                    </div>
-
-                    <div
-                      class="priority-btn"
-                      id="prio-medium"
-                      onclick="setPriority('medium')"
-                    >
-                      Medium
-                      <img
-                        src="./assets/icons/medium-orange.svg"
-                        alt="medium"
-                      />
-                    </div>
-                    <div
-                      class="priority-btn-medium d_none"
-                      id="prio-medium-active"
-                      onclick="setPriority('medium')"
-                    >
-                      Medium
-                      <img src="./assets/icons/medium-white.svg" alt="medium" />
-                    </div>
-
-                    <div
-                      class="priority-btn"
-                      id="prio-low"
-                      onclick="setPriority('low')"
-                    >
-                      Low <img src="./assets/icons/low-green.svg" alt="low" />
-                    </div>
-                    <div
-                      class="priority-btn-low d_none"
-                      id="prio-low-active"
-                      onclick="setPriority('low')"
-                    >
-                      Low <img src="./assets/icons/low-white.svg" alt="low" />
-                    </div>
-                  </div>
-
-                  <label>Assigned to</label>
-                  <div
-                    id="assignee-select"
-                    class="assignee-select"
-                    tabindex="0"
-                    aria-haspopup="listbox"
-                    aria-expanded="false"
-                  >
-                    <span class="assignee-select-label"
-                      >Select contacts to assign</span
-                    >
-                    <span class="chevron">▾</span>
-                  </div>
-                  <ul
-                    id="assignee-options"
-                    class="assignee-options d_none"
-                    role="listbox"
-                    aria-multiselectable="true"
-                  ></ul>
-                  <div id="assignee-list" class="assignee-list"></div>
-
-                  <label for="category"
-                    >Category<span class="mandatory-field">*</span></label
-                  >
-                  <select name="category" class="task-category select">
-                    <option value="Select task category">
-                      Select task category
-                    </option>
-                    <option value="Technical Task">Technical Task</option>
-                    <option value="User Story">User Story</option>
-                  </select>
-                  <p class="category-error input-error"></p>
-
-                  <label for="subtask">Subtasks</label>
-                  <div class="subtask-input-row">
-                    <input
-                      type="text"
-                      placeholder="Add new subtask"
-                      id="subtask"
-                    />
-                    <button
-                      type="button"
-                      id="subtask-add-btn"
-                      class="subtask-add-btn d_none"
-                      aria-label="Add subtask"
-                    >
-                      <img src="./assets/icons/hug.svg" alt="add subtask" />
-                    </button>
-                  </div>
-                  <div class="subtask-list" id="subtask-list"></div>
-                </div>
-              </form>
-
-              <div class="add-task-footer">
-                <p>
-                  <span class="mandatory-field">*</span>This field is required
-                </p>
-                <div>
                   <button
-                    class="white-btn"
-                    onclick="clearTask(document.querySelector('.add-task-content'))"
+                    type="button"
+                    id="subtask-add-btn"
+                    class="subtask-add-btn d_none"
+                    aria-label="Add subtask"
                   >
-                    Clear X
-                  </button>
-                  <button
-                    onclick="createTask(document.querySelector('.add-task-content'))"
-                    class="blue-btn-bold"
-                  >
-                    Create Task
-                    <img src="./assets/icons/check.svg" alt="create" />
+                    <img src="./assets/icons/hug.svg" alt="add subtask" />
                   </button>
                 </div>
+                <div class="subtask-list" id="subtask-list"></div>
               </div>
-            </section>
-          </main>
-        </section>
-      </div>
+            </form>
 
-      <nav class="nav-bar-mobile">
-        <button id="summary">
-          <img src="./assets/icons/summary.svg" alt="" />
-          Summary
-        </button>
-        <button id="add-task" class="nav-bar-button-active-a-mobile">
-          <img src="./assets/icons/addtask.svg" alt="" />
-          Add Task
-        </button>
-        <button id="board">
-          <img src="./assets/icons/board.svg" alt="" />
-          Board
-        </button>
-        <button id="contacts">
-          <img src="./assets/icons/contacts.svg" alt="" />
-          Contacts
-        </button>
-      </nav>
-
-      <div
-        id="toast"
-        class="toast d_none"
-        role="status"
-        aria-live="polite"
-      ></div>
+            <div class="add-task-footer">
+              <p>
+                <span class="mandatory-field">*</span>This field is required
+              </p>
+              <div>
+                <button
+                  class="white-btn"
+                  onclick="clearTask(document.querySelector('.add-task-content'))"
+                >
+                  Clear X
+                </button>
+                <button
+                  onclick="createTask(document.querySelector('.add-task-content'))"
+                  class="blue-btn-bold"
+                >
+                  Create Task
+                  <img src="./assets/icons/check.svg" alt="create" />
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </section>
     </div>
+
+    <nav class="nav-bar-mobile">
+      <button id="summary">
+        <img src="./assets/icons/summary.svg" alt="" />
+        Summary
+      </button>
+      <button id="add-task" class="nav-bar-button-active-a-mobile">
+        <img src="./assets/icons/addtask.svg" alt="" />
+        Add Task
+      </button>
+      <button id="board">
+        <img src="./assets/icons/board.svg" alt="" />
+        Board
+      </button>
+      <button id="contacts">
+        <img src="./assets/icons/contacts.svg" alt="" />
+        Contacts
+      </button>
+    </nav>
+
+    <div id="toast" class="toast d_none" role="status" aria-live="polite"></div>
   </body>
 </html>

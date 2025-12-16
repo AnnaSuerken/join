@@ -27,7 +27,7 @@ export function setCurrentDetail(newDetail) {
 
 /* ---------- Close ---------- */
 export function closeDetailOverlay() {
-  detailSection.classList.add("d_none");
+  
   document.body.classList.remove("board-overlay-open");
   currentDetail = { id: null, col: null, task: null };
 }
@@ -113,7 +113,7 @@ export async function openDetailOverlayById(id) {
   currentDetail = { id, col, task: { ...normalized, assignedDetailed } };
 
   renderDetail(currentDetail.task);
-  detailSection.classList.remove("d_none");
+  
   document.body.classList.add("board-overlay-open");
   wireSubtaskToggleHandler();
 }

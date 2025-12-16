@@ -344,6 +344,47 @@ function clearTask(form) {
   resetGlobalArrays();
 }
 
+/* ---------- ✅ Task Detail Overlay Animation ---------- */
+
+function openTaskDetailOverlay() {
+  const overlay = document.getElementById("task-detail-overlay");
+  if (!overlay) return;
+
+  overlay.classList.remove("d_none", "is-closing");
+  overlay.classList.add("task-detail-overlay");
+  overlay.setAttribute("aria-hidden", "false");
+
+  requestAnimationFrame(() => {
+    overlay.classList.add("is-open");
+  });
+}
+
+function closeTaskDetailOverlay() {
+  const overlay = document.getElementById("task-detail-overlay");
+  if (!overlay) return;
+
+  overlay.classList.remove("is-open");
+  overlay.classList.add("is-closing");
+  overlay.setAttribute("aria-hidden", "true");
+
+  const panel = overlay.querySelector(".task-overlay-open");
+  if (!panel) {
+    overlay.classList.add("d_none");
+    overlay.classList.remove("is-closing");
+    return;
+  }
+
+  const onEnd = (e) => {
+    if (e.propertyName !== "transform") return;
+    panel.removeEventListener("transitionend", onEnd);
+
+    overlay.classList.add("d_none");
+    overlay.classList.remove("is-closing");
+  };
+
+  panel.addEventListener("transitionend", onEnd);
+}
+
 /* ---------- Init ---------- */
 
 addEventListener("load", () => {
@@ -355,6 +396,16 @@ addEventListener("load", () => {
   wireSubtaskEvents();
   renderSubtasks();
   wireEditPriorityButtons();
+
+  // Close Button + Backdrop Click
+  const overlay = document.getElementById("task-detail-overlay");
+  const closeBtn = document.getElementById("detail-close-btn");
+
+  closeBtn?.addEventListener("click", closeTaskDetailOverlay);
+
+  overlay?.addEventListener("click", (e) => {
+    if (e.target === overlay) closeTaskDetailOverlay();
+  });
 });
 
 /* ---------- Exports für Inline-Handler ---------- */
@@ -364,3 +415,7 @@ window.clearTask = clearTask;
 window.setPriority = setPriority;
 window.getContactsData = getContactsData;
 window.toggleAssigneeByIndex = toggleAssigneeByIndex;
+
+// Exports für Detail Overlay (für board.js)
+window.openTaskDetailOverlay = openTaskDetailOverlay;
+window.closeTaskDetailOverlay = closeTaskDetailOverlay;

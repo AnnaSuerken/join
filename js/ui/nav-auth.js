@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const navRefaddTask = document.getElementById("add-task");
   const navRefBoard = document.getElementById("board");
   const nacRefConnections = document.getElementById("contacts");
+  const headerIcons = document.getElementById("dropbtn");
 
   onAuthStateChanged(window.auth, (user) => {
     const display = user ? "flex" : "none";
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleNavItem(navRefaddTask, display);
     toggleNavItem(navRefBoard, display);
     toggleNavItem(nacRefConnections, display);
+    toggleNavItem(headerIcons, display);
   });
 });
 

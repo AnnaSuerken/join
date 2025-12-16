@@ -1,395 +1,553 @@
 <!DOCTYPE html>
 <html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Board</title>
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="./css/assets.css" />
+    <link rel="stylesheet" href="./css/summary.css" />
+    <link rel="stylesheet" href="./css/board.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/add-task.css" />
+    <link rel="stylesheet" href="./css/task-overlay.css" />
+    <link rel="stylesheet" href="./css/nav.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join - Board</title>
-  <link rel="shortcut icon" href="./assets/icons/favicon-32x32.png" type="image/x-icon" />
-  <link rel="stylesheet" href="./css/assets.css" />
-  <link rel="stylesheet" href="./css/summary.css" />
-  <link rel="stylesheet" href="./css/board.css" />
-  <link rel="stylesheet" href="./css/style.css" />
-  <link rel="stylesheet" href="./css/add-task.css" />
-  <link rel="stylesheet" href="./css/task-overlay.css" />
-  <link rel="stylesheet" href="./css/nav.css" />
+    <!-- Module-Skripte -->
+    <script type="module" src="./js/auth/logout.js"></script>
+    <script type="module" src="./js/core/main.js"></script>
+    <script type="module" src="./js/board/mobile-drag-scroll.js"></script>
+    <script type="module" src="./js/board/board.js"></script>
+    <script type="module" src="./js/board/addtask-overlay.js"></script>
 
-  <!-- Module-Skripte -->
-  <script type="module" src="./js/auth/logout.js"></script>
-  <script type="module" src="./js/core/main.js"></script>
-  <script type="module" src="./js/board/mobile-drag-scroll.js"></script>
-  <script type="module" src="./js/board/board.js"></script>
-  <script type="module" src="./js/board/addtask-overlay.js"></script>
+    <!-- normales Skript (mit window.* Funktionen) -->
+    <script src="./js/tasks/add-task.js"></script>
+    <script src="./js/tasks/subtasks.js"></script>
+    <script src="./js/tasks/form-validation.js"></script>
+  </head>
 
-  <!-- normales Skript (mit window.* Funktionen) -->
-  <script src="./js/tasks/add-task.js"></script>
-  <script src="./js/tasks/subtasks.js"></script>
-  <script src="./js/tasks/form-validation.js"></script>
-</head>
-
-<body>
-  <div class="maxsice">
-  <div id="loading-overlay">
-    <div class="spinner"></div>
-  </div>
-  <div class="content">
-    <section class="content-left">
-      <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
-      <section class="nav-bar">
-        <button id="summary">
-          <img src="./assets/icons/summary.svg" alt="" />Summary
-        </button>
-        <button id="add-task">
-          <img src="./assets/icons/addtask.svg" alt="" />Add Task
-        </button>
-        <button class="nav-bar-button-active">
-          <img src="./assets/icons/board.svg" alt="" />Board
-        </button>
-        <button id="contacts">
-          <img src="./assets/icons/contacts.svg" alt="" />Contacts
-        </button>
-      </section>
-      <div class="nav-bar-links">
-        <a href="./privacy-policy.html">Privacy Policy</a>
-        <a href="./legal-notice.html">Legal notice</a>
-      </div>
-    </section>
-
-    <section class="content-right">
-      <header class="header-right">
-        <img src="./assets/imgs/join_logo_blue.svg" alt="Logo" class="logo-mobile" />
-        <span class="tool-name">Kanban Projekt Management Tool</span>
-        <div class="header-content-right">
-          <a href="./help.html">
-            <img src="./assets/icons/help.svg" alt="help" class="help-btn" />
-          </a>
-          <div class="dropdown">
-            <button id="dropbtn" class="dropbtn"></button>
-            <div class="dropdown-content">
-              <a href="./help.html">Help</a>
-              <a href="./legal-notice.html">Legal Notice</a>
-              <a href="./privacy-policy.html">Privacy Policy</a>
-              <a id="logout-btn">Logout</a>
-            </div>
-          </div>
+  <body>
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+    <div class="content">
+      <section class="content-left">
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <section class="nav-bar">
+          <button id="summary">
+            <img src="./assets/icons/summary.svg" alt="" />Summary
+          </button>
+          <button id="add-task">
+            <img src="./assets/icons/addtask.svg" alt="" />Add Task
+          </button>
+          <button class="nav-bar-button-active">
+            <img src="./assets/icons/board.svg" alt="" />Board
+          </button>
+          <button id="contacts">
+            <img src="./assets/icons/contacts.svg" alt="" />Contacts
+          </button>
+        </section>
+        <div class="nav-bar-links">
+          <a href="./privacy-policy.html">Privacy Policy</a>
+          <a href="./legal-notice.html">Legal notice</a>
         </div>
-      </header>
+      </section>
 
-      <section id="board-section" class="board-section">
-        <section class="board-header">
-          <h1>Board</h1>
-          <div class="action-container">
-            <input id="task-search" type="search" placeholder="Find Task" />
-            <img src="./assets/icons/search.svg" alt="Search" />
-            <button class="blue-btn-bold open-add-task-overlay" id="open-add-task-overlay" data-column="todo">
-              Add Task
-            </button>
-          </div>
-        </section>
-
-        <section class="task-board">
-          <!-- To Do -->
-          <div class="task-column">
-            <div class="task-table-header">
-              <span>To Do</span>
-              <button class="white-btn-bold open-add-task-overlay" data-column="todo">
-                +
-              </button>
-            </div>
-            <div id="task-table-todo" class="task-table-colum dropzone"></div>
-          </div>
-
-          <!-- In progress -->
-          <div class="task-column">
-            <div class="task-table-header">
-              <span>In progress</span>
-              <button class="white-btn-bold open-add-task-overlay" data-column="inprogress">
-                +
-              </button>
-            </div>
-            <div id="task-table-progress" class="task-table-colum dropzone"></div>
-          </div>
-
-          <!-- Await Feedback -->
-          <div class="task-column">
-            <div class="task-table-header">
-              <span>Await Feedback</span>
-              <button class="white-btn-bold open-add-task-overlay" data-column="await">
-                +
-              </button>
-            </div>
-            <div id="task-table-feedback" class="task-table-colum dropzone"></div>
-          </div>
-
-          <!-- Done -->
-          <div class="task-column">
-            <div class="task-table-header">
-              <span>Done</span>
-              <button class="white-btn-bold open-add-task-overlay" data-column="done">
-                +
-              </button>
-            </div>
-            <div id="task-table-done" class="task-table-colum dropzone"></div>
-          </div>
-        </section>
-
-        <!-- Add-Task-Overlay -->
-        <section class="task-overlay-section d_none" id="add-task-overlay">
-          <div class="task-overlay">
-            <div class="task-overlay-header">
-              <h1>Add Task</h1>
-              <img src="./assets/icons/Close.svg" alt="close" id="close-btn" class="close-btn" />
-            </div>
-            <form class="add-task-content task-form">
-              <div class="task-overlay-content-right">
-                <label for="task-title">Title<span class="mandatory-field">*</span></label>
-                <input type="text" placeholder="Enter a Title" class="task-title" />
-                <p class="title-error input-error"></p>
-
-                <label for="task-description">Description</label>
-                <textarea placeholder="Enter a Description" class="task-description"></textarea>
-
-                <label for="task-due-date">Due date<span class="mandatory-field">*</span></label>
-                <input type="date" min="" class="task-due-date" />
-                <p class="date-error input-error"></p>
-              </div>
-
-              <div class="divider"></div>
-
-              <div class="task-overlay-content-left">
-                <label>Priority</label>
-                <div class="priority-container">
-                  <div class="priority-btn" id="prio-urgent" onclick="setPriority('urgent')">
-                    Urgent
-                    <img src="./assets/icons/urgent-red.svg" alt="urgent" class="urgent-img" />
-                  </div>
-                  <div class="priority-btn-urgent d_none" id="prio-urgent-active" onclick="setPriority('urgent')">
-                    Urgent
-                    <img src="./assets/icons/urgent-white.svg" alt="urgent" class="urgent-img" />
-                  </div>
-
-                  <div class="priority-btn" id="prio-medium" onclick="setPriority('medium')">
-                    Medium
-                    <img src="./assets/icons/medium-orange.svg" alt="medium" />
-                  </div>
-                  <div class="priority-btn-medium d_none" id="prio-medium-active" onclick="setPriority('medium')">
-                    Medium
-                    <img src="./assets/icons/medium-white.svg" alt="medium" />
-                  </div>
-
-                  <div class="priority-btn" id="prio-low" onclick="setPriority('low')">
-                    Low
-                    <img src="./assets/icons/low-green.svg" alt="low" />
-                  </div>
-                  <div class="priority-btn-low d_none" id="prio-low-active" onclick="setPriority('low')">
-                    Low
-                    <img src="./assets/icons/low-white.svg" alt="low" />
-                  </div>
-                </div>
-
-                <label>Assigned to</label>
-                <div id="assignee-select" class="assignee-select" tabindex="0" aria-haspopup="listbox"
-                  aria-expanded="false">
-                  <span class="assignee-select-label">Select contacts to assign</span>
-                  <span class="chevron">▾</span>
-                </div>
-                <ul id="assignee-options" class="assignee-options d_none" role="listbox" aria-multiselectable="true">
-                </ul>
-                <div id="assignee-list" class="assignee-list"></div>
-
-                <label for="category">Category<span class="mandatory-field">*</span></label>
-                <select name="category" class="task-category select">
-                  <option value="Select task category">
-                    Select task category
-                  </option>
-                  <option value="Technical Task">Technical Task</option>
-                  <option value="User Story">User Story</option>
-                </select>
-                <p class="category-error input-error"></p>
-
-                <label for="subtask">Subtasks</label>
-                <div class="subtask-input-row">
-                  <input type="text" placeholder="Add new subtask" id="subtask" />
-                  <button type="button" id="subtask-add-btn" class="subtask-add-btn d_none" aria-label="Add subtask">
-                    <img src="./assets/icons/hug.svg" alt="add subtask" />
-                  </button>
-                </div>
-                <div class="subtask-list" id="subtask-list"></div>
-              </div>
-            </form>
-            <div class="task-overlay-footer">
-              <p>
-                <span class="mandatory-field">*</span>This field is required
-              </p>
-              <div>
-                <button class="white-btn"
-                  onclick="clearTask(document.querySelector('#add-task-overlay .add-task-content'))">
-                  Clear X
-                </button>
-                <button onclick="createTask(document.querySelector('#add-task-overlay .add-task-content'))"
-                  class="blue-btn-bold">
-                  Create Task
-                  <img src="./assets/icons/check.svg" alt="create" />
-                </button>
+      <section class="content-right">
+        <header class="header-right">
+          <img
+            src="./assets/imgs/join_logo_blue.svg"
+            alt="Logo"
+            class="logo-mobile"
+          />
+          <span class="tool-name">Kanban Projekt Management Tool</span>
+          <div class="header-content-right">
+            <a href="./help.html">
+              <img src="./assets/icons/help.svg" alt="help" class="help-btn" />
+            </a>
+            <div class="dropdown">
+              <button id="dropbtn" class="dropbtn"></button>
+              <div class="dropdown-content">
+                <a href="./help.html">Help</a>
+                <a href="./legal-notice.html">Legal Notice</a>
+                <a href="./privacy-policy.html">Privacy Policy</a>
+                <a id="logout-btn">Logout</a>
               </div>
             </div>
           </div>
-        </section>
+        </header>
 
-        <!-- Detail-Overlay -->
-        <section class="task-overlay-open d_none" id="task-detail-overlay">
-          <div class="task-overlay-open-head">
-            <p class="task-name" id="detail-category" style="background-color: #0038ff">
-              Category
-            </p>
-            <button id="detail-close-btn" aria-label="Close">X</button>
-          </div>
-
-          <div class="task-overlay-open-title">
-            <h1 id="detail-title">Task Title</h1>
-          </div>
-
-          <div class="task-overlay-open-description">
-            <p id="detail-desc">Task description</p>
-          </div>
-
-          <div class="task-overlay-open-footer">
-            <div class="task-overlay-open-due-date">
-              <p>Due Date:</p>
-              <span id="detail-date">--.--.----</span>
-            </div>
-
-            <div class="task-overlay-open-priority" id="detail-priority">
-              <p>Priority:</p>
-              <span>
-                <span id="detail-priority-text">Medium</span>
-                <img id="detail-priority-icon" src="./assets/icons/medium-orange.svg" alt="priority" />
-              </span>
-            </div>
-
-            <div class="task-overlay-open-assigned-to">
-              <p>Assigned To:</p>
-              <div class="detail-assignees" id="detail-assignees"></div>
-            </div>
-          </div>
-
-          <div class="task-overlay-open-footer">
-            <div class="task-overlay-open-subtasks">
-              <p>Subtasks:</p>
-              <div class="task-overlay-open-subtask-list" id="task-overlay-open-subtask-list"></div>
-            </div>
-            <div class="task-overlay-open-actions">
-              <button id="detail-delete" class="" title="Delete">
-                <img src="./assets/icons/delete.svg" alt="" />
-              </button>
-              <button id="detail-edit" class="" title="Edit">
-                <img src="./assets/icons/edit.svg" alt="" />
+        <section id="board-section" class="board-section">
+          <section class="board-header">
+            <h1>Board</h1>
+            <div class="action-container">
+              <input id="task-search" type="search" placeholder="Find Task" />
+              <img src="./assets/icons/search.svg" alt="Search" />
+              <button
+                class="blue-btn-bold open-add-task-overlay"
+                id="open-add-task-overlay"
+                data-column="todo"
+              >
+                Add Task
               </button>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <!-- Edit-Overlay -->
-        <section class="task-overlay-open task-overlay-edit d_none" id="task-edit-overlay">
-          <div class="task-overlay-open-head-edit">
-            <button id="edit-close-btn" aria-label="Close">X</button>
-          </div>
-
-          <form></form>
-
-          <div class="task-overlay-open-title">
-            <p>Title</p>
-            <input type="text" id="edit-title" placeholder="Title" />
-          </div>
-
-          <div class="task-overlay-open-description">
-            <p>Description</p>
-            <textarea id="edit-desc" placeholder="Description"></textarea>
-          </div>
-
-          <div class="task-overlay-open-footer">
-            <div class="task-overlay-open-due-date task-overlay-edit-due-date">
-              <p>Due Date:</p>
-              <input type="date" id="edit-date" />
-              <div class="muted" id="edit-date-hint"></div>
-            </div>
-
-            <div class="task-overlay-open-priority task-overlay-edit-priority" id="edit-priority">
-              <p>Priority:</p>
-              <div class="priority-container">
-                <button type="button" class="priority-btn" id="edit-prio-urgent">
-                  Urgent
-                  <img src="./assets/icons/urgent-red.svg" alt="urgent" />
-                </button>
-                <button type="button" class="priority-btn" id="edit-prio-medium">
-                  Medium
-                  <img src="./assets/icons/medium-orange.svg" alt="medium" />
-                </button>
-                <button type="button" class="priority-btn" id="edit-prio-low">
-                  Low
-                  <img src="./assets/icons/low-green.svg" alt="low" />
-                </button>
-              </div>
-            </div>
-
-            <div class="task-overlay-open-assigned-to task-overlay-edit-assigned-to">
-              <label>Assigned to</label>
-              <div id="edit-assignee-select" class="assignee-select task-overlay-edit-assigned-to-select" tabindex="0"
-                aria-haspopup="listbox" aria-expanded="false">
-                <span class="assignee-select-label">Select contacts to assign</span>
-                <span class="chevron">▾</span>
-              </div>
-              <ul id="edit-assignee-options" class="assignee-options edit-assignee-options d_none" role="listbox"
-                aria-multiselectable="true"></ul>
-              <div id="edit-assignee-list" class="edit-assignee-list"></div>
-            </div>
-          </div>
-
-          <div class="task-overlay-open-footer">
-            <div class="task-overlay-open-subtasks">
-              <p>Subtasks:</p>
-              <div class="subtask-toolbar">
-                <input type="text" id="edit-subtask-input" placeholder="Add new subtask" />
-                <button class="icon-btn" id="edit-subtask-add" title="Add subtask">
+          <section class="task-board">
+            <!-- To Do -->
+            <div class="task-column">
+              <div class="task-table-header">
+                <span>To Do</span>
+                <button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="todo"
+                >
                   +
                 </button>
               </div>
-              <div class="subtask-list" id="edit-subtask-list"></div>
+              <div id="task-table-todo" class="task-table-colum dropzone"></div>
             </div>
-            <div class="task-overlay-open-actions">
-              <button id="edit-ok-btn" class="" title="Ok">
-                Ok <img src="./assets/icons/edit.svg" alt="" />
-              </button>
+
+            <!-- In progress -->
+            <div class="task-column">
+              <div class="task-table-header">
+                <span>In progress</span>
+                <button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="inprogress"
+                >
+                  +
+                </button>
+              </div>
+              <div
+                id="task-table-progress"
+                class="task-table-colum dropzone"
+              ></div>
             </div>
-          </div>
+
+            <!-- Await Feedback -->
+            <div class="task-column">
+              <div class="task-table-header">
+                <span>Await Feedback</span>
+                <button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="await"
+                >
+                  +
+                </button>
+              </div>
+              <div
+                id="task-table-feedback"
+                class="task-table-colum dropzone"
+              ></div>
+            </div>
+
+            <!-- Done -->
+            <div class="task-column">
+              <div class="task-table-header">
+                <span>Done</span>
+                <button
+                  class="white-btn-bold open-add-task-overlay"
+                  data-column="done"
+                >
+                  +
+                </button>
+              </div>
+              <div id="task-table-done" class="task-table-colum dropzone"></div>
+            </div>
+          </section>
+
+          <!-- Add-Task-Overlay -->
+          <section class="task-overlay-section d_none" id="add-task-overlay">
+            <div class="task-overlay">
+              <div class="task-overlay-header">
+                <h1>Add Task</h1>
+                <img
+                  src="./assets/icons/Close.svg"
+                  alt="close"
+                  id="close-btn"
+                  class="close-btn"
+                />
+              </div>
+              <form class="add-task-content task-form">
+                <div class="task-overlay-content-right">
+                  <label for="task-title"
+                    >Title<span class="mandatory-field">*</span></label
+                  >
+                  <input
+                    type="text"
+                    placeholder="Enter a Title"
+                    class="task-title"
+                  />
+                  <p class="title-error input-error"></p>
+
+                  <label for="task-description">Description</label>
+                  <textarea
+                    placeholder="Enter a Description"
+                    class="task-description"
+                  ></textarea>
+
+                  <label for="task-due-date"
+                    >Due date<span class="mandatory-field">*</span></label
+                  >
+                  <input type="date" min="" class="task-due-date" />
+                  <p class="date-error input-error"></p>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="task-overlay-content-left">
+                  <label>Priority</label>
+                  <div class="priority-container">
+                    <div
+                      class="priority-btn"
+                      id="prio-urgent"
+                      onclick="setPriority('urgent')"
+                    >
+                      Urgent
+                      <img
+                        src="./assets/icons/urgent-red.svg"
+                        alt="urgent"
+                        class="urgent-img"
+                      />
+                    </div>
+                    <div
+                      class="priority-btn-urgent d_none"
+                      id="prio-urgent-active"
+                      onclick="setPriority('urgent')"
+                    >
+                      Urgent
+                      <img
+                        src="./assets/icons/urgent-white.svg"
+                        alt="urgent"
+                        class="urgent-img"
+                      />
+                    </div>
+
+                    <div
+                      class="priority-btn"
+                      id="prio-medium"
+                      onclick="setPriority('medium')"
+                    >
+                      Medium
+                      <img
+                        src="./assets/icons/medium-orange.svg"
+                        alt="medium"
+                      />
+                    </div>
+                    <div
+                      class="priority-btn-medium d_none"
+                      id="prio-medium-active"
+                      onclick="setPriority('medium')"
+                    >
+                      Medium
+                      <img src="./assets/icons/medium-white.svg" alt="medium" />
+                    </div>
+
+                    <div
+                      class="priority-btn"
+                      id="prio-low"
+                      onclick="setPriority('low')"
+                    >
+                      Low
+                      <img src="./assets/icons/low-green.svg" alt="low" />
+                    </div>
+                    <div
+                      class="priority-btn-low d_none"
+                      id="prio-low-active"
+                      onclick="setPriority('low')"
+                    >
+                      Low
+                      <img src="./assets/icons/low-white.svg" alt="low" />
+                    </div>
+                  </div>
+
+                  <label>Assigned to</label>
+                  <div
+                    id="assignee-select"
+                    class="assignee-select"
+                    tabindex="0"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                  >
+                    <span class="assignee-select-label"
+                      >Select contacts to assign</span
+                    >
+                    <span class="chevron">▾</span>
+                  </div>
+                  <ul
+                    id="assignee-options"
+                    class="assignee-options d_none"
+                    role="listbox"
+                    aria-multiselectable="true"
+                  ></ul>
+                  <div id="assignee-list" class="assignee-list"></div>
+
+                  <label for="category"
+                    >Category<span class="mandatory-field">*</span></label
+                  >
+                  <select name="category" class="task-category select">
+                    <option value="Select task category">
+                      Select task category
+                    </option>
+                    <option value="Technical Task">Technical Task</option>
+                    <option value="User Story">User Story</option>
+                  </select>
+                  <p class="category-error input-error"></p>
+
+                  <label for="subtask">Subtasks</label>
+                  <div class="subtask-input-row">
+                    <input
+                      type="text"
+                      placeholder="Add new subtask"
+                      id="subtask"
+                    />
+                    <button
+                      type="button"
+                      id="subtask-add-btn"
+                      class="subtask-add-btn d_none"
+                      aria-label="Add subtask"
+                    >
+                      <img src="./assets/icons/hug.svg" alt="add subtask" />
+                    </button>
+                  </div>
+                  <div class="subtask-list" id="subtask-list"></div>
+                </div>
+              </form>
+              <div class="task-overlay-footer">
+                <p>
+                  <span class="mandatory-field">*</span>This field is required
+                </p>
+                <div>
+                  <button
+                    class="white-btn"
+                    onclick="clearTask(document.querySelector('#add-task-overlay .add-task-content'))"
+                  >
+                    Clear X
+                  </button>
+                  <button
+                    onclick="createTask(document.querySelector('#add-task-overlay .add-task-content'))"
+                    class="blue-btn-bold"
+                  >
+                    Create Task
+                    <img src="./assets/icons/check.svg" alt="create" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Detail-Overlay -->
+          <section
+            class="task-detail-overlay d_none"
+            id="task-detail-overlay"
+            aria-hidden="true"
+          >
+            <div class="task-overlay-open">
+              <div class="task-overlay-open-head">
+                <p
+                  class="task-name"
+                  id="detail-category"
+                  style="background-color: #0038ff"
+                >
+                  Category
+                </p>
+                <button id="detail-close-btn" aria-label="Close">X</button>
+              </div>
+
+              <div class="task-overlay-open-title">
+                <h1 id="detail-title">Task Title</h1>
+              </div>
+
+              <div class="task-overlay-open-description">
+                <p id="detail-desc">Task description</p>
+              </div>
+
+              <div class="task-overlay-open-footer">
+                <div class="task-overlay-open-due-date">
+                  <p>Due Date:</p>
+                  <span id="detail-date">--.--.----</span>
+                </div>
+
+                <div class="task-overlay-open-priority" id="detail-priority">
+                  <p>Priority:</p>
+                  <span>
+                    <span id="detail-priority-text">Medium</span>
+                    <img
+                      id="detail-priority-icon"
+                      src="./assets/icons/medium-orange.svg"
+                      alt="priority"
+                    />
+                  </span>
+                </div>
+
+                <div class="task-overlay-open-assigned-to">
+                  <p>Assigned To:</p>
+                  <div class="detail-assignees" id="detail-assignees"></div>
+                </div>
+              </div>
+
+              <div class="task-overlay-open-footer">
+                <div class="task-overlay-open-subtasks">
+                  <p>Subtasks:</p>
+                  <div
+                    class="task-overlay-open-subtask-list"
+                    id="task-overlay-open-subtask-list"
+                  ></div>
+                </div>
+                <div class="task-overlay-open-actions">
+                  <button id="detail-delete" class="" title="Delete">
+                    <img src="./assets/icons/delete.svg" alt="" />
+                  </button>
+                  <button id="detail-edit" class="" title="Edit">
+                    <img src="./assets/icons/edit.svg" alt="" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Edit-Overlay -->
+          <section
+            class="task-overlay-open task-overlay-edit d_none"
+            id="task-edit-overlay"
+          >
+            <div class="task-overlay-open-head-edit">
+              <button id="edit-close-btn" aria-label="Close">X</button>
+            </div>
+
+            <form></form>
+
+            <div class="task-overlay-open-title">
+              <p>Title</p>
+              <input type="text" id="edit-title" placeholder="Title" />
+            </div>
+
+            <div class="task-overlay-open-description">
+              <p>Description</p>
+              <textarea id="edit-desc" placeholder="Description"></textarea>
+            </div>
+
+            <div class="task-overlay-open-footer">
+              <div
+                class="task-overlay-open-due-date task-overlay-edit-due-date"
+              >
+                <p>Due Date:</p>
+                <input type="date" id="edit-date" />
+                <div class="muted" id="edit-date-hint"></div>
+              </div>
+
+              <div
+                class="task-overlay-open-priority task-overlay-edit-priority"
+                id="edit-priority"
+              >
+                <p>Priority:</p>
+                <div class="priority-container">
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    id="edit-prio-urgent"
+                  >
+                    Urgent
+                    <img src="./assets/icons/urgent-red.svg" alt="urgent" />
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    id="edit-prio-medium"
+                  >
+                    Medium
+                    <img src="./assets/icons/medium-orange.svg" alt="medium" />
+                  </button>
+                  <button type="button" class="priority-btn" id="edit-prio-low">
+                    Low
+                    <img src="./assets/icons/low-green.svg" alt="low" />
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="task-overlay-open-assigned-to task-overlay-edit-assigned-to"
+              >
+                <label>Assigned to</label>
+                <div
+                  id="edit-assignee-select"
+                  class="assignee-select task-overlay-edit-assigned-to-select"
+                  tabindex="0"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                >
+                  <span class="assignee-select-label"
+                    >Select contacts to assign</span
+                  >
+                  <span class="chevron">▾</span>
+                </div>
+                <ul
+                  id="edit-assignee-options"
+                  class="assignee-options edit-assignee-options d_none"
+                  role="listbox"
+                  aria-multiselectable="true"
+                ></ul>
+                <div id="edit-assignee-list" class="edit-assignee-list"></div>
+              </div>
+            </div>
+
+            <div class="task-overlay-open-footer">
+              <div class="task-overlay-open-subtasks">
+                <p>Subtasks:</p>
+                <div class="subtask-toolbar">
+                  <input
+                    type="text"
+                    id="edit-subtask-input"
+                    placeholder="Add new subtask"
+                  />
+                  <button
+                    class="icon-btn"
+                    id="edit-subtask-add"
+                    title="Add subtask"
+                  >
+                    +
+                  </button>
+                </div>
+                <div class="subtask-list" id="edit-subtask-list"></div>
+              </div>
+              <div class="task-overlay-open-actions">
+                <button id="edit-ok-btn" class="" title="Ok">
+                  Ok <img src="./assets/icons/edit.svg" alt="" />
+                </button>
+              </div>
+            </div>
+          </section>
         </section>
       </section>
-    </section>
-  </div>
+    </div>
 
-  <!-- 🔹 Mobile Bottom Navigation -->
-  <nav class="nav-bar-mobile">
-    <button id="summary">
-      <img src="./assets/icons/summary.svg" alt="" />
-      Summary
-    </button>
-    <button id="add-task">
-      <img src="./assets/icons/addtask.svg" alt="" />
-      Add Task
-    </button>
-    <button id="board" class="nav-bar-button-active-a-mobile">
-      <img src="./assets/icons/board.svg" alt="" />
-      Board
-    </button>
-    <button id="contacts">
-      <img src="./assets/icons/contacts.svg" alt="" />
-      Contacts
-    </button>
-  </nav>
+    <!-- 🔹 Mobile Bottom Navigation -->
+    <nav class="nav-bar-mobile">
+      <button id="summary">
+        <img src="./assets/icons/summary.svg" alt="" />
+        Summary
+      </button>
+      <button id="add-task">
+        <img src="./assets/icons/addtask.svg" alt="" />
+        Add Task
+      </button>
+      <button id="board" class="nav-bar-button-active-a-mobile">
+        <img src="./assets/icons/board.svg" alt="" />
+        Board
+      </button>
+      <button id="contacts">
+        <img src="./assets/icons/contacts.svg" alt="" />
+        Contacts
+      </button>
+    </nav>
 
-  <div id="toast" class="toast d_none" role="status" aria-live="polite">
-    Task wurde erfolgreich erstellt.
-  </div>
-</body>
-
+    <div id="toast" class="toast d_none" role="status" aria-live="polite">
+      Task wurde erfolgreich erstellt.
+    </div>
+  </body>
 </html>

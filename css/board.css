@@ -536,3 +536,64 @@
     justify-content: center;
   }
 }
+
+/* =========================================================
+   ✅ Detail-Overlay: Slide-In von rechts + z-index + zentriert
+   ========================================================= */
+
+#task-detail-overlay.task-detail-overlay {
+  position: fixed;
+  inset: 0;
+
+  /* ✅ Zentriert das Panel im Screen */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(15, 23, 42, 0.35);
+
+  /* ✅ z-index */
+  z-index: 1000;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+/* Panel */
+#task-detail-overlay.task-detail-overlay .task-overlay-open {
+  /* ✅ über dem Backdrop */
+  z-index: 1001;
+
+  /* ✅ damit es nicht aus dem Viewport läuft */
+  max-height: 90vh;
+  overflow-y: auto;
+
+  /* ✅ Slide-in von rechts */
+  transform: translateX(50%);
+  position: initial;
+  left: 50%;
+  top: 50%;
+  transition: transform 280ms ease;
+  will-change: transform;
+}
+
+/* geöffnet */
+#task-detail-overlay.task-detail-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#task-detail-overlay.task-detail-overlay.is-open .task-overlay-open {
+  transform: translateX(0);
+}
+
+/* schließend */
+#task-detail-overlay.task-detail-overlay.is-closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#task-detail-overlay.task-detail-overlay.is-closing .task-overlay-open {
+  transform: translateX(110%);
+}

@@ -41,6 +41,8 @@
   text-align: center;
   padding: 0;
   cursor: pointer;
+  justify-content: center;
+  align-items: center;
 }
 
 .dropbtn:hover {
@@ -254,7 +256,7 @@
   font-size: 14px;
   color: crimson;
   margin-top: 4px;
-  min-height: 18px; 
+  min-height: 18px;
 }
 
 .error {
@@ -280,11 +282,10 @@ select.error {
 /* Responsive */
 
 @media (max-width: 1050px) {
-
   .help-btn {
     display: none;
   }
-  
+
   .content-left {
     display: none !important;
   }

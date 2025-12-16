@@ -20,12 +20,10 @@ const COLS = ["todo", "inprogress", "await", "done"];
 
 window.currentTaskColumn = window.currentTaskColumn || "todo";
 
-/**opens and closes add-task-overlay within board.html
- */
+/** opens and closes add-task-overlay within board.html */
 function openAddTaskOverlay(btn) {
   const overlay = document.getElementById("add-task-overlay");
   const form = overlay?.querySelector(".task-form");
-  overlay?.classList.remove("d_none");
   document.body.classList.add("no-scroll");
   window.getContactsData?.();
   if (form) window.clearTask?.(form);
@@ -37,7 +35,6 @@ function closeAddTaskOverlay() {
   const overlay = document.getElementById("add-task-overlay");
   const form = overlay?.querySelector(".task-form");
   if (form) window.clearTask?.(form);
-  overlay?.classList.add("d_none");
   document.body.classList.remove("no-scroll");
 }
 
@@ -286,9 +283,14 @@ function taskCard(task) {
     el.addEventListener("touchend", onTouchEnd);
   }
 
-  // Klick -> Detail
+  // Klick -> Detail (✅ Animation starten + dann Detail befüllen)
   el.addEventListener("click", async () => {
     if (el.classList.contains("dragging")) return;
+
+    // Animation (kommt aus add-task.js / global)
+    window.openTaskDetailOverlay?.();
+
+    // Inhalt laden/befüllen (kommt aus detail.js)
     await openDetailOverlayById(task.id);
   });
 
