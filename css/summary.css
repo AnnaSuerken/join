@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 60px;
-  margin-top: 106px;
+  margin-top: 80px;
 }
 
 .summary-title h1 {
@@ -234,7 +234,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100dvh - 180px);
+    height: calc(100vh - 80px);
     padding: 0;
     margin-bottom: 12px;
   }

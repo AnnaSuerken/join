@@ -176,6 +176,7 @@ main {
   align-items: center;
   justify-content: center;
   gap: 15px;
+  width: 100%;
 }
 
 .footer-links {
@@ -203,6 +204,7 @@ main {
 @media (max-width: 900px) {
   main {
     padding-bottom: 35px;
+    height: 100vh;
   }
 
   .logo-box-signup {

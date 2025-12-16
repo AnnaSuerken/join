@@ -79,6 +79,14 @@ function setupGlobalNavClicks() {
     if (event.target.closest("#board")) window.location.href = "./board.html";
     if (event.target.closest("#contacts"))
       window.location.href = "./contacts.html";
+    if (event.target.closest("#m-login")) window.location.href = "./login.html";
+    if (event.target.closest("#m-summary"))
+      window.location.href = "./index.html";
+    if (event.target.closest("#m-add-task"))
+      window.location.href = "./add-task.html";
+    if (event.target.closest("#m-board")) window.location.href = "./board.html";
+    if (event.target.closest("#m-contacts"))
+      window.location.href = "./contacts.html";
   });
 }
 
