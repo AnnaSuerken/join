@@ -296,6 +296,7 @@ async function createTask(form) {
 
   progressTablePush(payload, currentTaskColumn || "todo", form);
   clearTask(form);
+  window.location.href = "./board.html"
 }
 
 /* ---------- Form-Reset ---------- */

@@ -94,37 +94,31 @@
 }
 
 .subtask-item {
-  max-width: 440px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background-color: #f5f5f5;
-  padding: 10px;
-  border: solid 0.5px #d1d1d1;
-  border-radius: 13px;
 }
 
 .subtask-item:hover {
-  border: solid 0.5px #2a3647;
-  transition: all 0.3s ease;
-}
-
-.subtask-item span {
-  color: #2a3647;
-  overflow: scroll;
-  overflow-y: hidden;
-  scrollbar-width: thin;
+  background-color: #D9D9D9;
+  border-radius: 10px;
 }
 
 .subtask-item button {
   background: none;
   border: none;
   cursor: pointer;
-  padding-left: 12px;
+  padding: unset !important;
 }
 
 .subtask-text {
-  width: 70%;
+  color: #2a3647;
+  width: 80%;
+}
+
+.subtask-actions {
+  display: flex;
+  gap: 15px;
+  width: 20%;
 }
 
 .priority-btn,
@@ -357,7 +351,8 @@
   }
 
   .assignee-select,
-  .assignee-options {
+  .assignee-options,
+  .subtask-list  {
     width: 290px;
   }
 
@@ -365,6 +360,7 @@
   .btn-delete {
     width: 10px;
     margin: 0px;
+    padding: unset;
   }
 
   .add-task-footer {

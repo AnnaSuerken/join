@@ -102,7 +102,11 @@ function removeSubtask(index) {
   subtasks.splice(index, 1);
   renderSubtasks();
   adjustEditingIndexAfterRemoval(index);
-  list?.classList.remove("add-scroll-bar");
+  if (subtasks.length === 0) {
+    list.classList.remove("add-scroll-bar");
+  } else {
+    list.classList.add("add-scroll-bar");
+  }
 }
 
 function adjustEditingIndexAfterRemoval(index) {
