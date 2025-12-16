@@ -25,6 +25,10 @@
   flex-direction: column;
 }
 
+.content-right header{
+    box-shadow: 0px 1px 10px #c2c0c0;
+}
+
 .help-btn:hover {
   width: 23px;
 }
@@ -94,8 +98,8 @@
 }
 
 .header-right {
-  box-shadow: 0px 1px 10px #c2c0c0;
   width: 100%;
+  max-width: 1920px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -116,7 +120,7 @@
 .tool-name {
   font-size: 20px;
   font-weight: 400;
-  margin-left: 90px;
+  margin-left: 60px;
 }
 
 #logout-btn {

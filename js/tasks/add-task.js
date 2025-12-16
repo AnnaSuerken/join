@@ -171,14 +171,14 @@ function toggleAssigneeByIndex(i) {
 
 /* ---------- Priority ---------- */
 
-let currentPriority = null;
+let currentPriority = "null";
 
 function setPriority(status) {
   const priorities = ["urgent", "medium", "low"];
 
   if (currentPriority === status) {
     resetAllPriorities(priorities);
-    currentPriority = null;
+    currentPriority = "null";
     return;
   }
 
@@ -192,6 +192,15 @@ function resetAllPriorities(priorities) {
     document.getElementById(`prio-${priority}`)?.classList.remove("d_none");
     document.getElementById(`prio-${priority}-active`)?.classList.add("d_none");
   });
+}
+
+function resetStartPriorities() {
+    document.getElementById('prio-low')?.classList.remove("d_none");
+    document.getElementById('prio-urgent')?.classList.remove("d_none");
+    document.getElementById('prio-medium')?.classList.add("d_none");
+    document.getElementById('prio-urgent-active')?.classList.add("d_none");
+    document.getElementById('prio-low-active')?.classList.add("d_none");
+    document.getElementById('prio-medium-active')?.classList.remove("d_none");
 }
 
 function activateSelectedPriority(status) {
@@ -340,7 +349,7 @@ function clearTask(form) {
   clearAddTaskErrors(form);
   resetTaskInputs(taskTitle, taskDescription, taskDueDate, taskCategory);
   resetSubtaskFields(subtaskInput, subtaskList, addBtn);
-  resetAllPriorities(["urgent", "medium", "low"]);
+  resetStartPriorities();
   resetGlobalArrays();
 }
 

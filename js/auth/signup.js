@@ -129,11 +129,6 @@ function getSignupFormValues() {
   };
 }
 
-function showValidationToast() {
-  if (typeof showToast === "function") {
-    showToast("Bitte überprüfe deine Eingaben (Fehler sind markiert).", true);
-  }
-}
 
 function showSignupRunningToast() {
   if (typeof showToast === "function") {

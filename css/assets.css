@@ -44,9 +44,14 @@ main {
   margin-right: 60px;
   max-width: 1920px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
+
+footer {
+  max-width: 1920px;
+}
+
 .board-section {
   margin-left: 60px;
   margin-right: 60px;

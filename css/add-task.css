@@ -332,6 +332,10 @@
     width: 10px;
     margin: 0px;
   }
+
+  .add-task-footer {
+  width: 80%;
+}
 }
 
 @media (max-width: 900px) {
@@ -385,6 +389,7 @@
   .assignee-select,
   .assignee-options {
     width: 396px;
+    position: absolute;
   }
 
   .add-task-footer {

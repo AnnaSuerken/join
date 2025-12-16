@@ -3,7 +3,6 @@ main {
   align-items: center;
   justify-content: center;
   height: calc(100vh - 202px);
-  max-width: none !important;
 }
 
 .logo-box-signup {
@@ -12,6 +11,7 @@ main {
   justify-content: space-between;
   margin-right: 77px;
   height: 202px;
+  max-width: 1920px;
 }
 
 .sign-up-div {
