@@ -121,6 +121,23 @@
   border-radius: 12px;
 }
 
+.contact-edit-icon {
+  width: 65px;
+}
+
+.contact-delete-icon {
+  width: 72px;
+}
+
+
+.contact-edit-icon:hover {
+  content: url("../assets/icons/edit_icon_blue.svg");
+}
+
+.contact-delete-icon:hover {
+  content: url("../assets/icons/delete_icon_blue.svg");
+}
+
 /* Avatar klein */
 .avatar-small {
   width: 40px;
@@ -194,6 +211,10 @@
   border-radius: 3px;
 }
 
+.contacts-headline-separator-mobile{
+  display: none;
+}
+
 .contacts-subline {
   font-size: 27px;
   font-weight: 400;
@@ -206,7 +227,8 @@
   gap: 24px;
   margin-bottom: 24px;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .contact-avatar-circle {
@@ -256,21 +278,11 @@
 }
 
 .contact-action-link {
-  background: transparent;
-  border: none;
   cursor: pointer;
   font-size: 16px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #2a3647;
-  padding: 6px 8px;
-  border-radius: 8px;
-}
-
-.contact-action-link:hover {
-  background: rgba(41, 171, 226, 0.12);
-  color: #29abe2;
 }
 
 .contact-section-title {
@@ -420,7 +432,7 @@
   justify-content: center;
 
   position: absolute;
-  left: -60px;       /* overlap into left side */
+  left: 32px;       /* overlap into left side */
   top: 50%;
   transform: translateY(-55%);
   z-index: 20;
@@ -437,7 +449,9 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  height: 100%;
+  height: 80%;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 /* Form */
@@ -446,11 +460,13 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  align-items: flex-end;
 }
 
 /* Inputs */
 .input-wrapper {
   position: relative;
+  width: 80%;
 }
 
 .input-icon {
@@ -586,6 +602,13 @@
   .add-contact-sub {
     font-size: 22px;
   }
+
+  .modal-avatar-circle {
+  left: 0px;     
+  width: 100px;
+  height: 100px;
+
+}
 }
 
 /* =========================
@@ -630,7 +653,7 @@
   #return-arrow {
     cursor: pointer;
     position: absolute;
-    top: 220px;
+    top: 25px;
     right: 8%;
   }
 
@@ -772,6 +795,28 @@
     background: #29abe2;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
   }
+
+.contacts-headline-row {
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-direction: column;
+}
+
+  .contacts-headline-separator {
+  display: none;
+}
+
+  .contacts-headline-separator-mobile {
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #29abe2;
+  }
+
+  .contact-name-row {
+  justify-content: center ;
+}
 }
 
 /* Smaller phones */
@@ -785,6 +830,11 @@
   .contact-name {
     font-size: 26px;
   }
+
+  .contact-avatar-circle {
+  width: 80px;
+  height: 80px;
+}
 }
 
 @media (max-width: 360px) {
