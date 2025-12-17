@@ -159,7 +159,6 @@
 }
 
 /* Detail-Bereich rechts */
-
 .contacts-detail {
   flex: 1;
   padding: 32px 24px;
@@ -203,7 +202,6 @@
 }
 
 /* CONTACT DETAIL HEADER */
-
 .contact-header-row {
   display: flex;
   gap: 24px;
@@ -317,8 +315,7 @@
   height: 16px;
 }
 
-/* MODAL / OVERLAY – Desktop */
-
+/* MODAL Desktop */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -331,6 +328,7 @@
   z-index: 2000;
 }
 
+/* Desktop Card */
 .add-contact-modal {
   background-color: #fff;
   border-radius: 12px;
@@ -340,6 +338,7 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   overflow: hidden;
+
   position: absolute;
   left: 50%;
   top: 50%;
@@ -347,7 +346,7 @@
   transition: transform 0.35s ease;
 }
 
-/* Closed-State: rechts außerhalb  */
+/* Closed rechts außerhalb */
 .modal-overlay:not(.modal-open) .add-contact-modal {
   transform: translate(100%, -50%);
 }
@@ -388,6 +387,7 @@
   max-height: none;
 }
 
+
 .modal-close-btn {
   position: absolute;
   right: 24px;
@@ -401,12 +401,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 50;
 }
 
 .modal-close-btn:hover {
   background-color: #eeeeee;
   border-radius: 100%;
 }
+
 
 .modal-form-row {
   display: flex;
@@ -427,6 +429,7 @@
   justify-content: center;
 }
 
+/* Inputs  */
 .modal-form {
   flex: 1;
   display: flex;
@@ -436,9 +439,23 @@
 
 .modal-input {
   width: 100%;
-  padding: 12px 40px 12px 12px;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 12px 44px 12px 12px; 
   border: 1px solid #d1d1d1;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #000;
+  background: #fff;
+  outline: none;
+}
+
+.modal-input::placeholder {
+  color: #c7c7c7;
+}
+
+.modal-input:focus {
+  border-color: #29abe2;
 }
 
 .modal-footer {
@@ -449,8 +466,7 @@
   margin-top: 32px;
 }
 
-/* =MOBILE CONTACT ACTION FAB = */
-
+/* =MOBILE CONTACT  = */
 .contact-menu-btn {
   position: fixed;
   bottom: 120px;
@@ -496,7 +512,7 @@
   background-color: #f1f1f1;
 }
 
-/*  kein FAB  */
+/* kein FAB */
 @media (min-width: 821px) {
   .contact-menu-btn,
   .contact-menu {
@@ -504,7 +520,7 @@
   }
 }
 
-/* Mobile: alte Edit/Delete ausblenden */
+/* Mobile: alte Edit ausblenden */
 @media (max-width: 820px) {
   .contacts-detail .contact-actions,
   .contacts-detail .actions {
@@ -609,7 +625,7 @@
     font-size: 20px;
   }
 
-  /*  Add-Contact Button */
+  /* Add-Contact Button */
   .add-contact-btn {
     position: fixed !important;
     bottom: 90px !important;
@@ -630,59 +646,6 @@
   .add-contact-icon img {
     width: 28px !important;
     height: 28px !important;
-  }
-
-  /* MOBILE: Modal als echtes Bottom-Sheet */
-  .modal-overlay {
-    align-items: flex-end;
-    justify-content: center;
-  }
-
-  .add-contact-modal {
-    position: relative;
-    left: 0;
-    right: 0;
-    top: auto;
-    bottom: 0;
-
-    width: 100%;
-    max-width: 100%;
-    border-radius: 24px 24px 0 0;
-
-    margin: 0;
-    margin-bottom: 80px;
-
-    flex-direction: column;
-    max-height: none;
-    height: auto;
-    overflow: visible;
-
-    transform: translateY(100%);
-    transition: transform 0.35s ease;
-  }
-
-  .modal-overlay:not(.modal-open) .add-contact-modal {
-    transform: translateY(100%);
-  }
-
-  .modal-overlay.modal-open .add-contact-modal {
-    transform: translateY(0);
-  }
-
-  .add-contact-left {
-    padding: 24px;
-    text-align: left;
-    flex: 0 0 auto;
-  }
-
-  .add-contact-right {
-    padding: 24px;
-    overflow: visible;
-    max-height: none;
-  }
-
-  .modal-form-row {
-    margin-top: 32px;
   }
 
   .contact-back-btn {
@@ -731,32 +694,6 @@
     font-size: 13px;
   }
 
-  .add-contact-left {
-    border-radius: 12px;
-  }
-
-  .add-contact-right {
-    padding: 16px;
-    height: 50vh !important;
-    overflow: scroll;
-    scrollbar-width: none;
-    flex: none;
-    border-radius: 12px;
-  }
-
-  .modal-form-row {
-    flex-direction: column;
-  }
-
-  .modal-avatar-circle {
-    width: 72px;
-    height: 72px;
-  }
-
-  .modal-footer {
-    justify-content: center;
-  }
-
   .contact-actions {
     gap: 10px;
     display: flex;
@@ -781,15 +718,9 @@
     margin-left: 8px !important;
     margin-right: 8px !important;
   }
-
-  /* für kleine Geräte weiter vollbreit lassen */
-  .add-contact-modal {
-    width: 100%;
-    max-width: 100%;
-  }
 }
 
-/*  kleine Geräte ~320–360px */
+/* kleine Geräte ~320–360px */
 @media (max-width: 360px) {
   .contact-row {
     gap: 12px;
@@ -811,17 +742,14 @@
     font-size: 16px;
   }
 
-  .add-contact-right {
-    padding: 12px;
-  }
-
   .modal-close-btn {
     right: 12px;
     top: 12px;
   }
 
   .modal-input {
-    padding: 10px 36px 10px 10px;
+    padding: 10px 40px 10px 10px;
+    height: 42px;
   }
 
   .contact-actions {
@@ -843,43 +771,207 @@
     align-items: center;
   }
 }
-/* == OVERRIDE: Mobile Add-Contact wie Figma-Card == */
+
+
 @media (max-width: 820px) {
-  /* Overlay ist egal */
-  .modal-overlay {
-    align-items: flex-end;
-    justify-content: center;
+  /* Overlay centered */
+  #add-contact-overlay.modal-overlay {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
   }
 
-  /* Card: zentriert */
-  .modal-overlay .add-contact-modal {
-    position: absolute;
-    left: 50%;
-    top: auto;
-    bottom: 80px;
+  
+  #add-contact-overlay .add-contact-modal {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
 
-    width: 94%;
-    max-width: 420px;
-    border-radius: 24px;
+    width: min(396px, 100%) !important;
+    max-width: min(396px, 100%) !important;
 
-    margin: 0;
-    flex-direction: column;
-    max-height: none;
-    height: auto;
-    overflow: visible;
+    border-radius: 30px !important;
+    overflow: hidden !important;
 
-    /* Startposition */
-    transform: translate(-50%, 100%);
-    transition: transform 0.35s ease;
+    display: flex !important;
+    flex-direction: column !important;
+
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+
+    transform: translate(-50%, 110%) !important;
+    transition: transform 0.35s ease !important;
   }
 
-  /* geschlossen: Card  */
-  .modal-overlay:not(.modal-open) .add-contact-modal {
-    transform: translate(-50%, 100%);
+  #add-contact-overlay.modal-open .add-contact-modal {
+    transform: translate(-50%, -50%) !important;
   }
 
-  /* Card Bottom-Nav */
-  .modal-overlay.modal-open .add-contact-modal {
-    transform: translate(-50%, 0);
+  /* Header   */
+  #add-contact-overlay .add-contact-left {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+
+    
+    padding: 48px 24px 92px !important;
+
+    background-color: #2a3647 !important;
+  }
+
+  #add-contact-overlay .add-contact-left-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  #add-contact-overlay .add-contact-headline {
+    font-size: 47px !important;
+    font-weight: 700 !important;
+    line-height: 1.05 !important;
+    margin: 0 !important;
+  }
+
+  #add-contact-overlay .add-contact-sub {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    opacity: 0.95 !important;
+  }
+
+  #add-contact-overlay .add-contact-underline {
+    width: 78px !important;
+    height: 3px !important;
+    background: #29abe2 !important;
+    border-radius: 2px !important;
+  }
+
+  #add-contact-overlay .join-big-logo {
+    display: none !important;
+  }
+
+  
+  #add-contact-overlay #close-add-contact-overlay.modal-close-btn {
+    position: absolute !important;
+    top: 18px !important;
+    right: 18px !important;
+    z-index: 99999 !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+  }
+
+  #add-contact-overlay #close-add-contact-overlay.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  #add-contact-overlay #close-add-contact-overlay.modal-close-btn img {
+    width: 20px !important;
+    height: 20px !important;
+    filter: brightness(0) invert(1) !important;
+  }
+
+  /* Body */
+  #add-contact-overlay .add-contact-right {
+    width: 100% !important;
+    padding: 0 16px 26px !important;
+    background: #fff !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  
+  #add-contact-overlay .modal-avatar-circle {
+    width: 120px !important;
+    height: 120px !important;
+    border-radius: 999px !important;
+    background-color: #d9d9d9 !important;
+    border: 3px solid #ffffff !important;
+
+    position: absolute !important;
+    left: 50% !important;
+    top: -60px !important; /* ✅ 120/2 */
+    transform: translateX(-50%) !important;
+    z-index: 20 !important;
+  }
+
+  
+  #add-contact-overlay .modal-form-row {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 76px !important;
+  }
+
+  
+  #add-contact-overlay .modal-form {
+    width: min(364px, 100%) !important;
+    margin: 0 auto !important;
+    gap: 8px !important;
+  }
+
+  
+  #add-contact-overlay .input-error {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  #add-contact-overlay .input-error:empty {
+    display: none !important;
+  }
+
+  /* icon alignment */
+  #add-contact-overlay .input-wrapper {
+    position: relative !important;
+  }
+
+  #add-contact-overlay .input-icon {
+    position: absolute !important;
+    right: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 20px !important;
+    height: 20px !important;
+    opacity: 0.6 !important;
+    pointer-events: none !important;
+  }
+
+  #add-contact-overlay .modal-input {
+    height: 44px !important;
+    border-radius: 10px !important;
+    border: 1px solid #d1d1d1 !important;
+    padding: 12px 44px 12px 12px !important;
+    font-size: 16px !important;
+    background: #fff !important;
+  }
+
+  /* Footer: only Create */
+  #cancel-add-contact-overlay {
+    display: none !important;
+  }
+
+  #add-contact-overlay .modal-footer {
+    justify-content: center !important;
+    margin-top: 16px !important;
+    gap: 0 !important;
+  }
+
+  #create-contact-btn {
+    width: auto !important;
+    white-space: nowrap !important;
+    padding: 12px 18px !important;
+    border-radius: 10px !important;
+    background: #2a3647 !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #create-contact-btn:hover {
+    background: #29abe2 !important;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1) !important;
   }
 }
