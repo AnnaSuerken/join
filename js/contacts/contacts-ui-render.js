@@ -68,17 +68,19 @@ function renderContactListLegacy() {
 function legacyDetailTemplate(c) {
   return `
     <div class="contact-header-row">
+      <div class="contact-detail-name-header">
       <div class="contact-avatar-circle" style="background-color:${c.color}">
         ${c.initials}
       </div>
-      <div class="contact-main-info">
-        <div class="contact-name-row">
-          <h2 class="contact-name">${c.name}</h2>
-          <div class="contact-actions">
-            <button class="contact-action-link" id="legacyEdit">✎ Edit</button>
-            <button class="contact-action-link" id="legacyDelete">🗑 Delete</button>
+      <div class="contact-name-row">
+      <h2 class="contact-name">${c.name}</h2>
+                <div class="contact-actions">
+            <img src="./assets/icons/edit_icon.svg" class="contact-edit-icon contact-action-link"" id="legacyEdit">
+            <img src="./assets/icons/delete_icon.svg" class="contact-delete-icon contact-action-link" id="legacyDelete">
           </div>
-        </div>
+          </div>
+      </div>
+      <div class="contact-main-info">
         <div class="contact-section-title">Contact Information</div>
         <div class="contact-info-block">
           <div class="contact-info-label">Email</div>
@@ -89,11 +91,8 @@ function legacyDetailTemplate(c) {
         <div class="contact-info-block">
           <div class="contact-info-label">Phone</div>
           <div class="contact-phone-row">
-            <div class="phone-icon-bubble">
-              <img src="./assets/icons/call.svg" alt="phone icon" class="phone-icon-img" />
-            </div>
             <span class="contact-info-value">
-               ${c.phone || "-"}
+              ${c.phone || "-"}
             </span>
           </div>
         </div>

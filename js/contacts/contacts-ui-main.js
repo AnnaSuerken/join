@@ -199,7 +199,7 @@ function fillModalForEdit(contact, els) {
   els.emailInput.value = contact.email;
   els.phoneInput.value = contact.phone || "";
   if (els.titleEl) els.titleEl.textContent = "Edit contact";
-  if (els.primaryBtn) els.primaryBtn.textContent = "Save contact ✓";
+  if (els.primaryBtn) els.primaryBtn.textContent = "Save ✓";
   updateModalAvatar(els.avatar, contact.color, contact.initials);
 }
 

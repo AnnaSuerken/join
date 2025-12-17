@@ -66,6 +66,12 @@
   height: 24px;
 }
 
+.contacts-separator {
+    width: 60px;
+    height: 3px;
+    background-color: #29abe2;
+}
+
 .contacts-scroll {
   flex: 1;
   overflow-y: auto;
@@ -196,6 +202,10 @@
   background-color: #29abe2;
 }
 
+.contacts-headline-separator-mobile {
+  display: none;
+}
+
 .contacts-subline {
   font-size: 27px;
   font-weight: 400;
@@ -209,6 +219,7 @@
   gap: 24px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .contact-avatar-circle {
@@ -233,12 +244,17 @@
 
 .contact-name-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
   flex-wrap: wrap;
+  flex-direction: column;
 }
 
+.contact-detail-name-header {
+  display: flex;
+  gap: 54px;
+}
 .contact-name {
   font-size: 32px;
   font-weight: 500;
@@ -253,23 +269,22 @@
 }
 
 .contact-action-link {
-  background: #f5f5f5;
-  border-radius: 20px;
-  border: 1px solid #d1d1d1;
   cursor: pointer;
   font-size: 14px;
-  line-height: 1.2;
-  padding: 6px 12px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap;
+  font-size: bold;
+  gap: 5px;
   color: #000;
 }
 
-.contact-action-link:hover {
-  background-color: #e4e4e4;
-  border-color: #b5b5b5;
+.contact-edit-icon:hover {
+  content: url("../assets/icons/edit_icon_blue.svg");
+}
+
+.contact-delete-icon:hover {
+  content: url("../assets/icons/delete_icon_blue.svg");
 }
 
 .contact-section-title {
@@ -278,12 +293,12 @@
 }
 
 .contact-info-block {
-  margin-bottom: 16px;
+  margin-bottom: 5px;
 }
 
 .contact-info-label {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .contact-info-value {
@@ -431,7 +446,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .modal-input {
@@ -541,6 +555,13 @@
     height: calc(100vh - 180px);
     overflow: hidden;
   }
+  .join-big-logo {
+    display: none;
+  }
+
+  .add-contact-headline{
+    font-size: 47px;
+  }
 
   .contacts-panel {
     width: 100% !important;
@@ -572,7 +593,6 @@
   #return-arrow {
     cursor: pointer;
     position: absolute;
-    top: 220.5px;
     right: 8%;
   }
 
@@ -670,9 +690,10 @@
   }
 
   .add-contact-left {
-    padding: 24px;
     text-align: left;
-    flex: 0 0 auto;
+    height: px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 
   .add-contact-right {
@@ -694,6 +715,10 @@
     background: transparent;
     cursor: pointer;
     font-size: 14px;
+  }
+
+     .contact-name-row {
+    justify-content: center
   }
 }
 
@@ -730,7 +755,14 @@
     height: 36px;
     font-size: 13px;
   }
+  .contact-detail-name-header {
+    gap: 15px;
+}
 
+  .contact-avatar-circle {
+  width: 60px;
+  height: 60px;
+}
   .add-contact-left {
     border-radius: 12px;
   }
@@ -757,6 +789,11 @@
     justify-content: center;
   }
 
+    .modal-footer button {
+      padding: 10px;
+      width: 120px;
+  }
+
   .contact-actions {
     gap: 10px;
     display: flex;
@@ -770,8 +807,8 @@
 
   .contact-header-row {
     justify-content: center;
-  }
 
+  }
   .contacts-main {
     margin-left: 8px !important;
     margin-right: 8px !important;
@@ -790,7 +827,7 @@
 }
 
 /*  kleine Geräte ~320–360px */
-@media (max-width: 360px) {
+@media (max-width: 380px) {
   .contact-row {
     gap: 12px;
   }
@@ -803,12 +840,31 @@
     font-size: 13px;
   }
 
-  .contacts-headline {
-    font-size: 28px;
+  .contact-main-info{
+      align-items: flex-start;
   }
 
+  .contacts-headline-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .contacts-headline {
+    font-size: 47px;
+  }
+
+  .contacts-headline-separator {
+    display: none;
+  }
+
+  .contacts-headline-separator-mobile {
+    display: block;
+    width: 90px;
+    height: 3px;
+    background-color: #29abe2;
+  }
   .contacts-subline {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .add-contact-right {
@@ -835,12 +891,6 @@
 
   .contact-header-row {
     flex-direction: column;
-    align-items: center;
-  }
-
-  .contacts-headline-row {
-    gap: 10px;
-    align-items: center;
   }
 }
 /* == OVERRIDE: Mobile Add-Contact wie Figma-Card == */
