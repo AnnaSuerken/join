@@ -156,6 +156,15 @@
     <!-- ADD CONTACT MODAL -->
     <section class="modal-overlay d_none" id="add-contact-overlay">
       <div class="add-contact-modal">
+        <!-- ✅ Close Button moved here (top-right on card) -->
+        <button
+          class="modal-close-btn"
+          id="close-add-contact-overlay"
+          aria-label="close"
+        >
+          <img src="./assets/icons/Close.svg" alt="close" />
+        </button>
+
         <div class="add-contact-left">
           <div class="add-contact-left-text">
             <img
@@ -172,14 +181,6 @@
         </div>
 
         <div class="add-contact-right">
-          <button
-            class="modal-close-btn"
-            id="close-add-contact-overlay"
-            aria-label="close"
-          >
-            <img src="./assets/icons/Close.svg" alt="close" />
-          </button>
-
           <div class="modal-form-row">
             <div class="modal-avatar-circle" id="modal-avatar-preview">
               <img src="./assets/icons/person.svg" alt="avatar placeholder" />
