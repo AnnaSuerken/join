@@ -27,6 +27,9 @@ const passwordError = document.getElementById("password-error");
 const password2Error = document.getElementById("password2-error");
 const checkboxError = document.getElementById("checkbox-error");
 
+password.addEventListener("input", liveValidatePasswords);
+password2.addEventListener("input", liveValidatePasswords);
+
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -188,12 +191,6 @@ function applySignupErrorToForm(err) {
   }
 }
 
-function showSignupErrorToast(err) {
-  if (typeof showToast === "function") {
-    showToast(err.message || "Registrierung fehlgeschlagen.", true);
-  }
-}
-
 async function handleSignup() {
   if (!validateForm()) {
     showValidationToast();
@@ -201,12 +198,10 @@ async function handleSignup() {
   }
 
   const { displayName, email, pwd } = getSignupFormValues();
-  showSignupRunningToast();
 
   try {
     const cred = await registerUser(email, pwd);
     await saveUserProfile(cred.user, displayName, email);
-    showSignupSuccessToast();
     redirectToLoginDelayed();
   } catch (err) {
     console.error(err);
@@ -216,11 +211,6 @@ async function handleSignup() {
 }
 
 form?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  await handleSignup();
-});
-
-signupbutton?.addEventListener("click", async (e) => {
   e.preventDefault();
   await handleSignup();
 });
@@ -235,3 +225,21 @@ onAuthStateChanged(auth, async (user) => {
     console.warn("Konnte Gast-Datensatz nicht aktualisieren:", e);
   }
 });
+
+function liveValidatePasswords() {
+  const pwdVal = password.value;
+  const pwd2Val = password2.value;
+
+  passwordError.textContent = "";
+  password2Error.textContent = "";
+  password.classList.remove("error");
+  password2.classList.remove("error");
+
+  if (!pwdVal || !pwd2Val) return;
+
+  if (pwdVal !== pwd2Val) {
+    password2Error.textContent = "Die Passwörter stimmen nicht überein.";
+    password.classList.add("error");
+    password2.classList.add("error");
+  }
+}

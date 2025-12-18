@@ -89,17 +89,18 @@ async function handleFormSubmit(e) {
   e.preventDefault();
   clearErrors();
 
-  const { email, password } = extractLoginValues(e);
-  if (!isValidEmail(email)) {
-    showInvalidEmailError();
-    return;
-  }
-  if (!password) {
-    showEmptyPasswordError();
-    return;
-  }
+  if (!validateLoginInputs()) return;
 
-  showLoginToast("Anmeldung läuft");
+const { email, password } = extractLoginValues(e);
+
+let hasError = false;
+
+if (!password) {
+  showEmptyPasswordError();
+  hasError = true;
+}
+
+if (hasError) return;
 
   try {
     await performLogin(email, password);
@@ -112,7 +113,6 @@ async function handleFormSubmit(e) {
 
 async function handleGuestLogin() {
   clearErrors();
-  showLoginToast("Gast-Anmeldung läuft...");
 
   try {
     const cred = await signInAnonymously(auth);
@@ -140,3 +140,27 @@ setTimeout(() => {
   const loader = document.querySelector(".loader");
   if (loader) loader.style.display = "none";
 }, 1000);
+
+
+function validateLoginInputs() {
+  let valid = true;
+
+  emailError.textContent = "";
+  passwordError.textContent = "";
+  emailInput.classList.remove("error");
+  passwordInput.classList.remove("error");
+
+  if (!emailInput.value.trim()) {
+    emailError.textContent = "Bitte E-Mail eingeben.";
+    emailInput.classList.add("error");
+    valid = false;
+  }
+
+  if (!passwordInput.value.trim()) {
+    passwordError.textContent = "Bitte Passwort eingeben.";
+    passwordInput.classList.add("error");
+    valid = false;
+  }
+
+  return valid;
+}
