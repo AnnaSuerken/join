@@ -1,10 +1,6 @@
 // js/core/main.js
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-/**
- * Fallback-requireAuth, falls du hier ohne ES-Module lädst.
- * Wenn du auth-guard.js als Modul verwendest, kannst du das hier entfernen.
- */
 function requireAuthLocal({ redirectTo = "/login.html" } = {}) {
   return new Promise((resolve) => {
     onAuthStateChanged(window.auth, (user) => {
