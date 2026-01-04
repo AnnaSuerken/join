@@ -33,7 +33,10 @@ main {
   background-color: #2a3647;
   color: white;
   font-weight: bold;
-  padding: 15px 24px;
+  padding-top: 15px;
+  padding-right: 24px;
+  padding-bottom: 15px;
+  padding-left: 24px;
   border-radius: 8px;
   font-size: 21px;
 }
@@ -45,52 +48,72 @@ main {
   margin-left: 72px;
 }
 
+
 .loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: top left;
+  position: fixed;
+  inset: 0;
   z-index: 9999;
   background-color: rgba(255, 255, 255, 0.95);
-  width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: ease-in-out;
+  animation: hideLoader 1.8s ease-in-out forwards;
+  animation-delay: 1.8s;
+  pointer-events: all;
+}
+
+@keyframes hideLoader {
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .loader-img {
-  height: 300px;
-  width: auto;
-  margin-right: 77px;
-  animation: zoomOutLeft 5s forwards;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
+  animation: moveToLogoDesktop 1.8s ease-in-out forwards;
+}
+
+@keyframes moveToLogoDesktop {
+  0% {
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: auto;
+    transform: translate(-50%, -30%) scale(0.7);
+    opacity: 1;
+  }
+
+  70% {
+    transform: translate(-50%, -30%) scale(0.6);
+    opacity: 1;
+  }
+
+  80% {
+    top: 80px;
+    left: 72px;
+    transform: scale(1);
+  }
+
+  100% {
+    width: 100px;
+    height: auto;
+    transform: none;
+    opacity: 1;
+  }
 }
 
 .loader-img-mobile {
   display: none;
 }
 
-@keyframes zoomOutLeft {
-  0% {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-  }
-
-  40% {
-    opacity: 1;
-    transform: scale3d(0.475, 0.475, 0.475)
-      translate3d(calc(-100vw - 150px), calc(-100vh - 150px), 150px);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(0.1) translate3d(-10000px, 0, 0);
-    transform-origin: right center;
-  }
-}
+/* -----------------------------
+   SIGN UP BOX
+------------------------------ */
 
 .sign-up-box {
   display: flex;
@@ -176,7 +199,9 @@ main {
   margin-top: 25px;
 }
 
-/* Responsive */
+/* -----------------------------
+   Responsive Design
+------------------------------ */
 
 @media (max-width: 900px) {
   main {
@@ -193,6 +218,10 @@ main {
     width: 64px;
   }
 }
+
+/* -----------------------------
+   Mobile Version
+------------------------------ */
 
 @media (max-width: 660px) {
   main {
@@ -227,19 +256,86 @@ main {
     margin-top: 16px;
   }
 
+  .signup-input {
+    padding-top: 15px;
+    padding-right: 70px;
+  }
+
+  .sign-up-box-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 35px;
+  }
+
+  .sign-up-box-header {
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .divider {
+    width: 88px;
+    height: 3px;
+    margin-top: 25px;
+  }
+
+  .checkbox-container {
+    margin-top: 24px;
+  }
+
+  .sign-up-input-container {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  /* Mobile Loader Hintergrund dunkel */
   .loader {
     background-color: #2a3647;
   }
 
+  /* Desktop Loader-Logo aus */
   .loader-img {
     display: none;
   }
 
+  /* Mobile Loader-Logo (weiß) an */
   .loader-img-mobile {
     display: block;
-    height: 64px;
-    margin-left: 38px;
-    margin-top: 37px;
-    animation: zoomOutLeft 5s forwards;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    width: 150px;
+    height: auto;
+
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center;
+
+    animation: moveToLogoMobile 1.8s ease-in-out forwards;
+  }
+
+  /* Zielposition Mobile: oben links (wo dein mobile Logo sitzt) */
+  @keyframes moveToLogoMobile {
+    0% {
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    70% {
+      transform: translate(-50%, -50%) scale(0.6);
+      opacity: 1;
+    }
+
+    100% {
+      top: 37px;
+      left: 38px;
+      width: 64px;
+      transform: none;
+      opacity: 1;
+    }
   }
 }
