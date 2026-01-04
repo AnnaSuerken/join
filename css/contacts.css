@@ -110,6 +110,12 @@
   border-bottom: 1px solid #d1d1d1;
   cursor: pointer;
 }
+/* letzte Zeile ohne Abschluss-Strich */
+.contacts-scroll .contact-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
 
 .contact-row:hover {
   background-color: #f3f3f3;
@@ -310,10 +316,10 @@
   text-decoration: none;
 }
 
-/* =========================
+/* 
    MODAL Overlay + Card
    (Desktop like original)
-========================= */
+*/
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -344,7 +350,7 @@
   transition: transform 0.35s ease;
 }
 
-/* overlay gets modal-open by your JS */
+/* overlay */
 .modal-overlay.modal-open .add-contact-modal {
   transform: translateX(0);
 }
@@ -399,7 +405,7 @@
   overflow: hidden;
 }
 
-/* Close button (top right on card) */
+/* Close button  */
 .modal-close-btn {
   position: absolute;
   right: 32px;
@@ -432,7 +438,7 @@
   justify-content: center;
 
   position: absolute;
-  left: 32px;       /* overlap into left side */
+  left: 32px;       
   top: 50%;
   transform: translateY(-55%);
   z-index: 20;
@@ -615,19 +621,7 @@
    Responsive: Mobile Layout
 ========================= */
 @media (max-width: 820px) {
-  .contacts-main {
-    flex-direction: column;
-    height: calc(100vh - 180px);
-  }
-
-  .contacts-panel {
-    width: 100%;
-    min-width: 0;
-    border-right: none;
-    border-bottom: 1px solid #d1d1d1;
-    height: calc(100vh - 180px);
-    overflow-y: auto;
-  }
+  
 
   .contacts-panel-inner {
     padding: 16px;
@@ -843,3 +837,11 @@
     font-size: 16px;
   }
 }
+
+@media (max-width: 1050px) {
+  .contacts-panel,
+  .contacts-detail {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+}
+

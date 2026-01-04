@@ -32,13 +32,8 @@ main {
 .sign-up-div a {
   background-color: #2a3647;
   color: white;
-  border: none;
   font-weight: bold;
-  border: none;
-  padding-top: 15px;
-  padding-right: 24px;
-  padding-bottom: 15px;
-  padding-left: 24px;
+  padding: 15px 24px;
   border-radius: 8px;
   font-size: 21px;
 }
@@ -70,13 +65,7 @@ main {
   height: 300px;
   width: auto;
   margin-right: 77px;
-  -webkit-animation-name: zoomOutLeft;
-  animation-name: zoomOutLeft;
-  -webkit-animation-duration: 5s;
-  animation-duration: 5s;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  transition: ease-in-out;
+  animation: zoomOutLeft 5s forwards;
 }
 
 .loader-img-mobile {
@@ -92,18 +81,13 @@ main {
 
   40% {
     opacity: 1;
-    -webkit-transform: scale3d(0.475, 0.475, 0.475)
-      translate3d(calc(-100vw - 150px), calc(-100vh - 150px), 150px);
     transform: scale3d(0.475, 0.475, 0.475)
       translate3d(calc(-100vw - 150px), calc(-100vh - 150px), 150px);
-    background-color: none;
   }
 
   100% {
     opacity: 0;
-    -webkit-transform: scale(0.1) translate3d(-10000px, 0, 0);
     transform: scale(0.1) translate3d(-10000px, 0, 0);
-    -webkit-transform-origin: right center;
     transform-origin: right center;
   }
 }
@@ -115,10 +99,8 @@ main {
   flex-direction: column;
   background-color: white;
   border-radius: 25px;
-  box-shadow: -1px 0px 6px 0px rgb(0, 0, 0, 0.2);
-  padding-top: 32px;
-  padding-left: 32px;
-  padding-right: 32px;
+  box-shadow: -1px 0 6px rgba(0, 0, 0, 0.2);
+  padding: 32px;
   color: #f6f7f8;
 }
 
@@ -151,18 +133,13 @@ main {
 }
 
 .signup-input {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-right: 125px;
-  padding-left: 12px;
+  padding: 15px 125px 15px 12px;
 }
 
 .checkbox-container {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding: 15px 0;
   display: flex;
   align-items: center;
-  justify-items: center;
   gap: 10px;
   color: #757575;
 }
@@ -199,7 +176,7 @@ main {
   margin-top: 25px;
 }
 
-/* Responsive Design */
+/* Responsive */
 
 @media (max-width: 900px) {
   main {
@@ -217,8 +194,6 @@ main {
   }
 }
 
-/* mobile version*/
-
 @media (max-width: 660px) {
   main {
     flex-direction: column;
@@ -229,10 +204,6 @@ main {
     margin-left: 38px;
     margin-top: 37px;
     height: 64px;
-  }
-
-  .logo-box-signup img {
-    margin: 0;
   }
 
   .sign-up-div {
@@ -246,73 +217,18 @@ main {
     margin-top: 35px;
   }
 
-  .sign-up-div-mobile a {
-    font-weight: 700;
-    padding-top: 15px;
-    padding-right: 16px;
-    padding-bottom: 15px;
-    padding-left: 16px;
-    border-radius: 8px;
-    font-size: 16px;
-  }
-
   .sign-up-box {
-    padding: 0;
     width: 286px;
-    margin: 0;
+    padding: 0;
   }
 
   .sign-up-box-h1 {
-    color: #293647;
-    font-weight: 700;
     font-size: 47px;
     margin-top: 16px;
   }
 
-  .signup-input {
-    padding-top: 15px;
-    padding-right: 70px;
-  }
-
-  .sign-up-box-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    margin-top: 35px;
-  }
-
-  .sign-up-box-header {
-    justify-content: center;
-    gap: 24px;
-  }
-
-  .divider {
-    background-color: #29abe2;
-    width: 88px;
-    height: 3px;
-    margin-top: 25px;
-  }
-
-  .checkbox-container {
-    margin-top: 24px;
-  }
-
-  .sign-up-input-container {
-    margin-left: 15px;
-    margin-right: 15px;
-  }
-
   .loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: top left;
     background-color: #2a3647;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: ease-in-out;
   }
 
   .loader-img {
@@ -320,44 +236,10 @@ main {
   }
 
   .loader-img-mobile {
+    display: block;
     height: 64px;
     margin-left: 38px;
     margin-top: 37px;
-    width: auto;
-    -webkit-animation-name: zoomOutLeft;
-    animation-name: zoomOutLeft;
-    -webkit-animation-duration: 5s;
-    animation-duration: 5s;
-    -webkit-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-    transition: all 0.5 ease-in-out;
-    display: block;
-  }
-
-  @keyframes zoomOutLeft {
-    0% {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      height: 150px;
-      width: auto;
-    }
-
-    40% {
-      opacity: 1;
-      -webkit-transform: scale3d(0.475, 0.475, 0.475)
-        translate3d(calc(-100vw - 100px), calc(-100vh - 100px), 100px);
-      transform: scale3d(0.475, 0.475, 0.475)
-        translate3d(calc(-100vw - 100px), calc(-100vh - 100px), 100px);
-      background-color: none;
-    }
-
-    100% {
-      opacity: 0;
-      -webkit-transform: scale(0.1) translate3d(-10000px, 0, 0);
-      transform: scale(0.1) translate3d(-10000px, 0, 0);
-      -webkit-transform-origin: right center;
-      transform-origin: right center;
-    }
+    animation: zoomOutLeft 5s forwards;
   }
 }

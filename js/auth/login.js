@@ -1,4 +1,5 @@
 // js/auth/login.js
+
 import { auth, db } from "../core/firebase.js";
 import {
   signInWithEmailAndPassword,
@@ -13,7 +14,6 @@ import {
 
 const form = document.getElementById("login-form");
 const guestBtn = document.getElementById("guest-login-btn");
-
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("email-error");
@@ -37,13 +37,16 @@ function extractLoginValues(e) {
 }
 
 function showInvalidEmailError() {
-  if (emailError)
+  if (emailError) {
     emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
+  }
   if (emailInput) emailInput.classList.add("error");
 }
 
 function showEmptyPasswordError() {
-  if (passwordError) passwordError.textContent = "Bitte gib ein Passwort ein.";
+  if (passwordError) {
+    passwordError.textContent = "Bitte gib ein Passwort ein.";
+  }
   if (passwordInput) passwordInput.classList.add("error");
 }
 
@@ -59,28 +62,38 @@ async function performLogin(email, password) {
 
 function handleLoginError(err) {
   console.error(err);
+
   switch (err.code) {
     case "auth/user-not-found":
-      if (emailError)
+      if (emailError) {
         emailError.textContent = "Diese Email ist nicht registriert.";
+      }
       if (emailInput) emailInput.classList.add("error");
       break;
+
     case "auth/invalid-email":
       showInvalidEmailError();
       break;
+
     case "auth/wrong-password":
-      if (passwordError) passwordError.textContent = "Falsches Passwort.";
+      if (passwordError) {
+        passwordError.textContent = "Falsches Passwort.";
+      }
       if (passwordInput) passwordInput.classList.add("error");
       break;
+
     case "auth/too-many-requests":
-      if (passwordError)
+      if (passwordError) {
         passwordError.textContent =
           "Zu viele fehlgeschlagene Versuche. Bitte später erneut versuchen.";
+      }
       break;
+
     default:
-      if (passwordError)
+      if (passwordError) {
         passwordError.textContent =
           "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.";
+      }
       break;
   }
 }
@@ -91,16 +104,16 @@ async function handleFormSubmit(e) {
 
   if (!validateLoginInputs()) return;
 
-const { email, password } = extractLoginValues(e);
+  const { email, password } = extractLoginValues(e);
 
-let hasError = false;
+  let hasError = false;
 
-if (!password) {
-  showEmptyPasswordError();
-  hasError = true;
-}
+  if (!password) {
+    showEmptyPasswordError();
+    hasError = true;
+  }
 
-if (hasError) return;
+  if (hasError) return;
 
   try {
     await performLogin(email, password);
@@ -116,11 +129,13 @@ async function handleGuestLogin() {
 
   try {
     const cred = await signInAnonymously(auth);
+
     await update(ref(db, `guests/${cred.user.uid}`), {
       createdAt: serverTimestamp(),
       lastLoginAt: serverTimestamp(),
       isAnonymous: true,
     });
+
     showLoginToast("Als Gast angemeldet.");
     window.location.href = "/index.html";
   } catch (err) {
@@ -140,7 +155,6 @@ setTimeout(() => {
   const loader = document.querySelector(".loader");
   if (loader) loader.style.display = "none";
 }, 1000);
-
 
 function validateLoginInputs() {
   let valid = true;
