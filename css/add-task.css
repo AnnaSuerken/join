@@ -298,6 +298,11 @@
   align-items: center;
 }
 
+.task-category {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+}
+
 /* Responsive Design */
 
 @media (max-width: 1340px) {
@@ -419,7 +424,6 @@
   .assignee-select,
   .assignee-options {
     width: 396px;
-    position: absolute;
   }
 
   .add-task-footer {
