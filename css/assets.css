@@ -76,6 +76,9 @@ article {
   .dropdown-content {
     right: 0 !important;
   }
+    button {
+    width: 180px;
+  }
 }
 
 @media (max-width: 600px) {
