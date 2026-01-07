@@ -180,21 +180,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: auto;
 }
 
 .task-overlay {
   background-color: #ffffff;
   border-radius: 30px;
   padding: 16px;
-  height: 90%;
-  width: 80%;
-  overflow: scroll;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .task-name-open {
@@ -209,10 +205,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 74px;
-  margin-right: 74px;
-  margin-top: 64px;
-  width: 80%;
+  margin-top: 32px;
+  width: 100%;
 }
 
 .task-overlay-header h1 {
@@ -229,6 +223,7 @@
   background-color: #eeeeee;
   border-radius: 100%;
 }
+
 
 .task-overlay-content {
   display: flex;
@@ -290,10 +285,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 74px;
-  margin-right: 74px;
   margin-bottom: 32px;
-  width: 80%;
+  width: 100%;
 }
 
 .task-overlay-footer span {
@@ -301,15 +294,6 @@
 }
 
 /* RESPONSIVE */
-@media (max-width: 1550px) {
-  .task-overlay-header {
-    width: 65%;
-  }
-
-  .task-overlay-open {
-    width: 60% !important;
-  }
-}
 
 @media (max-width: 1340px) {
   .task-overlay-content-right input,
@@ -350,9 +334,12 @@
 }
 
 @media (max-width: 900px) {
+
   .task-overlay {
+    height: 80%;
     padding-bottom: 100px;
   }
+
   .task-overlay-content-right input,
   .task-overlay-content-left select,
   .task-overlay-content-right textarea {
@@ -361,7 +348,7 @@
 
   .task-overlay-footer {
     justify-content: flex-end;
-    width: 50%;
+    padding-bottom: 100px;
   }
 
   .task-overlay-footer div {
@@ -370,7 +357,7 @@
     gap: 32px;
     justify-content: flex-end;
     position: fixed;
-    bottom: 100px;
+    bottom: 180px;
   }
   .task-overlay-content-right input,
   .task-overlay-content-left select,
@@ -471,10 +458,6 @@
     align-items: center;
   }
 
-  .task-overlay {
-    width: 100%;
-  }
-
   .task-overlay-header {
     margin-left: 16px;
     margin-right: 16px;
@@ -486,7 +469,7 @@
     font-size: 56px;
   }
 
-  .task-overlay-content {
+  .add-task-overlay-content {
     margin-left: 16px;
     margin-right: 16px;
     align-items: center;
@@ -503,11 +486,9 @@
   .subtask-list,
   .subtask-item {
     max-width: 396px;
-    width: auto !important;
   }
   .task-overlay-content-right textarea {
     min-width: 300px;
-    width: auto !important;
   }
   .priority-container {
     justify-content: space-between;
@@ -534,7 +515,7 @@
 
   .task-overlay-footer {
     justify-content: center;
-    width: 80%;
+    width: 100%;
   }
 
   .task-overlay-footer div {

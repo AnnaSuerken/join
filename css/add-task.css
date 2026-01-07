@@ -9,7 +9,7 @@
 
 .add-task-content {
   display: flex;
-  gap: 48px;
+  gap: 32px;
   margin-top: 32px;
 }
 
@@ -305,6 +305,10 @@
   align-items: center;
 }
 
+.pos-absolute {
+  position: absolute;
+}
+
 .task-category {
   font-family: "Inter", sans-serif;
   font-size: 16px;
@@ -376,7 +380,7 @@
   }
 
   .add-task-footer {
-    width: 80%;
+    width: 100%;
   }
 }
 
@@ -437,7 +441,7 @@
     width: 100%;
     flex-direction: column;
     margin-top: 0;
-    padding-bottom: 100px;
+    padding-bottom: 150px;
   }
 
   .add-task-footer div {
@@ -484,6 +488,7 @@
 
   .priority-container {
     flex-direction: unset;
+    gap: 10px;
   }
 
   .priority-btn {
