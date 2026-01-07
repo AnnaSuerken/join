@@ -16,7 +16,6 @@ const TASKS_ROOT = "/board";
 const CONTACTS_ROOT = "/contacts";
 const COLS = ["todo", "inprogress", "await", "done"];
 
-/* ---------- UI: Add-Task Overlay open/close ---------- */
 
 window.currentTaskColumn = window.currentTaskColumn || "todo";
 
@@ -155,7 +154,6 @@ searchInput?.addEventListener("input", render);
 
 /* ---------- Task-Karte ---------- */
 function taskCard(task) {
-  // ✅ Safety: ohne id keine Karte (verhindert /undefined writes)
   if (!task?.id) {
     console.warn("Task without id skipped:", task);
     return document.createElement("div");

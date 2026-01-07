@@ -149,7 +149,6 @@ function wireSubtaskToggleHandler() {
         doneCount,
         totalCount
       );
-      // Board-Render übernimmt der onData-Listener in board.js
     });
 }
 
@@ -180,5 +179,7 @@ detailDeleteBtn?.addEventListener("click", async (e) => {
   const { id } = currentDetail || {};
   if (!id) return;
   await delTask(id);
-  closeDetailOverlay();
+  detailCloseBtn?.click();
 });
+
+window.closeDetailOverlay = closeDetailOverlay;
