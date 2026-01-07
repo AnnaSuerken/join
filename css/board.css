@@ -197,6 +197,10 @@
   align-items: center;
 }
 
+.task-name-open {
+  width: auto;
+}
+
 .task-overlay::-webkit-scrollbar {
   width: 0px;
 }

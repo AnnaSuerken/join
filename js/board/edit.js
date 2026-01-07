@@ -97,6 +97,7 @@ document.addEventListener("click", (e) => {
 
 function toggleEditAssigneeDropdown(open) {
   editAssigneeOptions.classList.toggle("d_none", !open);
+  document.getElementById("edit-assignee-list").classList.toggle("d_none", open);
   editAssigneeSelect.setAttribute("aria-expanded", String(open));
 }
 
