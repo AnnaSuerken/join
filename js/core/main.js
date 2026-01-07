@@ -130,12 +130,6 @@ function hideToast(toast) {
   setTimeout(() => toast.classList.add("d_none"), 250);
 }
 
-function hideLoadingOverlay() {
-  const overlay = document.getElementById("loading-overlay");
-  if (!overlay) return;
-  setTimeout(() => overlay.classList.add("hidden"), 700);
-}
-
 function guardProtectedPages() {
   const p = window.location.pathname;
   const publicPages = [
@@ -147,15 +141,13 @@ function guardProtectedPages() {
   ];
   if (publicPages.includes(p)) return;
 
-  // hier kannst du stattdessen requireAuth aus auth-guard nutzen
   (window.requireAuth || requireAuthLocal)();
 }
 
 addEventListener("load", () => {
+  guardProtectedPages();
   preventEnterSubmit();
   loadNameHeader();
-  hideLoadingOverlay();
-  guardProtectedPages();
 });
 
 setupGlobalNavClicks();
