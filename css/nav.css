@@ -18,6 +18,14 @@
   padding: 8px 14px;
   border-radius: 8px;
   transition: background 0.2s ease, color 0.2s ease;
+  justify-content: center;
+}
+
+.nav-bar-icons {
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .nav-bar button:hover {

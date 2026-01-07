@@ -36,16 +36,24 @@
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
         <section class="nav-bar">
           <button id="summary">
-            <img src="./assets/icons/summary.svg" alt="" />Summary
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/summary.svg" alt="" />Summary
+            </div>
           </button>
           <button id="add-task">
-            <img src="./assets/icons/addtask.svg" alt="" />Add Task
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/addtask.svg" alt="" />Add Task
+            </div>
           </button>
           <button class="nav-bar-button-active">
-            <img src="./assets/icons/board.svg" alt="" />Board
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/board.svg" alt="" />Board
+            </div>
           </button>
           <button id="contacts">
-            <img src="./assets/icons/contacts.svg" alt="" />Contacts
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/contacts.svg" alt="" />Contacts
+            </div>
           </button>
         </section>
         <div class="nav-bar-links">
@@ -266,26 +274,26 @@
                   </div>
 
                   <label>Assigned to</label>
-                <div class="assignee-wrapper">
-                <div
-                  id="assignee-select"
-                  class="assignee-select"
-                  tabindex="0"
-                  aria-haspopup="listbox"
-                  aria-expanded="false"
-                >
-                  <span class="assignee-select-label"
-                    >Select contacts to assign</span
-                  >
-                  <span class="chevron">▾</span>
-                </div>
-                <ul
-                  id="assignee-options"
-                  class="assignee-options d_none"
-                  role="listbox"
-                  aria-multiselectable="true"
-                ></ul>
-                </div>
+                  <div class="assignee-wrapper">
+                    <div
+                      id="assignee-select"
+                      class="assignee-select"
+                      tabindex="0"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                    >
+                      <span class="assignee-select-label"
+                        >Select contacts to assign</span
+                      >
+                      <span class="chevron">▾</span>
+                    </div>
+                    <ul
+                      id="assignee-options"
+                      class="assignee-options d_none"
+                      role="listbox"
+                      aria-multiselectable="true"
+                    ></ul>
+                  </div>
                   <div id="assignee-list" class="assignee-list"></div>
 
                   <label for="category"

@@ -29,23 +29,31 @@
         <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
         <section class="nav-bar">
           <button id="summary">
-            <img src="./assets/icons/summary.svg" alt="" />
-            Summary
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/summary.svg" alt="" />
+              Summary
+            </div>
           </button>
 
           <button class="nav-bar-button-active">
-            <img src="./assets/icons/addtask.svg" alt="" />
-            Add Task
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/addtask.svg" alt="" />
+              Add Task
+            </div>
           </button>
 
           <button id="board">
-            <img src="./assets/icons/board.svg" alt="" />
-            Board
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/board.svg" alt="" />
+              Board
+            </div>
           </button>
 
           <button id="contacts">
-            <img src="./assets/icons/contacts.svg" alt="" />
-            Contacts
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/contacts.svg" alt="" />
+              Contacts
+            </div>
           </button>
         </section>
 
@@ -58,26 +66,26 @@
       <section class="content-right">
         <header>
           <div class="header-right">
-          <img
-            src="./assets/imgs/join_logo_blue.svg"
-            alt="Logo"
-            class="logo-mobile"
-          />
-          <span class="tool-name">Kanban Projekt Management Tool</span>
-          <div class="header-content-right">
-            <a href="./help.html"
-              ><img src="./assets/icons/help.svg" alt="help" class="help-btn"
-            /></a>
-            <div class="dropdown">
-              <button id="dropbtn" class="dropbtn"></button>
-              <div class="dropdown-content">
-                <a href="./help.html">Help</a>
-                <a href="./legal-notice.html">Legal Notice</a>
-                <a href="./privacy-policy.html">Privacy Policy</a>
-                <a id="logout-btn">Logout</a>
+            <img
+              src="./assets/imgs/join_logo_blue.svg"
+              alt="Logo"
+              class="logo-mobile"
+            />
+            <span class="tool-name">Kanban Projekt Management Tool</span>
+            <div class="header-content-right">
+              <a href="./help.html"
+                ><img src="./assets/icons/help.svg" alt="help" class="help-btn"
+              /></a>
+              <div class="dropdown">
+                <button id="dropbtn" class="dropbtn"></button>
+                <div class="dropdown-content">
+                  <a href="./help.html">Help</a>
+                  <a href="./legal-notice.html">Legal Notice</a>
+                  <a href="./privacy-policy.html">Privacy Policy</a>
+                  <a id="logout-btn">Logout</a>
+                </div>
               </div>
-          </div>
-          </div>
+            </div>
           </div>
         </header>
 
@@ -175,24 +183,24 @@
 
                 <label>Assigned to</label>
                 <div class="assignee-wrapper">
-                <div
-                  id="assignee-select"
-                  class="assignee-select"
-                  tabindex="0"
-                  aria-haspopup="listbox"
-                  aria-expanded="false"
-                >
-                  <span class="assignee-select-label"
-                    >Select contacts to assign</span
+                  <div
+                    id="assignee-select"
+                    class="assignee-select"
+                    tabindex="0"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
                   >
-                  <span class="chevron">▾</span>
-                </div>
-                <ul
-                  id="assignee-options"
-                  class="assignee-options d_none"
-                  role="listbox"
-                  aria-multiselectable="true"
-                ></ul>
+                    <span class="assignee-select-label"
+                      >Select contacts to assign</span
+                    >
+                    <span class="chevron">▾</span>
+                  </div>
+                  <ul
+                    id="assignee-options"
+                    class="assignee-options d_none"
+                    role="listbox"
+                    aria-multiselectable="true"
+                  ></ul>
                 </div>
                 <div id="assignee-list" class="assignee-list"></div>
 
