@@ -1,10 +1,7 @@
-
 /* ---------- UI: Add-Task Overlay open/close ---------- */
 
 window.currentTaskColumn = window.currentTaskColumn || "todo";
 
-/**opens and closes add-task-overlay within board.html
- */
 function openAddTaskOverlay(btn) {
   const overlay = document.getElementById("add-task-overlay");
   const form = overlay?.querySelector(".task-form");
@@ -32,4 +29,8 @@ document.addEventListener("click", (e) => {
     return closeAddTaskOverlay();
 });
 
-
+addEventListener("click", (e) => {
+  if (e.target === document.getElementById("add-task-overlay")) {
+    closeAddTaskOverlay();
+  }
+});
