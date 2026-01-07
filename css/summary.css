@@ -206,6 +206,16 @@
 
 /* ========== RESPONSIVE ========= */
 
+@media (max-width: 1050px) {
+  .main-summary {
+    align-items: center;
+  }
+  main {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}
+
 @media (max-width: 1140px) {
   .summary-name {
     display: none;
@@ -230,13 +240,12 @@
 /* Smartphones */
 @media (max-width: 520px) {
   .main-summary {
-    padding: 10px;
+    padding: 0;
+    margin-bottom: 12px;
+    height: calc(100vh - 80px);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 80px);
-    padding: 0;
-    margin-bottom: 12px;
   }
 
   .summary-title {
@@ -257,60 +266,74 @@
   }
 
   .summary-title h1 {
-    font-size: 47px;
+    font-size: clamp(34px, 9vw, 47px);
   }
 
   .summary-title p {
-    font-size: 20px;
+    font-size: clamp(16px, 4.5vw, 20px);
+  }
+
+  .summary-wrapper {
+    width: 100%;
+    justify-content: center;
   }
 
   .summary-tasks {
     width: 100%;
+    max-width: 400px;
+    min-width: 300px;
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: clamp(8px, 2vw, 10px);
   }
 
   .summary-tasks h2 {
-    font-size: 47px;
+    font-size: clamp(34px, 9vw, 47px);
   }
 
   .summary-tasks p {
-    font-size: 16px;
+    font-size: clamp(14px, 4vw, 16px);
   }
 
   .summary-tasks h3 {
-    font-size: 16px;
+    font-size: clamp(14px, 4vw, 16px);
   }
 
+  /* ✅ MEDIUM: skaliert sauber zwischen 320px und 520px */
   .summary-task-medium {
-    width: 115px;
-    height: 110px;
-    margin: 10px;
+    width: clamp(20px, 39vw, 174px);
+    height: clamp(92px, 24vw, 110px);
+    margin: clamp(6px, 2vw, 10px);
+    padding: clamp(8px, 2.5vw, 16px);
   }
 
   .summary-task-medium img {
-    width: 40px;
+    width: clamp(28px, 9vw, 40px);
+    height: auto;
+    margin-right: clamp(6px, 2vw, 12px);
   }
 
+  /* ✅ BIG: skaliert sauber zwischen 320px und 520px */
   .summary-task-big {
-    width: 265px;
-    height: 110px;
-    padding: 0px;
-    margin: 10px;
-    gap: 20px;
+    width: clamp(300px, 92vw, 400px);
+    height: clamp(92px, 24vw, 110px);
+    margin: clamp(6px, 2vw, 10px);
+    padding: clamp(8px, 2vw, 16px);
+    gap: clamp(10px, 3vw, 20px);
   }
 
   .summary-task-big img {
-    width: 40px;
-    margin-left: 8px;
+    width: clamp(28px, 9vw, 40px);
+    height: auto;
+    margin-left: clamp(6px, 2vw, 8px);
   }
 
   .summary-task-big-split {
-    margin-left: 0px;
-    margin-right: 0px;
-    height: 68px;
+    height: clamp(56px, 16vw, 68px);
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .summary-task-big-left {
@@ -322,9 +345,9 @@
   }
 
   .summary-task-small {
-    width: 116px;
-    height: 116px;
-    padding: 0px;
-    margin: 0px;
+    width: clamp(94px, 28vw, 116px);
+    height: clamp(94px, 28vw, 116px);
+    padding: 0;
+    margin: 0;
   }
 }
