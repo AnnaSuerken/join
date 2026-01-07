@@ -27,7 +27,6 @@ export function setCurrentDetail(newDetail) {
 
 /* ---------- Close ---------- */
 export function closeDetailOverlay() {
-  
   document.body.classList.remove("board-overlay-open");
   currentDetail = { id: null, col: null, task: null };
 }
@@ -113,7 +112,7 @@ export async function openDetailOverlayById(id) {
   currentDetail = { id, col, task: { ...normalized, assignedDetailed } };
 
   renderDetail(currentDetail.task);
-  
+
   document.body.classList.add("board-overlay-open");
   wireSubtaskToggleHandler();
 }
@@ -149,7 +148,13 @@ function wireSubtaskToggleHandler() {
     });
 }
 
-async function saveSubtasksToFirebase(col, id, subtasks, doneCount, totalCount) {
+async function saveSubtasksToFirebase(
+  col,
+  id,
+  subtasks,
+  doneCount,
+  totalCount
+) {
   const updates = {};
   updates[`${col}/${id}/subtasks`] = subtasks;
   updates[`${col}/${id}/subtasksCompleted`] = doneCount;

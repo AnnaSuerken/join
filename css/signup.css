@@ -11,7 +11,6 @@ main {
   justify-content: space-between;
   margin-right: 77px;
   height: 202px;
-  max-width: 1920px;
 }
 
 .sign-up-div {
@@ -115,6 +114,10 @@ main {
 ------------------------------ */
 
 .sign-up-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,7 +220,6 @@ main {
   .logo-box-signup img {
     width: 64px;
   }
-
 }
 
 /* -----------------------------
@@ -251,22 +253,22 @@ main {
     margin-top: 32px;
   }
 
-.sign-up-div-mobile span {
-  font-size: 20px;
-  font-weight: 400;
-}
+  .sign-up-div-mobile span {
+    font-size: 20px;
+    font-weight: 400;
+  }
 
-.sign-up-div-mobile a {
-  background-color: #2a3647;
-  color: white;
-  font-weight: bold;
-  padding-top: 10px;
-  padding-right: 20px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  border-radius: 8px;
-  font-size: 21px;
-}
+  .sign-up-div-mobile a {
+    background-color: #2a3647;
+    color: white;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    border-radius: 8px;
+    font-size: 21px;
+  }
   .sign-up-box {
     width: 286px;
     padding: 0;
@@ -314,7 +316,7 @@ main {
   }
 
   .sign-up-btn-mobile {
-    margin-top:20px;
+    margin-top: 20px;
   }
 
   /* Mobile Loader Hintergrund dunkel */

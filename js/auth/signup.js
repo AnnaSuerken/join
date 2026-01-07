@@ -132,7 +132,6 @@ function getSignupFormValues() {
   };
 }
 
-
 function showSignupRunningToast() {
   if (typeof showToast === "function") {
     showToast("Registrierung läuft");
@@ -150,6 +149,7 @@ async function registerUser(email, pwd) {
 }
 
 async function saveUserProfile(user, displayName, email) {
+  showSignupRunningToast();
   await updateProfile(user, { displayName });
   await set(ref(db, `users/${user.uid}`), {
     uid: user.uid,
@@ -203,6 +203,7 @@ async function handleSignup() {
     const cred = await registerUser(email, pwd);
     await saveUserProfile(cred.user, displayName, email);
     redirectToLoginDelayed();
+    showSignupSuccessToast()
   } catch (err) {
     console.error(err);
     applySignupErrorToForm(err);

@@ -1,5 +1,4 @@
 // js/auth/login.js
-
 import { auth, db } from "../core/firebase.js";
 import {
   signInWithEmailAndPassword,
@@ -18,6 +17,19 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
+
+// ---- Toast Helpers ----
+function safeShowToast(message, isError = false) {
+  const fn =
+    typeof showToast === "function"
+      ? showToast
+      : typeof window !== "undefined" && typeof window.showToast === "function"
+        ? window.showToast
+        : null;
+
+  if (fn) fn(message, isError);
+}
+// ------------------------
 
 function clearErrors() {
   if (emailError) emailError.textContent = "";
@@ -50,12 +62,6 @@ function showEmptyPasswordError() {
   if (passwordInput) passwordInput.classList.add("error");
 }
 
-function showLoginToast(message, isError = false) {
-  if (typeof showToast === "function") {
-    showToast(message, isError);
-  }
-}
-
 async function performLogin(email, password) {
   return signInWithEmailAndPassword(auth, email, password);
 }
@@ -69,10 +75,12 @@ function handleLoginError(err) {
         emailError.textContent = "Diese Email ist nicht registriert.";
       }
       if (emailInput) emailInput.classList.add("error");
+      safeShowToast("Diese Email ist nicht registriert.", true);
       break;
 
     case "auth/invalid-email":
       showInvalidEmailError();
+      safeShowToast("Bitte gib eine gültige Email-Adresse ein.", true);
       break;
 
     case "auth/wrong-password":
@@ -80,6 +88,7 @@ function handleLoginError(err) {
         passwordError.textContent = "Falsches Passwort.";
       }
       if (passwordInput) passwordInput.classList.add("error");
+      safeShowToast("Falsches Passwort.", true);
       break;
 
     case "auth/too-many-requests":
@@ -87,6 +96,10 @@ function handleLoginError(err) {
         passwordError.textContent =
           "Zu viele fehlgeschlagene Versuche. Bitte später erneut versuchen.";
       }
+      safeShowToast(
+        "Zu viele Versuche. Bitte später erneut probieren.",
+        true
+      );
       break;
 
     default:
@@ -94,30 +107,55 @@ function handleLoginError(err) {
         passwordError.textContent =
           "Login fehlgeschlagen. Bitte überprüfe deine Eingaben.";
       }
+      safeShowToast("Login fehlgeschlagen. Bitte versuche es erneut.", true);
       break;
   }
+}
+
+function validateLoginInputs() {
+  let valid = true;
+
+  if (emailError) emailError.textContent = "";
+  if (passwordError) passwordError.textContent = "";
+  if (emailInput) emailInput.classList.remove("error");
+  if (passwordInput) passwordInput.classList.remove("error");
+
+  const emailVal = emailInput?.value?.trim() ?? "";
+  const pwdVal = passwordInput?.value?.trim() ?? "";
+
+  if (!emailVal) {
+    if (emailError) emailError.textContent = "Bitte E-Mail eingeben.";
+    if (emailInput) emailInput.classList.add("error");
+    valid = false;
+  } else if (!isValidEmail(emailVal)) {
+    showInvalidEmailError();
+    valid = false;
+  }
+
+  if (!pwdVal) {
+    if (passwordError) passwordError.textContent = "Bitte Passwort eingeben.";
+    if (passwordInput) passwordInput.classList.add("error");
+    valid = false;
+  }
+
+  return valid;
 }
 
 async function handleFormSubmit(e) {
   e.preventDefault();
   clearErrors();
 
-  if (!validateLoginInputs()) return;
+  if (!validateLoginInputs()) {
+    safeShowToast("Bitte überprüfe deine Eingaben.", true);
+    return;
+  }
 
   const { email, password } = extractLoginValues(e);
 
-  let hasError = false;
-
-  if (!password) {
-    showEmptyPasswordError();
-    hasError = true;
-  }
-
-  if (hasError) return;
-
   try {
     await performLogin(email, password);
-    showLoginToast("Erfolgreich angemeldet.");
+
+    safeShowToast("Erfolgreich angemeldet.");
     window.location.href = "/index.html";
   } catch (err) {
     handleLoginError(err);
@@ -136,16 +174,17 @@ async function handleGuestLogin() {
       isAnonymous: true,
     });
 
-    showLoginToast("Als Gast angemeldet.");
+    safeShowToast("Als Gast angemeldet.");
     window.location.href = "/index.html";
   } catch (err) {
     console.error(err);
-    showLoginToast("Gast-Login fehlgeschlagen.", true);
+    safeShowToast("Gast-Login fehlgeschlagen.", true);
   }
 }
 
 form?.addEventListener("submit", handleFormSubmit);
 guestBtn?.addEventListener("click", handleGuestLogin);
+
 
 onAuthStateChanged(auth, (user) => {
   if (user) window.location.href = "/index.html";
@@ -155,26 +194,3 @@ setTimeout(() => {
   const loader = document.querySelector(".loader");
   if (loader) loader.style.display = "none";
 }, 1000);
-
-function validateLoginInputs() {
-  let valid = true;
-
-  emailError.textContent = "";
-  passwordError.textContent = "";
-  emailInput.classList.remove("error");
-  passwordInput.classList.remove("error");
-
-  if (!emailInput.value.trim()) {
-    emailError.textContent = "Bitte E-Mail eingeben.";
-    emailInput.classList.add("error");
-    valid = false;
-  }
-
-  if (!passwordInput.value.trim()) {
-    passwordError.textContent = "Bitte Passwort eingeben.";
-    passwordInput.classList.add("error");
-    valid = false;
-  }
-
-  return valid;
-}
