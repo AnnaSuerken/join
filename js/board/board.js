@@ -123,7 +123,11 @@ function render() {
     const colEl = colsEl[c];
     if (!colEl) continue;
 
-    const list = Object.values(data[c] || {});
+    // ✅ WICHTIG: Firebase-Key behalten und als fallback-id nutzen
+    const list = Object.entries(data[c] || {}).map(([id, t]) => ({
+      ...t,
+      id: t?.id || id,
+    }));
 
     const filtered = list
       .filter((t) => {
@@ -151,6 +155,12 @@ searchInput?.addEventListener("input", render);
 
 /* ---------- Task-Karte ---------- */
 function taskCard(task) {
+  // ✅ Safety: ohne id keine Karte (verhindert /undefined writes)
+  if (!task?.id) {
+    console.warn("Task without id skipped:", task);
+    return document.createElement("div");
+  }
+
   let completed = Number.isFinite(task.subtasksCompleted)
     ? task.subtasksCompleted
     : 0;
@@ -200,12 +210,26 @@ function taskCard(task) {
 
   /* Desktop Drag&Drop */
   el.addEventListener("dragstart", (e) => {
+    const id = task.id || el.dataset.id;
+    if (!id) {
+      e.preventDefault();
+      return;
+    }
+
     el.classList.add("dragging");
-    const id = task.id;
     const fromCol = findColumnOfTask(id);
+
+    // ✅ Guard
+    if (!fromCol) {
+      e.preventDefault();
+      el.classList.remove("dragging");
+      return;
+    }
+
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", JSON.stringify({ id, fromCol }));
   });
+
   el.addEventListener("dragend", () => el.classList.remove("dragging"));
 
   /* Touch Drag&Drop */
@@ -213,6 +237,7 @@ function taskCard(task) {
     let currentZone = null;
 
     const onTouchStart = () => {
+      if (!task.id) return;
       el.classList.add("dragging");
       el.dataset.fromCol = findColumnOfTask(task.id) || "";
     };
@@ -246,7 +271,7 @@ function taskCard(task) {
       const fromCol = el.dataset.fromCol;
       const zone = currentZone;
       currentZone = null;
-      if (!zone || !fromCol) return;
+      if (!zone || !fromCol || !task.id) return;
 
       const toCol = getZoneStatus(zone);
       if (!toCol) return;
@@ -268,6 +293,7 @@ function taskCard(task) {
         updates[`${fromCol}/${task.id}`] = null;
         updates[`${toCol}/${task.id}`] = {
           ...taskObj,
+          id: task.id, // ✅ sicherstellen
           order: orderMap[task.id],
         };
 
@@ -286,11 +312,9 @@ function taskCard(task) {
   // Klick -> Detail (✅ Animation starten + dann Detail befüllen)
   el.addEventListener("click", async () => {
     if (el.classList.contains("dragging")) return;
+    if (!task.id) return;
 
-    // Animation (kommt aus add-task.js / global)
     window.openTaskDetailOverlay?.();
-
-    // Inhalt laden/befüllen (kommt aus detail.js)
     await openDetailOverlayById(task.id);
   });
 
@@ -309,13 +333,18 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
     zone.classList.add("over");
   });
   zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+
   zone.addEventListener("drop", async (e) => {
     e.preventDefault();
     zone.classList.remove("over");
 
     const payload = safeParse(e.dataTransfer.getData("text/plain"));
     if (!payload) return;
+
     const { id, fromCol } = payload;
+
+    // ✅ Guards: niemals ohne id / fromCol schreiben
+    if (!id || !fromCol) return;
 
     const toCol = getZoneStatus(zone);
     if (!toCol) return;
@@ -324,6 +353,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
     const draggedEl = document.querySelector(
       `.task[data-id="${CSS.escape(id)}"]`
     );
+
     if (draggedEl) {
       if (afterEl == null) zone.appendChild(draggedEl);
       else zone.insertBefore(draggedEl, afterEl);
@@ -336,7 +366,7 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
       const orderMap = buildOrderMapForZone(zone, toCol, id);
       const updates = {};
       updates[`${fromCol}/${id}`] = null;
-      updates[`${toCol}/${id}`] = { ...taskObj, order: orderMap[id] };
+      updates[`${toCol}/${id}`] = { ...taskObj, id, order: orderMap[id] };
 
       await dbApi.updateData(TASKS_ROOT, updates);
       await persistColumnOrder(zone, toCol);
@@ -350,18 +380,29 @@ document.querySelectorAll(".dropzone").forEach((zone) => {
 function buildOrderMapForZone(zone, toCol, draggedId) {
   const children = [...zone.querySelectorAll(".task")];
   const orderMap = {};
-  children.forEach((el, index) => (orderMap[el.dataset.id] = index));
-  if (!(draggedId in orderMap)) orderMap[draggedId] = children.length;
+  children.forEach((el, index) => {
+    const id = el.dataset.id;
+    if (!id) return;
+    orderMap[id] = index;
+  });
+  if (draggedId && !(draggedId in orderMap))
+    orderMap[draggedId] = children.length;
   return orderMap;
 }
 
 async function persistColumnOrder(zone, col) {
   const children = [...zone.querySelectorAll(".task")];
   const updates = {};
-  children.forEach(
-    (el, index) => (updates[`${col}/${el.dataset.id}/order`] = index)
-  );
-  if (Object.keys(updates).length) await dbApi.updateData(TASKS_ROOT, updates);
+
+  children.forEach((el, index) => {
+    const id = el.dataset.id;
+    if (!id) return; // ✅ verhindert /undefined/order
+    updates[`${col}/${id}/order`] = index;
+  });
+
+  if (Object.keys(updates).length) {
+    await dbApi.updateData(TASKS_ROOT, updates);
+  }
 }
 
 function getZoneStatus(zoneEl) {
@@ -394,6 +435,7 @@ function getDragAfterElement(container, y) {
 }
 
 function findColumnOfTask(id) {
+  if (!id) return null;
   for (const c of COLS) if (data[c] && data[c][id]) return c;
   return null;
 }

@@ -35,6 +35,11 @@ detailCloseBtn?.addEventListener("click", closeDetailOverlay);
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeDetailOverlay();
 });
+addEventListener("click", (e) => {
+  if (e.target === detailSection) {
+    closeDetailOverlay();
+  }
+});
 
 /* ---------- Column / Data ---------- */
 function findColumnOfTask(id) {
@@ -176,5 +181,4 @@ detailDeleteBtn?.addEventListener("click", async (e) => {
   if (!id) return;
   await delTask(id);
   closeDetailOverlay();
-  // onData-Listener in board.js aktualisiert die Spalten
 });

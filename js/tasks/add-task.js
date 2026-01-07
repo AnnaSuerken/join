@@ -55,10 +55,12 @@ function buildAssigneeDropdown() {
 
   list.innerHTML = contactsData.map(buildAssigneeOptionHtml).join("");
   trigger.setAttribute("aria-expanded", "false");
+
   if (!trigger._listenersAdded) {
     wireAssigneeDropdown(trigger, list);
     trigger._listenersAdded = true;
   }
+
   syncOptionSelectedStates();
   buildAssigneeDropdown._sync = syncOptionSelectedStates;
 }
@@ -171,14 +173,16 @@ function toggleAssigneeByIndex(i) {
 
 /* ---------- Priority ---------- */
 
-let currentPriority = "null";
+// ✅ konsistent: null statt "null" string
+let currentPriority = null;
 
 function setPriority(status) {
   const priorities = ["urgent", "medium", "low"];
 
+  // Toggle off
   if (currentPriority === status) {
     resetAllPriorities(priorities);
-    currentPriority = "null";
+    currentPriority = null;
     return;
   }
 
@@ -194,13 +198,14 @@ function resetAllPriorities(priorities) {
   });
 }
 
+// (Dein UI-Startzustand – ich lasse deine Logik drin)
 function resetStartPriorities() {
-    document.getElementById('prio-low')?.classList.remove("d_none");
-    document.getElementById('prio-urgent')?.classList.remove("d_none");
-    document.getElementById('prio-medium')?.classList.add("d_none");
-    document.getElementById('prio-urgent-active')?.classList.add("d_none");
-    document.getElementById('prio-low-active')?.classList.add("d_none");
-    document.getElementById('prio-medium-active')?.classList.remove("d_none");
+  document.getElementById("prio-low")?.classList.remove("d_none");
+  document.getElementById("prio-urgent")?.classList.remove("d_none");
+  document.getElementById("prio-medium")?.classList.add("d_none");
+  document.getElementById("prio-urgent-active")?.classList.add("d_none");
+  document.getElementById("prio-low-active")?.classList.add("d_none");
+  document.getElementById("prio-medium-active")?.classList.remove("d_none");
 }
 
 function activateSelectedPriority(status) {
@@ -258,7 +263,7 @@ function getAssigneeNames() {
 function createPayload(formElements, assigneeNames) {
   return {
     title: formElements.taskTitle.value,
-    id: "",
+    id: "", // wird nach push auf key gesetzt
     secondline: formElements.taskDescription?.value || "",
     deadline: formElements.taskDueDate.value,
     assignedContacts: assigneeNames,
@@ -268,22 +273,26 @@ function createPayload(formElements, assigneeNames) {
       taskCategoryColor.find((c) => c.name === formElements.taskCategory?.value)
         ?.color || "",
     subtask: subtasks,
-    priority: currentPriority,
+    priority: currentPriority || "low", // ✅ niemals null in DB, falls du Icons erwartest
   };
 }
 
-async function progressTablePush(payload, currentTaskColumn, form) {
-  switch (currentTaskColumn) {
+async function progressTablePush(payload, col, form) {
+  switch (col) {
     case "todo":
     case "inprogress":
     case "await":
     case "done": {
-      const key = await dbApi.pushData(`/board/${currentTaskColumn}`, payload);
-      await dbApi.updateData(`/board/${currentTaskColumn}/${key}`, { id: key });
+      const key = await dbApi.pushData(`/board/${col}`, payload);
+      await dbApi.updateData(`/board/${col}/${key}`, { id: key });
+
       showToast("Task was added.");
       clearTask(form);
-      break;
+      return key;
     }
+    default:
+      console.warn("Unknown column:", col);
+      return null;
   }
 }
 
@@ -294,9 +303,13 @@ async function createTask(form) {
   const assigneeNames = getAssigneeNames();
   const payload = createPayload(formElements, assigneeNames);
 
-  progressTablePush(payload, currentTaskColumn || "todo", form);
-  clearTask(form);
-  window.location.href = "./board.html"
+  const col = window.currentTaskColumn || "todo";
+
+  await progressTablePush(payload, col, form);
+
+  setTimeout(() => {
+    window.location.href = "/board.html";
+  }, 1000);
 }
 
 /* ---------- Form-Reset ---------- */
@@ -343,6 +356,7 @@ function clearTask(form) {
 
   const { taskTitle, taskDescription, taskDueDate, taskCategory } =
     getTaskFormElements(form);
+
   const subtaskInput = document.getElementById("subtask");
   const subtaskList = document.getElementById("subtask-list");
   const addBtn = document.getElementById("subtask-add-btn");
@@ -403,6 +417,7 @@ addEventListener("load", () => {
     const day = new Date();
     dayRef.min = day.toISOString().split("T")[0];
   }
+
   wireSubtaskEvents();
   renderSubtasks();
   wireEditPriorityButtons();
