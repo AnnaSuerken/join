@@ -384,6 +384,129 @@
   }
 }
 
+/* =========================================================
+   Center main content (<= 1050px) + fluid inputs to 320px
+   ========================================================= */
+
+/* ab/bis 1050px: Inhalt in der Mitte */
+@media (max-width: 1050px) {
+  main {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .add-task-section {
+    width: 100%;
+    max-width: 920px; /* kannst du anpassen (z.B. 860/900/960) */
+    margin: 0 auto;
+    padding: 0 24px; /* Luft links/rechts */
+    box-sizing: border-box;
+    height: calc(100vh + 280px);
+  }
+
+  /* Form darf flexibel werden */
+  .add-task-content {
+    width: 100%;
+  }
+
+  .add-task-section h1 {
+    justify-content: center;
+    display: flex;
+  }
+
+  .add-task-footer {
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .task-overlay-board {
+    height: 80%;
+    width: 80%;
+  }
+
+  .task-overlay-footer-board {
+    width: 100%;
+    justify-content: center !important;
+    display: flex;
+    gap: 12px !important;
+  }
+
+  .task-form-board {
+    height: 80%;
+    overflow: scroll;
+  }
+  .task-form-board::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  .task-overlay-footer-board {
+    padding-bottom: 80px !important;
+    margin-bottom: 0px !important;
+    position: relative !important;
+  }
+
+  .task-overlay-footer-board div {
+    position: fixed !important;
+    bottom: 120px !important;
+  }
+
+  /* alle Felder nicht mehr fest, sondern responsiv */
+  .add-task-content textarea,
+  .add-task-content-right input,
+  .add-task-content-left input,
+  .add-task-content-left select,
+  .assignee-wrapper,
+  .assignee-select,
+  .assignee-options,
+  .subtask-input-row,
+  .subtask-list,
+  .priority-container {
+    width: 100% !important;
+    max-width: 440px; /* Desktop-Optik bleibt, aber kann schrumpfen */
+    box-sizing: border-box;
+  }
+
+  /* Trennlinie optional ausblenden, damit’s schöner zentriert wirkt */
+  .divider {
+    display: none;
+  }
+
+  /* Spalten untereinander (sonst wird’s schnell gequetscht) */
+  .add-task-content {
+    flex-direction: column;
+    align-items: center; /* Form-Inhalte mittig innerhalb der Section */
+  }
+
+  .add-task-content-right,
+  .add-task-content-left {
+    width: 100%;
+    max-width: 440px;
+  }
+}
+
+/* bis 320px: alles bleibt innerhalb des Screens */
+@media (max-width: 320px) {
+  .add-task-section {
+    padding: 0 12px;
+  }
+
+  /* kleine Sicherheitskante gegen Overflows */
+  .priority-btn,
+  .priority-btn-urgent,
+  .priority-btn-medium,
+  .priority-btn-low {
+    font-size: 14px;
+    padding: 10px 8px;
+  }
+
+  .add-task-footer div {
+    gap: 12px;
+  }
+}
+
 @media (max-width: 900px) {
   .add-task-content-right,
   .add-task-content-left {
@@ -429,9 +552,12 @@
 
   .subtask-list {
     width: 396px;
-    height: auto;
+    height: 60px;
   }
 
+  .subtask-actions {
+    width: 15%;
+  }
   .assignee-select,
   .assignee-options {
     width: 396px;
