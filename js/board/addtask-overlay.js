@@ -10,7 +10,6 @@ function openAddTaskOverlay(btn) {
   window.getContactsData?.();
   if (form) window.clearTask?.(form);
   if (btn.dataset.column) window.currentTaskColumn = btn.dataset.column;
-  console.log(window.currentTaskColumn);
 }
 
 function closeAddTaskOverlay() {

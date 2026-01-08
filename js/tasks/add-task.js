@@ -307,9 +307,13 @@ async function createTask(form) {
 
   await progressTablePush(payload, col, form);
 
-  setTimeout(() => {
-    window.location.href = "/board.html";
-  }, 1000);
+  if (window.location.pathname.endsWith("board.html")) {
+    document.getElementById("close-btn")?.click();
+  } else {
+    setTimeout(() => {
+      window.location.href = "/board.html";
+    }, 1000);
+  }
 }
 
 /* ---------- Form-Reset ---------- */

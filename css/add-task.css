@@ -301,6 +301,7 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
+  min-height: 32px;
   max-width: 440px;
   align-items: center;
 }
@@ -323,6 +324,11 @@
 
   .add-task-content textarea {
     width: 290px;
+  }
+
+  .assignee-options-board {
+    height: 100px;
+    position: absolute;
   }
 
   .add-task-content-right input {
