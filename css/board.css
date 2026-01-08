@@ -224,7 +224,6 @@
   border-radius: 100%;
 }
 
-
 .task-overlay-content {
   display: flex;
   gap: 48px;
@@ -334,7 +333,6 @@
 }
 
 @media (max-width: 900px) {
-
   .task-overlay {
     height: 80%;
     padding-bottom: 100px;
@@ -394,6 +392,7 @@
   .board-section {
     margin-left: 12px;
     margin-right: 12px;
+    height: 175vh !important;
   }
   .task-overlay-open {
     width: 90% !important;
@@ -456,6 +455,12 @@
   }
   .task-column {
     align-items: center;
+    overflow: scroll;
+    max-height: 331px;
+    overflow-x: hidden;
+  }
+  .task-column::-webkit-scrollbar {
+    width: 0px;
   }
 
   .task-overlay-header {
