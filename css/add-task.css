@@ -430,7 +430,7 @@
 
   .task-overlay-board {
     height: 80%;
-    width: 80%;
+    width: 60%;
   }
 
   .task-overlay-footer-board {
@@ -490,6 +490,12 @@
   .add-task-content-left {
     width: 100%;
     max-width: 440px;
+  }
+}
+
+@media (max-width: 720px) {
+  .task-overlay-board {
+    width: 80%;
   }
 }
 
@@ -665,5 +671,11 @@
 
   .add-task-footer img {
     width: 14px;
+  }
+}
+
+@media (max-width: 450px) {
+  .task-overlay-board {
+    width: 90%;
   }
 }
