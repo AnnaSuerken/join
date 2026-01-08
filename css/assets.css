@@ -79,6 +79,15 @@ article {
   button {
     width: 180px;
   }
+  #edit-close-btn {
+    width: auto;
+  }
+  .task-overlay-edit button {
+    width: auto;
+  }
+  .task-detail-overlay button {
+    width: auto;
+  }
 }
 
 @media (max-width: 600px) {

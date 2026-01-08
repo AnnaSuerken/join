@@ -183,7 +183,7 @@
 .edit-assignee-list {
   display: flex;
   flex-direction: column;
-  min-height: 140px;
+  min-height: 105px;
   overflow: scroll;
   height: 30px;
 }
@@ -232,7 +232,8 @@
   font-size: 0.75rem;
 }
 .assignee-options {
-  max-height: 220px;
+  max-height: 105px;
+  position: absolute;
   overflow: auto;
   border: 0px;
   border-radius: 0.5rem;
@@ -453,9 +454,12 @@ progress {
 #edit-assignee-list {
   display: flex;
   flex-direction: column;
-  margin-top: 6px;
-  max-height: 140px;
+  max-height: 105px;
   overflow: auto;
+}
+.edit-assignee-options {
+  position: relative !important;
+  max-height: 105px;
 }
 #edit-assignee-list::-webkit-scrollbar {
   width: 3px;
