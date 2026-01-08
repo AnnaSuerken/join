@@ -386,7 +386,7 @@
   }
 
   .add-task-footer {
-    width: 100%;
+    width: 90%;
   }
 }
 
@@ -580,7 +580,7 @@
     display: flex;
     gap: 20px;
     justify-content: flex-end;
-    position: fixed;
+    position: static;
     bottom: 100px;
   }
 }
