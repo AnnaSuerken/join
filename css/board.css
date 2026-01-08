@@ -206,7 +206,9 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 32px;
-  width: 100%;
+  width: 95%;
+  margin-left: 32px;
+  margin-right: 32px;
 }
 
 .task-overlay-header h1 {

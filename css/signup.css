@@ -220,6 +220,10 @@ main {
   .logo-box-signup img {
     width: 64px;
   }
+
+  .sign-up-box {
+    top: 45%;
+  }
 }
 
 /* -----------------------------
@@ -250,7 +254,8 @@ main {
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-top: 32px;
+    top: 290px;
+    position: relative;
   }
 
   .sign-up-div-mobile span {
@@ -283,6 +288,11 @@ main {
   .signup-input {
     padding-top: 15px;
     padding-right: 70px;
+  }
+
+  .sign-up-input-container {
+    margin-top: unset;
+    margin-bottom: unset;
   }
 
   .sign-up-box-footer {
