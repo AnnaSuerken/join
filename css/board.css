@@ -359,16 +359,7 @@
     position: fixed;
     bottom: 180px;
   }
-  .task-overlay-content-right input,
-  .task-overlay-content-left select,
-  .task-overlay-content-right textarea,
-  .subtask-list,
-  .subtask-item {
-    max-width: 396px;
-  }
-  .task-overlay-content-right textarea {
-    min-width: 396px;
-  }
+
   .priority-container {
     justify-content: space-between;
   }
@@ -486,16 +477,7 @@
     margin-left: 32px;
     margin-right: 32px;
   }
-  .task-overlay-content-right input,
-  .task-overlay-content-left select,
-  .task-overlay-content-right textarea,
-  .subtask-list,
-  .subtask-item {
-    max-width: 396px;
-  }
-  .task-overlay-content-right textarea {
-    min-width: 300px;
-  }
+ 
   .priority-container {
     justify-content: space-between;
   }

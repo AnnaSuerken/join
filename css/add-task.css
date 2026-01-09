@@ -5,12 +5,15 @@
 .add-task-section h1 {
   font-size: 61px;
   font-weight: 700;
+  margin-left: 32px;
 }
 
 .add-task-content {
   display: flex;
   gap: 32px;
   margin-top: 32px;
+  margin-right: 32px;
+  margin-left: 32px;
 }
 
 .add-task-content textarea {
@@ -223,7 +226,6 @@
 
 .assignee-wrapper {
   position: relative;
-  width: 440px;
 }
 
 .assignee-option {
@@ -390,6 +392,13 @@
   }
 }
 
+.task-overlay-footer-board {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
 /* =========================================================
    Center main content (<= 1050px) + fluid inputs to 320px
    ========================================================= */
@@ -398,11 +407,6 @@
 @media (max-width: 1050px) {
   main {
     display: flex;
-    justify-content: center;
-  }
-  .task-overlay-header {
-    display: flex;
-    align-items: center;
     justify-content: center;
   }
 
@@ -419,7 +423,7 @@
     padding: 0 24px; /* Luft links/rechts */
     box-sizing: border-box;
     height: calc(100vh + 280px);
-  }
+}
 
   .add-task-section h1 {
     justify-content: center;
@@ -444,8 +448,9 @@
 
   .task-overlay-footer-board {
     width: 100%;
-    justify-content: center !important;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 12px !important;
   }
 
@@ -455,16 +460,6 @@
   }
   .task-form-board::-webkit-scrollbar {
     width: 0px;
-  }
-
-  .task-overlay-footer-board {
-    margin-bottom: 0px !important;
-    position: relative !important;
-  }
-
-  .task-overlay-footer-board div {
-    position: fixed !important;
-    bottom: 120px !important;
   }
 
   .add-task-content textarea,
@@ -505,6 +500,7 @@
   }
 
   .close-btn {
+    top: 12%;
     right: 15%;
   }
 }
@@ -591,7 +587,7 @@
     margin-right: 16px;
   }
 
-  .add-task-content-right {
+  .add-task-content-right{
     width: 100%;
   }
 
@@ -600,18 +596,20 @@
     font-weight: 700;
   }
 
+
   .add-task-content textarea,
   .add-task-content-right input,
   .subtask-input-row,
   .assignee-select,
   .assignee-options {
-    width: 265px;
+    max-width: 265px;
   }
 
   .add-task-content-left input,
   .add-task-content-left select {
     width: 265px;
     padding: 12px;
+    max-width: 265px;
   }
 
   .priority-container {
@@ -653,10 +651,9 @@
   .add-task-footer button {
     width: unset !important;
     padding-left: 18px;
-    padding-right: 18px;
     padding-top: 8px;
     padding-bottom: 8px;
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .add-task-footer img {
@@ -670,13 +667,11 @@
   }
 
   .close-btn {
-    right: 10%;
+    right: 8%;
   }
 
   .add-task-footer-button {
     width: unset !important;
-    padding-left: 18px;
-    padding-right: 18px;
     padding-top: 8px;
     padding-bottom: 8px;
     font-size: 18px;
@@ -684,7 +679,7 @@
 }
 
 /* bis 320px: alles bleibt innerhalb des Screens */
-@media (max-width: 320px) {
+@media (max-width: 380px) {
   .add-task-section {
     padding: 0 12px;
   }
@@ -700,5 +695,13 @@
 
   .add-task-footer div {
     gap: 12px;
+  }
+
+  .add-task-content textarea,
+  .add-task-content-right input,
+  .subtask-input-row,
+  .assignee-select,
+  .assignee-options {
+    max-width: 265px;
   }
 }
