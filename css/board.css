@@ -320,6 +320,10 @@
   .task-table-colum {
     align-items: center;
   }
+  
+  .task-overlay-header {
+    width: unset;
+  }
 }
 
 @media (max-width: 1024px) {
