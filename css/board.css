@@ -85,7 +85,7 @@
   cursor: pointer;
   margin: 16px;
   max-width: 100%;
-  min-width: 200px;
+  width: 245px;
   touch-action: none;
   user-select: none;
 }
