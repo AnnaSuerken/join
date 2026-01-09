@@ -399,7 +399,17 @@
   main {
     display: flex;
     justify-content: center;
-    width: 100%;
+  }
+  .task-overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close-btn {
+    top: 18%;
+    right: 25%;
+    position: absolute;
   }
 
   .add-task-section {
@@ -411,21 +421,20 @@
     height: calc(100vh + 280px);
   }
 
-  /* Form darf flexibel werden */
-  .add-task-content {
-    width: 100%;
-  }
-
   .add-task-section h1 {
     justify-content: center;
     display: flex;
+    margin-top: 32px;
   }
 
   .add-task-footer {
+    display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
     width: 100%;
+    flex-direction: column;
+    margin-top: 0;
+    padding-bottom: 120px;
   }
 
   .task-overlay-board {
@@ -449,7 +458,6 @@
   }
 
   .task-overlay-footer-board {
-    padding-bottom: 80px !important;
     margin-bottom: 0px !important;
     position: relative !important;
   }
@@ -459,7 +467,6 @@
     bottom: 120px !important;
   }
 
-  /* alle Felder nicht mehr fest, sondern responsiv */
   .add-task-content textarea,
   .add-task-content-right input,
   .add-task-content-left input,
@@ -471,11 +478,10 @@
   .subtask-list,
   .priority-container {
     width: 100% !important;
-    max-width: 440px; /* Desktop-Optik bleibt, aber kann schrumpfen */
+    max-width: 440px;
     box-sizing: border-box;
   }
 
-  /* Trennlinie optional ausblenden, damit’s schöner zentriert wirkt */
   .divider {
     display: none;
   }
@@ -497,25 +503,9 @@
   .task-overlay-board {
     width: 80%;
   }
-}
 
-/* bis 320px: alles bleibt innerhalb des Screens */
-@media (max-width: 320px) {
-  .add-task-section {
-    padding: 0 12px;
-  }
-
-  /* kleine Sicherheitskante gegen Overflows */
-  .priority-btn,
-  .priority-btn-urgent,
-  .priority-btn-medium,
-  .priority-btn-low {
-    font-size: 14px;
-    padding: 10px 8px;
-  }
-
-  .add-task-footer div {
-    gap: 12px;
+  .close-btn {
+    right: 15%;
   }
 }
 
@@ -674,8 +664,41 @@
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 500px) {
   .task-overlay-board {
     width: 90%;
+  }
+
+  .close-btn {
+    right: 10%;
+  }
+
+  .add-task-footer-button {
+    width: unset !important;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 18px;
+  }
+}
+
+/* bis 320px: alles bleibt innerhalb des Screens */
+@media (max-width: 320px) {
+  .add-task-section {
+    padding: 0 12px;
+  }
+
+  /* kleine Sicherheitskante gegen Overflows */
+  .priority-btn,
+  .priority-btn-urgent,
+  .priority-btn-medium,
+  .priority-btn-low {
+    font-size: 14px;
+    padding: 10px 8px;
+  }
+
+  .add-task-footer div {
+    gap: 12px;
   }
 }
