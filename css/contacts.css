@@ -630,8 +630,6 @@
     display: none;
     width: 100%;
     padding: 24px 16px 16px;
-    height: calc(100vh - 180px);
-    overflow-y: auto;
   }
 
   /* Show detail page */
@@ -753,7 +751,7 @@
 
   #add-contact-overlay .modal-form-row {
     display: block;
-    margin-top: 76px;
+    margin-top: 50px;
     height: auto;
   }
 
@@ -843,7 +841,7 @@
 @media (max-width: 1050px) {
   .contacts-panel,
   .contacts-detail {
-    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+    padding-bottom:30px;
   }
 }
 
