@@ -49,22 +49,23 @@ const nameError = () => byId("contact-name-error");
 const emailError = () => byId("contact-email-error");
 const phoneError = () => byId("contact-phone-error");
 
+function clearFieldError(field) {
+  const map = {
+    name: { err: nameError(), input: byId("contact-name-input") },
+    email: { err: emailError(), input: byId("contact-email-input") },
+    phone: { err: phoneError(), input: byId("contact-phone-input") },
+  };
+  const item = map[field];
+  if (!item) return;
+
+  if (item.err) item.err.textContent = "";
+  item.input?.classList.remove("error");
+}
+
 function clearContactErrors() {
-  const nErr = nameError();
-  const eErr = emailError();
-  const pErr = phoneError();
-
-  const nIn = byId("contact-name-input");
-  const eIn = byId("contact-email-input");
-  const pIn = byId("contact-phone-input");
-
-  if (nErr) nErr.textContent = "";
-  if (eErr) eErr.textContent = "";
-  if (pErr) pErr.textContent = "";
-
-  nIn?.classList.remove("error");
-  eIn?.classList.remove("error");
-  pIn?.classList.remove("error");
+  clearFieldError("name");
+  clearFieldError("email");
+  clearFieldError("phone");
 }
 
 function isValidEmail(email) {
@@ -72,14 +73,18 @@ function isValidEmail(email) {
 }
 
 /**
- * Sehr einfache Phone-Validierung:
+ * Phone-Validierung (PFLICHTFELD):
  * - erlaubt: +, Zahlen, Leerzeichen, /, -, (), .
  * - mind. 6 Ziffern insgesamt
  */
 function isValidPhone(phone) {
   const p = String(phone || "").trim();
-  if (!p) return true; // optional
+  if (!p) return false; // ✅ Pflicht!
+
+  // erlaubte Zeichen
   if (!/^[0-9+\-()./\s]+$/.test(p)) return false;
+
+  // mind. 6 Ziffern
   const digits = (p.match(/\d/g) || []).length;
   return digits >= 6;
 }
@@ -123,7 +128,11 @@ function validateContactForm({ name, email, phone }) {
     ok = false;
   }
 
-  if (phone && !isValidPhone(phone)) {
+  // ✅ PHONE IST PFLICHT
+  if (!phone) {
+    showPhoneError("Bitte gib eine Telefonnummer ein.");
+    ok = false;
+  } else if (!isValidPhone(phone)) {
     showPhoneError("Bitte gib eine gültige Telefonnummer ein.");
     ok = false;
   }
@@ -397,13 +406,13 @@ function attachLegacyOverlayHandlers() {
       if (e.target === overlay) closeOverlayLegacy();
     });
 
-  // Optional: beim Tippen Errors sofort entfernen
+  // ✅ Nur das jeweilige Feld löscht seinen Fehler
   const nIn = byId("contact-name-input");
   const eIn = byId("contact-email-input");
   const pIn = byId("contact-phone-input");
-  [nIn, eIn, pIn].forEach((el) => {
-    el?.addEventListener("input", () => clearContactErrors());
-  });
+  nIn?.addEventListener("input", () => clearFieldError("name"));
+  eIn?.addEventListener("input", () => clearFieldError("email"));
+  pIn?.addEventListener("input", () => clearFieldError("phone"));
 }
 
 function attachModernHandlers() {
