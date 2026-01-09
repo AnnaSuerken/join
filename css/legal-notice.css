@@ -121,4 +121,8 @@ h2 {
     font-size: 47px;
     margin-right: 32px;
   }
+
+  .doc-wrap{
+    margin-left: 32px;
+  }
 }
