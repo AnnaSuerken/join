@@ -63,7 +63,7 @@
   flex-direction: column;
   max-height: calc(100vh - 393px);
   overflow-y: auto;
-  overflow-x: hidden;
+  
   padding-bottom: 8px;
   display: flex;
   align-items: center;
@@ -453,7 +453,7 @@
     align-items: center;
     overflow: scroll;
     max-height: 331px;
-    overflow-x: hidden;
+    
   }
   .task-column::-webkit-scrollbar {
     width: 0px;

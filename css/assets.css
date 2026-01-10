@@ -1,3 +1,5 @@
+/*  GLOBAL BASICS */
+
 * {
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
@@ -5,17 +7,17 @@
   margin: 0;
 }
 
-body {
-  height: 100vh;
-  background-color: #f6f7f8;
-}
-
 html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  
   overflow-y: auto;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #f6f7f8;
 }
 
 a {
@@ -37,6 +39,12 @@ button {
   border-radius: 8px;
   font-size: 21px;
   cursor: pointer;
+  
+}
+
+
+.btn-w-180 {
+  width: 180px;
 }
 
 main {
@@ -70,30 +78,31 @@ article {
   position: relative;
 }
 
-/* Tablets quer / kleine Laptops */
+/* RESPONSIVE */
 
+/* Tablets kleine Laptops */
 @media (max-width: 900px) {
   .dropdown-content {
     right: 0 !important;
   }
-  button {
-    width: 180px;
-  }
+
+  
+
   #edit-close-btn {
     width: auto;
   }
+
   .task-overlay-edit button {
     width: auto;
   }
+
   .task-detail-overlay button {
     width: auto;
   }
 }
 
 @media (max-width: 600px) {
-  button {
-    width: 180px;
-  }
+  
 }
 
 @media (max-width: 430px) {
