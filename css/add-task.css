@@ -16,7 +16,7 @@
   margin-left: 32px;
 }
 
-.add-task-content textarea {
+.add-task-content-right textarea {
   width: 440px;
   height: 120px;
   border: solid 0.5px #d1d1d1;
@@ -34,7 +34,7 @@
 
 .add-task-content-right input,
 .add-task-content-left input,
-.select {
+.task-category {
   width: 440px;
   padding: 12px;
   border: solid 0.5px #d1d1d1;
@@ -324,7 +324,7 @@
     gap: 15px;
   }
 
-  .add-task-content textarea {
+  .add-task-content-right textarea {
     width: 290px;
   }
 
@@ -343,11 +343,6 @@
   }
 
   .subtask-input-row {
-    width: 290px;
-  }
-
-  /* Priority Buttons */
-  .priority-container {
     width: 290px;
   }
 
@@ -418,27 +413,27 @@
 
   .add-task-section {
     width: 100%;
-    max-width: 920px; /* kannst du anpassen (z.B. 860/900/960) */
     margin: 0 auto;
     padding: 0 24px; /* Luft links/rechts */
     box-sizing: border-box;
     height: calc(100vh + 280px);
-}
+  }
 
   .add-task-section h1 {
     justify-content: center;
     display: flex;
     margin-top: 32px;
+            margin-left: 32px;
+        margin-right: 32px;
   }
 
   .add-task-footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
     flex-direction: column;
-    margin-top: 0;
     padding-bottom: 120px;
+    width: 100%;
   }
 
   .task-overlay-board {
@@ -462,7 +457,7 @@
     width: 0px;
   }
 
-  .add-task-content textarea,
+  .add-task-content-right textarea,
   .add-task-content-right input,
   .add-task-content-left input,
   .add-task-content-left select,
@@ -472,8 +467,6 @@
   .subtask-input-row,
   .subtask-list,
   .priority-container {
-    width: 100% !important;
-    max-width: 440px;
     box-sizing: border-box;
   }
 
@@ -482,15 +475,28 @@
   }
 
   /* Spalten untereinander (sonst wird’s schnell gequetscht) */
+
   .add-task-content {
     flex-direction: column;
-    align-items: center; /* Form-Inhalte mittig innerhalb der Section */
+    align-items: center;
   }
 
-  .add-task-content-right,
-  .add-task-content-left {
+  .add-task-content-right {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    max-width: 440px;
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  .add-task-content-left {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-left: 32px;
+    margin-right: 32px;
   }
 }
 
@@ -520,52 +526,22 @@
     display: none;
   }
 
-  .add-task-content textarea {
-    width: 396px;
-    height: 88px;
-  }
-
   .add-task-content-right input,
   .add-task-content-left input,
   .add-task-content-left select {
-    width: 396px;
     padding: 12px;
   }
 
-  .subtask-input-row {
-    width: 396px;
-  }
-
   .priority-container {
-    flex-direction: unset;
-    width: 396px;
-  }
-
-  .priority-btn,
-  .priority-btn-urgent,
-  .priority-btn-medium,
-  .priority-btn-low {
-    padding: 15px 18px;
+    gap: 10px;
   }
 
   .subtask-list {
-    width: 396px;
     height: 60px;
   }
 
   .subtask-actions {
     width: 15%;
-  }
-  .assignee-select,
-  .assignee-options {
-    width: 396px;
-  }
-
-  .add-task-footer {
-    width: 100%;
-    flex-direction: column;
-    margin-top: 0;
-    padding-bottom: 120px;
   }
 
   .add-task-footer div {
@@ -578,43 +554,28 @@
 }
 
 @media (max-width: 540px) {
-  .priority-container {
-    width: 265px;
-  }
-
-  .add-task-section {
-    margin-left: 16px;
-    margin-right: 16px;
-  }
-
-  .add-task-content-right{
-    width: 100%;
-  }
-
   .add-task-section h1 {
     font-size: 47px;
     font-weight: 700;
   }
 
+  .add-task-content-right {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
 
-  .add-task-content textarea,
-  .add-task-content-right input,
-  .subtask-input-row,
-  .assignee-select,
-  .assignee-options {
-    max-width: 265px;
+    .add-task-content-left{
+    margin-left: 16px;
+    margin-right: 16px;
   }
 
   .add-task-content-left input,
   .add-task-content-left select {
-    width: 265px;
     padding: 12px;
-    max-width: 265px;
   }
 
   .priority-container {
-    flex-direction: unset;
-    gap: 10px;
+    gap: 16px;
   }
 
   .priority-btn {
@@ -637,7 +598,6 @@
   }
 
   .subtask-list {
-    width: 265px;
     height: auto;
   }
 
@@ -690,18 +650,9 @@
   .priority-btn-medium,
   .priority-btn-low {
     font-size: 14px;
-    padding: 10px 8px;
   }
 
   .add-task-footer div {
     gap: 12px;
-  }
-
-  .add-task-content textarea,
-  .add-task-content-right input,
-  .subtask-input-row,
-  .assignee-select,
-  .assignee-options {
-    max-width: 265px;
   }
 }
