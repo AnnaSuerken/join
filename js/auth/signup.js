@@ -203,7 +203,7 @@ async function handleSignup() {
     const cred = await registerUser(email, pwd);
     await saveUserProfile(cred.user, displayName, email);
     redirectToLoginDelayed();
-    showSignupSuccessToast()
+    showSignupSuccessToast();
   } catch (err) {
     console.error(err);
     applySignupErrorToForm(err);

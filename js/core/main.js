@@ -150,6 +150,56 @@ addEventListener("load", () => {
   loadNameHeader();
 });
 
+window.addEventListener("load", () => {
+  const fixedLogo = document.getElementById("fix-logo");
+  const loaderDesktop = document.getElementById("loader-img");
+  const loaderMobile = document.getElementById("loader-img-mobile");
+
+  if (!fixedLogo) return;
+
+  const isMobile = window.matchMedia("(max-width: 660px)").matches;
+  const loaderLogo = isMobile ? loaderMobile : loaderDesktop;
+
+  if (!loaderLogo) return;
+
+  loaderLogo.classList.remove("animate");
+
+  const start = () => {
+    const logoRect = fixedLogo.getBoundingClientRect();
+    const loaderRect = loaderLogo.getBoundingClientRect();
+
+    if (!logoRect.width || !loaderRect.width) {
+      requestAnimationFrame(start);
+      return;
+    }
+
+    const startX = window.innerWidth / 2;
+    const startY = window.innerHeight / 2;
+
+    const targetX = logoRect.left + logoRect.width / 2;
+    const targetY = logoRect.top + logoRect.height / 2;
+
+    const dx = targetX - startX;
+    const dy = targetY - startY;
+
+    const scale = logoRect.width / loaderRect.width;
+
+    loaderLogo.style.setProperty("--dx", `${dx}px`);
+    loaderLogo.style.setProperty("--dy", `${dy}px`);
+    loaderLogo.style.setProperty("--scale", `${scale}`);
+
+    void loaderLogo.offsetWidth;
+    loaderLogo.classList.add("animate");
+  };
+
+  // wenn <img> noch lädt
+  if (loaderLogo.tagName === "IMG" && !loaderLogo.complete) {
+    loaderLogo.addEventListener("load", start, { once: true });
+  } else {
+    requestAnimationFrame(start);
+  }
+});
+
 setupGlobalNavClicks();
 setupUserDropdown();
 

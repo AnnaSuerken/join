@@ -193,4 +193,4 @@ onAuthStateChanged(auth, (user) => {
 setTimeout(() => {
   const loader = document.querySelector(".loader");
   if (loader) loader.style.display = "none";
-}, 1000);
+}, 1800);

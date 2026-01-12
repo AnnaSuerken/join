@@ -5,7 +5,7 @@ main {
   height: calc(100vh - 202px);
 }
 
-.center{
+.center {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,9 +16,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-right: 77px;
+  padding-right: 77px;
   height: 202px;
-  width: 100vw;
+  width: calc(100vw - 72px);
   max-width: 1920px;
 }
 
@@ -54,8 +54,10 @@ main {
   height: 122px;
   margin-top: 80px;
   margin-left: 72px;
+  z-index: 999;
 }
 
+/* Loader Overlay (wie bei dir) */
 .loader {
   position: fixed;
   inset: 0;
@@ -64,9 +66,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: all;
+
   animation: hideLoader 1.8s ease-in-out forwards;
   animation-delay: 1.8s;
-  pointer-events: all;
 }
 
 @keyframes hideLoader {
@@ -80,36 +83,32 @@ main {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1);
+  width: 300px;
+  height: auto;
+
   transform-origin: center;
-  animation: moveToLogoDesktop 1.8s ease-in-out forwards;
+  will-change: transform;
+
+  /* Fallbacks */
+  --dx: 0px;
+  --dy: 0px;
+  --scale: 1;
+
+  transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
 }
 
-@keyframes moveToLogoDesktop {
+.loader-img.animate {
+  animation: moveToLogo 1.5s ease-in-out forwards;
+}
+@keyframes moveToLogo {
   0% {
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: auto;
-    transform: translate(-50%, -30%) scale(0.7);
+    transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
     opacity: 1;
-  }
-
-  70% {
-    transform: translate(-50%, -30%) scale(0.6);
-    opacity: 1;
-  }
-
-  80% {
-    top: 80px;
-    left: 72px;
-    transform: scale(1);
   }
 
   100% {
-    width: 100px;
-    height: auto;
-    transform: none;
+    transform: translate(-50%, -50%) translate(var(--dx), var(--dy))
+      scale(var(--scale));
     opacity: 1;
   }
 }
@@ -349,42 +348,36 @@ main {
     display: none;
   }
 
-  /* Mobile Loader-Logo (weiß) an */
   .loader-img-mobile {
-    display: block;
+    display: block; /* <-- so wird es angezeigt */
     position: fixed;
     top: 50%;
     left: 50%;
-
     width: 150px;
     height: auto;
-
-    transform: translate(-50%, -50%) scale(1);
     transform-origin: center;
+    will-change: transform;
 
-    animation: moveToLogoMobile 1.8s ease-in-out forwards;
+    --dx: 0px;
+    --dy: 0px;
+    --scale: 1;
+
+    transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+    z-index: 10000;
   }
 
-  /* Zielposition Mobile: oben links (wo dein mobile Logo sitzt) */
+  .loader-img-mobile.animate {
+    animation: moveToLogoMobile 1.5s ease-in-out forwards;
+  }
+
   @keyframes moveToLogoMobile {
     0% {
-      top: 50%;
-      left: 50%;
-      width: 150px;
-      transform: translate(-50%, -50%) scale(1);
+      transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
       opacity: 1;
     }
-
-    70% {
-      transform: translate(-50%, -50%) scale(0.6);
-      opacity: 1;
-    }
-
     100% {
-      top: 37px;
-      left: 38px;
-      width: 64px;
-      transform: none;
+      transform: translate(-50%, -50%) translate(var(--dx), var(--dy))
+        scale(var(--scale));
       opacity: 1;
     }
   }
