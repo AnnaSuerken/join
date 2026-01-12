@@ -283,7 +283,15 @@ main {
   }
   .sign-up-box {
     width: 286px;
-    padding: 0;
+    max-height: 60vh;
+    height: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+
+  .sign-up-box::-webkit-scrollbar {
+    display: none;
   }
 
   .sign-up-box-h1 {
