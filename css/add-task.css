@@ -557,6 +557,8 @@
   .add-task-section h1 {
     font-size: 47px;
     font-weight: 700;
+    margin-left: 16px;
+    margin-right: 16px;
   }
 
   .add-task-content-right {
