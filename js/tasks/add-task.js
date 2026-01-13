@@ -143,13 +143,34 @@ function toggleAssigneeByContactIndex(contactIndex) {
   buildAssigneeDropdown._sync?.();
 }
 
+function renderAssigneeChipsLocal(selectedAssignees, containerEl) {
+  if (!containerEl) return;
+
+  containerEl.innerHTML = "";
+  if (!selectedAssignees.length) return;
+
+  const max = 4;
+  const shown = selectedAssignees.slice(0, max);
+  const more = selectedAssignees.length - shown.length;
+
+  containerEl.innerHTML =
+    shown
+      .map(
+        (a) => `
+          <span class="avatar-chip" style="background:${a.color}" title="${a.name}">
+            ${a.initials}
+          </span>
+        `
+      )
+      .join("") +
+    (more > 0 ? `<span class="avatar-chip more-chip">+${more}</span>` : "");
+}
+
 function renderAssignees() {
   const wrap = document.getElementById("assignee-list");
   if (!wrap) return;
 
-  wrap.innerHTML = selectedAssignees
-    .map((a, i) => buildAssigneeAvatarHtml(a, i))
-    .join("");
+  renderAssigneeChipsLocal(selectedAssignees, wrap);
 }
 
 function buildAssigneeAvatarHtml(a, i) {
