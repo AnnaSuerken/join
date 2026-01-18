@@ -36,7 +36,6 @@
   border-radius: 6px;
   flex: 1 1 calc(25% - 16px);
   min-width: 275px;
-  align-items: center;
 }
 
 .task-table-header {
@@ -66,7 +65,6 @@
   
   padding-bottom: 8px;
   display: flex;
-  align-items: center;
 }
 
 .task {

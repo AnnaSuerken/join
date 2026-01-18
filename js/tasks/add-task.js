@@ -1,3 +1,8 @@
+function init(){
+  getContactsData();
+  initAssigneeChipToggle();
+}
+
 /* ---------- Konfiguration ---------- */
 let taskCategoryColor = [
   { name: "Technical Task", color: "#20D7C1" },
@@ -156,8 +161,8 @@ function renderAssigneeChipsLocal(selectedAssignees, containerEl) {
   containerEl.innerHTML =
     shown
       .map(
-        (a) => `
-          <span class="avatar-chip" style="background:${a.color}" title="${a.name}">
+        (a, i) => `
+          <span class="avatar-chip" data-index="${i}" style="background:${a.color}" title="${a.name}">
             ${a.initials}
           </span>
         `
@@ -191,6 +196,23 @@ function toggleAssigneeByIndex(i) {
   renderAssignees();
   buildAssigneeDropdown._sync?.();
 }
+
+function initAssigneeChipToggle() {
+  const assigneeList = document.getElementById("assignee-list");
+  if (!assigneeList) return;
+
+  assigneeList.addEventListener("click", function (e) {
+    const chip = e.target.closest(".avatar-chip");
+    if (!chip || chip.classList.contains("more-chip")) return;
+
+    const index = Number(chip.dataset.index);
+    if (isNaN(index)) return;
+
+    toggleAssigneeByIndex(index);
+  });
+}
+
+
 
 /* ---------- Priority ---------- */
 
