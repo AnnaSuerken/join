@@ -329,7 +329,7 @@ body.board-overlay-open #task-detail-overlay {
   transition: transform 200ms ease, opacity 200ms ease;
   opacity: 1;
   overflow: scroll;
-  overflow-x: hidden;
+ 
 }
 .task-overlay-open::-webkit-scrollbar {
   width: 6px;
