@@ -1,231 +1,29 @@
-function init(){
-  getContactsData();
-  initAssigneeChipToggle();
-}
-
-/* ---------- Konfiguration ---------- */
-let taskCategoryColor = [
-  { name: "Technical Task", color: "#20D7C1" },
-  { name: "User Story", color: "#0038FF" },
-];
-
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function makeInitials(name = "") {
-  const parts = name.trim().split(/\s+/);
-  const first = (parts[0]?.[0] || "").toUpperCase();
-  const last = (parts[1]?.[0] || "").toUpperCase();
-  return (first + last).slice(0, 2);
-}
-
-function colorFromName(name = "") {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const h = Math.abs(hash) % 360;
-  return `hsl(${h} 70% 45%)`;
-}
-
-/* ---------- Contacts / Custom Dropdown ---------- */
-
-let contactsData = [];
-let selectedAssignees = [];
-
-async function getContactsData() {
-  const data = await dbApi.getData("contacts/");
-  const contactsArray = Object.values(data || {});
-
-  contactsData = contactsArray.map((c) => ({
-    name: c.name,
-    initials: c.initials || makeInitials(c.name),
-    color: c.color || colorFromName(c.name),
-  }));
-
-  buildAssigneeDropdown();
-  renderAssignees();
-}
-
-function buildAssigneeDropdown() {
-  const trigger = document.getElementById("assignee-select");
-  const list = document.getElementById("assignee-options");
-  if (!trigger || !list) return;
-
-  list.innerHTML = contactsData.map(buildAssigneeOptionHtml).join("");
-  trigger.setAttribute("aria-expanded", "false");
-
-  if (!trigger._listenersAdded) {
-    wireAssigneeDropdown(trigger, list);
-    trigger._listenersAdded = true;
-  }
-
-  syncOptionSelectedStates();
-  buildAssigneeDropdown._sync = syncOptionSelectedStates;
-}
-
-function buildAssigneeOptionHtml(c, i) {
-  return `
-    <li class="assignee-option" role="option" aria-selected="false" data-index="${i}">
-      <span class="assignee-avatar" style="background:${escapeHtml(
-        c.color
-      )}">${escapeHtml(c.initials)}</span>
-      <span class="assignee-option-name">${escapeHtml(c.name)}</span>
-      <span class="assignee-indicator"></span>
-    </li>
-  `;
-}
-
-function wireAssigneeDropdown(trigger, list) {
-  trigger.addEventListener("click", () => toggleAssigneeList(trigger, list));
-  document.addEventListener("click", (e) =>
-    closeAssigneeListOnOutsideClick(e, trigger, list)
-  );
-  list.addEventListener("click", (e) => handleAssigneeListClick(e));
-}
-
-function toggleAssigneeList(trigger, list) {
-  const isOpen = trigger.getAttribute("aria-expanded") === "true";
-  list.classList.toggle("d_none", isOpen);
-  trigger.setAttribute("aria-expanded", isOpen ? "false" : "true");
-}
-
-function closeAssigneeListOnOutsideClick(e, trigger, list) {
-  if (!trigger.contains(e.target) && !list.contains(e.target)) {
-    list.classList.add("d_none");
-    trigger.setAttribute("aria-expanded", "false");
-  }
-}
-
-function handleAssigneeListClick(e) {
-  const item = e.target.closest(".assignee-option");
-  if (!item) return;
-  const idx = Number(item.dataset.index);
-  toggleAssigneeByContactIndex(idx);
-  syncOptionSelectedStates();
-}
-
-function syncOptionSelectedStates() {
-  const list = document.getElementById("assignee-options");
-  if (!list) return;
-
-  const selectedNames = new Set(
-    selectedAssignees.map((a) => a.name.toLowerCase())
-  );
-
-  list.querySelectorAll(".assignee-option").forEach((node) => {
-    const i = Number(node.dataset.index);
-    const name = (contactsData[i]?.name || "").toLowerCase();
-    const isSel = selectedNames.has(name);
-    node.setAttribute("aria-selected", String(isSel));
-    node.classList.toggle("is-selected", isSel);
-  });
-}
-
-function toggleAssigneeByContactIndex(contactIndex) {
-  const c = contactsData[contactIndex];
-  if (!c) return;
-
-  const pos = selectedAssignees.findIndex(
-    (a) => a.name.toLowerCase() === c.name.toLowerCase()
-  );
-
-  if (pos >= 0) selectedAssignees.splice(pos, 1);
-  else
-    selectedAssignees.push({
-      name: c.name,
-      initials: c.initials,
-      color: c.color,
-    });
-
-  renderAssignees();
-  buildAssigneeDropdown._sync?.();
-}
-
-function renderAssigneeChipsLocal(selectedAssignees, containerEl) {
-  if (!containerEl) return;
-
-  containerEl.innerHTML = "";
-  if (!selectedAssignees.length) return;
-
-  const max = 4;
-  const shown = selectedAssignees.slice(0, max);
-  const more = selectedAssignees.length - shown.length;
-
-  containerEl.innerHTML =
-    shown
-      .map(
-        (a, i) => `
-          <span class="avatar-chip" data-index="${i}" style="background:${a.color}" title="${a.name}">
-            ${a.initials}
-          </span>
-        `
-      )
-      .join("") +
-    (more > 0 ? `<span class="avatar-chip more-chip">+${more}</span>` : "");
-}
-
-function renderAssignees() {
-  const wrap = document.getElementById("assignee-list");
-  if (!wrap) return;
-
-  renderAssigneeChipsLocal(selectedAssignees, wrap);
-}
-
-function buildAssigneeAvatarHtml(a, i) {
-  return `
-    <span
-      class="assignee-avatar"
-      title="${escapeHtml(a.name)}"
-      style="background:${escapeHtml(a.color)}"
-      onclick="toggleAssigneeByIndex(${i})"
-    >
-      ${escapeHtml(a.initials)}
-    </span>
-  `;
-}
-
-function toggleAssigneeByIndex(i) {
-  selectedAssignees.splice(i, 1);
-  renderAssignees();
-  buildAssigneeDropdown._sync?.();
-}
-
-function initAssigneeChipToggle() {
-  const assigneeList = document.getElementById("assignee-list");
-  if (!assigneeList) return;
-
-  assigneeList.addEventListener("click", function (e) {
-    const chip = e.target.closest(".avatar-chip");
-    if (!chip || chip.classList.contains("more-chip")) return;
-
-    const index = Number(chip.dataset.index);
-    if (isNaN(index)) return;
-
-    toggleAssigneeByIndex(index);
-  });
-}
-
 
 
 /* ---------- Priority ---------- */
 
-// ✅ konsistent: null statt "null" string
-let currentPriority = null;
+/**
+ * Holds the currently selected priority.
+ * Defaults to "medium", as every task must always have a priority.
+ * 
+ */
+let currentPriority = "medium";
 
+/**
+ * Sets the priority for the current task.
+ *
+ * - Clicking an already active priority ("urgent" or "low")
+ *   resets the selection back to "medium".
+ *
+ * @param {"urgent"|"medium"|"low"} status
+ */
 function setPriority(status) {
   const priorities = ["urgent", "medium", "low"];
 
-  // Toggle off
-  if (currentPriority === status) {
+ if (currentPriority === status && status !== "medium") {
     resetAllPriorities(priorities);
-    currentPriority = null;
+    activateSelectedPriority("medium");
+    currentPriority = "medium";
     return;
   }
 
@@ -234,6 +32,14 @@ function setPriority(status) {
   currentPriority = status;
 }
 
+/**
+ * Resets the visual state of all priority buttons.
+ *
+ * This shows all inactive buttons and hides all active buttons,
+ * preparing the UI for a new priority selection.
+ *
+ * @param {Array<"urgent"|"medium"|"low">} priorities
+ */
 function resetAllPriorities(priorities) {
   priorities.forEach((priority) => {
     document.getElementById(`prio-${priority}`)?.classList.remove("d_none");
@@ -241,7 +47,14 @@ function resetAllPriorities(priorities) {
   });
 }
 
-// (Dein UI-Startzustand – ich lasse deine Logik drin)
+
+/**
+ * Resets the priority UI to its initial default state.
+ *
+ * This function ensures that "medium" is visually active
+ * while "urgent" and "low" are inactive.
+ * Typically used when resetting or creating a new task.
+ */
 function resetStartPriorities() {
   document.getElementById("prio-low")?.classList.remove("d_none");
   document.getElementById("prio-urgent")?.classList.remove("d_none");
@@ -251,58 +64,40 @@ function resetStartPriorities() {
   document.getElementById("prio-medium-active")?.classList.remove("d_none");
 }
 
+/**
+ * Activates the given priority in the UI.
+ *
+ * Hides the inactive button and shows the active version
+ * of the selected priority.
+ *
+ * @param {"urgent"|"medium"|"low"} status
+
+ */
 function activateSelectedPriority(status) {
   document.getElementById(`prio-${status}`)?.classList.add("d_none");
   document.getElementById(`prio-${status}-active`)?.classList.remove("d_none");
 }
 
-/* ---------- Edit-Priority im Overlay ---------- */
 
-function setEditPriority(status) {
-  currentPriority = status;
-  const priorities = ["urgent", "medium", "low"];
+/* ---------- Create Task---------- */
 
-  priorities.forEach((prio) => {
-    const btn = document.getElementById(`edit-prio-${prio}`);
-    if (!btn) return;
-    btn.classList.toggle("is-active", prio === status);
-  });
-}
-
-function wireEditPriorityButtons() {
-  const config = [
-    { id: "edit-prio-urgent", status: "urgent" },
-    { id: "edit-prio-medium", status: "medium" },
-    { id: "edit-prio-low", status: "low" },
-  ];
-
-  config.forEach(({ id, status }) => {
-    const btn = document.getElementById(id);
-    if (!btn || btn._wired) return;
-
-    btn.addEventListener("click", () => toggleEditPriority(status, config));
-    btn._wired = true;
-  });
-}
-
-function toggleEditPriority(status, config) {
-  if (currentPriority === status) {
-    currentPriority = null;
-    config.forEach(({ id }) => {
-      const b = document.getElementById(id);
-      if (b) b.classList.remove("is-active");
-    });
-  } else {
-    setEditPriority(status);
-  }
-}
-
-/* ---------- Task erstellen ---------- */
-
+/**
+ * Returns a list of assignee names from the currently selected assignees.
+ *
+ */
 function getAssigneeNames() {
   return selectedAssignees.map((assignee) => assignee.name);
 }
 
+/**
+ * Creates the task payload object that will be stored in the database.
+ *
+ * @param {Object} formElements
+ * Collection of form input references.
+ *
+ * @param {string[]} assigneeNames
+ * List of selected assignee names.
+ */
 function createPayload(formElements, assigneeNames) {
   return {
     title: formElements.taskTitle.value,
@@ -320,6 +115,18 @@ function createPayload(formElements, assigneeNames) {
   };
 }
 
+/**
+ * Pushes a task payload into the correct board column.
+ *
+ * @param {Object} payload
+ * Task payload to store.
+ *
+ * @param {string} col
+ * Target board column identifier.
+ *
+ * @param {HTMLFormElement} form
+ * The form element that was submitted.
+ */
 async function progressTablePush(payload, col, form) {
   switch (col) {
     case "todo":
@@ -339,6 +146,12 @@ async function progressTablePush(payload, col, form) {
   }
 }
 
+/**
+ * Creates a new task from the given form.
+ *
+ * @param {HTMLFormElement} form
+ * The task creation form.
+ */
 async function createTask(form) {
   if (!setMandatoryInputs(form)) return;
 
@@ -359,8 +172,21 @@ async function createTask(form) {
   }
 }
 
-/* ---------- Form-Reset ---------- */
-
+/**
+ * Resets the main task input fields.
+ *
+ * @param {HTMLInputElement} taskTitle
+ * Title input field.
+ *
+ * @param {HTMLTextAreaElement} taskDescription
+ * Description input field.
+ *
+ * @param {HTMLInputElement} taskDueDate
+ * Due date input field.
+ *
+ * @param {HTMLSelectElement} taskCategory
+ * Category select field.
+ */
 function resetTaskInputs(
   taskTitle,
   taskDescription,
@@ -373,6 +199,18 @@ function resetTaskInputs(
   if (taskCategory) taskCategory.value = "Select task category";
 }
 
+/**
+ * Resets subtask input fields and UI state.
+ *
+ * @param {HTMLInputElement} subtaskInput
+ * Subtask input field.
+ *
+ * @param {HTMLElement} subtaskList
+ * Container for subtasks.
+ *
+ * @param {HTMLButtonElement} addBtn
+ * Button for adding a subtask.
+ */
 function resetSubtaskFields(subtaskInput, subtaskList, addBtn) {
   if (subtaskInput) {
     subtaskInput.value = "";
@@ -386,6 +224,9 @@ function resetSubtaskFields(subtaskInput, subtaskList, addBtn) {
   if (addBtn) addBtn.classList.add("d_none");
 }
 
+/**
+ * Resets all global task-related state variables.
+ */
 function resetGlobalArrays() {
   currentPriority = null;
   subtasks = [];
@@ -398,6 +239,12 @@ function resetGlobalArrays() {
   });
 }
 
+/**
+ * Clears the task form and resets all related UI state.
+ *
+ * @param {HTMLFormElement} form
+ * The task form to reset.
+ */
 function clearTask(form) {
   if (!form) return;
 
@@ -415,8 +262,66 @@ function clearTask(form) {
   resetGlobalArrays();
 }
 
-/* ---------- ✅ Task Detail Overlay Animation ---------- */
+/**
+ * Sets the priority inside the edit overlay.
+ *
+ * @param {"urgent"|"medium"|"low"} status
+ * Priority to activate.
+ */
+function setEditPriority(status) {
+  currentPriority = status;
+  const priorities = ["urgent", "medium", "low"];
 
+  priorities.forEach((prio) => {
+    const btn = document.getElementById(`edit-prio-${prio}`);
+    if (!btn) return;
+    btn.classList.toggle("is-active", prio === status);
+  });
+}
+
+/**
+ * Wires click handlers for edit-priority buttons.
+ */
+function wireEditPriorityButtons() {
+  const config = [
+    { id: "edit-prio-urgent", status: "urgent" },
+    { id: "edit-prio-medium", status: "medium" },
+    { id: "edit-prio-low", status: "low" },
+  ];
+
+  config.forEach(({ id, status }) => {
+    const btn = document.getElementById(id);
+    if (!btn || btn._wired) return;
+
+    btn.addEventListener("click", () => toggleEditPriority(status, config));
+    btn._wired = true;
+  });
+}
+
+/**
+ * Toggles the edit-priority selection state.
+ *
+ * @param {"urgent"|"medium"|"low"} status
+ * Priority that was clicked.
+ *
+ * @param {Array<{id: string, status: string}>} config
+ * Button configuration list.
+ */
+function toggleEditPriority(status, config) {
+  if (currentPriority === status) {
+    currentPriority = null;
+    config.forEach(({ id }) => {
+      const b = document.getElementById(id);
+      if (b) b.classList.remove("is-active");
+    });
+  } else {
+    setEditPriority(status);
+  }
+}
+
+/**
+ * Opens the task detail overlay with animation.
+ */
 function openTaskDetailOverlay() {
   const overlay = document.getElementById("task-detail-overlay");
   if (!overlay) return;
@@ -430,6 +335,9 @@ function openTaskDetailOverlay() {
   });
 }
 
+/**
+ * Closes the task detail overlay with animation.
+ */
 function closeTaskDetailOverlay() {
   const overlay = document.getElementById("task-detail-overlay");
   if (!overlay) return;
@@ -456,8 +364,9 @@ function closeTaskDetailOverlay() {
   panel.addEventListener("transitionend", onEnd);
 }
 
-/* ---------- Init ---------- */
-
+/**
+ * Initializes task-related UI behavior on page load.
+ */
 addEventListener("load", () => {
   const dayRef = document.querySelector(".task-due-date");
   if (dayRef) {
@@ -473,7 +382,6 @@ addEventListener("load", () => {
     wireEditPriorityButtons();
   }
 
-  // Close Button + Backdrop Click
   const overlay = document.getElementById("task-detail-overlay");
   const closeBtn = document.getElementById("detail-close-btn");
 
@@ -484,15 +392,9 @@ addEventListener("load", () => {
   });
 });
 
-
-/* ---------- Exports für Inline-Handler ---------- */
-window.currentTaskColumn = window.currentTaskColumn || "todo";
+// Global exports
+window.openTaskDetailOverlay = openTaskDetailOverlay;
+window.closeTaskDetailOverlay = closeTaskDetailOverlay;
 window.createTask = createTask;
 window.clearTask = clearTask;
 window.setPriority = setPriority;
-window.getContactsData = getContactsData;
-window.toggleAssigneeByIndex = toggleAssigneeByIndex;
-
-// Exports für Detail Overlay (für board.js)
-window.openTaskDetailOverlay = openTaskDetailOverlay;
-window.closeTaskDetailOverlay = closeTaskDetailOverlay;

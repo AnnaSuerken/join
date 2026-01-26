@@ -443,6 +443,11 @@ progress {
   border: 2px solid #fff;
   margin-left: -8px;
 }
+
+.avatar-chip:hover {
+  cursor: pointer;
+}
+
 .avatar-chip:first-child {
   margin-left: 0;
 }
