@@ -467,7 +467,11 @@ addEventListener("load", () => {
 
   wireSubtaskEvents();
   renderSubtasks();
-  wireEditPriorityButtons();
+
+  const isBoard = window.location.pathname.endsWith("board.html");
+  if (!isBoard) {
+    wireEditPriorityButtons();
+  }
 
   // Close Button + Backdrop Click
   const overlay = document.getElementById("task-detail-overlay");
@@ -479,6 +483,7 @@ addEventListener("load", () => {
     if (e.target === overlay) closeTaskDetailOverlay();
   });
 });
+
 
 /* ---------- Exports für Inline-Handler ---------- */
 window.currentTaskColumn = window.currentTaskColumn || "todo";

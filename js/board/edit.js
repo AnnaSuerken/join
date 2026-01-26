@@ -6,10 +6,7 @@ import {
   toISODateOnly,
   normalizeAssigneesToIds,
 } from "../board/helpers.js";
-import {
-  getCurrentDetail,
-  renderDetail,
-} from "../board/detail.js";
+import { getCurrentDetail, renderDetail } from "../board/detail.js";
 
 const TASKS_ROOT = "/board";
 
@@ -34,26 +31,33 @@ const prioBtns = {
 let editPriority = "medium";
 
 // Klick-Listener für die Buttons
-Object.entries(prioBtns).forEach(([key, btn]) =>
-  btn?.addEventListener("click", () => setEditPriority(key))
-);
+Object.entries(prioBtns).forEach(([key, btn]) => {
+  btn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    setEditPriority(key);
+  });
+});
 
+/**
+ * ✅ Setzt die aktive Priority im Edit-Overlay
+ * - setzt CSS Klasse "is-active" (passt zu deinem CSS)
+ * - tauscht Icons (weiß vs farbig)
+ * - KEIN Toggle-Off (immer genau 1 aktiv)
+ */
 function setEditPriority(p) {
-  // Fallback, falls irgendwas Komisches reinkommt
   const allowed = ["urgent", "medium", "low"];
-  if (!allowed.includes(p)) {
-    p = "medium";
-  }
+  if (!allowed.includes(p)) p = "medium";
 
   editPriority = p;
 
   Object.entries(prioBtns).forEach(([key, btn]) => {
     if (!btn) return;
+
     const img = btn.querySelector("img");
     const isActive = key === p;
 
-    // Klasse für Styling
-    btn.classList.toggle("active", isActive);
+    // ✅ passt zu deinem CSS (.task-overlay-edit .priority-btn.is-active)
+    btn.classList.toggle("is-active", isActive);
 
     // Icon anpassen wie bei Add-Task
     if (img) {
@@ -97,8 +101,10 @@ document.addEventListener("click", (e) => {
 
 function toggleEditAssigneeDropdown(open) {
   editAssigneeOptions.classList.toggle("d_none", !open);
-  document.getElementById("edit-assignee-list").classList.toggle("d_none", open);
-  editAssigneeSelect.setAttribute("aria-expanded", String(open));
+  document
+    .getElementById("edit-assignee-list")
+    ?.classList.toggle("d_none", open);
+  editAssigneeSelect?.setAttribute("aria-expanded", String(open));
 }
 
 function renderEditAssigneeChips() {
@@ -110,6 +116,7 @@ function renderEditAssigneeChips() {
   const contacts = selectedAssigneeIds
     .map((id) => contactsById.get(id))
     .filter(Boolean);
+
   if (!contacts.length) return;
 
   contacts.forEach((c) => {
@@ -124,11 +131,13 @@ function renderEditAssigneeChips() {
         c.id
       )}">✕</button>
     `;
-    row.querySelector(".remove-assignee").addEventListener("click", () => {
+
+    row.querySelector(".remove-assignee")?.addEventListener("click", () => {
       selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== c.id);
       renderEditAssigneeChips();
       renderEditAssigneeOptions();
     });
+
     editAssigneeList.appendChild(row);
   });
 }
@@ -140,7 +149,7 @@ function renderEditAssigneeOptions() {
   const maps = window.boardContacts || {};
   const contactsById = maps.contactsById || new Map();
   const all = [...contactsById.values()].sort((a, b) =>
-    a.name.localeCompare(b.name)
+    (a.name || "").localeCompare(b.name || "")
   );
 
   all.forEach((c) => {
@@ -149,6 +158,7 @@ function renderEditAssigneeOptions() {
     li.role = "option";
     li.className = "assignee-option" + (selected ? " is-selected" : "");
     li.tabIndex = 0;
+
     li.innerHTML = `
       <span class="assignee-avatar" style="background:${escapeHtml(
         c.color
@@ -185,7 +195,11 @@ const editSubtaskAddBtn = document.getElementById("edit-subtask-add");
 const editSubtaskList = document.getElementById("edit-subtask-list");
 let editSubtasks = [];
 
-editSubtaskAddBtn?.addEventListener("click", () => addEditSubtask());
+editSubtaskAddBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
+  addEditSubtask();
+});
+
 editSubtaskInput?.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -194,7 +208,7 @@ editSubtaskInput?.addEventListener("keydown", (e) => {
 });
 
 function addEditSubtask() {
-  const val = (editSubtaskInput.value || "").trim();
+  const val = (editSubtaskInput?.value || "").trim();
   if (!val) return;
   editSubtasks.push({ text: val, done: false });
   editSubtaskInput.value = "";
@@ -215,17 +229,21 @@ function renderEditSubtasks() {
         <img src="./assets/icons/delete.svg" alt="" />
       </button>
     `;
+
     const checkbox = row.querySelector('input[type="checkbox"]');
     const textInput = row.querySelector('input[type="text"]');
     const delBtn = row.querySelector("button");
 
-    checkbox.addEventListener("change", () => {
+    checkbox?.addEventListener("change", () => {
       editSubtasks[i].done = checkbox.checked;
     });
-    textInput.addEventListener("input", () => {
+
+    textInput?.addEventListener("input", () => {
       editSubtasks[i].text = textInput.value;
     });
-    delBtn.addEventListener("click", () => {
+
+    delBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
       editSubtasks.splice(i, 1);
       renderEditSubtasks();
     });
@@ -237,16 +255,22 @@ function renderEditSubtasks() {
 /* ---------- Öffnen / Schließen / Speichern ---------- */
 detailEditBtn?.addEventListener("click", openEditOverlay);
 editCloseBtn?.addEventListener("click", closeEditOverlay);
+
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !editSection.classList.contains("d_none")) {
     closeEditOverlay();
   }
 });
-editOkBtn?.addEventListener("click", saveEditOverlay);
+
+editOkBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
+  saveEditOverlay();
+});
 
 function openEditOverlay() {
   const detail = getCurrentDetail();
   if (!detail?.task) return;
+
   const task = detail.task;
 
   editTitle.value = task.title || "";
@@ -254,9 +278,11 @@ function openEditOverlay() {
 
   const createdAtStr =
     task.createdAt || task.created || task.created_at || null;
+
   const createdAt = createdAtStr ? new Date(createdAtStr) : new Date();
   const minDateStr = toISODateOnly(createdAt);
   editDate.min = minDateStr;
+
   const hint = document.getElementById("edit-date-hint");
   if (hint) hint.textContent = `Earliest: ${minDateStr}`;
 
@@ -267,7 +293,7 @@ function openEditOverlay() {
     editDate.value = "";
   }
 
-  // 🔹 aktuelle Priority aus dem Task übernehmen
+  // ✅ Priority vorauswählen
   const rawPrio = (task.priority || "medium").toString().toLowerCase();
   setEditPriority(rawPrio);
 
@@ -306,8 +332,10 @@ async function saveEditOverlay() {
   const secondline = editDesc.value.trim();
 
   const task = detail.task;
+
   const createdAtStr =
     task.createdAt || task.created || task.created_at || null;
+
   const minDate = createdAtStr ? new Date(createdAtStr) : new Date();
   minDate.setHours(0, 0, 0, 0);
 
@@ -315,33 +343,30 @@ async function saveEditOverlay() {
   if (editDate.value) {
     const chosen = new Date(editDate.value);
     chosen.setHours(0, 0, 0, 0);
+
     if (chosen < minDate) {
-      if (typeof window.showToast === "function") {
-        window.showToast(
-          `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(
-            minDate
-          )}).`
-        );
-      } else {
-        alert(
-          `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(
-            minDate
-          )}).`
-        );
-      }
+      const msg = `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(
+        minDate
+      )}).`;
+
+      if (typeof window.showToast === "function") window.showToast(msg);
+      else alert(msg);
+
       return;
     }
+
     deadlineISO = new Date(
       chosen.getTime() - chosen.getTimezoneOffset() * 60000
     ).toISOString();
   }
 
-  const priority = editPriority; // 🔹 aktuelle Auswahl aus dem Overlay
+  const priority = editPriority; // ✅ wird von setEditPriority gesetzt
   const assignedContact = [...selectedAssigneeIds];
 
   const cleanedSubtasks = editSubtasks
     .map((s) => ({ text: (s.text || "").trim(), done: !!s.done }))
     .filter((s) => s.text.length > 0);
+
   const doneCount = cleanedSubtasks.filter((s) => s.done).length;
   const totalCount = cleanedSubtasks.length;
 
@@ -350,7 +375,7 @@ async function saveEditOverlay() {
     title,
     secondline,
     deadline: deadlineISO,
-    priority,
+    priority, // ✅ wird gespeichert
     assignedContact,
     subtasks: cleanedSubtasks,
     subtasksCompleted: doneCount,
@@ -381,6 +406,7 @@ async function saveEditOverlay() {
   renderDetail(newDetail.task);
 
   closeEditOverlay();
-  showToast("Task updated successfully.");
-  // Board-Render passiert separat über board.js / onData
+  if (typeof window.showToast === "function")
+    window.showToast("Task updated successfully.");
+  else alert("Task updated successfully.");
 }
