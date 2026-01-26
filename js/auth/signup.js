@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   onAuthStateChanged,
+  signOut,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import {
   ref,
@@ -162,6 +163,15 @@ async function saveUserProfile(user, displayName, email) {
   });
 }
 
+// ✅ nach Signup NICHT eingeloggt bleiben
+async function logoutAfterSignup() {
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.warn("Logout nach Registrierung fehlgeschlagen:", e);
+  }
+}
+
 function redirectToLoginDelayed() {
   setTimeout(() => {
     window.location.href = "/login.html";
@@ -193,7 +203,7 @@ function applySignupErrorToForm(err) {
 
 async function handleSignup() {
   if (!validateForm()) {
-    showValidationToast();
+    showValidationToast?.();
     return;
   }
 
@@ -202,12 +212,16 @@ async function handleSignup() {
   try {
     const cred = await registerUser(email, pwd);
     await saveUserProfile(cred.user, displayName, email);
-    redirectToLoginDelayed();
+
+    // ✅ direkt wieder ausloggen, damit User NICHT automatisch eingeloggt bleibt
+    await logoutAfterSignup();
+
     showSignupSuccessToast();
+    redirectToLoginDelayed();
   } catch (err) {
     console.error(err);
     applySignupErrorToForm(err);
-    showSignupErrorToast(err);
+    showSignupErrorToast?.(err);
   }
 }
 
