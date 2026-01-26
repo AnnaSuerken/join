@@ -203,7 +203,6 @@ function applySignupErrorToForm(err) {
 
 async function handleSignup() {
   if (!validateForm()) {
-    showValidationToast?.();
     return;
   }
 
