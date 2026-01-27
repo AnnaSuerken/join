@@ -1,25 +1,39 @@
-/* =========================
-   Helpers
-========================= */
+
 .d_none {
   display: none !important;
 }
 
-/* =========================
-   Layout: Contacts Page
-========================= */
+
+:root {
+  --contacts-main-offset: 166px;
+
+  /* FIX mobile bottom spacing (nav height + little air) */
+  --mobile-bottom-nav-height: 80px;
+  --mobile-bottom-safe-gap: 16px;
+}
+
+body.contacts-page {
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Content right */
 .content-right {
   display: flex;
   flex-direction: column;
   flex: 1;
   background-color: #fff;
+  min-height: 0;
 }
 
 .contacts-main {
   display: flex;
-  height: calc(100vh - 166px);
+  height: calc(100vh - var(--contacts-main-offset));
   overflow: hidden;
+  min-height: 0;
+  background-color: #ffffff;
 }
+
 
 .contacts-panel {
   width: 360px;
@@ -29,6 +43,8 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  min-height: 0;
+  background-color: #ffffff;
 }
 
 .contacts-panel-inner {
@@ -37,11 +53,11 @@
   height: 100%;
   padding: 24px;
   box-sizing: border-box;
+  min-height: 0;
+  background-color: #ffffff;
 }
 
-/* =========================
-   Left: Add Contact Button
-========================= */
+
 .add-contact-btn {
   width: 100%;
   height: 48px;
@@ -58,6 +74,7 @@
   font-size: 16px;
   font-weight: 700;
   line-height: 1.2;
+  flex: 0 0 auto;
 }
 
 .add-contact-btn:hover {
@@ -70,25 +87,39 @@
   height: 24px;
 }
 
-/* =========================
-   Left: Contacts List
-========================= */
+/*  Left: Contacts List  */
+#contacts-scroll,
 .contacts-scroll {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+
   margin-top: 24px;
   border-top: 1px solid #d1d1d1;
   padding-top: 16px;
-  padding-right: 8px;
+
+  
+  background-color: #ffffff;
+  scrollbar-gutter: stable;
+
+  
+  padding-right: 0;
+
   box-sizing: border-box;
 }
 
+#contacts-scroll::-webkit-scrollbar,
 .contacts-scroll::-webkit-scrollbar {
   width: 3px;
 }
+
+#contacts-scroll::-webkit-scrollbar-track,
 .contacts-scroll::-webkit-scrollbar-track {
-  background: transparent;
+  background: #ffffff; 
 }
+
+#contacts-scroll::-webkit-scrollbar-thumb,
 .contacts-scroll::-webkit-scrollbar-thumb {
   background-color: #cfcfcf;
   border-radius: 3px;
@@ -110,12 +141,12 @@
   border-bottom: 1px solid #d1d1d1;
   cursor: pointer;
 }
-/* letzte Zeile ohne Abschluss-Strich */
-.contacts-scroll .contact-row:last-child {
+
+.contacts-scroll .contact-row:last-child,
+#contacts-scroll .contact-row:last-child {
   border-bottom: none;
   margin-bottom: 0;
 }
-
 
 .contact-row:hover {
   background-color: #f3f3f3;
@@ -134,7 +165,6 @@
 .contact-delete-icon {
   width: 72px;
 }
-
 
 .contact-edit-icon:hover {
   content: url("../assets/icons/edit_icon_blue.svg");
@@ -179,17 +209,16 @@
   word-break: break-word;
 }
 
-/* =========================
-   Right: Detail Panel
-========================= */
+/*  Right: Detail Panel  */
 .contacts-detail {
   flex: 1;
   padding: 32px 24px;
   height: 100%;
   overflow-y: auto;
-  
   box-sizing: border-box;
   position: relative;
+  min-height: 0;
+  background-color: #ffffff;
 }
 
 .contact-detail-inner {
@@ -270,6 +299,7 @@
   display: flex;
   gap: 54px;
 }
+
 .contact-name {
   font-size: 47px;
   font-weight: 500;
@@ -316,10 +346,7 @@
   text-decoration: none;
 }
 
-/* 
-   MODAL Overlay + Card
-   (Desktop like original)
-*/
+/* ========================= MODAL ========================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -334,7 +361,6 @@
   box-sizing: border-box;
 }
 
-/* Card */
 .add-contact-modal {
   width: min(1212px, 100%);
   height: min(592px, 90vh);
@@ -344,18 +370,14 @@
   overflow: hidden;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   position: relative;
-
-  /* Slide-in desktop */
   transform: translateX(120%);
   transition: transform 0.35s ease;
 }
 
-/* overlay */
 .modal-overlay.modal-open .add-contact-modal {
   transform: translateX(0);
 }
 
-/* Left part */
 .add-contact-left {
   width: 40%;
   background: #2a3647;
@@ -396,7 +418,6 @@
   border-radius: 2px;
 }
 
-/* Right part */
 .add-contact-right {
   width: 60%;
   padding: 90px 60px 40px;
@@ -405,7 +426,6 @@
   overflow: hidden;
 }
 
-/* Close button  */
 .modal-close-btn {
   position: absolute;
   right: 32px;
@@ -426,7 +446,6 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* Avatar overlap (desktop) */
 .modal-avatar-circle {
   width: 120px;
   height: 120px;
@@ -436,9 +455,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   position: absolute;
-  left: 32px; /* overlap into left side */      
+  left: 32px;
   top: 50%;
   transform: translateY(-55%);
   z-index: 20;
@@ -450,7 +468,6 @@
   opacity: 0.45;
 }
 
-/* Form row */
 .modal-form-row {
   display: flex;
   align-items: center;
@@ -460,7 +477,6 @@
   justify-content: flex-end;
 }
 
-/* Form */
 .modal-form {
   width: 100%;
   display: flex;
@@ -469,7 +485,6 @@
   align-items: flex-end;
 }
 
-/* Inputs */
 .input-wrapper {
   position: relative;
   width: 80%;
@@ -507,7 +522,6 @@
   border-color: #29abe2;
 }
 
-/* errors */
 .input-error {
   margin: 0;
   font-size: 12px;
@@ -519,7 +533,6 @@
   display: none;
 }
 
-/* Footer buttons */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -527,9 +540,7 @@
   margin-top: 24px;
 }
 
-/* =========================
-   Mobile: Detail actions menu
-========================= */
+/*  Mobile: Detail  menu */
 .contact-menu-btn {
   position: fixed;
   bottom: 120px;
@@ -583,9 +594,7 @@
   }
 }
 
-/* =========================
-   Responsive: Tablets
-========================= */
+/*  Responsive: Tablets  */
 @media (max-width: 1024px) {
   .contacts-headline {
     font-size: 48px;
@@ -597,18 +606,15 @@
     width: 320px;
     min-width: 320px;
   }
-
   .add-contact-right {
     padding: 80px 40px 32px;
   }
-
   .add-contact-headline {
     font-size: 48px;
   }
   .add-contact-sub {
     font-size: 22px;
   }
-
   .modal-avatar-circle {
     left: 0px;
     width: 100px;
@@ -616,12 +622,8 @@
   }
 }
 
-/* =========================
-   Responsive: Mobile Layout
-========================= */
+/* Responsive: Mobile Layout  */
 @media (max-width: 820px) {
-  
-
   .contacts-panel-inner {
     padding: 16px;
   }
@@ -632,15 +634,14 @@
     padding: 24px 16px 16px;
   }
 
-  /* Show detail page */
   .contacts-main.show-detail .contacts-panel {
     display: none;
   }
+
   .contacts-main.show-detail .contacts-detail {
     display: block;
   }
 
-  /* Back arrow */
   #return-arrow {
     cursor: pointer;
     position: absolute;
@@ -648,7 +649,6 @@
     right: 8%;
   }
 
-  /* Floating add button */
   .add-contact-btn {
     position: fixed;
     bottom: 90px;
@@ -671,10 +671,15 @@
     height: 28px;
   }
 
-  /* Hide old desktop actions */
   .contacts-detail .contact-actions,
   .contacts-detail .actions {
     display: none;
+  }
+
+  
+  #contacts-scroll,
+  .contacts-scroll {
+    padding-bottom: calc(var(--mobile-bottom-nav-height) + var(--mobile-bottom-safe-gap));
   }
 
   /* ===== Modal Mobile (Original look) ===== */
@@ -691,7 +696,6 @@
     border-radius: 30px;
     flex-direction: column;
     overflow: hidden;
-
     transform: translateY(120%);
     transition: transform 0.35s ease;
   }
@@ -761,7 +765,6 @@
     gap: 10px;
   }
 
-  /* Footer: only create on mobile */
   #cancel-add-contact-overlay {
     display: none;
   }
@@ -808,12 +811,13 @@
   .contact-name-row {
     justify-content: center;
   }
+
   .modal-form {
     align-items: center;
   }
 }
 
-/* Smaller phones */
+/*  phones */
 @media (max-width: 600px) {
   .contacts-headline {
     font-size: 32px;
@@ -824,7 +828,6 @@
   .contact-name {
     font-size: 26px;
   }
-
   .contact-avatar-circle {
     width: 80px;
     height: 80px;
@@ -838,10 +841,10 @@
   }
 }
 
-@media (max-width: 1050px) {
+
+@media (max-width: 1050px) and (min-width: 821px) {
   .contacts-panel,
   .contacts-detail {
-    padding-bottom:30px;
+    padding-bottom: 30px;
   }
 }
-
