@@ -1,14 +1,12 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Desktop
   const summary = document.getElementById("summary");
   const addTask = document.getElementById("add-task");
   const board = document.getElementById("board");
   const contacts = document.getElementById("contacts");
   const headerIcons = document.getElementById("dropbtn");
 
-  // Mobile
   const mSummary = document.getElementById("m-summary");
   const mAddTask = document.getElementById("m-add-task");
   const mBoard = document.getElementById("m-board");
@@ -41,6 +39,7 @@ function updateSummaryNav(el, user) {
       Summary
     `;
   } else {
+    el.id = "login";
     el.innerHTML = `
       <img src="./assets/icons/login.svg" alt="" />
       Log in

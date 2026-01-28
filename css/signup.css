@@ -1,16 +1,43 @@
-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 202px);
+/* =============================
+   PAGE / LAYOUT FIX (100vh, nur Box scrollt)
+============================= */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Seite scrollt NICHT */
 }
 
 .center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* <<< statt center (verhindert Abschneiden oben) */
+  height: 100vh; /* <<< Seite exakt 100vh */
+  overflow: hidden;
 }
+
+/* main nimmt den restlichen Platz ein (statt calc height) */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* <<< statt center (verhindert Abschneiden oben) */
+  flex: 1 1 auto; /* <<< ersetzt height: calc(...) sauber */
+  width: 100%;
+  overflow: hidden; /* main scrollt NICHT */
+  padding: 16px 0;
+}
+
+/* (deine alte Regel wird überschrieben) */
+/*
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 202px);
+}
+*/
 
 .logo-box-signup {
   display: flex;
@@ -124,7 +151,7 @@ main {
 .sign-up-box {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* <<< statt center (Header bleibt oben) */
   flex-direction: column;
   background-color: white;
   border-radius: 25px;
@@ -133,6 +160,14 @@ main {
   padding-bottom: 20px;
   color: #f6f7f8;
   width: 530px;
+
+  /* <<< NUR DIE BOX SCROLLT */
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  /* optional: damit iOS scrollt flüssig */
+  -webkit-overflow-scrolling: touch;
 }
 
 .sign-up-box-h1 {
@@ -141,12 +176,19 @@ main {
   font-size: 61px;
 }
 
+/* <<< bleibt beim Box-Scroll sichtbar */
 .sign-up-box-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+
   display: flex;
   align-items: center;
   width: 100%;
   margin-left: 15px;
   justify-content: space-evenly;
+  padding-bottom: 12px;
 }
 
 .header-title {
@@ -183,6 +225,8 @@ main {
   color: #757575;
 }
 
+/* Footer bleibt wie bei dir, aber wir geben Luft in main,
+   damit Footer NICHT die Box überdeckt */
 .signup-footer-links-container {
   position: absolute;
   bottom: 10px;
@@ -215,6 +259,10 @@ main {
   margin-top: 10px;
 }
 
+#guest-login-btn {
+  margin-top: 16px;
+}
+
 /* -----------------------------
    Responsive Design
 ------------------------------ */
@@ -242,6 +290,13 @@ main {
   main {
     flex-direction: column;
     margin: 0;
+    padding-bottom: 70px;
+    align-items: center;
+  }
+
+  .sign-up-box-header {
+    width: 286px;
+    position: static;
   }
 
   .logo-box-signup {
@@ -281,13 +336,17 @@ main {
     border-radius: 8px;
     font-size: 21px;
   }
+
   .sign-up-box {
-    width: 286px;
-    max-height: 60vh;
-    height: auto;
+    width: 70%;
+    max-height: 100%;
     padding: 16px;
     box-sizing: border-box;
     overflow-y: auto;
+  }
+
+  #guest-login-btn {
+    margin-top: 0px;
   }
 
   .sign-up-box::-webkit-scrollbar {
@@ -308,8 +367,9 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     margin-top: 32px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .sign-up-box-header {
@@ -330,7 +390,7 @@ main {
   .sign-up-input-container {
     margin-left: 15px;
     margin-right: 15px;
-    height: 400px;
+    height: auto;
     margin-bottom: 32px;
     margin-top: 25px;
   }
@@ -338,7 +398,7 @@ main {
   .log-in-input-container {
     margin-left: 15px;
     margin-right: 15px;
-    height: 350px;
+    height: auto;
     margin-bottom: 32px;
   }
 
@@ -357,7 +417,7 @@ main {
   }
 
   .loader-img-mobile {
-    display: block; /* <-- so wird es angezeigt */
+    display: block;
     position: fixed;
     top: 50%;
     left: 50%;

@@ -192,7 +192,6 @@ window.addEventListener("load", () => {
     loaderLogo.classList.add("animate");
   };
 
-  // wenn <img> noch lädt
   if (loaderLogo.tagName === "IMG" && !loaderLogo.complete) {
     loaderLogo.addEventListener("load", start, { once: true });
   } else {

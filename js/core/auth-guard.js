@@ -1,14 +1,6 @@
-// js/core/auth-guard.js
 import { auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-/**
- * Blendet die Seite erst ein, wenn Auth-Status feststeht,
- * und leitet ab, wenn kein User eingeloggt ist.
- *
- * @param {Object} options
- * @param {string} options.redirectTo Pfad zur Login-Seite
- */
 export function requireAuth({ redirectTo = "/login.html" } = {}) {
   document.documentElement.style.visibility = "hidden";
 
@@ -25,5 +17,4 @@ export function requireAuth({ redirectTo = "/login.html" } = {}) {
   });
 }
 
-// global, falls du irgendwo window.requireAuth nutzt
 window.requireAuth = requireAuth;
