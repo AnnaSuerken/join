@@ -238,12 +238,10 @@
   }
 }
 
-/* Smartphones */
 @media (max-width: 520px) {
   .main-summary {
     padding: 0;
     margin-bottom: 12px;
-    height: calc(100vh - 80px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -302,7 +300,6 @@
     font-size: clamp(14px, 4vw, 16px);
   }
 
-  /* ✅ MEDIUM: skaliert sauber zwischen 320px und 520px */
   .summary-task-medium {
     width: clamp(20px, 39vw, 174px);
     height: clamp(92px, 24vw, 110px);
@@ -316,7 +313,7 @@
     margin-right: clamp(6px, 2vw, 12px);
   }
 
-  /* ✅ BIG: skaliert sauber zwischen 320px und 520px */
+
   .summary-task-big {
     width: clamp(300px, 92vw, 400px);
     height: clamp(92px, 24vw, 110px);
