@@ -385,8 +385,7 @@ function initAssigneeChipToggle() {
   });
 }
 
-/* ---------- Exports für Inline-Handler ---------- */
+/* ----------Inline-Handler ---------- */
 window.currentTaskColumn = window.currentTaskColumn || "todo";
 window.getContactsData = getContactsData;
 window.toggleAssigneeByIndex = toggleAssigneeByIndex;
-

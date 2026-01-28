@@ -297,6 +297,8 @@ main {
   .sign-up-box-header {
     width: 286px;
     position: static;
+    justify-content: center;
+    gap: 15px;
   }
 
   .logo-box-signup {
@@ -360,7 +362,7 @@ main {
 
   .signup-input {
     padding-top: 15px;
-    padding-right: 70px;
+    padding-right: 25px;
   }
 
   .sign-up-box-footer {
@@ -370,11 +372,6 @@ main {
     margin-top: 32px;
     gap: 12px;
     flex-wrap: wrap;
-  }
-
-  .sign-up-box-header {
-    justify-content: center;
-    gap: 24px;
   }
 
   .divider {
