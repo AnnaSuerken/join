@@ -1,9 +1,28 @@
+
+:root {
+  --headerH: 180px;     
+  --bottomNavH: 0px;    
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+
 .main-summary {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: left !important;
-  height: calc(100vh - 180px);
+  justify-content: flex-start !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  /* damit unten nichts „klebt“ */
+  padding-bottom: 16px;
+  box-sizing: border-box;
 }
 
 .summary-title {
@@ -36,6 +55,10 @@
 .summary-slash-mobile {
   display: none;
 }
+
+/* ==============================
+   WRAPPER / TASKS
+============================== */
 
 .summary-wrapper {
   display: flex;
@@ -210,6 +233,7 @@
   .main-summary {
     align-items: center;
   }
+
   main {
     margin-left: 10px !important;
     margin-right: 10px !important;
@@ -223,6 +247,8 @@
   }
 }
 
+/* (Dein originaler Block war außerhalb eines Media Query, das war vermutlich ein Versehen.
+   Ich lasse ihn drin, aber sinnvoll platziert) */
 .summary-name {
   margin-left: 0;
   margin-top: 32px;
@@ -238,12 +264,20 @@
   }
 }
 
+/* ==============================
+   MOBILE: Bottom Nav berücksichtigen
+============================== */
+
 @media (max-width: 520px) {
+  :root {
+    --bottomNavH: 90px; /* <<< HÖHE deiner mobilen Bottom Nav (anpassen falls anders) */
+  }
+
   .main-summary {
-    padding: 0;
-    margin-bottom: 12px;
+    padding: 0 0 calc(var(--bottomNavH) + 12px) 0; /* extra Luft unten */
+    margin-bottom: 0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 
@@ -312,7 +346,6 @@
     height: auto;
     margin-right: clamp(6px, 2vw, 12px);
   }
-
 
   .summary-task-big {
     width: clamp(300px, 92vw, 400px);
