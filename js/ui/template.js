@@ -1,4 +1,7 @@
-// js/ui/template.js
+/**
+ * Generates the HTML template for the "Add new contact" button.
+ *
+ */
 export function addButtonTemplate() {
   return `
     <div class="list-head">

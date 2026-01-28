@@ -1,5 +1,12 @@
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
+/**
+ * Initializes navigation visibility and content
+ * after loading.
+ *
+ * Listens to authentication state changes and updates
+ * navigation items accordingly.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   const summary = document.getElementById("summary");
   const addTask = document.getElementById("add-task");
@@ -30,6 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/**
+ * Updates the summary navigation entry
+ *
+ * If a user is logged in, the element shows "Summary".
+ * If not, it switches to a "Log in" link.
+ *
+ * @param {HTMLElement|null} el
+ * The navigation element to update.
+ *
+ * @param {Object|null} user
+ * The authenticated Firebase user object or null.
+ */
 function updateSummaryNav(el, user) {
   if (!el) return;
 
@@ -47,6 +66,15 @@ function updateSummaryNav(el, user) {
   }
 }
 
+/**
+ * Toggles the visibility of a navigation item.
+ *
+ * @param {HTMLElement|null} el
+ * The navigation element to show or hide.
+ *
+ * @param {string} display
+ * CSS display value (e.g. "flex" or "none").
+ */
 function toggleNavItem(el, display) {
   if (!el) return;
   el.style.display = display;
