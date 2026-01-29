@@ -316,6 +316,7 @@
   .task-board {
     flex-direction: column;
     gap: 24px;
+    margin-bottom: 70px;
   }
 
   .task-column {
@@ -334,7 +335,7 @@
   }
 
   .task-table-colum::-webkit-scrollbar {
-    height: 5px;
+    height: 16px;
   }
   .task-table-colum::-webkit-scrollbar-thumb {
     background-color: #c1c1c1;

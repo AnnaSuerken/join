@@ -1,43 +1,28 @@
-/* =============================
-   PAGE / LAYOUT FIX (100vh, nur Box scrollt)
-============================= */
-
 html,
 body {
   height: 100%;
   margin: 0;
-  overflow: hidden; /* Seite scrollt NICHT */
+  overflow: hidden;
 }
 
 .center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* <<< statt center (verhindert Abschneiden oben) */
-  height: 100vh; /* <<< Seite exakt 100vh */
+  justify-content: flex-start; 
+  height: 100vh;
   overflow: hidden;
 }
 
-/* main nimmt den restlichen Platz ein (statt calc height) */
 main {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* <<< statt center (verhindert Abschneiden oben) */
-  flex: 1 1 auto; /* <<< ersetzt height: calc(...) sauber */
+  align-items: center;
+  flex: 1 1 auto;
   width: 100%;
-  overflow: hidden; /* main scrollt NICHT */
+  overflow: hidden; 
   padding: 16px 0;
 }
-
-/* (deine alte Regel wird überschrieben) */
-/*
-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 202px);
-}
-*/
 
 .logo-box-signup {
   display: flex;
@@ -182,10 +167,9 @@ main {
   top: 0;
   background: white;
   z-index: 10;
-
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 90%;
   margin-left: 15px;
   justify-content: space-evenly;
   padding-bottom: 12px;
@@ -223,6 +207,7 @@ main {
   align-items: center;
   gap: 10px;
   color: #757575;
+  flex-wrap: wrap;
 }
 
 /* Footer bleibt wie bei dir, aber wir geben Luft in main,
@@ -382,6 +367,7 @@ main {
 
   .checkbox-container {
     padding: unset;
+    justify-content: center;
   }
 
   .sign-up-input-container {

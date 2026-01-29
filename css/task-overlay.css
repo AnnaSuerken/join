@@ -152,6 +152,11 @@
   gap: 8px;
 }
 
+.priority-container {
+  gap: 8px;
+  display: flex;
+}
+
 .task-overlay-edit-priority button {
   padding: 8px 16px;
   border-radius: 6px;
@@ -315,7 +320,7 @@ body.board-overlay-open #task-detail-overlay {
 }
 
 .task-overlay-open {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -491,7 +496,7 @@ progress {
 
 @media (max-width: 545px) {
   .task-overlay-edit-priority button {
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
   }
   .priority-container {
@@ -502,6 +507,7 @@ progress {
 @media (max-width: 1340px) {
   .priority-container {
     width: 100% !important;
+    flex-direction: column;
   }
   .priority-container img {
     padding-left: 2px;
