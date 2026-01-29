@@ -4,17 +4,14 @@
 
 let modalMode = "create";
 
-/* ====== NON-BLOCKING TOAST (ohne OK / ohne alert) ====== */
+/* ====== NON-BLOCKING TOAST  ====== */
 
 function showInlineToast(message, isError = false, duration = 2500) {
-  const toast = document.getElementById("toast");
+  const toast = byId("toast");
   if (!toast) return;
 
   toast.textContent = message;
-
-  // optional: CSS z.B. .toast.error
   toast.classList.toggle("error", !!isError);
-
   toast.classList.remove("d_none");
 
   clearTimeout(showInlineToast._t);
@@ -25,41 +22,31 @@ function showInlineToast(message, isError = false, duration = 2500) {
   }, duration);
 }
 
-/**
- * Einheitliche Meldungs-Funktion:
- * - nutzt showToast, wenn vorhanden (dein bestehendes System)
- * - fallback auf showInlineToast, falls showToast fehlt/Probleme macht
- */
 function notify(message, isError = false) {
   try {
-    if (typeof showToast === "function") {
-      // wichtig: KEIN alert hier – wir rufen nur deine showToast-Funktion auf
-      showToast(message, isError);
-      return;
-    }
+    if (typeof showToast === "function") return showToast(message, isError);
   } catch (e) {
     console.warn("[contacts] showToast failed, fallback to inline toast", e);
   }
   showInlineToast(message, isError);
 }
 
-/* ====== VALIDATION (wie login.js) ====== */
+/* ====== VALIDATION  ====== */
 
 const nameError = () => byId("contact-name-error");
 const emailError = () => byId("contact-email-error");
 const phoneError = () => byId("contact-phone-error");
 
 function clearFieldError(field) {
-  const map = {
-    name: { err: nameError(), input: byId("contact-name-input") },
-    email: { err: emailError(), input: byId("contact-email-input") },
-    phone: { err: phoneError(), input: byId("contact-phone-input") },
-  };
-  const item = map[field];
-  if (!item) return;
+  const cfg = {
+    name: ["contact-name-error", "contact-name-input"],
+    email: ["contact-email-error", "contact-email-input"],
+    phone: ["contact-phone-error", "contact-phone-input"],
+  }[field];
+  if (!cfg) return;
 
-  if (item.err) item.err.textContent = "";
-  item.input?.classList.remove("error");
+  byId(cfg[0]) && (byId(cfg[0]).textContent = "");
+  byId(cfg[1])?.classList.remove("error");
 }
 
 function clearContactErrors() {
@@ -72,21 +59,11 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-/**
- * Phone-Validierung (PFLICHTFELD):
- * - erlaubt: +, Zahlen, Leerzeichen, /, -, (), .
- * - mind. 6 Ziffern insgesamt
- */
 function isValidPhone(phone) {
   const p = String(phone || "").trim();
-  if (!p) return false; // ✅ Pflicht!
-
-  // erlaubte Zeichen
+  if (!p) return false;
   if (!/^[0-9+\-()./\s]+$/.test(p)) return false;
-
-  // mind. 6 Ziffern
-  const digits = (p.match(/\d/g) || []).length;
-  return digits >= 6;
+  return (p.match(/\d/g) || []).length >= 6;
 }
 
 function showNameError(msg) {
@@ -128,7 +105,6 @@ function validateContactForm({ name, email, phone }) {
     ok = false;
   }
 
-  // ✅ PHONE IST PFLICHT
   if (!phone) {
     showPhoneError("Bitte gib eine Telefonnummer ein.");
     ok = false;
@@ -146,7 +122,6 @@ function openOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
   if (!overlay) return;
   overlay.classList.remove("d_none");
-  // Reflow, damit die CSS-Transition sicher triggert
   void overlay.offsetWidth;
   overlay.classList.add("modal-open");
 }
@@ -162,16 +137,18 @@ function resetOverlayAvatar() {
 function closeOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
   if (!overlay) return;
+
   const modal = overlay.querySelector(".add-contact-modal");
   const hide = () => {
     overlay.classList.add("d_none");
-    const form = byId("add-contact-form");
-    if (form) form.reset();
+    byId("add-contact-form")?.reset();
     resetOverlayAvatar();
     clearContactErrors();
   };
+
   if (modal) modal.addEventListener("transitionend", hide, { once: true });
   else hide();
+
   overlay.classList.remove("modal-open");
 }
 
@@ -188,12 +165,14 @@ function getModalElements() {
 
 function updateModalAvatar(avatar, color, initials) {
   if (!avatar) return;
+
   if (!color || !initials) {
     avatar.style.backgroundColor = "#efefef";
     avatar.innerHTML =
       '<img src="./assets/icons/person.svg" alt="avatar placeholder" />';
     return;
   }
+
   avatar.style.backgroundColor = color;
   avatar.innerHTML = `
     <span style="color:#fff; font-size:24px; font-weight:500;">
@@ -207,8 +186,8 @@ function fillModalForEdit(contact, els) {
   els.nameInput.value = contact.name;
   els.emailInput.value = contact.email;
   els.phoneInput.value = contact.phone || "";
-  if (els.titleEl) els.titleEl.textContent = "Edit contact";
-  if (els.primaryBtn) els.primaryBtn.textContent = "Save ✓";
+  els.titleEl && (els.titleEl.textContent = "Edit contact");
+  els.primaryBtn && (els.primaryBtn.textContent = "Save ✓");
   updateModalAvatar(els.avatar, contact.color, contact.initials);
 }
 
@@ -217,18 +196,20 @@ function resetModalForCreate(els) {
   els.nameInput.value = "";
   els.emailInput.value = "";
   els.phoneInput.value = "";
-  if (els.titleEl) els.titleEl.textContent = "Add contact";
-  if (els.primaryBtn) els.primaryBtn.textContent = "Create contact ✓";
+  els.titleEl && (els.titleEl.textContent = "Add contact");
+  els.primaryBtn && (els.primaryBtn.textContent = "Create contact ✓");
   updateModalAvatar(els.avatar);
 }
 
 function openModal(mode = "create", cid = state.selectedId) {
   modalMode = mode;
   const els = getModalElements();
+
   if (!els.nameInput || !els.emailInput || !els.phoneInput) {
     openOverlayLegacy();
     return;
   }
+
   const canEdit = mode === "edit" && cid && state.data[cid];
   if (canEdit) {
     const c = normalizeContact(cid, state.data[cid]);
@@ -236,6 +217,7 @@ function openModal(mode = "create", cid = state.selectedId) {
   } else {
     resetModalForCreate(els);
   }
+
   openOverlayLegacy();
 }
 
@@ -252,33 +234,27 @@ function getModalValues() {
 
 function handleCreateClick() {
   const values = getModalValues();
-
-  // ✅ Validierung wie im Login (nur inline Fehler, kein Popup)
-  if (!validateContactForm(values)) {
-    notify("Bitte überprüfe deine Eingaben.", true);
-    return;
-  }
+  if (!validateContactForm(values)) return notify("Bitte überprüfe deine Eingaben.", true);
 
   const { name, email, phone } = values;
   const isEdit = modalMode === "edit" && state.selectedId;
 
   if (isEdit) {
-    saveEdit(name, email, phone).then(() => {
+    return saveEdit(name, email, phone).then(() => {
       closeOverlayLegacy();
       notify("Contact updated successfully.");
     });
-    return;
   }
 
   const color = colorPool[hashStr(name) % colorPool.length];
-  createContact(name, email, phone, color).then(() => {
+  return createContact(name, email, phone, color).then(() => {
     const id = state.selectedId;
     closeOverlayLegacy();
     if (id) {
       renderDetailForId(id);
       setActiveRow(id);
       showDetailFullscreenIfMobile();
-      if (typeof updateFabForContact === "function") updateFabForContact(id);
+      typeof updateFabForContact === "function" && updateFabForContact(id);
     }
     notify("Contact created successfully.");
   });
@@ -288,7 +264,6 @@ async function onDelete() {
   const id = state.selectedId;
   if (!id) return;
 
-  // ✅ Kein confirm/alert — direkt löschen
   await deleteContactById(id);
 
   state.selectedId = null;
@@ -308,36 +283,35 @@ function renderDetailForId(id) {
 function restoreSelectedIfExists() {
   const id = state.selectedId;
   if (!id) return false;
+
   const modern = qs(`.row[data-id="${id}"]`);
   const legacy = qs(`.contact-row[data-id="${id}"]`);
   if (!modern && !legacy) return false;
+
   setActiveRow(id);
   renderDetailForId(id);
   return true;
 }
 
 function selectFirstAvailable() {
-  const firstModern = qs(".row");
-  const firstLegacy = qs(".contact-row");
-  const first = firstModern || firstLegacy;
+  const first = qs(".row") || qs(".contact-row");
   if (first) {
     const cid = first.dataset.id;
     state.selectedId = cid;
     setActiveRow(cid);
     renderDetailForId(cid);
-  } else {
-    const detail = qs(".detail-card");
-    if (detail) detail.innerHTML = "<p>No contact selected.</p>";
-    else renderEmptyDetailLegacy();
+    return;
   }
+
+  const detail = qs(".detail-card");
+  if (detail) detail.innerHTML = "<p>No contact selected.</p>";
+  else renderEmptyDetailLegacy();
 }
 
 function afterRenderSelectFallback() {
   if (restoreSelectedIfExists()) return;
   selectFirstAvailable();
 }
-
-/* FAB / Mobile Menu */
 
 function updateFabForContact(id) {
   const btn = byId("contact-menu-btn");
@@ -348,12 +322,12 @@ function updateFabForContact(id) {
   menu.classList.add("d_none");
 }
 
+/* Data normalization */
+
 function normalizeStoreData(raw) {
   if (!raw) return {};
-  if (typeof raw === "object" && !Array.isArray(raw) && raw !== null) {
-    if (raw.contacts && typeof raw.contacts === "object") {
-      return normalizeStoreData(raw.contacts);
-    }
+  if (typeof raw === "object" && raw !== null && !Array.isArray(raw)) {
+    if (raw.contacts && typeof raw.contacts === "object") return normalizeStoreData(raw.contacts);
     return raw;
   }
   if (Array.isArray(raw)) {
@@ -368,11 +342,14 @@ function normalizeStoreData(raw) {
   return {};
 }
 
+/* Render scheduling */
+
 let scheduled = false;
 
 function scheduleRender() {
   if (scheduled) return;
   scheduled = true;
+
   requestAnimationFrame(() => {
     scheduled = false;
     const usedModern = renderContactsModern();
@@ -390,34 +367,27 @@ function startLiveView() {
   });
 }
 
+/* Handlers */
+
 function attachLegacyOverlayHandlers() {
-  const openBtn = byId("open-add-contact-overlay");
-  const closeBtn = byId("close-add-contact-overlay");
-  const cancelBtn = byId("cancel-add-contact-overlay");
-  const createBtn = byId("create-contact-btn");
   const overlay = byId("add-contact-overlay");
 
-  if (openBtn) openBtn.addEventListener("click", () => openModal("create"));
-  if (closeBtn) closeBtn.addEventListener("click", closeOverlayLegacy);
-  if (cancelBtn) cancelBtn.addEventListener("click", closeOverlayLegacy);
-  if (createBtn) createBtn.addEventListener("click", handleCreateClick);
-  if (overlay)
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) closeOverlayLegacy();
-    });
+  byId("open-add-contact-overlay")?.addEventListener("click", () => openModal("create"));
+  byId("close-add-contact-overlay")?.addEventListener("click", closeOverlayLegacy);
+  byId("cancel-add-contact-overlay")?.addEventListener("click", closeOverlayLegacy);
+  byId("create-contact-btn")?.addEventListener("click", handleCreateClick);
 
-  // ✅ Nur das jeweilige Feld löscht seinen Fehler
-  const nIn = byId("contact-name-input");
-  const eIn = byId("contact-email-input");
-  const pIn = byId("contact-phone-input");
-  nIn?.addEventListener("input", () => clearFieldError("name"));
-  eIn?.addEventListener("input", () => clearFieldError("email"));
-  pIn?.addEventListener("input", () => clearFieldError("phone"));
+  overlay?.addEventListener("click", (e) => e.target === overlay && closeOverlayLegacy());
+
+  byId("contact-name-input")?.addEventListener("input", () => clearFieldError("name"));
+  byId("contact-email-input")?.addEventListener("input", () => clearFieldError("email"));
+  byId("contact-phone-input")?.addEventListener("input", () => clearFieldError("phone"));
 }
 
 function attachModernHandlers() {
   const addBtn = byId("openAddModal");
   if (addBtn) addBtn.addEventListener("click", () => openModal("create"));
+
   const backBtn = byId("return-arrow");
   if (backBtn && !backBtn.dataset.bound) {
     backBtn.addEventListener("click", () => {
@@ -431,8 +401,6 @@ function attachModernHandlers() {
 function initFabMenu() {
   const btn = byId("contact-menu-btn");
   const menu = byId("contact-menu");
-  const edit = byId("contact-menu-edit");
-  const del = byId("contact-menu-delete");
   if (!btn || !menu) return;
 
   btn.addEventListener("click", (e) => {
@@ -440,25 +408,21 @@ function initFabMenu() {
     menu.classList.toggle("d_none");
   });
 
-  if (edit)
-    edit.addEventListener("click", () => {
-      if (!state.selectedId) return;
-      openModal("edit", state.selectedId);
-      menu.classList.add("d_none");
-    });
+  byId("contact-menu-edit")?.addEventListener("click", () => {
+    if (!state.selectedId) return;
+    openModal("edit", state.selectedId);
+    menu.classList.add("d_none");
+  });
 
-  if (del)
-    del.addEventListener("click", () => {
-      if (!state.selectedId) return;
-      onDelete();
-      menu.classList.add("d_none");
-    });
+  byId("contact-menu-delete")?.addEventListener("click", () => {
+    if (!state.selectedId) return;
+    onDelete();
+    menu.classList.add("d_none");
+  });
 
   document.addEventListener("click", (e) => {
     if (menu.classList.contains("d_none")) return;
-    if (!menu.contains(e.target) && !btn.contains(e.target)) {
-      menu.classList.add("d_none");
-    }
+    if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add("d_none");
   });
 }
 
@@ -471,11 +435,9 @@ function init() {
   initFabMenu();
 
   window.addEventListener("resize", () => {
-    if (!isMobileLayout()) {
-      hideDetailFullscreen();
-      const backBtn = byId("return-arrow");
-      if (backBtn) backBtn.classList.add("d_none");
-    }
+    if (isMobileLayout()) return;
+    hideDetailFullscreen();
+    byId("return-arrow")?.classList.add("d_none");
   });
 }
 

@@ -26,9 +26,7 @@ function nameToInitials(displayName, email) {
 function getInitialsFromName(name) {
   const parts = name.split(/\s+/).filter(Boolean);
   if (parts.length >= 2) {
-    return (parts[0][0] + parts[parts.length - 1][0]).toLocaleUpperCase(
-      "de-DE"
-    );
+    return (parts[0][0] + parts[parts.length - 1][0]).toLocaleUpperCase("de-DE");
   }
   return name.slice(0, 2).toLocaleUpperCase("de-DE");
 }
@@ -48,13 +46,7 @@ async function loadNameHeader() {
 
   onAuthStateChanged(window.auth, async (user) => {
     try {
-      if (!user) {
-        userNameRef.innerText = "G";
-        return;
-      }
-      const dbName = await dbApi.getData(`users/${user.uid}/displayName`);
-      const name = (dbName || user.displayName || "").trim();
-      userNameRef.innerText = nameToInitials(name, user.email);
+      userNameRef.innerText = user ? await initialsForUser(user) : "G";
     } catch (err) {
       console.error(err);
       userNameRef.innerText = "G";
@@ -62,29 +54,51 @@ async function loadNameHeader() {
   });
 }
 
+async function initialsForUser(user) {
+  const dbName = await dbApi.getData(`users/${user.uid}/displayName`);
+  const name = (dbName || user.displayName || "").trim();
+  return nameToInitials(name, user.email);
+}
+
 function delTask(id) {
   dbApi.deleteData("/board" + findColumnOfTask(id) + "/" + id);
 }
 
+/* --------- NAV: refactor --------- */
+
 function setupGlobalNavClicks() {
-  addEventListener("click", (event) => {
-    if (event.target.closest("#login")) window.location.href = "./login.html";
-    if (event.target.closest("#summary")) window.location.href = "./index.html";
-    if (event.target.closest("#add-task"))
-      window.location.href = "./add-task.html";
-    if (event.target.closest("#board")) window.location.href = "./board.html";
-    if (event.target.closest("#contacts"))
-      window.location.href = "./contacts.html";
-    if (event.target.closest("#m-login")) window.location.href = "./login.html";
-    if (event.target.closest("#m-summary"))
-      window.location.href = "./index.html";
-    if (event.target.closest("#m-add-task"))
-      window.location.href = "./add-task.html";
-    if (event.target.closest("#m-board")) window.location.href = "./board.html";
-    if (event.target.closest("#m-contacts"))
-      window.location.href = "./contacts.html";
-  });
+  addEventListener("click", (event) => handleNavClick(event));
 }
+
+function handleNavClick(event) {
+  const routes = navRoutes();
+  const path = matchRoute(event.target, routes);
+  if (path) window.location.href = path;
+}
+
+function navRoutes() {
+  return [
+    ["#login", "./login.html"],
+    ["#summary", "./index.html"],
+    ["#add-task", "./add-task.html"],
+    ["#board", "./board.html"],
+    ["#contacts", "./contacts.html"],
+    ["#m-login", "./login.html"],
+    ["#m-summary", "./index.html"],
+    ["#m-add-task", "./add-task.html"],
+    ["#m-board", "./board.html"],
+    ["#m-contacts", "./contacts.html"],
+  ];
+}
+
+function matchRoute(target, routes) {
+  for (const [selector, href] of routes) {
+    if (target.closest(selector)) return href;
+  }
+  return null;
+}
+
+/* --------- DROPDOWN: ok --------- */
 
 function setupUserDropdown() {
   document.addEventListener("DOMContentLoaded", () => {
@@ -150,54 +164,81 @@ addEventListener("load", () => {
   loadNameHeader();
 });
 
+/* --------- LOADER: refactor --------- */
+
 window.addEventListener("load", () => {
+  const cfg = getLoaderConfig();
+  if (!cfg) return;
+
+  resetLoaderAnimation(cfg.loaderLogo);
+  startLoaderAnimation(cfg.fixedLogo, cfg.loaderLogo);
+});
+
+function getLoaderConfig() {
   const fixedLogo = document.getElementById("fix-logo");
+  if (!fixedLogo) return null;
+
   const loaderDesktop = document.getElementById("loader-img");
   const loaderMobile = document.getElementById("loader-img-mobile");
+  const loaderLogo = pickLoaderLogo(loaderDesktop, loaderMobile);
 
-  if (!fixedLogo) return;
+  return loaderLogo ? { fixedLogo, loaderLogo } : null;
+}
 
+function pickLoaderLogo(loaderDesktop, loaderMobile) {
   const isMobile = window.matchMedia("(max-width: 660px)").matches;
-  const loaderLogo = isMobile ? loaderMobile : loaderDesktop;
+  return isMobile ? loaderMobile : loaderDesktop;
+}
 
-  if (!loaderLogo) return;
-
+function resetLoaderAnimation(loaderLogo) {
   loaderLogo.classList.remove("animate");
+}
 
-  const start = () => {
-    const logoRect = fixedLogo.getBoundingClientRect();
-    const loaderRect = loaderLogo.getBoundingClientRect();
+function startLoaderAnimation(fixedLogo, loaderLogo) {
+  const start = () => animateLoaderToLogo(fixedLogo, loaderLogo, start);
+  waitForLoaderImage(loaderLogo, start);
+}
 
-    if (!logoRect.width || !loaderRect.width) {
-      requestAnimationFrame(start);
-      return;
-    }
-
-    const startX = window.innerWidth / 2;
-    const startY = window.innerHeight / 2;
-
-    const targetX = logoRect.left + logoRect.width / 2;
-    const targetY = logoRect.top + logoRect.height / 2;
-
-    const dx = targetX - startX;
-    const dy = targetY - startY;
-
-    const scale = logoRect.width / loaderRect.width;
-
-    loaderLogo.style.setProperty("--dx", `${dx}px`);
-    loaderLogo.style.setProperty("--dy", `${dy}px`);
-    loaderLogo.style.setProperty("--scale", `${scale}`);
-
-    void loaderLogo.offsetWidth;
-    loaderLogo.classList.add("animate");
-  };
-
+function waitForLoaderImage(loaderLogo, start) {
   if (loaderLogo.tagName === "IMG" && !loaderLogo.complete) {
     loaderLogo.addEventListener("load", start, { once: true });
   } else {
     requestAnimationFrame(start);
   }
-});
+}
+
+function animateLoaderToLogo(fixedLogo, loaderLogo, retry) {
+  const data = calcAnimationData(fixedLogo, loaderLogo);
+  if (!data) return requestAnimationFrame(retry);
+
+  applyAnimationVars(loaderLogo, data);
+  void loaderLogo.offsetWidth;
+  loaderLogo.classList.add("animate");
+}
+
+function calcAnimationData(fixedLogo, loaderLogo) {
+  const logoRect = fixedLogo.getBoundingClientRect();
+  const loaderRect = loaderLogo.getBoundingClientRect();
+  if (!logoRect.width || !loaderRect.width) return null;
+
+  const startX = window.innerWidth / 2;
+  const startY = window.innerHeight / 2;
+
+  const targetX = logoRect.left + logoRect.width / 2;
+  const targetY = logoRect.top + logoRect.height / 2;
+
+  return {
+    dx: targetX - startX,
+    dy: targetY - startY,
+    scale: logoRect.width / loaderRect.width,
+  };
+}
+
+function applyAnimationVars(loaderLogo, { dx, dy, scale }) {
+  loaderLogo.style.setProperty("--dx", `${dx}px`);
+  loaderLogo.style.setProperty("--dy", `${dy}px`);
+  loaderLogo.style.setProperty("--scale", `${scale}`);
+}
 
 setupGlobalNavClicks();
 setupUserDropdown();
