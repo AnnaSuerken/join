@@ -1,6 +1,10 @@
-// js/helpers.js
+/**
+ * board/helpers.js
+ * Allgemeine Helfer + Kontakte/Assign.
+ */
 
-/* ---------- generelle Helfer ---------- */
+/* ---------- General ---------- */
+
 export function safeParse(s) {
   try {
     return JSON.parse(s);
@@ -10,30 +14,27 @@ export function safeParse(s) {
 }
 
 export function escapeHtml(str) {
-  return String(str).replace(
-    /[&<>"']/g,
-    (m) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;",
-      }[m])
+  return String(str).replace(/[&<>"']/g, (m) => mapEsc(m));
+}
+
+function mapEsc(m) {
+  return (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m] || m
   );
 }
 
 export function normalizeSubtasks(task) {
-  if (Array.isArray(task?.subtasks)) {
-    return task.subtasks.map((s) => ({
-      text: s.text || s,
-      done: !!s.done,
-    }));
-  }
-  if (Array.isArray(task?.subtask)) {
-    return task.subtask.map((t) => ({ text: t, done: false }));
-  }
+  if (Array.isArray(task?.subtasks)) return normalizeNew(task.subtasks);
+  if (Array.isArray(task?.subtask)) return normalizeOld(task.subtask);
   return [];
+}
+
+function normalizeNew(list) {
+  return list.map((s) => ({ text: s.text || s, done: !!s.done }));
+}
+
+function normalizeOld(list) {
+  return list.map((t) => ({ text: t, done: false }));
 }
 
 export function capitalize(s = "") {
@@ -44,105 +45,117 @@ export function formatDate(s) {
   if (!s) return "-";
   const d = new Date(s);
   if (isNaN(d)) return "-";
-  return `${String(d.getDate()).padStart(2, "0")}.${String(
-    d.getMonth() + 1
-  ).padStart(2, "0")}.${d.getFullYear()}`;
+  return `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)}.${d.getFullYear()}`;
+}
+
+function pad2(n) {
+  return String(n).padStart(2, "0");
 }
 
 export function toISODateOnly(d) {
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 10);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 }
 
-/* ---------- Kontakte / Assignments ---------- */
-/** nutzt window.boardContacts (wird in board.js gesetzt) */
+/* ---------- Assignments ---------- */
+
 export function normalizeAssigneesToIds(val) {
-  const maps = window.boardContacts || {};
-  const contactsById = maps.contactsById || new Map();
-  const contactIdByName = maps.contactIdByName || new Map();
-  const contactIdByEmail = maps.contactIdByEmail || new Map();
-
-  if (!val) return [];
+  const maps = getContactMaps();
   const out = [];
-  const pushIf = (id) => {
-    if (id && contactsById.has(id)) out.push(id);
-  };
 
-  if (Array.isArray(val)) {
-    for (const x of val) {
-      if (typeof x === "string") {
-        const s = x.trim();
-        if (contactsById.has(s)) {
-          pushIf(s);
-          continue;
-        }
-        if (s.includes("@")) {
-          pushIf(contactIdByEmail.get(s.toLowerCase()));
-          continue;
-        }
-        pushIf(contactIdByName.get(s.toLowerCase()));
-      } else if (x && typeof x === "object") {
-        const byId = (x.id || x.contactId || "").toString().trim();
-        if (contactsById.has(byId)) {
-          pushIf(byId);
-          continue;
-        }
-        const byEmail = (x.email || "").toLowerCase();
-        if (byEmail) {
-          pushIf(contactIdByEmail.get(byEmail));
-          continue;
-        }
-        const byName = (x.name || "").toLowerCase();
-        if (byName) {
-          pushIf(contactIdByName.get(byName));
-        }
-      }
-    }
-  } else if (typeof val === "string") {
-    for (const token of val
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean)) {
-      if (contactsById.has(token)) {
-        pushIf(token);
-        continue;
-      }
-      if (token.includes("@")) {
-        pushIf(contactIdByEmail.get(token.toLowerCase()));
-        continue;
-      }
-      pushIf(contactIdByName.get(token.toLowerCase()));
-    }
-  }
+  if (!val) return out;
+  if (Array.isArray(val)) return parseArray(val, maps, out);
+  if (typeof val === "string") return parseString(val, maps, out);
+
   return out;
+}
+
+function getContactMaps() {
+  const maps = window.boardContacts || {};
+  return {
+    contactsById: maps.contactsById || new Map(),
+    byName: maps.contactIdByName || new Map(),
+    byEmail: maps.contactIdByEmail || new Map(),
+  };
+}
+
+function parseArray(arr, maps, out) {
+  arr.forEach((x) => parseToken(x, maps, out));
+  return out;
+}
+
+function parseString(s, maps, out) {
+  s.split(",").map((x) => x.trim()).filter(Boolean).forEach((t) => parseToken(t, maps, out));
+  return out;
+}
+
+function parseToken(x, maps, out) {
+  if (typeof x === "string") return parseStringToken(x, maps, out);
+  if (x && typeof x === "object") return parseObjectToken(x, maps, out);
+}
+
+function parseStringToken(s, maps, out) {
+  const token = s.trim();
+  if (!token) return;
+  if (tryById(token, maps, out)) return;
+  if (token.includes("@")) return tryByEmail(token, maps, out);
+  tryByName(token, maps, out);
+}
+
+function parseObjectToken(o, maps, out) {
+  const id = (o.id || o.contactId || "").toString().trim();
+  if (tryById(id, maps, out)) return;
+
+  const email = (o.email || "").toLowerCase();
+  if (email) return tryByEmail(email, maps, out);
+
+  const name = (o.name || "").toLowerCase();
+  if (name) tryByName(name, maps, out);
+}
+
+function tryById(id, maps, out) {
+  if (!id || !maps.contactsById.has(id)) return false;
+  out.push(id);
+  return true;
+}
+
+function tryByEmail(email, maps, out) {
+  const id = maps.byEmail.get(email.toLowerCase());
+  if (id && maps.contactsById.has(id)) out.push(id);
+}
+
+function tryByName(name, maps, out) {
+  const id = maps.byName.get(name.toLowerCase());
+  if (id && maps.contactsById.has(id)) out.push(id);
 }
 
 export function populateAssignedChips(ids, containerEl) {
   if (!containerEl) return;
+  const contacts = ids.map(getContactById).filter(Boolean);
+  if (!contacts.length) return (containerEl.innerHTML = "");
+
+  const { shown, more } = splitMax(contacts, 4);
+  containerEl.innerHTML = shown.map(chipTpl).join("") + moreTpl(more);
+}
+
+function getContactById(id) {
   const maps = window.boardContacts || {};
-  const contactsById = maps.contactsById || new Map();
+  const byId = maps.contactsById || new Map();
+  return byId.get(id);
+}
 
-  containerEl.innerHTML = "";
-  const contacts = ids.map((id) => contactsById.get(id)).filter(Boolean);
-  if (!contacts.length) return;
+function splitMax(list, max) {
+  const shown = list.slice(0, max);
+  const more = list.length - shown.length;
+  return { shown, more };
+}
 
-  const max = 4;
-  const shown = contacts.slice(0, max);
-  const more = contacts.length - shown.length;
+function chipTpl(c) {
+  return `
+    <span class="avatar-chip" style="background:${escapeHtml(c.color)}" title="${escapeHtml(c.name)}">
+      ${escapeHtml(c.initials)}
+    </span>`;
+}
 
-  const chips = shown
-    .map(
-      (c) => `
-      <span class="avatar-chip" style="background:${escapeHtml(
-        c.color
-      )}" title="${escapeHtml(c.name)}">
-        ${escapeHtml(c.initials)}
-      </span>`
-    )
-    .join("");
-
-  containerEl.innerHTML =
-    chips +
-    (more > 0 ? `<span class="avatar-chip more-chip">+${more}</span>` : "");
+function moreTpl(more) {
+  return more > 0 ? `<span class="avatar-chip more-chip">+${more}</span>` : "";
 }
