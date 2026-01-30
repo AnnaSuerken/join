@@ -1,3 +1,9 @@
+/**
+ * Generates a unique identifier based on timestamp and randomness.
+ *
+ * @returns {string}
+ * Generated unique ID.
+ */
 function genId() {
   return Date.now().toString(16) + Math.random().toString(16).slice(2);
 }
@@ -43,8 +49,9 @@ const state = {
   unsubscribe: null,
 };
 
-/* ===== NUR DB-API ===== */
-
+/**
+ * Ensures that the global dbApi is available.
+ */
 function assertDbApi() {
   if (!window.dbApi) {
     console.error(
@@ -80,8 +87,15 @@ const store = {
   },
 };
 
-/* ===== CONTACT-NORMALISIERUNG ===== */
-
+/**
+ * Normalizes raw contact data into a consistent structure.
+ *
+ * @param {string} id
+ * Contact ID.
+ *
+ * @param {Object} raw
+ * Raw contact data.
+ */
 function normalizeContact(id, raw) {
   if (!raw) return null;
   const name = raw?.name ?? "";
@@ -100,17 +114,38 @@ function normalizeContact(id, raw) {
   };
 }
 
+/**
+ * Converts the internal state object into a contacts array.
+ *
+ * @returns {Object[]}
+ * Array of normalized contacts.
+ */
 function contactsArrayFromState() {
   const entries = Object.entries(state.data || {});
   return entries.map(([id, raw]) => normalizeContact(id, raw)).filter(Boolean);
 }
 
+/**
+ * Sorts contacts array alphabetically by name.
+ *
+ * @param {Object[]} arr
+ * Contacts array.
+ */
 function sortContactsInPlace(arr) {
   arr.sort((a, b) => {
     return a.name.localeCompare(b.name, "de", { sensitivity: "base" });
   });
 }
 
+/**
+ * Displays and logs a store-related error.
+ *
+ * @param {string} msg
+ * Error message.
+ *
+ * @param {Error} e
+ * Error object.
+ */
 function showStoreError(msg, e) {
   console.error(e);
   if (typeof showToast === "function") {
@@ -118,8 +153,21 @@ function showStoreError(msg, e) {
   }
 }
 
-/* ===== CREATE / UPDATE / DELETE ===== */
-
+/**
+ * Creates a new contact entry.
+ *
+ * @param {string} name
+ * Contact name.
+ *
+ * @param {string} email
+ * Contact email.
+ *
+ * @param {string} phone
+ * Contact phone number.
+ *
+ * @param {string} color
+ * Contact color.
+ */
 async function createContact(name, email, phone, color) {
   const payload = {
     name,
@@ -136,6 +184,18 @@ async function createContact(name, email, phone, color) {
   }
 }
 
+/**
+ * Saves changes to the currently selected contact.
+ *
+ * @param {string} name
+ * Updated name.
+ *
+ * @param {string} email
+ * Updated email.
+ *
+ * @param {string} phone
+ * Updated phone number.
+ */
 async function saveEdit(name, email, phone) {
   const id = state.selectedId;
   if (!id) return;
@@ -155,6 +215,12 @@ async function saveEdit(name, email, phone) {
   }
 }
 
+/**
+ * Deletes a contact by its ID.
+ *
+ * @param {string} id
+ * Contact ID.
+ */
 async function deleteContactById(id) {
   try {
     await store.deleteData(`contacts/${id}`);

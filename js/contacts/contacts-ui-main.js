@@ -1,123 +1,6 @@
-/* contacts-ui-main.js */
-
-/* Modal / Overlay */
-
-let modalMode = "create";
-
-/* ====== NON-BLOCKING TOAST  ====== */
-
-function showInlineToast(message, isError = false, duration = 2500) {
-  const toast = byId("toast");
-  if (!toast) return;
-
-  toast.textContent = message;
-  toast.classList.toggle("error", !!isError);
-  toast.classList.remove("d_none");
-
-  clearTimeout(showInlineToast._t);
-  showInlineToast._t = setTimeout(() => {
-    toast.classList.add("d_none");
-    toast.classList.remove("error");
-    toast.textContent = "";
-  }, duration);
-}
-
-function notify(message, isError = false) {
-  try {
-    if (typeof showToast === "function") return showToast(message, isError);
-  } catch (e) {
-    console.warn("[contacts] showToast failed, fallback to inline toast", e);
-  }
-  showInlineToast(message, isError);
-}
-
-/* ====== VALIDATION  ====== */
-
-const nameError = () => byId("contact-name-error");
-const emailError = () => byId("contact-email-error");
-const phoneError = () => byId("contact-phone-error");
-
-function clearFieldError(field) {
-  const cfg = {
-    name: ["contact-name-error", "contact-name-input"],
-    email: ["contact-email-error", "contact-email-input"],
-    phone: ["contact-phone-error", "contact-phone-input"],
-  }[field];
-  if (!cfg) return;
-
-  byId(cfg[0]) && (byId(cfg[0]).textContent = "");
-  byId(cfg[1])?.classList.remove("error");
-}
-
-function clearContactErrors() {
-  clearFieldError("name");
-  clearFieldError("email");
-  clearFieldError("phone");
-}
-
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function isValidPhone(phone) {
-  const p = String(phone || "").trim();
-  if (!p) return false;
-  if (!/^[0-9+\-()./\s]+$/.test(p)) return false;
-  return (p.match(/\d/g) || []).length >= 6;
-}
-
-function showNameError(msg) {
-  const el = nameError();
-  const input = byId("contact-name-input");
-  if (el) el.textContent = msg;
-  input?.classList.add("error");
-}
-
-function showEmailError(msg) {
-  const el = emailError();
-  const input = byId("contact-email-input");
-  if (el) el.textContent = msg;
-  input?.classList.add("error");
-}
-
-function showPhoneError(msg) {
-  const el = phoneError();
-  const input = byId("contact-phone-input");
-  if (el) el.textContent = msg;
-  input?.classList.add("error");
-}
-
-function validateContactForm({ name, email, phone }) {
-  clearContactErrors();
-
-  let ok = true;
-
-  if (!name) {
-    showNameError("Bitte gib einen Namen ein.");
-    ok = false;
-  }
-
-  if (!email) {
-    showEmailError("Bitte gib eine Email-Adresse ein.");
-    ok = false;
-  } else if (!isValidEmail(email)) {
-    showEmailError("Bitte gib eine gültige Email-Adresse ein.");
-    ok = false;
-  }
-
-  if (!phone) {
-    showPhoneError("Bitte gib eine Telefonnummer ein.");
-    ok = false;
-  } else if (!isValidPhone(phone)) {
-    showPhoneError("Bitte gib eine gültige Telefonnummer ein.");
-    ok = false;
-  }
-
-  return ok;
-}
-
-/* ====== Overlay / Modal ====== */
-
+/**
+ * Opens the legacy contact overlay with animation.
+ */
 function openOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
   if (!overlay) return;
@@ -126,6 +9,9 @@ function openOverlayLegacy() {
   overlay.classList.add("modal-open");
 }
 
+/**
+ * Resets the avatar preview inside the modal.
+ */
 function resetOverlayAvatar() {
   const avatar = byId("modal-avatar-preview");
   if (!avatar) return;
@@ -134,6 +20,9 @@ function resetOverlayAvatar() {
     '<img src="./assets/icons/person.svg" alt="avatar placeholder" />';
 }
 
+/**
+ * Closes the legacy contact overlay and resets form state.
+ */
 function closeOverlayLegacy() {
   const overlay = byId("add-contact-overlay");
   if (!overlay) return;
@@ -152,6 +41,11 @@ function closeOverlayLegacy() {
   overlay.classList.remove("modal-open");
 }
 
+/**
+ * Returns all relevant modal DOM elements.
+ *
+ * @returns {Object}
+ */
 function getModalElements() {
   return {
     nameInput: byId("contact-name-input"),
@@ -163,6 +57,18 @@ function getModalElements() {
   };
 }
 
+/**
+ * Updates the modal avatar preview.
+ *
+ * @param {HTMLElement} avatar
+ * Avatar element.
+ *
+ * @param {string} [color]
+ * Avatar background color.
+ *
+ * @param {string} [initials]
+ * Avatar initials.
+ */
 function updateModalAvatar(avatar, color, initials) {
   if (!avatar) return;
 
@@ -181,6 +87,15 @@ function updateModalAvatar(avatar, color, initials) {
   `;
 }
 
+/**
+ * Fills the contact modal with existing contact data for editing.
+ *
+ * @param {Object} contact
+ * Normalized contact object.
+ *
+ * @param {Object} els
+ * Cached modal DOM elements.
+ */
 function fillModalForEdit(contact, els) {
   clearContactErrors();
   els.nameInput.value = contact.name;
@@ -191,6 +106,12 @@ function fillModalForEdit(contact, els) {
   updateModalAvatar(els.avatar, contact.color, contact.initials);
 }
 
+/**
+ * Resets the contact modal for creating a new contact.
+ *
+ * @param {Object} els
+ * Cached modal DOM elements.
+ */
 function resetModalForCreate(els) {
   clearContactErrors();
   els.nameInput.value = "";
@@ -201,6 +122,15 @@ function resetModalForCreate(els) {
   updateModalAvatar(els.avatar);
 }
 
+/**
+ * Opens the contact modal in either create or edit mode.
+ *
+ * @param {"create"|"edit"} [mode="create"]
+ * Modal operation mode.
+ *
+ * @param {string|null} [cid]
+ * Contact ID to edit.
+ */
 function openModal(mode = "create", cid = state.selectedId) {
   modalMode = mode;
   const els = getModalElements();
@@ -221,6 +151,9 @@ function openModal(mode = "create", cid = state.selectedId) {
   openOverlayLegacy();
 }
 
+/**
+ * Reads and normalizes values from the contact modal form.
+ */
 function getModalValues() {
   const nameEl = byId("contact-name-input");
   const emailEl = byId("contact-email-input");
@@ -232,6 +165,11 @@ function getModalValues() {
   };
 }
 
+/**
+ * Handles the primary create / save button click inside the modal.
+ *
+ * Creates or updates a contact depending on the current modal mode.
+ */
 function handleCreateClick() {
   const values = getModalValues();
   if (!validateContactForm(values)) return notify("Bitte überprüfe deine Eingaben.", true);
@@ -260,6 +198,9 @@ function handleCreateClick() {
   });
 }
 
+/**
+ * Deletes the currently selected contact.
+ */
 async function onDelete() {
   const id = state.selectedId;
   if (!id) return;
@@ -273,13 +214,19 @@ async function onDelete() {
   notify("Contact deleted successfully.");
 }
 
-/* Auswahl / Fallback */
-
+/**
+ * Renders the detail view for a contact ID.
+ *
+ * @param {string} id
+ */
 function renderDetailForId(id) {
   if (qs(".detail-card")) updateDetailModern(id);
   else renderContactDetailLegacy(id);
 }
 
+/**
+ * Restores previously selected contact if still present.
+ */
 function restoreSelectedIfExists() {
   const id = state.selectedId;
   if (!id) return false;
@@ -293,6 +240,9 @@ function restoreSelectedIfExists() {
   return true;
 }
 
+/**
+ * Selects the first available contact as fallback.
+ */
 function selectFirstAvailable() {
   const first = qs(".row") || qs(".contact-row");
   if (first) {
@@ -308,11 +258,22 @@ function selectFirstAvailable() {
   else renderEmptyDetailLegacy();
 }
 
+/**
+ * Ensures a valid contact is selected after rendering.
+ */
 function afterRenderSelectFallback() {
   if (restoreSelectedIfExists()) return;
   selectFirstAvailable();
 }
 
+
+/**
+ * Updates the visibility of the floating action button (FAB)
+ * depending on the selected contact and current layout.
+ *
+ * @param {string|null} id
+ * The currently selected contact ID.
+ */
 function updateFabForContact(id) {
   const btn = byId("contact-menu-btn");
   const menu = byId("contact-menu");
@@ -322,8 +283,13 @@ function updateFabForContact(id) {
   menu.classList.add("d_none");
 }
 
-/* Data normalization */
-
+/**
+ * Normalizes raw contact data from the database into
+ * a consistent object-based structure.
+ *
+ * @param {any} raw
+ * Raw data returned from the database.
+ */
 function normalizeStoreData(raw) {
   if (!raw) return {};
   if (typeof raw === "object" && raw !== null && !Array.isArray(raw)) {
@@ -342,10 +308,11 @@ function normalizeStoreData(raw) {
   return {};
 }
 
-/* Render scheduling */
-
 let scheduled = false;
 
+/**
+ * Schedules a single render cycle for the contact list.
+ */
 function scheduleRender() {
   if (scheduled) return;
   scheduled = true;
@@ -359,6 +326,9 @@ function scheduleRender() {
   });
 }
 
+/**
+ * Starts the live database subscription for contacts.
+ */
 function startLiveView() {
   if (state.unsubscribe) state.unsubscribe();
   state.unsubscribe = store.onData("contacts", (data) => {
@@ -367,8 +337,9 @@ function startLiveView() {
   });
 }
 
-/* Handlers */
-
+/**
+ * Attaches event handlers for legacy contact overlay elements.
+ */
 function attachLegacyOverlayHandlers() {
   const overlay = byId("add-contact-overlay");
 
@@ -384,6 +355,9 @@ function attachLegacyOverlayHandlers() {
   byId("contact-phone-input")?.addEventListener("input", () => clearFieldError("phone"));
 }
 
+/**
+ * Attaches event handlers for the modern contact UI.
+ */
 function attachModernHandlers() {
   const addBtn = byId("openAddModal");
   if (addBtn) addBtn.addEventListener("click", () => openModal("create"));
@@ -398,36 +372,58 @@ function attachModernHandlers() {
   }
 }
 
+/**
+ * Initializes the floating action button (FAB) menu for contacts.
+ *
+ * Handles opening/closing the menu, edit/delete actions,
+ * and closing on outside click.
+ */
 function initFabMenu() {
   const btn = byId("contact-menu-btn");
   const menu = byId("contact-menu");
   if (!btn || !menu) return;
 
+  wireFabToggle(btn, menu);
+  wireFabActions(menu);
+  wireFabOutsideClose(btn, menu);
+}
+
+function wireFabToggle(btn, menu) {
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
     menu.classList.toggle("d_none");
   });
+}
 
-  byId("contact-menu-edit")?.addEventListener("click", () => {
-    if (!state.selectedId) return;
-    openModal("edit", state.selectedId);
-    menu.classList.add("d_none");
-  });
+function wireFabActions(menu) {
+  byId("contact-menu-edit")?.addEventListener("click", () =>
+    handleFabAction(menu, () => openModal("edit", state.selectedId))
+  );
 
-  byId("contact-menu-delete")?.addEventListener("click", () => {
-    if (!state.selectedId) return;
-    onDelete();
-    menu.classList.add("d_none");
-  });
+  byId("contact-menu-delete")?.addEventListener("click", () =>
+    handleFabAction(menu, onDelete)
+  );
+}
 
+function handleFabAction(menu, action) {
+  if (!state.selectedId) return;
+  action();
+  menu.classList.add("d_none");
+}
+
+function wireFabOutsideClose(btn, menu) {
   document.addEventListener("click", (e) => {
-    if (menu.classList.contains("d_none")) return;
-    if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add("d_none");
+    if (!menu.classList.contains("d_none") &&
+        !menu.contains(e.target) &&
+        !btn.contains(e.target)) {
+      menu.classList.add("d_none");
+    }
   });
 }
 
-/* Init */
-
+/**
+ * Initializes the contacts UI and starts live data subscription.
+ */
 function init() {
   startLiveView();
   attachModernHandlers();

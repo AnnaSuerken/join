@@ -1,7 +1,13 @@
+/**
+ * Checks whether the current viewport matches the mobile layout.
+ */
 function isMobileLayout() {
   return window.innerWidth <= 820;
 }
 
+/**
+ * Displays the contact detail view in fullscreen mode on mobile devices.
+ */
 function showDetailFullscreenIfMobile() {
   if (!isMobileLayout()) return;
   const cm = qs(".contacts-main");
@@ -10,13 +16,22 @@ function showDetailFullscreenIfMobile() {
   if (cm) cm.classList.add("show-detail");
 }
 
+/**
+ * Hides the fullscreen contact detail view.
+ */
 function hideDetailFullscreen() {
   const cm = qs(".contacts-main");
   if (cm) cm.classList.remove("show-detail");
 }
 
-/* Legacy Render */
-
+/**
+ * Creates and appends a letter header element to the legacy contact list.
+ *
+ * @param {string} letter
+ * Uppercase grouping letter.
+ * @param {HTMLElement} listEl
+ * Target list container.
+ */
 function createLetterHeader(letter, listEl) {
   const el = document.createElement("div");
   el.className = "contacts-letter";
@@ -24,6 +39,14 @@ function createLetterHeader(letter, listEl) {
   listEl.appendChild(el);
 }
 
+/**
+ * Creates and appends a legacy contact row.
+ *
+ * @param {Object} c
+ * Normalized contact object.
+ * @param {HTMLElement} listEl
+ * Target list container.
+ */
 function createLegacyRow(c, listEl) {
   const row = document.createElement("div");
   row.className = "contact-row";
@@ -37,6 +60,12 @@ function createLegacyRow(c, listEl) {
   listEl.appendChild(row);
 }
 
+/**
+ * Generates the HTML template for a legacy contact row.
+ *
+ * @param {Object} c
+ * Normalized contact object.
+ */
 function legacyRowTemplate(c) {
   return `
     <div class="avatar-small" style="background-color:${c.color}">${c.initials}</div>
@@ -47,6 +76,12 @@ function legacyRowTemplate(c) {
   `;
 }
 
+/**
+ * Renders the legacy contact list grouped by first letter.
+ *
+ * @returns {boolean}
+ * True if rendering was successful.
+ */
 function renderContactListLegacy() {
   const listEl = byId("contacts-scroll");
   if (!listEl) return false;
@@ -65,6 +100,12 @@ function renderContactListLegacy() {
   return true;
 }
 
+/**
+ * Generates the legacy contact detail HTML template.
+ *
+ * @param {Object} c
+ * Normalized contact object.
+ */
 function legacyDetailTemplate(c) {
   return `
     <div class="contact-header-row">
@@ -101,6 +142,12 @@ function legacyDetailTemplate(c) {
   `;
 }
 
+/**
+ * Renders the legacy contact detail view for a given contact ID.
+ *
+ * @param {string} id
+ * Contact identifier.
+ */
 function renderContactDetailLegacy(id) {
   const detailEl = byId("contact-detail");
   if (!detailEl) return;
@@ -114,6 +161,9 @@ function renderContactDetailLegacy(id) {
   if (typeof updateFabForContact === "function") updateFabForContact(c.id);
 }
 
+/**
+ * Renders an empty legacy contact detail placeholder.
+ */
 function renderEmptyDetailLegacy() {
   const detailEl = byId("contact-detail");
   if (!detailEl) return;
@@ -124,8 +174,14 @@ function renderEmptyDetailLegacy() {
   `;
 }
 
-/* Modern Render */
-
+/**
+ * Finds an existing contact group by letter.
+ *
+ * @param {string} letter
+ * Grouping letter.
+ * @param {HTMLElement} list
+ * Contact list container.
+ */
 function findGroupByLetter(letter, list) {
   const groups = qsa(".group", list);
   for (const g of groups) {
@@ -136,6 +192,16 @@ function findGroupByLetter(letter, list) {
   return null;
 }
 
+/**
+ * Inserts a contact group element into the list in alphabetical order.
+ *
+ * @param {string} letter
+ * Grouping letter.
+ * @param {HTMLElement} list
+ * List container.
+ * @param {HTMLElement} newGroup
+ * Group element to insert.
+ */
 function insertGroupSorted(letter, list, newGroup) {
   const groups = qsa(".group", list);
   let placed = false;
@@ -151,6 +217,12 @@ function insertGroupSorted(letter, list, newGroup) {
   if (!placed) list.appendChild(newGroup);
 }
 
+/**
+ * Ensures a contact group exists for a given letter.
+ *
+ * @param {string} letter
+ * Grouping letter.
+ */
 function ensureGroup(letter) {
   const upper = (letter || "#").toUpperCase();
   const list = qs(".list");
@@ -164,6 +236,14 @@ function ensureGroup(letter) {
   return g;
 }
 
+/**
+ * Inserts a contact row into a group in sorted order.
+ *
+ * @param {HTMLElement} groupEl
+ * Target group element.
+ * @param {HTMLElement} rowEl
+ * Contact row element.
+ */
 function insertRowSorted(groupEl, rowEl) {
   const rows = qsa(".row", groupEl);
   const newName = qs(".row-name", rowEl).textContent.trim();
@@ -178,6 +258,12 @@ function insertRowSorted(groupEl, rowEl) {
   groupEl.appendChild(rowEl);
 }
 
+/**
+ * Creates the HTML template for a modern contact row.
+ *
+ * @param {Object} c
+ * Normalized contact object.
+ */
 function makeRowTemplate(c) {
   return `
     <div class="avatar" style="background:${c.color}">${c.initials}</div>
@@ -188,6 +274,12 @@ function makeRowTemplate(c) {
   `;
 }
 
+/**
+ * Creates a clickable modern contact row button.
+ *
+ * @param {Object} c
+ * Normalized contact object.
+ */
 function makeRow(c) {
   const button = document.createElement("button");
   button.className = "row";
@@ -202,6 +294,12 @@ function makeRow(c) {
   return button;
 }
 
+/**
+ * Sets the active contact row across legacy and modern layouts.
+ *
+ * @param {string} cid
+ * Contact identifier.
+ */
 function setActiveRow(cid) {
   state.selectedId = cid;
   const targetId = String(cid);
@@ -213,6 +311,12 @@ function setActiveRow(cid) {
   });
 }
 
+/**
+ * Generates the modern contact detail HTML template.
+ *
+ * @param {Object} c
+ * Normalized contact object.
+ */
 function modernDetailTemplate(c) {
   return `
     <div class="detail-header">
@@ -241,6 +345,12 @@ function modernDetailTemplate(c) {
   `;
 }
 
+/**
+ * Updates the modern contact detail view.
+ *
+ * @param {string} cid
+ * Contact identifier.
+ */
 function updateDetailModern(cid) {
   const c = normalizeContact(cid, state.data[cid]);
   if (!c) return;
@@ -254,6 +364,9 @@ function updateDetailModern(cid) {
   if (typeof updateFabForContact === "function") updateFabForContact(c.id);
 }
 
+/**
+ * Returns the header template containing the "Add contact" button.
+ */
 function addButtonTemplate() {
   return `
     <div class="list-head">
@@ -264,6 +377,9 @@ function addButtonTemplate() {
   `;
 }
 
+/**
+ * Renders the modern contact list view.
+ */
 function renderContactsModern() {
   const list = qs(".list");
   if (!list) return false;

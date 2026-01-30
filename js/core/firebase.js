@@ -14,6 +14,10 @@ import {
   remove,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
+/**
+ * Firebase application configuration.
+ *
+ */
 const firebaseConfig = {
   apiKey: "AIzaSyCLJlzAaU0yw1uT3SgPseFDz0TzGmi8TIY",
   authDomain: "join-1338.firebaseapp.com",
@@ -29,6 +33,10 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 
+/**
+ * wrapper API for Firebase Realtime Database operations.
+ *
+ */
 export const dbApi = {
   async setData(path, data) {
     await set(ref(db, path), data);
@@ -61,6 +69,5 @@ export const dbApi = {
   },
 };
 
-// global verfügbar lassen, damit alte Skripte weiterlaufen
 window.dbApi = dbApi;
 window.auth = auth;
