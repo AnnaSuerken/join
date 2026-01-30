@@ -1,8 +1,3 @@
-/**
- * board/edit.js
- * Edit Overlay: öffnen/schließen/speichern + assignees + subtasks + priority.
- */
-
 import { dbApi } from "../core/firebase.js";
 import {
   editSection, editCloseBtn, editOkBtn, detailEditBtn,
@@ -19,6 +14,9 @@ let editPriority = "medium";
 let selectedAssigneeIds = [];
 let editSubtasks = [];
 
+/**
+ * Initializes all edit overlay bindings.
+ */
 export function initEditBindings() {
   bindPriorityButtons();
   bindOpenClose();
@@ -27,12 +25,18 @@ export function initEditBindings() {
   bindSubtaskEditor();
 }
 
+/**
+ * Binds open/close actions for the edit overlay.
+ */
 function bindOpenClose() {
   detailEditBtn?.addEventListener("click", openEditOverlay);
   editCloseBtn?.addEventListener("click", closeEditOverlay);
   document.addEventListener("keydown", (e) => isEditOpen() && e.key === "Escape" && closeEditOverlay());
 }
 
+/**
+ * Binds save button handler.
+ */
 function bindSave() {
   editOkBtn?.addEventListener("click", (e) => {
     e.preventDefault();
@@ -40,8 +44,9 @@ function bindSave() {
   });
 }
 
-/* ---------- Priority ---------- */
-
+/**
+ * Wires priority button click handlers.
+ */
 function bindPriorityButtons() {
   Object.entries(prioBtns).forEach(([key, btn]) => {
     btn?.addEventListener("click", (e) => {
@@ -51,32 +56,48 @@ function bindPriorityButtons() {
   });
 }
 
+/**
+ * Sets the active edit priority.
+ *
+ * @param {string} p
+ * Priority value.
+ */
 function setEditPriority(p) {
   const allowed = ["urgent", "medium", "low"];
   editPriority = allowed.includes(p) ? p : "medium";
   Object.entries(prioBtns).forEach(([k, btn]) => togglePrioBtn(k, btn, editPriority));
 }
 
+/**
+ * Toggles priority button active state.
+ */
 function togglePrioBtn(key, btn, active) {
   if (!btn) return;
   btn.classList.toggle("is-active", key === active);
   updatePrioIcon(btn, key, key === active);
 }
 
+/**
+ * Updates priority icon depending on active state.
+ */
 function updatePrioIcon(btn, key, isActive) {
   const img = btn.querySelector("img");
   if (!img) return;
   img.src = prioIconPath(key, isActive);
 }
 
+/**
+ * Returns the icon path for a priority.
+ */
 function prioIconPath(key, active) {
   if (key === "urgent") return active ? "./assets/icons/urgent-white.svg" : "./assets/icons/urgent-red.svg";
   if (key === "medium") return active ? "./assets/icons/medium-white.svg" : "./assets/icons/medium-orange.svg";
   return active ? "./assets/icons/low-white.svg" : "./assets/icons/low-green.svg";
 }
 
-/* ---------- Open / Close ---------- */
-
+/**
+ * Opens the edit overlay and initializes fields.
+ */
 function openEditOverlay() {
   const detail = getCurrentDetail();
   if (!detail?.task) return;
@@ -89,24 +110,36 @@ function openEditOverlay() {
   hideDetailShowEdit();
 }
 
+/**
+ * Closes the edit overlay.
+ */
 function closeEditOverlay() {
   editSection?.classList.add("d_none");
   document.body.classList.remove("board-overlay-open");
   document.getElementById("task-detail-overlay")?.classList.remove("d_none");
 }
 
+/**
+ * Hides detail view and shows edit overlay.
+ */
 function hideDetailShowEdit() {
   document.getElementById("task-detail-overlay")?.classList.add("d_none");
   editSection?.classList.remove("d_none");
   document.body.classList.add("board-overlay-open");
 }
 
+/**
+ * Checks if the edit overlay is currently open.
+ */
 function isEditOpen() {
   return editSection && !editSection.classList.contains("d_none");
 }
 
-/* ---------- Fill Fields ---------- */
-
+/**
+ * Fills edit form fields with task data.
+ *
+ * @param {object} task
+ */
 function fillFields(task) {
   editTitle.value = task.title || "";
   editDesc.value = task.secondline || "";
@@ -114,12 +147,18 @@ function fillFields(task) {
   setEditPriority((task.priority || "medium").toString().toLowerCase());
 }
 
+/**
+ * Sets the date input value from a deadline.
+ */
 function setDateValue(deadline) {
   if (!deadline) return (editDate.value = "");
   const d = new Date(deadline);
   editDate.value = isNaN(d) ? "" : toISODateOnly(d);
 }
 
+/**
+ * Initializes minimum selectable date based on creation date.
+ */
 function initMinDate(task) {
   const createdAt = getCreatedAt(task);
   const minStr = toISODateOnly(createdAt);
@@ -128,19 +167,30 @@ function initMinDate(task) {
   if (hint) hint.textContent = `Earliest: ${minStr}`;
 }
 
+/**
+ * Resolves the task creation date.
+ *
+ * @param {object} task
+ */
 function getCreatedAt(task) {
   const s = task.createdAt || task.created || task.created_at || null;
   const d = s ? new Date(s) : new Date();
   return isNaN(d) ? new Date() : d;
 }
 
-/* ---------- Assignees ---------- */
-
+/**
+ * Binds dropdown open/close logic for assignee selection.
+ */
 function bindAssigneeDropdown() {
   editAssigneeSelect?.addEventListener("click", () => toggleEditAssigneeDropdown(isAssigneeClosed()));
   document.addEventListener("click", (e) => closeAssigneeOnOutside(e));
 }
 
+/**
+ * Closes assignee dropdown when clicking outside.
+ *
+ * @param {MouseEvent} e
+ */
 function closeAssigneeOnOutside(e) {
   if (!isEditOpen()) return;
   if (!editAssigneeSelect.contains(e.target) && !editAssigneeOptions.contains(e.target)) {
@@ -148,16 +198,29 @@ function closeAssigneeOnOutside(e) {
   }
 }
 
+/**
+ * Checks whether the assignee dropdown is closed.
+ */
 function isAssigneeClosed() {
   return editAssigneeOptions?.classList.contains("d_none");
 }
 
+/**
+ * Toggles assignee dropdown visibility.
+ *
+ * @param {boolean} open
+ */
 function toggleEditAssigneeDropdown(open) {
   editAssigneeOptions?.classList.toggle("d_none", !open);
   document.getElementById("edit-assignee-list")?.classList.toggle("d_none", open);
   editAssigneeSelect?.setAttribute("aria-expanded", String(open));
 }
 
+/**
+ * Initializes assignees from the given task.
+ *
+ * @param {object} task
+ */
 function initAssignees(task) {
   selectedAssigneeIds = normalizeAssigneesToIds(task.assignedContact);
   renderEditAssigneeChips();
@@ -166,12 +229,20 @@ function initAssignees(task) {
   if (lbl) lbl.textContent = "Select contacts to assign";
 }
 
+/**
+ * Renders selected assignee chips.
+ */
 function renderEditAssigneeChips() {
   if (!editAssigneeList) return;
   editAssigneeList.innerHTML = "";
   getSelectedContacts().forEach((c) => editAssigneeList.appendChild(chipRow(c)));
 }
 
+/**
+ * Creates a chip row element for a contact.
+ *
+ * @param {object} c
+ */
 function chipRow(c) {
   const row = document.createElement("div");
   row.className = "detail-user-row";
@@ -180,6 +251,9 @@ function chipRow(c) {
   return row;
 }
 
+/**
+ * Returns HTML for an assignee chip row.
+ */
 function chipRowHtml(c) {
   return `
     <div class="user" style="background:${escapeHtml(c.color || "#999")}">${escapeHtml(c.initials || "?")}</div>
@@ -188,18 +262,31 @@ function chipRowHtml(c) {
   `;
 }
 
+/**
+ * Removes an assignee by id.
+ *
+ * @param {string} id
+ */
 function removeAssignee(id) {
   selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== id);
   renderEditAssigneeChips();
   renderEditAssigneeOptions();
 }
 
+/**
+ * Renders assignee dropdown options.
+ */
 function renderEditAssigneeOptions() {
   if (!editAssigneeOptions) return;
   editAssigneeOptions.innerHTML = "";
   getAllContacts().forEach((c) => editAssigneeOptions.appendChild(optionLi(c)));
 }
 
+/**
+ * Creates an option list item for a contact.
+ *
+ * @param {object} c
+ */
 function optionLi(c) {
   const li = document.createElement("li");
   const selected = selectedAssigneeIds.includes(c.id);
@@ -215,6 +302,9 @@ function optionLi(c) {
   return li;
 }
 
+/**
+ * Returns HTML for an assignee dropdown option.
+ */
 function optionHtml(c) {
   return `
     <span class="assignee-avatar" style="background:${escapeHtml(c.color)}">${escapeHtml(c.initials)}</span>
@@ -223,12 +313,20 @@ function optionHtml(c) {
   `;
 }
 
+/**
+ * Handles keyboard selection on dropdown options.
+ */
 function onOptionKey(e, id) {
   if (e.key !== "Enter" && e.key !== " ") return;
   e.preventDefault();
   toggleAssignee(id);
 }
 
+/**
+ * Toggles assignee selection.
+ *
+ * @param {string} id
+ */
 function toggleAssignee(id) {
   selectedAssigneeIds = selectedAssigneeIds.includes(id)
     ? selectedAssigneeIds.filter((x) => x !== id)
@@ -238,20 +336,31 @@ function toggleAssignee(id) {
   renderEditAssigneeOptions();
 }
 
+/**
+ * Returns all contacts sorted by name.
+ *
+ * @returns {object[]}
+ */
 function getAllContacts() {
   const maps = window.boardContacts || {};
   const byId = maps.contactsById || new Map();
   return [...byId.values()].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 }
 
+/**
+ * Returns selected contacts.
+ *
+ * @returns {object[]}
+ */
 function getSelectedContacts() {
   const maps = window.boardContacts || {};
   const byId = maps.contactsById || new Map();
   return selectedAssigneeIds.map((id) => byId.get(id)).filter(Boolean);
 }
 
-/* ---------- Subtasks ---------- */
-
+/**
+ * Binds subtask editor events.
+ */
 function bindSubtaskEditor() {
   editSubtaskAddBtn?.addEventListener("click", (e) => {
     e.preventDefault();
@@ -266,11 +375,19 @@ function bindSubtaskEditor() {
   });
 }
 
+/**
+ * Initializes subtasks from task data.
+ *
+ * @param {object} task
+ */
 function initSubtasks(task) {
   editSubtasks = normalizeSubtasks(task).map((s) => ({ text: s.text, done: !!s.done }));
   renderEditSubtasks();
 }
 
+/**
+ * Adds a new subtask from input.
+ */
 function addEditSubtask() {
   const val = (editSubtaskInput?.value || "").trim();
   if (!val) return;
@@ -279,12 +396,18 @@ function addEditSubtask() {
   renderEditSubtasks();
 }
 
+/**
+ * Renders all editable subtasks.
+ */
 function renderEditSubtasks() {
   if (!editSubtaskList) return;
   editSubtaskList.innerHTML = "";
   editSubtasks.forEach((st, i) => editSubtaskList.appendChild(subtaskRow(st, i)));
 }
 
+/**
+ * Creates a subtask edit row.
+ */
 function subtaskRow(st, i) {
   const row = document.createElement("div");
   row.className = "subtask-edit-row";
@@ -294,6 +417,9 @@ function subtaskRow(st, i) {
   return row;
 }
 
+/**
+ * Returns HTML for subtask edit row.
+ */
 function subtaskRowHtml(st, i) {
   return `
     <input type="checkbox" ${st.done ? "checked" : ""} data-i="${i}" />
@@ -304,6 +430,9 @@ function subtaskRowHtml(st, i) {
   `;
 }
 
+/**
+ * Binds subtask row interactions.
+ */
 function wireSubtaskRow(row, i) {
   const cb = row.querySelector('input[type="checkbox"]');
   const txt = row.querySelector('input[type="text"]');
@@ -314,14 +443,18 @@ function wireSubtaskRow(row, i) {
   del?.addEventListener("click", (e) => onDelSubtask(e, i));
 }
 
+/**
+ * Deletes a subtask.
+ */
 function onDelSubtask(e, i) {
   e.preventDefault();
   editSubtasks.splice(i, 1);
   renderEditSubtasks();
 }
 
-/* ---------- Save ---------- */
-
+/**
+ * Saves edited task data to database.
+ */
 async function saveEditOverlay() {
   const detail = getCurrentDetail();
   if (!detail?.id || !detail?.col || !detail.task) return;
@@ -335,6 +468,12 @@ async function saveEditOverlay() {
   toast("Task updated successfully.");
 }
 
+/**
+ * Builds the updated task object from edit form values.
+ *
+ * @param {object} task
+ * Original task data.
+ */
 function buildUpdatedTask(task) {
   const title = editTitle.value.trim();
   const secondline = editDesc.value.trim();
@@ -360,6 +499,12 @@ function buildUpdatedTask(task) {
   };
 }
 
+/**
+ * Builds an ISO deadline string and validates against creation date.
+ *
+ * @param {Date} createdAt
+ */
+
 function buildDeadlineISO(createdAt) {
   if (!editDate.value) return "";
   const chosen = new Date(editDate.value);
@@ -372,34 +517,65 @@ function buildDeadlineISO(createdAt) {
   return toUTCISODateOnly(chosen);
 }
 
+/**
+ * Shows validation error for invalid deadline.
+ *
+ * @param {Date} min
+ */
 function failMinDate(min) {
   const msg = `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(min)}).`;
   toast(msg);
   return null;
 }
 
+/**
+ * Converts a date to UTC ISO string (date only).
+ *
+ * @param {Date} d
+ */
 function toUTCISODateOnly(d) {
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString();
 }
 
+/**
+ * Cleans and normalizes subtasks.
+ *
+ * @param {Array} list
+ */
 function cleanSubtasks(list) {
   return list
     .map((s) => ({ text: (s.text || "").trim(), done: !!s.done }))
     .filter((s) => s.text.length > 0);
 }
 
+/**
+ * Syncs detail overlay after saving task.
+ *
+ * @param {object} detail
+ * @param {object} updatedTask
+ */
 function syncDetailAfterSave(detail, updatedTask) {
   const assignedDetailed = buildAssignedDetailed(updatedTask.assignedContact);
   setCurrentDetail({ ...detail, task: { ...updatedTask, assignedDetailed } });
   renderDetail({ ...updatedTask, assignedDetailed });
 }
 
+/**
+ * Resolves assignee IDs to full contact objects.
+ *
+ * @param {string[]|string} idsVal
+ */
 function buildAssignedDetailed(idsVal) {
   const maps = window.boardContacts || {};
   const byId = maps.contactsById || new Map();
   return normalizeAssigneesToIds(idsVal).map((id) => byId.get(id)).filter(Boolean);
 }
 
+/**
+ * Shows a toast message.
+ *
+ * @param {string} msg
+ */
 function toast(msg) {
   if (typeof window.showToast === "function") window.showToast(msg);
   else alert(msg);

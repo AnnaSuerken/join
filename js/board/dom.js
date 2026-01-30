@@ -1,6 +1,6 @@
 /**
  * board/dom.js
- * DOM-Referenzen zentral.
+ * DOM-References.
  */
 
 export const colsEl = {

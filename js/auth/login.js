@@ -1,4 +1,3 @@
-// js/auth/login.js
 import { auth, db } from "../core/firebase.js";
 import {
   signInWithEmailAndPassword,
@@ -18,7 +17,14 @@ const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("email-error");
 const passwordError = document.getElementById("password-error");
 
-// ---- Toast Helpers ----
+/**
+ * displays a toast message if a toast handler is available.
+ *
+ * @param {string} message
+ * Message to display.
+ * @param {boolean} [isError=false]
+ * Whether the message represents an error.
+ */
 function safeShowToast(message, isError = false) {
   const fn =
     typeof showToast === "function"
@@ -29,8 +35,11 @@ function safeShowToast(message, isError = false) {
 
   if (fn) fn(message, isError);
 }
-// ------------------------
 
+
+/**
+ * Clears all login form validation errors and error styles.
+ */
 function clearErrors() {
   if (emailError) emailError.textContent = "";
   if (passwordError) passwordError.textContent = "";
@@ -38,16 +47,31 @@ function clearErrors() {
   if (passwordInput) passwordInput.classList.remove("error");
 }
 
+/**
+ * Validates an email address format.
+ *
+ * @param {string} email
+ * Email address.
+ */
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+/**
+ * Extracts login credentials from the submit event.
+ *
+ * @param {SubmitEvent} e
+ * Form submit event.
+ */
 function extractLoginValues(e) {
   const email = e.target.email.value.trim();
   const password = e.target.password.value;
   return { email, password };
 }
 
+/**
+ * Displays an invalid email error message.
+ */
 function showInvalidEmailError() {
   if (emailError) {
     emailError.textContent = "Bitte gib eine gültige Email-Adresse ein.";
@@ -55,6 +79,9 @@ function showInvalidEmailError() {
   if (emailInput) emailInput.classList.add("error");
 }
 
+/**
+ * Displays an empty password error message.
+ */
 function showEmptyPasswordError() {
   if (passwordError) {
     passwordError.textContent = "Bitte gib ein Passwort ein.";
@@ -62,9 +89,24 @@ function showEmptyPasswordError() {
   if (passwordInput) passwordInput.classList.add("error");
 }
 
+/**
+ * Performs a Firebase email/password login.
+ *
+ * @param {string} email
+ * User email.
+ * @param {string} password
+ * User password.
+ */
 async function performLogin(email, password) {
   return signInWithEmailAndPassword(auth, email, password);
 }
+
+/**
+ * Handles Firebase authentication errors.
+ *
+ * @param {any} err
+ * Firebase authentication error object.
+ */
 
 function handleLoginError(err) {
   console.error(err);
@@ -112,35 +154,57 @@ function handleLoginError(err) {
   }
 }
 
+/**
+ * Validates login form input fields.
+ */
 function validateLoginInputs() {
-  let valid = true;
-
-  if (emailError) emailError.textContent = "";
-  if (passwordError) passwordError.textContent = "";
-  if (emailInput) emailInput.classList.remove("error");
-  if (passwordInput) passwordInput.classList.remove("error");
+  resetLoginErrors();
 
   const emailVal = emailInput?.value?.trim() ?? "";
   const pwdVal = passwordInput?.value?.trim() ?? "";
 
-  if (!emailVal) {
-    if (emailError) emailError.textContent = "Bitte E-Mail eingeben.";
-    if (emailInput) emailInput.classList.add("error");
-    valid = false;
-  } else if (!isValidEmail(emailVal)) {
-    showInvalidEmailError();
-    valid = false;
-  }
-
-  if (!pwdVal) {
-    if (passwordError) passwordError.textContent = "Bitte Passwort eingeben.";
-    if (passwordInput) passwordInput.classList.add("error");
-    valid = false;
-  }
+  let valid = true;
+  if (!validateEmailField(emailVal)) valid = false;
+  if (!validatePasswordField(pwdVal)) valid = false;
 
   return valid;
 }
 
+function resetLoginErrors() {
+  emailError && (emailError.textContent = "");
+  passwordError && (passwordError.textContent = "");
+  emailInput?.classList.remove("error");
+  passwordInput?.classList.remove("error");
+}
+
+function validateEmailField(value) {
+  if (!value) {
+    emailError && (emailError.textContent = "Bitte E-Mail eingeben.");
+    emailInput?.classList.add("error");
+    return false;
+  }
+  if (!isValidEmail(value)) {
+    showInvalidEmailError();
+    return false;
+  }
+  return true;
+}
+
+function validatePasswordField(value) {
+  if (!value) {
+    passwordError && (passwordError.textContent = "Bitte Passwort eingeben.");
+    passwordInput?.classList.add("error");
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Handles login form submission.
+ *
+ * @param {SubmitEvent} e
+ * Form submit event.
+ */
 async function handleFormSubmit(e) {
   e.preventDefault();
   clearErrors();
@@ -162,6 +226,9 @@ async function handleFormSubmit(e) {
   }
 }
 
+/**
+ * Handles anonymous guest login.
+ */
 async function handleGuestLogin() {
   clearErrors();
 
@@ -185,11 +252,16 @@ async function handleGuestLogin() {
 form?.addEventListener("submit", handleFormSubmit);
 guestBtn?.addEventListener("click", handleGuestLogin);
 
-
+/**
+ * Redirects already authenticated users away from the login page.
+ */
 onAuthStateChanged(auth, (user) => {
   if (user) window.location.href = "/index.html";
 });
 
+/**
+ * Hides the loader animation after a fixed delay.
+ */
 setTimeout(() => {
   const loader = document.querySelector(".loader");
   if (loader) loader.style.display = "none";

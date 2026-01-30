@@ -31,10 +31,19 @@ const checkboxError = document.getElementById("checkbox-error");
 password.addEventListener("input", liveValidatePasswords);
 password2.addEventListener("input", liveValidatePasswords);
 
+/**
+ * Checks whether an email address is syntactically valid.
+ *
+ * @param {string} email
+ * Email address to validate.
+ */
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+/**
+ * Clears all validation error messages and error styles.
+ */
 function clearErrors() {
   [nameError, emailError, passwordError, password2Error, checkboxError].forEach(
     (el) => el && (el.textContent = "")
@@ -45,6 +54,12 @@ function clearErrors() {
   });
 }
 
+/**
+ * Validates the display name input.
+ *
+ * @param {string} nameVal
+ * Entered display name.
+ */
 function validateName(nameVal) {
   if (!nameVal) {
     nameError.textContent = "Bitte gib deinen Namen ein.";
@@ -54,6 +69,12 @@ function validateName(nameVal) {
   return true;
 }
 
+/**
+ * Validates the email input.
+ *
+ * @param {string} emailVal
+ * Entered email address.
+ */
 function validateEmailValue(emailVal) {
   if (!emailVal) {
     emailError.textContent = "Bitte gib eine Email-Adresse ein.";
@@ -68,6 +89,12 @@ function validateEmailValue(emailVal) {
   return true;
 }
 
+/**
+ * Validates the password value.
+ *
+ * @param {string} pwdVal
+ * Entered password.
+ */
 function validatePasswordValue(pwdVal) {
   if (!pwdVal) {
     passwordError.textContent = "Bitte gib ein Passwort ein.";
@@ -83,6 +110,14 @@ function validatePasswordValue(pwdVal) {
   return true;
 }
 
+/**
+ * Validates password confirmation.
+ *
+ * @param {string} pwdVal
+ * Primary password.
+ * @param {string} pwd2Val
+ * Confirmation password.
+ */
 function validatePasswordConfirmation(pwdVal, pwd2Val) {
   if (!pwd2Val) {
     password2Error.textContent = "Bitte wiederhole dein Passwort.";
@@ -98,6 +133,9 @@ function validatePasswordConfirmation(pwdVal, pwd2Val) {
   return true;
 }
 
+/**
+ * Validates whether the privacy checkbox is checked.
+ */
 function validatePrivacyBox() {
   if (!checkBox.checked) {
     checkboxError.textContent =
@@ -107,6 +145,9 @@ function validatePrivacyBox() {
   return true;
 }
 
+/**
+ * Validates the complete signup form.
+ */
 function validateForm() {
   clearErrors();
   let isValid = true;
@@ -125,6 +166,9 @@ function validateForm() {
   return isValid;
 }
 
+/**
+ * Extracts signup form values.
+ */
 function getSignupFormValues() {
   return {
     displayName: nameInput.value.trim(),
@@ -133,22 +177,47 @@ function getSignupFormValues() {
   };
 }
 
+/**
+ * Shows a toast indicating that signup is in progress.
+ */
 function showSignupRunningToast() {
   if (typeof showToast === "function") {
     showToast("Registrierung läuft");
   }
 }
 
+/**
+ * Shows a signup success.
+ */
 function showSignupSuccessToast() {
   if (typeof showToast === "function") {
     showToast("Registrierung erfolgreich.");
   }
 }
 
+/**
+ * Registers a new user with email and password.
+ *
+ * @param {string} email
+ * User email.
+ * @param {string} pwd
+ * User password.
+ */
+
 async function registerUser(email, pwd) {
   return createUserWithEmailAndPassword(auth, email, pwd);
 }
 
+/**
+ * Saves user profile data in Firebase Auth and Database.
+ *
+ * @param {import("firebase/auth").User} user
+ * Firebase user object.
+ * @param {string} displayName
+ * Display name.
+ * @param {string} email
+ * Email address.
+ */
 async function saveUserProfile(user, displayName, email) {
   showSignupRunningToast();
   await updateProfile(user, { displayName });
@@ -163,7 +232,9 @@ async function saveUserProfile(user, displayName, email) {
   });
 }
 
-// ✅ nach Signup NICHT eingeloggt bleiben
+/**
+ * Logs the user out immediately after signup.
+ */
 async function logoutAfterSignup() {
   try {
     await signOut(auth);
@@ -172,12 +243,21 @@ async function logoutAfterSignup() {
   }
 }
 
+/**
+ * Redirects to the login page after a short delay.
+ */
 function redirectToLoginDelayed() {
   setTimeout(() => {
     window.location.href = "/login.html";
   }, 1500);
 }
 
+/**
+ * Applies Firebase signup errors to the form UI.
+ *
+ * @param {any} err
+ * Firebase error object.
+ */
 function applySignupErrorToForm(err) {
   switch (err.code) {
     case "auth/email-already-in-use":
@@ -201,6 +281,9 @@ function applySignupErrorToForm(err) {
   }
 }
 
+/**
+ * Handles the signup process.
+ */
 async function handleSignup() {
   if (!validateForm()) {
     return;
@@ -212,7 +295,6 @@ async function handleSignup() {
     const cred = await registerUser(email, pwd);
     await saveUserProfile(cred.user, displayName, email);
 
-    // ✅ direkt wieder ausloggen, damit User NICHT automatisch eingeloggt bleibt
     await logoutAfterSignup();
 
     showSignupSuccessToast();
@@ -224,22 +306,9 @@ async function handleSignup() {
   }
 }
 
-form?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  await handleSignup();
-});
-
-onAuthStateChanged(auth, async (user) => {
-  if (!user?.isAnonymous) return;
-  try {
-    await dbUpdate(ref(db, `guests/${user.uid}`), {
-      lastLoginAt: serverTimestamp(),
-    });
-  } catch (e) {
-    console.warn("Konnte Gast-Datensatz nicht aktualisieren:", e);
-  }
-});
-
+/**
+ * Live-validates password matching while typing.
+ */
 function liveValidatePasswords() {
   const pwdVal = password.value;
   const pwd2Val = password2.value;
@@ -257,3 +326,20 @@ function liveValidatePasswords() {
     password2.classList.add("error");
   }
 }
+
+/* ---------- Events ---------- */
+form?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  await handleSignup();
+});
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user?.isAnonymous) return;
+  try {
+    await dbUpdate(ref(db, `guests/${user.uid}`), {
+      lastLoginAt: serverTimestamp(),
+    });
+  } catch (e) {
+    console.warn("Konnte Gast-Datensatz nicht aktualisieren:", e);
+  }
+});

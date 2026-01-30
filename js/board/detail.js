@@ -1,8 +1,3 @@
-/**
- * board/detail.js
- * Detail Overlay: öffnen, rendern, subtasks toggeln, löschen.
- */
-
 import { dbApi } from "../core/firebase.js";
 import { detailCloseBtn, detailDeleteBtn, detailSection } from "./dom.js";
 import { TASKS_ROOT, COLS } from "./state.js";
@@ -11,6 +6,9 @@ import { escapeHtml, normalizeSubtasks, formatDate, capitalize, normalizeAssigne
 let currentDetail = { id: null, col: null, task: null };
 let subtasksHandlerWired = false;
 
+/**
+ * Initializes global event bindings for the detail overlay.
+ */
 export function initDetailBindings() {
   detailCloseBtn?.addEventListener("click", closeDetailOverlay);
   document.addEventListener("keydown", (e) => e.key === "Escape" && closeDetailOverlay());
@@ -19,19 +17,34 @@ export function initDetailBindings() {
   window.closeDetailOverlay = closeDetailOverlay;
 }
 
+/**
+ * Returns the currently active task detail.
+ */
 export function getCurrentDetail() {
   return currentDetail;
 }
 
+/**
+ * Sets the current task detail state.
+ */
 export function setCurrentDetail(next) {
   currentDetail = next;
 }
 
+/**
+ * Closes the task detail overlay and resets state.
+ */
 export function closeDetailOverlay() {
   document.body.classList.remove("board-overlay-open");
   currentDetail = { id: null, col: null, task: null };
 }
 
+/**
+ * Opens the detail overlay for a task by its ID.
+ *
+ * @param {string} id
+ * Task ID.
+ */
 export async function openDetailOverlayById(id) {
   const col = findColumnOfTask(id);
   if (!col) return;
@@ -49,6 +62,12 @@ export async function openDetailOverlayById(id) {
   wireSubtaskToggleHandler();
 }
 
+/**
+ * Renders all visible task details into the overlay.
+ *
+ * @param {Object} task
+ * Normalized task object.
+ */
 export function renderDetail(task) {
   setText("detail-category", task.category || "No Category");
   setBg("detail-category", task.categorycolor || "#0038ff");
@@ -61,14 +80,24 @@ export function renderDetail(task) {
   renderSubtasks(task.subtasks || []);
 }
 
-/* ---------- Helpers ---------- */
-
+/**
+ * Finds the column of a task by its ID.
+ *
+ * @param {string} id
+ * Task ID.
+ */
 function findColumnOfTask(id) {
   const data = window.boardData || {};
   for (const c of COLS) if (data[c] && data[c][id]) return c;
   return null;
 }
 
+/**
+ * Normalizes a task snapshot from the database.
+ *
+ * @param {Object} snap
+ * Raw task data.
+ */
 function normalizeTask(snap) {
   const subtasks = normalizeSubtasks(snap);
   return {
@@ -79,6 +108,12 @@ function normalizeTask(snap) {
   };
 }
 
+/**
+ * Builds detailed assignee objects from assigned contact IDs.
+ *
+ * @param {string|string[]} assignedContact
+ * Raw assigned contact reference(s).
+ */
 function buildAssignedDetailed(assignedContact) {
   const ids = normalizeAssigneesToIds(assignedContact);
   const maps = window.boardContacts || {};
@@ -86,6 +121,11 @@ function buildAssignedDetailed(assignedContact) {
   return ids.map((id) => byId.get(id)).filter(Boolean);
 }
 
+/**
+ * Renders the task priority text and icon.
+ *
+ * @param {string} priority
+ */
 function renderPriority(priority) {
   const prio = (priority || "low").toLowerCase();
   setText("detail-priority-text", capitalize(prio));
@@ -93,6 +133,11 @@ function renderPriority(priority) {
   if (icon) icon.src = `./assets/icons/${prio}.svg`;
 }
 
+/**
+ * Renders the assignee list.
+ *
+ * @param {Array<Object>} list
+ */
 function renderAssignees(list) {
   const box = document.getElementById("detail-assignees");
   if (!box) return;
@@ -100,6 +145,12 @@ function renderAssignees(list) {
   list.forEach((u) => (box.innerHTML += assigneeRow(u)));
 }
 
+/**
+ * Returns the HTML for a single assignee row.
+ *
+ * @param {Object} u
+ * Assignee data.
+ */
 function assigneeRow(u) {
   return `
     <div class="detail-user-row">
@@ -109,6 +160,11 @@ function assigneeRow(u) {
   `;
 }
 
+/**
+ * Renders the task subtasks list.
+ *
+ * @param {Array<Object>} subtasks
+ */
 function renderSubtasks(subtasks) {
   const stList = document.getElementById("task-overlay-open-subtask-list");
   if (!stList) return;
@@ -116,6 +172,14 @@ function renderSubtasks(subtasks) {
   subtasks.forEach((s, i) => (stList.innerHTML += subtaskRow(s, i)));
 }
 
+/**
+ * Returns the HTML for a single subtask row.
+ *
+ * @param {{text:string,done:boolean}} s
+ * Subtask data.
+ * @param {number} i
+ * Subtask index.
+ */
 function subtaskRow(s, i) {
   return `
     <div class="task-overlay-open-subtask-item">
@@ -125,18 +189,35 @@ function subtaskRow(s, i) {
   `;
 }
 
+/**
+ * Sets the text content of an element by ID.
+ *
+ * @param {string} id
+ * Element ID.
+ * @param {string} txt
+ * Text content.
+ */
 function setText(id, txt) {
   const el = document.getElementById(id);
   if (el) el.textContent = txt;
 }
 
+/**
+ * Sets the background color of an element by ID.
+ *
+ * @param {string} id
+ * Element ID.
+ * @param {string} color
+ * CSS color value.
+ */
 function setBg(id, color) {
   const el = document.getElementById(id);
   if (el) el.style.backgroundColor = color;
 }
 
-/* ---------- Subtasks Toggle ---------- */
-
+/**
+ * Wires the subtask checkbox toggle handler once.
+ */
 function wireSubtaskToggleHandler() {
   if (subtasksHandlerWired) return;
   subtasksHandlerWired = true;
@@ -145,6 +226,11 @@ function wireSubtaskToggleHandler() {
   list?.addEventListener("change", onSubtaskChange);
 }
 
+/**
+ * Handles subtask checkbox toggle events.
+ *
+ * @param {Event} e
+ */
 async function onSubtaskChange(e) {
   const cb = e.target.closest('input[type="checkbox"][data-st-index]');
   if (!cb || !currentDetail.task?.subtasks) return;
@@ -158,6 +244,20 @@ async function onSubtaskChange(e) {
   await saveSubtasks(currentDetail.col, currentDetail.id, currentDetail.task.subtasks, done, total);
 }
 
+/**
+ * Persists updated subtask state to the database.
+ *
+ * @param {string} col
+ * Task column.
+ * @param {string} id
+ * Task ID.
+ * @param {Array<Object>} subtasks
+ * Subtask list.
+ * @param {number} doneCount
+ * Completed subtask count.
+ * @param {number} totalCount
+ * Total subtask count.
+ */
 async function saveSubtasks(col, id, subtasks, doneCount, totalCount) {
   const updates = {};
   updates[`${col}/${id}/subtasks`] = subtasks;
@@ -166,8 +266,11 @@ async function saveSubtasks(col, id, subtasks, doneCount, totalCount) {
   await dbApi.updateData(TASKS_ROOT, updates);
 }
 
-/* ---------- Delete ---------- */
-
+/**
+ * Handles delete button click inside the detail overlay.
+ *
+ * @param {MouseEvent} e
+ */
 async function onDeleteClick(e) {
   e.preventDefault();
   e.stopPropagation();
@@ -177,6 +280,12 @@ async function onDeleteClick(e) {
   detailCloseBtn?.click();
 }
 
+/**
+ * Deletes a task by ID.
+ *
+ * @param {string} id
+ * Task ID.
+ */
 async function delTask(id) {
   const col = findColumnOfTask(id);
   if (!col) return;

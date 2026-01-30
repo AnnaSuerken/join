@@ -1,18 +1,19 @@
-/**
- * board/listeners.js
- * Firebase Listener -> State updaten -> rendern.
- */
-
 import { dbApi } from "../core/firebase.js";
 import { renderBoard } from "./render.js";
 import { CONTACTS_ROOT, TASKS_ROOT, initGlobals, setContactsMaps, setData } from "./state.js";
 
+/**
+ * Initializes all Firebase listeners for tasks and contacts.
+ */
 export function initListeners() {
   initGlobals();
   bindTasks();
   bindContacts();
 }
 
+/**
+ * Subscribes to task updates and updates board state.
+ */
 function bindTasks() {
   dbApi.onData(TASKS_ROOT, (val) => {
     setData(normalizeBoard(val));
@@ -20,6 +21,9 @@ function bindTasks() {
   });
 }
 
+/**
+ * Subscribes to contact updates and rebuilds contact lookup maps.
+ */
 function bindContacts() {
   dbApi.onData(CONTACTS_ROOT, (val) => {
     const maps = buildContactMaps(val);
@@ -28,6 +32,12 @@ function bindContacts() {
   });
 }
 
+/**
+ * Normalizes board data to ensure all columns exist.
+ *
+ * @param {object|null} val
+ * Raw board data from Firebase.
+ */
 function normalizeBoard(val) {
   return {
     todo: val?.todo || {},
@@ -37,6 +47,12 @@ function normalizeBoard(val) {
   };
 }
 
+/**
+ * Builds lookup maps for contacts.
+ *
+ * @param {object|null} val
+ * Raw contacts data from Firebase.
+ */
 function buildContactMaps(val) {
   const byId = new Map();
   const byName = new Map();
@@ -48,6 +64,20 @@ function buildContactMaps(val) {
   return { byId, byName, byEmail };
 }
 
+/**
+ * Normalizes and registers a single contact in lookup maps.
+ *
+ * @param {string} id
+ * Contact id.
+ * @param {object} c
+ * Raw contact data.
+ * @param {Map} byId
+ * Map of contacts by id.
+ * @param {Map} byName
+ * Map of contact ids by lowercase name.
+ * @param {Map} byEmail
+ * Map of contact ids by lowercase email.
+ */
 function addContact(id, c, byId, byName, byEmail) {
   const contact = {
     id,

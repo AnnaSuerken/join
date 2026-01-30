@@ -1,14 +1,17 @@
-/**
- * board/task-card.js
- * Erstellt eine Task-Karte + bindet Click/Drag.
- */
-
 import { escapeHtml, normalizeAssigneesToIds } from "./helpers.js";
 import { populateAssignedChips } from "./helpers.js";
 import { openDetailOverlayById } from "./detail.js";
 import { wireDesktopDragHandlers } from "./dnd-desktop.js";
 import { wireTouchDragHandlers } from "./dnd-touch.js";
 
+/**
+ * Creates a draggable task card element.
+ *
+ * @param {Object} task
+ * Task data object.
+ * @param {string} task.id
+ * Unique task identifier.
+ */
 export function taskCard(task) {
   if (!task?.id) return emptyNode(task);
 
@@ -23,11 +26,23 @@ export function taskCard(task) {
   return el;
 }
 
+/**
+ * Returns an empty node for invalid tasks.
+ *
+ * @param {Object} task
+ * Invalid task object.
+ */
 function emptyNode(task) {
   console.warn("Task without id skipped:", task);
   return document.createElement("div");
 }
 
+/**
+ * Builds the task card DOM element.
+ *
+ * @param {Object} task
+ * Task data object.
+ */
 function buildCardEl(task) {
   const { completed, total } = getProgress(task);
   const prioIcon = escapeHtml(task.priority || "low");
@@ -41,6 +56,12 @@ function buildCardEl(task) {
   return el;
 }
 
+/**
+ * Calculates subtask progress values.
+ *
+ * @param {Object} task
+ * Task data object.
+ */
 function getProgress(task) {
   const st = Array.isArray(task.subtasks) ? task.subtasks : null;
   const old = Array.isArray(task.subtask) ? task.subtask : null;
@@ -49,6 +70,18 @@ function getProgress(task) {
   return { completed, total };
 }
 
+/**
+ * Generates the inner HTML for a task card.
+ *
+ * @param {Object} task
+ * Task data object.
+ * @param {number} completed
+ * Number of completed subtasks.
+ * @param {number} total
+ * Total number of subtasks.
+ * @param {string} prioIcon
+ * Priority icon identifier.
+ */
 function cardHtml(task, completed, total, prioIcon) {
   return `
     <div>
@@ -75,6 +108,14 @@ function cardHtml(task, completed, total, prioIcon) {
   `;
 }
 
+/**
+ * Wires click handler to open the task detail overlay.
+ *
+ * @param {HTMLElement} el
+ * Task card element.
+ * @param {Object} task
+ * Task data object.
+ */
 function wireClickToDetail(el, task) {
   el.addEventListener("click", async () => {
     if (el.classList.contains("dragging")) return;
