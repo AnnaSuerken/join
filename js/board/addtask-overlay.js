@@ -17,7 +17,7 @@ let chipListenerBound = false;
  * Button that triggered the overlay opening (used to detect target column).
  */
 export function openAddTaskOverlay(btn) {
-  const overlay = $("#add-task-overlay");
+  const overlay = $("add-task-overlay");
   const form = overlay?.querySelector(".task-form");
 
   overlay?.classList.remove("d_none");
@@ -33,7 +33,7 @@ export function openAddTaskOverlay(btn) {
  * Closes the add-task overlay and resets the form.
  */
 export function closeAddTaskOverlay() {
-  const overlay = $("#add-task-overlay");
+  const overlay = $("add-task-overlay");
   const form = overlay?.querySelector(".task-form");
 
   if (form) window.clearTask?.(form);
@@ -47,7 +47,7 @@ export function closeAddTaskOverlay() {
 export function initAddTaskOverlayBindings() {
   onClickDelegate(document, ".open-add-task-overlay", (_, btn) => openAddTaskOverlay(btn));
   onClickDelegate(document, "#add-task-overlay .close-btn", () => closeAddTaskOverlay());
-  document.addEventListener("click", (e) => e.target === $("#add-task-overlay") && closeAddTaskOverlay());
+  document.addEventListener("click", (e) => e.target === $("add-task-overlay") && closeAddTaskOverlay());
 }
 
 /**

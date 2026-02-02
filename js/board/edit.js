@@ -7,576 +7,298 @@ import {
 } from "./dom.js";
 
 import { TASKS_ROOT } from "./state.js";
-import { escapeHtml, normalizeSubtasks, toISODateOnly, normalizeAssigneesToIds } from "./helpers.js";
+import { toISODateOnly } from "./helpers.js";
 import { getCurrentDetail, renderDetail, setCurrentDetail } from "./detail.js";
 
-let editPriority = "medium";
-let selectedAssigneeIds = [];
-let editSubtasks = [];
+import { createAssigneeEditor, createSubtaskEditor, toast } from "./edit-helpers.js";
 
-/**
- * Initializes all edit overlay bindings.
- */
+let editPriority = "medium";
+let assignees = null;
+let subtasks = null;
+
+/** Init all edit bindings */
 export function initEditBindings() {
+  initEditors();
   bindPriorityButtons();
   bindOpenClose();
   bindSave();
-  bindAssigneeDropdown();
-  bindSubtaskEditor();
 }
 
-/**
- * Binds open/close actions for the edit overlay.
- */
+/** Create editor instances */
+function initEditors() {
+  assignees = createAssigneeEditor({
+    selectEl: editAssigneeSelect,
+    optionsEl: editAssigneeOptions,
+    listEl: editAssigneeList,
+    isEditOpen,
+  });
+  subtasks = createSubtaskEditor({
+    inputEl: editSubtaskInput,
+    addBtnEl: editSubtaskAddBtn,
+    listEl: editSubtaskList,
+  });
+}
+
+/** Bind overlay open/close */
 function bindOpenClose() {
   detailEditBtn?.addEventListener("click", openEditOverlay);
   editCloseBtn?.addEventListener("click", closeEditOverlay);
-  document.addEventListener("keydown", (e) => isEditOpen() && e.key === "Escape" && closeEditOverlay());
+  document.addEventListener("keydown", onEscClose);
 }
 
-/**
- * Binds save button handler.
- */
+/** Close on Escape key */
+function onEscClose(e) {
+  if (!isEditOpen()) return;
+  if (e.key !== "Escape") return;
+  closeEditOverlay();
+}
+
+/** Bind save button click */
 function bindSave() {
-  editOkBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    saveEditOverlay();
-  });
+  editOkBtn?.addEventListener("click", onSaveClick);
 }
 
-/**
- * Wires priority button click handlers.
- */
+/** Handle save button click */
+function onSaveClick(e) {
+  e.preventDefault();
+  saveEditOverlay();
+}
+
+/** Bind priority button actions */
 function bindPriorityButtons() {
   Object.entries(prioBtns).forEach(([key, btn]) => {
-    btn?.addEventListener("click", (e) => {
-      e.preventDefault();
-      setEditPriority(key);
-    });
+    btn?.addEventListener("click", (e) => onPrioClick(e, key));
   });
 }
 
-/**
- * Sets the active edit priority.
- *
- * @param {string} p
- * Priority value.
- */
+/** Handle priority button click */
+function onPrioClick(e, key) {
+  e.preventDefault();
+  setEditPriority(key);
+}
+
+/** Set active edit priority */
 function setEditPriority(p) {
+  editPriority = normalizePriority(p);
+  Object.entries(prioBtns).forEach(([k, btn]) => applyPrioState(k, btn));
+}
+
+/** Normalize priority value */
+function normalizePriority(p) {
   const allowed = ["urgent", "medium", "low"];
-  editPriority = allowed.includes(p) ? p : "medium";
-  Object.entries(prioBtns).forEach(([k, btn]) => togglePrioBtn(k, btn, editPriority));
+  return allowed.includes(p) ? p : "medium";
 }
 
-/**
- * Toggles priority button active state.
- */
-function togglePrioBtn(key, btn, active) {
+/** Apply priority button state */
+function applyPrioState(key, btn) {
   if (!btn) return;
-  btn.classList.toggle("is-active", key === active);
-  updatePrioIcon(btn, key, key === active);
+  const active = key === editPriority;
+  btn.classList.toggle("is-active", active);
+  setPrioIcon(btn, key, active);
 }
 
-/**
- * Updates priority icon depending on active state.
- */
-function updatePrioIcon(btn, key, isActive) {
+/** Set correct priority icon */
+function setPrioIcon(btn, key, active) {
   const img = btn.querySelector("img");
   if (!img) return;
-  img.src = prioIconPath(key, isActive);
+  img.src = prioIconPath(key, active);
 }
 
-/**
- * Returns the icon path for a priority.
- */
+/** Resolve priority icon path */
 function prioIconPath(key, active) {
   if (key === "urgent") return active ? "./assets/icons/urgent-white.svg" : "./assets/icons/urgent-red.svg";
   if (key === "medium") return active ? "./assets/icons/medium-white.svg" : "./assets/icons/medium-orange.svg";
   return active ? "./assets/icons/low-white.svg" : "./assets/icons/low-green.svg";
 }
 
-/**
- * Opens the edit overlay and initializes fields.
- */
+/** Open edit overlay */
 function openEditOverlay() {
   const detail = getCurrentDetail();
   if (!detail?.task) return;
-
-  fillFields(detail.task);
-  initMinDate(detail.task);
-  initAssignees(detail.task);
-  initSubtasks(detail.task);
-
-  hideDetailShowEdit();
+  initOverlayFields(detail.task);
+  showEditOverlay();
 }
 
-/**
- * Closes the edit overlay.
- */
-function closeEditOverlay() {
-  editSection?.classList.add("d_none");
-  document.body.classList.remove("board-overlay-open");
-  document.getElementById("task-detail-overlay")?.classList.remove("d_none");
+/** Initialize overlay form fields */
+function initOverlayFields(task) {
+  fillFields(task);
+  initMinDate(task);
+  assignees?.initFromTask(task);
+  subtasks?.initFromTask(task);
 }
 
-/**
- * Hides detail view and shows edit overlay.
- */
-function hideDetailShowEdit() {
-  document.getElementById("task-detail-overlay")?.classList.add("d_none");
-  editSection?.classList.remove("d_none");
-  document.body.classList.add("board-overlay-open");
-}
-
-/**
- * Checks if the edit overlay is currently open.
- */
-function isEditOpen() {
-  return editSection && !editSection.classList.contains("d_none");
-}
-
-/**
- * Fills edit form fields with task data.
- *
- * @param {object} task
- */
+/** Fill form from task */
 function fillFields(task) {
-  editTitle.value = task.title || "";
-  editDesc.value = task.secondline || "";
-  setDateValue(task.deadline);
+  setTitleValue(task);
+  setDescValue(task);
+  setDeadlineValue(task);
   setEditPriority((task.priority || "medium").toString().toLowerCase());
 }
 
-/**
- * Sets the date input value from a deadline.
- */
+/** Set title input value */
+function setTitleValue(task) {
+  editTitle.value = task.title || "";
+}
+
+/** Set description input value */
+function setDescValue(task) {
+  editDesc.value = task.secondline || "";
+}
+
+/** Set date input value */
+function setDeadlineValue(task) {
+  setDateValue(task.deadline);
+}
+
+/** Convert deadline to input */
 function setDateValue(deadline) {
   if (!deadline) return (editDate.value = "");
   const d = new Date(deadline);
   editDate.value = isNaN(d) ? "" : toISODateOnly(d);
 }
 
-/**
- * Initializes minimum selectable date based on creation date.
- */
+/** Initialize min allowed date */
 function initMinDate(task) {
   const createdAt = getCreatedAt(task);
   const minStr = toISODateOnly(createdAt);
+  applyMinDate(minStr);
+  applyMinDateHint(minStr);
+}
+
+/** Apply min date attribute */
+function applyMinDate(minStr) {
   editDate.min = minStr;
+}
+
+/** Show earliest date hint */
+function applyMinDateHint(minStr) {
   const hint = document.getElementById("edit-date-hint");
   if (hint) hint.textContent = `Earliest: ${minStr}`;
 }
 
-/**
- * Resolves the task creation date.
- *
- * @param {object} task
- */
+/** Read task creation date */
 function getCreatedAt(task) {
   const s = task.createdAt || task.created || task.created_at || null;
   const d = s ? new Date(s) : new Date();
   return isNaN(d) ? new Date() : d;
 }
 
-/**
- * Binds dropdown open/close logic for assignee selection.
- */
-function bindAssigneeDropdown() {
-  editAssigneeSelect?.addEventListener("click", () => toggleEditAssigneeDropdown(isAssigneeClosed()));
-  document.addEventListener("click", (e) => closeAssigneeOnOutside(e));
+/** Show edit, hide detail */
+function showEditOverlay() {
+  document.getElementById("task-detail-overlay")?.classList.add("d_none");
+  editSection?.classList.remove("d_none");
+  document.body.classList.add("board-overlay-open");
 }
 
-/**
- * Closes assignee dropdown when clicking outside.
- *
- * @param {MouseEvent} e
- */
-function closeAssigneeOnOutside(e) {
-  if (!isEditOpen()) return;
-  if (!editAssigneeSelect.contains(e.target) && !editAssigneeOptions.contains(e.target)) {
-    toggleEditAssigneeDropdown(false);
-  }
+/** Close edit overlay */
+function closeEditOverlay() {
+  editSection?.classList.add("d_none");
+  document.body.classList.remove("board-overlay-open");
+  document.getElementById("task-detail-overlay")?.classList.remove("d_none");
 }
 
-/**
- * Checks whether the assignee dropdown is closed.
- */
-function isAssigneeClosed() {
-  return editAssigneeOptions?.classList.contains("d_none");
+/** Check overlay open state */
+function isEditOpen() {
+  return !!editSection && !editSection.classList.contains("d_none");
 }
 
-/**
- * Toggles assignee dropdown visibility.
- *
- * @param {boolean} open
- */
-function toggleEditAssigneeDropdown(open) {
-  editAssigneeOptions?.classList.toggle("d_none", !open);
-  document.getElementById("edit-assignee-list")?.classList.toggle("d_none", open);
-  editAssigneeSelect?.setAttribute("aria-expanded", String(open));
-}
-
-/**
- * Initializes assignees from the given task.
- *
- * @param {object} task
- */
-function initAssignees(task) {
-  selectedAssigneeIds = normalizeAssigneesToIds(task.assignedContact);
-  renderEditAssigneeChips();
-  renderEditAssigneeOptions();
-  const lbl = editAssigneeSelect?.querySelector(".assignee-select-label");
-  if (lbl) lbl.textContent = "Select contacts to assign";
-}
-
-/**
- * Renders selected assignee chips.
- */
-function renderEditAssigneeChips() {
-  if (!editAssigneeList) return;
-  editAssigneeList.innerHTML = "";
-  getSelectedContacts().forEach((c) => editAssigneeList.appendChild(chipRow(c)));
-}
-
-/**
- * Creates a chip row element for a contact.
- *
- * @param {object} c
- */
-function chipRow(c) {
-  const row = document.createElement("div");
-  row.className = "detail-user-row";
-  row.innerHTML = chipRowHtml(c);
-  row.querySelector(".remove-assignee")?.addEventListener("click", () => removeAssignee(c.id));
-  return row;
-}
-
-/**
- * Returns HTML for an assignee chip row.
- */
-function chipRowHtml(c) {
-  return `
-    <div class="user" style="background:${escapeHtml(c.color || "#999")}">${escapeHtml(c.initials || "?")}</div>
-    <p>${escapeHtml(c.name || "")}</p>
-    <button class="remove-assignee" title="Entfernen" data-id="${escapeHtml(c.id)}">✕</button>
-  `;
-}
-
-/**
- * Removes an assignee by id.
- *
- * @param {string} id
- */
-function removeAssignee(id) {
-  selectedAssigneeIds = selectedAssigneeIds.filter((x) => x !== id);
-  renderEditAssigneeChips();
-  renderEditAssigneeOptions();
-}
-
-/**
- * Renders assignee dropdown options.
- */
-function renderEditAssigneeOptions() {
-  if (!editAssigneeOptions) return;
-  editAssigneeOptions.innerHTML = "";
-  getAllContacts().forEach((c) => editAssigneeOptions.appendChild(optionLi(c)));
-}
-
-/**
- * Creates an option list item for a contact.
- *
- * @param {object} c
- */
-function optionLi(c) {
-  const li = document.createElement("li");
-  const selected = selectedAssigneeIds.includes(c.id);
-
-  li.role = "option";
-  li.tabIndex = 0;
-  li.className = "assignee-option" + (selected ? " is-selected" : "");
-  li.innerHTML = optionHtml(c);
-
-  li.addEventListener("click", () => toggleAssignee(c.id));
-  li.addEventListener("keydown", (e) => onOptionKey(e, c.id));
-
-  return li;
-}
-
-/**
- * Returns HTML for an assignee dropdown option.
- */
-function optionHtml(c) {
-  return `
-    <span class="assignee-avatar" style="background:${escapeHtml(c.color)}">${escapeHtml(c.initials)}</span>
-    <span>${escapeHtml(c.name)}</span>
-    <span class="assignee-check">✔</span>
-  `;
-}
-
-/**
- * Handles keyboard selection on dropdown options.
- */
-function onOptionKey(e, id) {
-  if (e.key !== "Enter" && e.key !== " ") return;
-  e.preventDefault();
-  toggleAssignee(id);
-}
-
-/**
- * Toggles assignee selection.
- *
- * @param {string} id
- */
-function toggleAssignee(id) {
-  selectedAssigneeIds = selectedAssigneeIds.includes(id)
-    ? selectedAssigneeIds.filter((x) => x !== id)
-    : [...selectedAssigneeIds, id];
-
-  renderEditAssigneeChips();
-  renderEditAssigneeOptions();
-}
-
-/**
- * Returns all contacts sorted by name.
- *
- * @returns {object[]}
- */
-function getAllContacts() {
-  const maps = window.boardContacts || {};
-  const byId = maps.contactsById || new Map();
-  return [...byId.values()].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-}
-
-/**
- * Returns selected contacts.
- *
- * @returns {object[]}
- */
-function getSelectedContacts() {
-  const maps = window.boardContacts || {};
-  const byId = maps.contactsById || new Map();
-  return selectedAssigneeIds.map((id) => byId.get(id)).filter(Boolean);
-}
-
-/**
- * Binds subtask editor events.
- */
-function bindSubtaskEditor() {
-  editSubtaskAddBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    addEditSubtask();
-  });
-
-  editSubtaskInput?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addEditSubtask();
-    }
-  });
-}
-
-/**
- * Initializes subtasks from task data.
- *
- * @param {object} task
- */
-function initSubtasks(task) {
-  editSubtasks = normalizeSubtasks(task).map((s) => ({ text: s.text, done: !!s.done }));
-  renderEditSubtasks();
-}
-
-/**
- * Adds a new subtask from input.
- */
-function addEditSubtask() {
-  const val = (editSubtaskInput?.value || "").trim();
-  if (!val) return;
-  editSubtasks.push({ text: val, done: false });
-  editSubtaskInput.value = "";
-  renderEditSubtasks();
-}
-
-/**
- * Renders all editable subtasks.
- */
-function renderEditSubtasks() {
-  if (!editSubtaskList) return;
-  editSubtaskList.innerHTML = "";
-  editSubtasks.forEach((st, i) => editSubtaskList.appendChild(subtaskRow(st, i)));
-}
-
-/**
- * Creates a subtask edit row.
- */
-function subtaskRow(st, i) {
-  const row = document.createElement("div");
-  row.className = "subtask-edit-row";
-  row.innerHTML = subtaskRowHtml(st, i);
-
-  wireSubtaskRow(row, i);
-  return row;
-}
-
-/**
- * Returns HTML for subtask edit row.
- */
-function subtaskRowHtml(st, i) {
-  return `
-    <input type="checkbox" ${st.done ? "checked" : ""} data-i="${i}" />
-    <input type="text" value="${escapeHtml(st.text)}" data-i="${i}" />
-    <button class="icon-btn" title="Löschen" data-i="${i}">
-      <img src="./assets/icons/delete.svg" alt="" />
-    </button>
-  `;
-}
-
-/**
- * Binds subtask row interactions.
- */
-function wireSubtaskRow(row, i) {
-  const cb = row.querySelector('input[type="checkbox"]');
-  const txt = row.querySelector('input[type="text"]');
-  const del = row.querySelector("button");
-
-  cb?.addEventListener("change", () => (editSubtasks[i].done = cb.checked));
-  txt?.addEventListener("input", () => (editSubtasks[i].text = txt.value));
-  del?.addEventListener("click", (e) => onDelSubtask(e, i));
-}
-
-/**
- * Deletes a subtask.
- */
-function onDelSubtask(e, i) {
-  e.preventDefault();
-  editSubtasks.splice(i, 1);
-  renderEditSubtasks();
-}
-
-/**
- * Saves edited task data to database.
- */
+/** Save updated task data */
 async function saveEditOverlay() {
   const detail = getCurrentDetail();
-  if (!detail?.id || !detail?.col || !detail.task) return;
+  if (!isValidDetail(detail)) return;
 
   const updated = buildUpdatedTask(detail.task);
   if (!updated) return;
 
-  await dbApi.updateData(TASKS_ROOT, { [`${detail.col}/${detail.id}`]: updated });
-  syncDetailAfterSave(detail, updated);
+  await persistTask(detail, updated);
+  syncDetail(detail, updated);
   closeEditOverlay();
   toast("Task updated successfully.");
 }
 
-/**
- * Builds the updated task object from edit form values.
- *
- * @param {object} task
- * Original task data.
- */
+/** Validate current detail payload */
+function isValidDetail(detail) {
+  return !!detail?.id && !!detail?.col && !!detail?.task;
+}
+
+/** Persist task into database */
+async function persistTask(detail, updated) {
+  const path = `${detail.col}/${detail.id}`;
+  await dbApi.updateData(TASKS_ROOT, { [path]: updated });
+}
+
+/** Build updated task object */
 function buildUpdatedTask(task) {
-  const title = editTitle.value.trim();
-  const secondline = editDesc.value.trim();
+  const base = buildBaseEdits(task);
+  const deadline = buildDeadlineField(task);
+  if (deadline === null) return null;
 
-  const createdAt = getCreatedAt(task);
-  const deadlineISO = buildDeadlineISO(createdAt);
-  if (deadlineISO === null) return null;
+  const assigneeIds = assignees?.getSelectedIds?.() || [];
+  const sub = subtasks?.getCleanSubtasks?.() || { subtasks: [], doneCount: 0 };
 
-  const subtasks = cleanSubtasks(editSubtasks);
-  const doneCount = subtasks.filter((s) => s.done).length;
+  return composeUpdated(task, base, deadline, assigneeIds, sub);
+}
 
+/** Build title and desc */
+function buildBaseEdits() {
   return {
-    ...task,
-    title,
-    secondline,
-    deadline: deadlineISO,
+    title: editTitle.value.trim(),
+    secondline: editDesc.value.trim(),
     priority: editPriority,
-    assignedContact: [...selectedAssigneeIds],
-    subtasks,
-    subtasksCompleted: doneCount,
-    subtasksTotal: subtasks.length,
-    createdAt: task.createdAt || task.created || task.created_at || new Date().toISOString(),
   };
 }
 
-/**
- * Builds an ISO deadline string and validates against creation date.
- *
- * @param {Date} createdAt
- */
+/** Build validated deadline field */
+function buildDeadlineField(task) {
+  const createdAt = getCreatedAt(task);
+  return buildDeadlineISO(createdAt);
+}
 
+/** Build ISO deadline string */
 function buildDeadlineISO(createdAt) {
   if (!editDate.value) return "";
-  const chosen = new Date(editDate.value);
-  chosen.setHours(0, 0, 0, 0);
-
-  const min = new Date(createdAt);
-  min.setHours(0, 0, 0, 0);
-
+  const chosen = toMidnight(new Date(editDate.value));
+  const min = toMidnight(new Date(createdAt));
   if (chosen < min) return failMinDate(min);
   return toUTCISODateOnly(chosen);
 }
 
-/**
- * Shows validation error for invalid deadline.
- *
- * @param {Date} min
- */
+/** Set date to midnight */
+function toMidnight(d) {
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+/** Show invalid deadline toast */
 function failMinDate(min) {
-  const msg = `Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(min)}).`;
-  toast(msg);
+  toast(`Das Fälligkeitsdatum darf nicht vor dem Erstellungsdatum liegen (${toISODateOnly(min)}).`);
   return null;
 }
 
-/**
- * Converts a date to UTC ISO string (date only).
- *
- * @param {Date} d
- */
+/** Convert date to UTC ISO */
 function toUTCISODateOnly(d) {
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString();
+  const off = d.getTimezoneOffset() * 60000;
+  return new Date(d.getTime() - off).toISOString();
 }
 
-/**
- * Cleans and normalizes subtasks.
- *
- * @param {Array} list
- */
-function cleanSubtasks(list) {
-  return list
-    .map((s) => ({ text: (s.text || "").trim(), done: !!s.done }))
-    .filter((s) => s.text.length > 0);
+/** Compose final updated task */
+function composeUpdated(task, base, deadline, assigneeIds, sub) {
+  const createdAt = task.createdAt || task.created || task.created_at || new Date().toISOString();
+  return {
+    ...task,
+    ...base,
+    deadline,
+    assignedContact: assigneeIds,
+    subtasks: sub.subtasks,
+    subtasksCompleted: sub.doneCount,
+    subtasksTotal: sub.subtasks.length,
+    createdAt,
+  };
 }
 
-/**
- * Syncs detail overlay after saving task.
- *
- * @param {object} detail
- * @param {object} updatedTask
- */
-function syncDetailAfterSave(detail, updatedTask) {
-  const assignedDetailed = buildAssignedDetailed(updatedTask.assignedContact);
+/** Sync detail view state */
+function syncDetail(detail, updatedTask) {
+  const assignedDetailed = assignees?.resolveAssignedDetailed?.(updatedTask.assignedContact) || [];
   setCurrentDetail({ ...detail, task: { ...updatedTask, assignedDetailed } });
   renderDetail({ ...updatedTask, assignedDetailed });
-}
-
-/**
- * Resolves assignee IDs to full contact objects.
- *
- * @param {string[]|string} idsVal
- */
-function buildAssignedDetailed(idsVal) {
-  const maps = window.boardContacts || {};
-  const byId = maps.contactsById || new Map();
-  return normalizeAssigneesToIds(idsVal).map((id) => byId.get(id)).filter(Boolean);
-}
-
-/**
- * Shows a toast message.
- *
- * @param {string} msg
- */
-function toast(msg) {
-  if (typeof window.showToast === "function") window.showToast(msg);
-  else alert(msg);
 }

@@ -19,9 +19,7 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-
-  /* damit unten nichts „klebt“ */
-  padding-bottom: 16px;
+  padding-bottom: 70px;
   box-sizing: border-box;
 }
 
