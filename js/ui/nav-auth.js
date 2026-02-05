@@ -8,13 +8,14 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/f
  * navigation items accordingly.
  */
 document.addEventListener("DOMContentLoaded", () => {
-  const summary = document.getElementById("summary");
+  const login = document.getElementById("login");
   const addTask = document.getElementById("add-task");
   const board = document.getElementById("board");
   const contacts = document.getElementById("contacts");
   const headerIcons = document.getElementById("dropbtn");
 
   const mSummary = document.getElementById("m-summary");
+  const mLogin = document.getElementById("m-login");
   const mAddTask = document.getElementById("m-add-task");
   const mBoard = document.getElementById("m-board");
   const mContacts = document.getElementById("m-contacts");
@@ -22,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(window.auth, (user) => {
     const display = user ? "flex" : "none";
 
-    updateSummaryNav(summary, user);
-    updateSummaryNav(mSummary, user);
+    updateSummaryNav(login, user);
+    updateSummaryNav(mLogin, user);
 
     toggleNavItem(addTask, display);
     toggleNavItem(board, display);
@@ -53,10 +54,17 @@ function updateSummaryNav(el, user) {
   if (!el) return;
 
   if (user) {
+    el.id = "summary";
     el.innerHTML = `
       <img src="./assets/icons/summary.svg" alt="" />
       Summary
     `;
+    document.getElementById("add-task").classList.remove("d_none");
+    document.getElementById("board").classList.remove("d_none");
+    document.getElementById("contacts").classList.remove("d_none");
+    document.getElementById("m-add-task").classList.remove("d_none");
+    document.getElementById("m-board").classList.remove("d_none");
+    document.getElementById("m-contacts").classList.remove("d_none");
   } else {
     el.id = "login";
     el.innerHTML = `

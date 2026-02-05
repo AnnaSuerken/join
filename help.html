@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -25,39 +25,37 @@
   <body>
     <div class="content">
       <section class="content-left">
-            <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
+        <img src="./assets/imgs/join_logo_white.svg" alt="Join Logo" />
 
-            <section class="nav-bar">
-              <button>
-                <div id="summary" class="nav-bar-icons">
-                <img src="./assets/icons/summary.svg" alt="" />
-                Summary
-                </div>
+        <section class="nav-bar">
+          <button>
+            <div id="login" class="nav-bar-icons">
+              <img src="./assets/icons/login.svg" alt="" />
+              Login
+            </div>
+          </button>
 
-              </button>
+          <button class="d_none" id="add-task">
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/addtask.svg" alt="" />
+              Add Task
+            </div>
+          </button>
 
-              <button id="add-task">
-                <div class="nav-bar-icons">
-                <img src="./assets/icons/addtask.svg" alt="" />
-                Add Task
-                </div>
-              </button>
+          <button class="d_none" id="board">
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/board.svg" alt="" />
+              Board
+            </div>
+          </button>
 
-              <button id="board">
-                <div class="nav-bar-icons">
-                <img src="./assets/icons/board.svg" alt="" />
-                Board
-                </div>
-
-              </button>
-
-              <button id="contacts">
-                <div class="nav-bar-icons">
-                <img src="./assets/icons/contacts.svg" alt="" />
-                Contacts
-                </div>
-              </button>
-            </section>
+          <button class="d_none" id="contacts">
+            <div class="nav-bar-icons">
+              <img src="./assets/icons/contacts.svg" alt="" />
+              Contacts
+            </div>
+          </button>
+        </section>
         <div class="nav-bar-links">
           <a href="./privacy-policy.html">Privacy Policy</a>
           <a href="./legal-notice.html">Legal notice</a>
@@ -222,21 +220,21 @@
       </section>
     </div>
 
-    <!-- MOBILE BOTTOM NAV -->
+    <!-- 🔹 Mobile Bottom Navigation -->
     <nav class="nav-bar-mobile">
-      <button id="m-summary">
-        <img src="./assets/icons/summary.svg" alt="" />
-        Summary
+      <button id="m-login">
+        <img src="./assets/icons/login.svg" alt="" />
+        Log in
       </button>
-      <button id="m-add-task">
+      <button class="d_none" id="m-add-task">
         <img src="./assets/icons/addtask.svg" alt="" />
         Add Task
       </button>
-      <button id="m-board">
+      <button class="d_none" id="m-board">
         <img src="./assets/icons/board.svg" alt="" />
         Board
       </button>
-      <button id="m-contacts" class="nav-bar-button-active-a-mobile">
+      <button id="m-contacts" class="nav-bar-button-active-a-mobile d_none">
         <img src="./assets/icons/contacts.svg" alt="" />
         Contacts
       </button>
