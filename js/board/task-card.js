@@ -65,8 +65,12 @@ function buildCardEl(task) {
 function getProgress(task) {
   const st = Array.isArray(task.subtasks) ? task.subtasks : null;
   const old = Array.isArray(task.subtask) ? task.subtask : null;
-  const total = Number.isFinite(task.subtasksTotal) ? task.subtasksTotal : st?.length || old?.length || 0;
-  const completed = Number.isFinite(task.subtasksCompleted) ? task.subtasksCompleted : st?.filter((x) => x?.done).length || 0;
+  const total = Number.isFinite(task.subtasksTotal)
+    ? task.subtasksTotal
+    : st?.length || old?.length || 0;
+  const completed = Number.isFinite(task.subtasksCompleted)
+    ? task.subtasksCompleted
+    : st?.filter((x) => x?.done).length || 0;
   return { completed, total };
 }
 
@@ -82,6 +86,20 @@ function getProgress(task) {
  * @param {string} prioIcon
  * Priority icon identifier.
  */
+
+function subtaskHtml(completed, total) {
+  if (total === 0) return "";
+
+  return `
+    <div class="task-subtasks">
+      <div class="task-subtask-line">
+        <progress value="${completed}" max="${total}"></progress>
+      </div>
+      <p>${completed}/${total} Subtasks</p>
+    </div>
+  `;
+}
+
 function cardHtml(task, completed, total, prioIcon) {
   return `
     <div>
@@ -89,16 +107,14 @@ function cardHtml(task, completed, total, prioIcon) {
         ${escapeHtml(task.category || "No Category")}
       </p>
     </div>
+
     <div class="task-discription">
       <p class="task-discription-headline">${escapeHtml(task.title || "")}</p>
       <p class="task-discription-secontline">${escapeHtml(task.secondline || "")}</p>
     </div>
-    <div class="task-subtasks">
-      <div class="task-subtask-line">
-        <progress value="${completed}" max="${total}"></progress>
-      </div>
-      <p>${completed}/${total} Subtasks</p>
-    </div>
+
+    ${subtaskHtml(completed, total)}
+
     <div class="task-users">
       <div class="assigned-avatars"></div>
       <div class="task-priority">
