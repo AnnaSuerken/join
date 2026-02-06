@@ -1,26 +1,35 @@
+
 .d_none {
   display: none !important;
 }
 
-:root {
-  --contacts-main-offset: 166px;
 
-  --mobile-bottom-nav-height: 80px;
-  --mobile-bottom-safe-gap: 16px;
+html,
+body {
+  width: 100%;
+  overflow-x: hidden; 
 }
+
 
 body.contacts-page {
   overflow: hidden;
-  background-color: #ffffff;
 }
 
-/* Content right */
+
 .content-right {
   display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: #fff;
+  background-color: #f6f7f8; 
   min-height: 0;
+  min-width: 0; 
+  overflow-x: hidden;
+}
+
+
+:root {
+  --contacts-main-offset: 166px;
+  --mobile-bottom-nav: 90px; 
 }
 
 .contacts-main {
@@ -28,9 +37,11 @@ body.contacts-page {
   height: calc(100vh - var(--contacts-main-offset));
   overflow: hidden;
   min-height: 0;
-  background-color: #ffffff;
+  min-width: 0;
+  max-width: 100%;
 }
 
+/* ========================= Left Panel ========================= */
 .contacts-panel {
   width: 360px;
   min-width: 360px;
@@ -38,10 +49,9 @@ body.contacts-page {
   display: flex;
   flex-direction: column;
   height: 100%;
-  
-  overflow: visible;
+  overflow: hidden;
   min-height: 0;
-  background-color: #ffffff;
+  max-width: 100%;
 }
 
 .contacts-panel-inner {
@@ -51,8 +61,10 @@ body.contacts-page {
   padding: 24px;
   box-sizing: border-box;
   min-height: 0;
-  background-color: #ffffff;
+  min-width: 0;
+  overflow-x: hidden;
 }
+
 
 .add-contact-btn {
   width: 100%;
@@ -83,30 +95,20 @@ body.contacts-page {
   height: 24px;
 }
 
-/*  Left: Contacts List  */
+
 #contacts-scroll,
 .contacts-scroll {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-
-  
-  overflow-x: visible;
+  overflow-x: hidden;
 
   margin-top: 24px;
   border-top: 1px solid #d1d1d1;
   padding-top: 16px;
-
-  background-color: #ffffff;
-  scrollbar-gutter: stable;
-
-  
-  padding-left: 16px;
-
-  
-  padding-right: 0;
-
+  padding-right: 8px;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 #contacts-scroll::-webkit-scrollbar,
@@ -116,7 +118,7 @@ body.contacts-page {
 
 #contacts-scroll::-webkit-scrollbar-track,
 .contacts-scroll::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: transparent;
 }
 
 #contacts-scroll::-webkit-scrollbar-thumb,
@@ -129,10 +131,6 @@ body.contacts-page {
   font-size: 14px;
   font-weight: 400;
   color: #000;
-
-  
-  padding: 6px 0;
-
   margin-bottom: 16px;
 }
 
@@ -144,10 +142,7 @@ body.contacts-page {
   margin-bottom: 16px;
   border-bottom: 1px solid #d1d1d1;
   cursor: pointer;
-
-  
-  margin-left: -16px;
-  margin-right: 0;
+  max-width: 100%;
 }
 
 .contacts-scroll .contact-row:last-child,
@@ -182,7 +177,7 @@ body.contacts-page {
   content: url("../assets/icons/delete_icon_blue.svg");
 }
 
-/* Avatar klein */
+
 .avatar-small {
   width: 40px;
   height: 40px;
@@ -201,6 +196,7 @@ body.contacts-page {
   display: flex;
   flex-direction: column;
   line-height: 1.25;
+  min-width: 0;
 }
 
 .contact-row-name {
@@ -215,22 +211,27 @@ body.contacts-page {
   font-weight: 400;
   color: #007cee;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
-/*  Right: Detail Panel  */
+
 .contacts-detail {
   flex: 1;
   padding: 32px 24px;
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden; 
   box-sizing: border-box;
   position: relative;
   min-height: 0;
-  background-color: #ffffff;
+  min-width: 0; 
+  max-width: 100%;
 }
 
 .contact-detail-inner {
   max-width: 600px;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Headline */
@@ -240,6 +241,7 @@ body.contacts-page {
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .contacts-headline {
@@ -272,6 +274,7 @@ body.contacts-page {
   flex-wrap: wrap;
   align-items: flex-start;
   flex-direction: column;
+  max-width: 100%;
 }
 
 .contact-avatar-circle {
@@ -292,6 +295,8 @@ body.contacts-page {
   flex-direction: column;
   gap: 16px;
   flex: 1;
+  min-width: 0; 
+  max-width: 100%;
 }
 
 .contact-name-row {
@@ -301,24 +306,36 @@ body.contacts-page {
   gap: 10px;
   flex-wrap: wrap;
   flex-direction: column;
+  max-width: 100%;
 }
+
 
 .contact-detail-name-header {
   display: flex;
-  gap: 54px;
+  align-items: flex-start;
+  flex-wrap: wrap; 
+  gap: 16px; 
+  max-width: 100%;
+  min-width: 0;
 }
 
 .contact-name {
   font-size: 47px;
   font-weight: 500;
+  max-width: 100%;
+  overflow-wrap: anywhere; 
+  word-break: break-word;
 }
+
 
 .contact-actions {
   display: flex;
   flex-direction: row;
   gap: 12px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .contact-action-link {
@@ -347,6 +364,7 @@ body.contacts-page {
 .contact-info-value {
   font-size: 16px;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .contact-info-value[href] {
@@ -354,7 +372,7 @@ body.contacts-page {
   text-decoration: none;
 }
 
-
+/* ========================= MODAL Overlay + Card (Desktop) ========================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -369,6 +387,7 @@ body.contacts-page {
   box-sizing: border-box;
 }
 
+/* Card */
 .add-contact-modal {
   width: min(1212px, 100%);
   height: min(592px, 90vh);
@@ -382,10 +401,12 @@ body.contacts-page {
   transition: transform 0.35s ease;
 }
 
+/* overlay */
 .modal-overlay.modal-open .add-contact-modal {
   transform: translateX(0);
 }
 
+/* Left part */
 .add-contact-left {
   width: 40%;
   background: #2a3647;
@@ -426,6 +447,7 @@ body.contacts-page {
   border-radius: 2px;
 }
 
+/* Right part */
 .add-contact-right {
   width: 60%;
   padding: 90px 60px 40px;
@@ -434,6 +456,7 @@ body.contacts-page {
   overflow: hidden;
 }
 
+/* Close button */
 .modal-close-btn {
   position: absolute;
   right: 32px;
@@ -454,6 +477,7 @@ body.contacts-page {
   background: rgba(0, 0, 0, 0.06);
 }
 
+/* Avatar overlap  */
 .modal-avatar-circle {
   width: 120px;
   height: 120px;
@@ -476,6 +500,7 @@ body.contacts-page {
   opacity: 0.45;
 }
 
+/* Form row */
 .modal-form-row {
   display: flex;
   align-items: center;
@@ -485,6 +510,7 @@ body.contacts-page {
   justify-content: flex-end;
 }
 
+/* Form */
 .modal-form {
   width: 100%;
   display: flex;
@@ -493,6 +519,7 @@ body.contacts-page {
   align-items: flex-end;
 }
 
+/* Inputs */
 .input-wrapper {
   position: relative;
   width: 80%;
@@ -530,6 +557,7 @@ body.contacts-page {
   border-color: #29abe2;
 }
 
+/* errors */
 .input-error {
   margin: 0;
   font-size: 12px;
@@ -541,6 +569,7 @@ body.contacts-page {
   display: none;
 }
 
+/* Footer buttons */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -548,7 +577,7 @@ body.contacts-page {
   margin-top: 24px;
 }
 
-/*  Mobile: Detail  menu */
+/* ========================= Mobile: Detail actions menu ========================= */
 .contact-menu-btn {
   position: fixed;
   bottom: 120px;
@@ -602,7 +631,7 @@ body.contacts-page {
   }
 }
 
-/*  Responsive: Tablets  */
+/* ========================= Responsive: Tablets ========================= */
 @media (max-width: 1024px) {
   .contacts-headline {
     font-size: 48px;
@@ -628,24 +657,17 @@ body.contacts-page {
     width: 100px;
     height: 100px;
   }
-}
-
-/* Responsive: Mobile Layout  */
-@media (max-width: 820px) {
-  .contacts-panel-inner {
-    padding: 0px;
-  }
 
   
-  #contacts-scroll,
-  .contacts-scroll {
-    padding-left: 16px;
-    padding-right: 16px;
+  .contact-detail-name-header {
+    gap: 14px;
   }
+}
 
-  .contact-row {
-    margin-left: -16px;
-    margin-right: -16px;
+/* ========================= Responsive: Mobile Layout ========================= */
+@media (max-width: 820px) {
+  .contacts-panel-inner {
+    padding: 16px;
   }
 
   .contacts-detail {
@@ -696,9 +718,15 @@ body.contacts-page {
     display: none;
   }
 
- 
+  /* Mobile: bisschen Luft wegen Bottom-Nav */
+  #contacts-scroll,
+  .contacts-scroll {
+    padding-bottom: 110px;
+  }
+
+  /* ===== Modal Mobile (Fix: nimmt Platz bis zur Bottom-Nav sauber aus) ===== */
   #add-contact-overlay.modal-overlay {
-    padding: 16px;
+    padding: 16px 16px calc(16px + var(--mobile-bottom-nav));
     align-items: center;
     justify-content: center;
   }
@@ -706,7 +734,7 @@ body.contacts-page {
   #add-contact-overlay .add-contact-modal {
     width: min(396px, 100%);
     height: auto;
-    max-height: 92vh;
+    max-height: calc(100vh - var(--mobile-bottom-nav) - 32px);
     border-radius: 30px;
     flex-direction: column;
     overflow: hidden;
@@ -831,7 +859,7 @@ body.contacts-page {
   }
 }
 
-/*  phones */
+/* Smaller phones */
 @media (max-width: 600px) {
   .contacts-headline {
     font-size: 32px;
@@ -855,7 +883,8 @@ body.contacts-page {
   }
 }
 
-@media (max-width: 1050px) and (min-width: 821px) {
+
+@media (max-width: 1050px) {
   .contacts-panel,
   .contacts-detail {
     padding-bottom: 30px;

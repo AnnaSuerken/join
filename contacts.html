@@ -35,7 +35,8 @@
         <section class="nav-bar">
           <button>
             <div id="summary" class="nav-bar-icons">
-              <img src="./assets/icons/summary.svg" alt="" />Summary
+              <img src="./assets/icons/summary.svg" alt="" />
+              Summary
             </div>
           </button>
 
@@ -60,11 +61,13 @@
             </div>
           </button>
         </section>
+
         <div class="nav-bar-links">
           <a href="./privacy-policy.html">Privacy Policy</a>
           <a href="./legal-notice.html">Legal notice</a>
         </div>
       </section>
+
       <!-- RIGHT MAIN AREA -->
       <section class="content-right">
         <header>
@@ -75,12 +78,18 @@
               class="logo-mobile"
             />
             <span class="tool-name">Kanban Projekt Management Tool</span>
+
             <div class="header-content-right">
-              <a href="./help.html"
-                ><img src="./assets/icons/help.svg" alt="help" class="help-btn"
-              /></a>
+              <a href="./help.html">
+                <img
+                  src="./assets/icons/help.svg"
+                  alt="help"
+                  class="help-btn"
+                />
+              </a>
+
               <div class="dropdown">
-                <button id="dropbtn" class="dropbtn"></button>
+                <button id="dropbtn" class="dropbtn" aria-label="Open menu"></button>
                 <div class="dropdown-content">
                   <a class="help-btn-dropdown" href="./help.html">Help</a>
                   <a href="./legal-notice.html">Legal Notice</a>
@@ -95,7 +104,11 @@
         <main class="contacts-main">
           <aside class="contacts-panel">
             <div class="contacts-panel-inner">
-              <button id="open-add-contact-overlay" class="add-contact-btn">
+              <button
+                id="open-add-contact-overlay"
+                class="add-contact-btn"
+                type="button"
+              >
                 <span class="add-contact-text">Add new contact</span>
                 <span class="add-contact-icon">
                   <img src="./assets/icons/person_add.svg" alt="add person" />
@@ -155,12 +168,20 @@
     </div>
 
     <!-- ADD CONTACT MODAL -->
-    <section class="modal-overlay d_none" id="add-contact-overlay">
+    <section
+      class="modal-overlay d_none"
+      id="add-contact-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-contact-title"
+    >
       <div class="add-contact-modal">
+        <!-- Close stays here (CSS positions it on dark area on desktop) -->
         <button
           class="modal-close-btn"
           id="close-add-contact-overlay"
           aria-label="close"
+          type="button"
         >
           <img src="./assets/icons/Close.svg" alt="close" />
         </button>
@@ -173,9 +194,11 @@
               alt="Join Logo"
             />
 
-            <h2 class="add-contact-headline">Add contact</h2>
-            <div class="add-contact-underline"></div>
+            <h2 class="add-contact-headline" id="add-contact-title">Add contact</h2>
+
+            <!-- FIX: Original order -> subline then underline -->
             <p class="add-contact-sub">Tasks are better with a team!</p>
+            <div class="add-contact-underline"></div>
           </div>
         </div>
 
@@ -241,11 +264,19 @@
           </div>
 
           <div class="modal-footer">
-            <button class="white-btn" id="cancel-add-contact-overlay">
+            <button
+              class="white-btn"
+              id="cancel-add-contact-overlay"
+              type="button"
+            >
               Cancel ✕
             </button>
 
-            <button class="blue-btn-bold" id="create-contact-btn">
+            <button
+              class="blue-btn-bold"
+              id="create-contact-btn"
+              type="button"
+            >
               Create contact ✓
             </button>
           </div>
@@ -255,19 +286,22 @@
 
     <!-- 🔹 Mobile Bottom Navigation -->
     <nav class="nav-bar-mobile">
-      <button id="m-summary">
+      <button id="m-summary" type="button">
         <img src="./assets/icons/summary.svg" alt="" />
         Summary
       </button>
-      <button id="m-add-task">
+
+      <button id="m-add-task" type="button">
         <img src="./assets/icons/addtask.svg" alt="" />
         Add Task
       </button>
-      <button id="m-board">
+
+      <button id="m-board" type="button">
         <img src="./assets/icons/board.svg" alt="" />
         Board
       </button>
-      <button id="m-contacts" class="nav-bar-button-active-a-mobile">
+
+      <button id="m-contacts" class="nav-bar-button-active-a-mobile" type="button">
         <img src="./assets/icons/contacts.svg" alt="" />
         Contacts
       </button>
