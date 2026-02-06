@@ -34,7 +34,7 @@ body.contacts-page {
 
 .contacts-main {
   display: flex;
-  height: calc(100vh - var(--contacts-main-offset));
+  height: calc(100vh - 96px);
   overflow: hidden;
   min-height: 0;
   min-width: 0;
@@ -102,8 +102,6 @@ body.contacts-page {
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-
-  margin-top: 24px;
   border-top: 1px solid #d1d1d1;
   padding-top: 16px;
   padding-right: 8px;
@@ -631,6 +629,11 @@ body.contacts-page {
   }
 }
 
+@media (max-width: 1050px) {
+  .contacts-main{
+    padding-bottom: 70px;}
+}
+
 /* ========================= Responsive: Tablets ========================= */
 @media (max-width: 1024px) {
   .contacts-headline {
@@ -666,6 +669,9 @@ body.contacts-page {
 
 /* ========================= Responsive: Mobile Layout ========================= */
 @media (max-width: 820px) {
+  .contacts-panel {
+    width: 100vw;
+  }
   .contacts-panel-inner {
     padding: 16px;
   }
@@ -718,11 +724,6 @@ body.contacts-page {
     display: none;
   }
 
-  /* Mobile: bisschen Luft wegen Bottom-Nav */
-  #contacts-scroll,
-  .contacts-scroll {
-    padding-bottom: 110px;
-  }
 
   /* ===== Modal Mobile (Fix: nimmt Platz bis zur Bottom-Nav sauber aus) ===== */
   #add-contact-overlay.modal-overlay {
@@ -883,10 +884,3 @@ body.contacts-page {
   }
 }
 
-
-@media (max-width: 1050px) {
-  .contacts-panel,
-  .contacts-detail {
-    padding-bottom: 30px;
-  }
-}
